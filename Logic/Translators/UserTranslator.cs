@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Logic.Translators
 {
-    public static class UserTranslator
+    public class UserTranslator
     {
         public static UserDto ToModel(User user)
         {

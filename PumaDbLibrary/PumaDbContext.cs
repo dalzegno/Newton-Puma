@@ -8,7 +8,7 @@ namespace PumaDbLibrary
 {
     public partial class PumaDbContext : DbContext
     {
-        public PumaDbContext()
+        public PumaDbContext() 
         {
         }
 

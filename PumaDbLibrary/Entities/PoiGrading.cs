@@ -12,11 +12,11 @@ namespace PumaDbLibrary
     public partial class PoiGrading
     {
         [Key]
-        public long Id { get; set; }
+        public int Id { get; set; }
         [Column("Grading_Id")]
-        public long GradingId { get; set; }
+        public int GradingId { get; set; }
         [Column("Point_Of_Interest_Id")]
-        public long PointOfInterestId { get; set; }
+        public int PointOfInterestId { get; set; }
 
         [ForeignKey(nameof(GradingId))]
         [InverseProperty("PoiGradings")]

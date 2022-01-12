@@ -12,14 +12,14 @@ namespace PumaDbLibrary
     public partial class Comment
     {
         [Key]
-        public long Id { get; set; }
+        public int Id { get; set; }
         [Required]
         [Column(TypeName = "nvarchar(400)")]
         public string Body { get; set; }
         [Column("Point_Of_Interest_Id")]
-        public long PointOfInterestId { get; set; }
+        public int PointOfInterestId { get; set; }
         [Column("User_Id")]
-        public long UserId { get; set; }
+        public int UserId { get; set; }
 
         [ForeignKey(nameof(PointOfInterestId))]
         [InverseProperty("Comments")]

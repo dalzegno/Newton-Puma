@@ -19,9 +19,9 @@ namespace PumaDbLibrary
         }
 
         [Key]
-        public long Id { get; set; }
+        public int Id { get; set; }
         [Column("Location_Id")]
-        public long LocationId { get; set; }
+        public int LocationId { get; set; }
 
         [ForeignKey(nameof(LocationId))]
         [InverseProperty("PointOfInterests")]

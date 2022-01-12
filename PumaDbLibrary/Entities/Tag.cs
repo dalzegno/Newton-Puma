@@ -17,7 +17,7 @@ namespace PumaDbLibrary
         }
 
         [Key]
-        public long Id { get; set; }
+        public int Id { get; set; }
         [Required]
         [Column(TypeName = "nvarchar(45)")]
         public string Name { get; set; }

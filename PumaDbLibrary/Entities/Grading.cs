@@ -17,11 +17,11 @@ namespace PumaDbLibrary
         }
 
         [Key]
-        public long Id { get; set; }
+        public int Id { get; set; }
         [Column(TypeName = "TINYINT")]
-        public long GradeType { get; set; }
+        public int GradeType { get; set; }
         [Column("User_Id")]
-        public long UserId { get; set; }
+        public int UserId { get; set; }
 
         [ForeignKey(nameof(UserId))]
         [InverseProperty("Gradings")]
