@@ -12,6 +12,9 @@ namespace Logic.Translators
     {
         public static UserDto ToModel(User user)
         {
+            if (user == null)
+                return null;
+
             return new UserDto()
             {
                 Id = user.Id,
