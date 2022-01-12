@@ -1,28 +1,52 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
-             x:Class="Puma.MainPage">
-    <Grid>
-        <!--<Grid.RowDefinitions>
-            <RowDefinition Height=".1*"/>
-            <RowDefinition Height=".9*"/>
-        </Grid.RowDefinitions>-->
-        <AbsoluteLayout>
-            
-
-            <maps:Map   AbsoluteLayout.LayoutBounds="0.5, 0.5, -1, -1" 
-                        AbsoluteLayout.LayoutFlags="PositionProportional"
-                        HeightRequest="1080"
-                        WidthRequest="1920"/>
-            <!-- NAVBAR -->
-            <StackLayout BackgroundColor="#CAE9FF"
-                        AbsoluteLayout.LayoutBounds="0, 0, -1, -1" 
-                        HeightRequest="80"
-                        WidthRequest="1920"
-                        Opacity=".9">
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             x:Class="Puma.MainPage"
+             xmlns:local="clr-namespace:Client.CustomRenderer;assembly=Client"
+             >
+    <AbsoluteLayout  VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+        
+        <!-- MAP -->
+        <maps:Map   Background="White"
+                    BackgroundColor="White"
+                      AbsoluteLayout.LayoutFlags="All"
+      AbsoluteLayout.LayoutBounds="0,0,1,1"
+                        />
+        
+        <!-- NAVBAR -->
+        <StackLayout BackgroundColor="#CAE9FF"
+                    AbsoluteLayout.LayoutBounds="0, 0, 1, 60" 
+                    AbsoluteLayout.LayoutFlags="WidthProportional"
+                    Grid.RowSpan="3"
+                    Grid.ColumnSpan="2"
+                    Opacity=".9"
+                     Spacing="10"
+                     Padding="5"
+                     Orientation="Horizontal">
                 <Label Text="Hello World" FontSize="38"/>
+            
+                <!--<local:RoundedEntry HorizontalOptions="FillAndExpand"></local:RoundedEntry>-->
+            <Frame 
+                    Margin="5"
+                    BorderColor="LightGray"
+                    Padding="0"
+                   CornerRadius="15"
+                   IsClippedToBounds="False"
+                   HorizontalOptions="CenterAndExpand"
+                    WidthRequest="500"
+                   VerticalOptions="FillAndExpand"
+                    Opacity=".8">
+                <local:RoundedEntry Opacity=".8"></local:RoundedEntry>
+            </Frame>
+            <StackLayout Orientation="Horizontal" Margin="0,5,20,5">
+            <Button x:Name="btn_Login"
+                    Text="Log in"></Button>
+            <Label Text="|" VerticalOptions="Center"></Label>
+            <Button x:Name="btn_Signup"
+                    Text="Sign up"></Button>
             </StackLayout>
-            <!-- -->
-        </AbsoluteLayout>
-    </Grid>
+        </StackLayout>
+
+    </AbsoluteLayout>
 </ContentPage>
