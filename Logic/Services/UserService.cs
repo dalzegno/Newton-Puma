@@ -19,9 +19,9 @@ namespace Logic.Services
             _context = context;
         }
 
-        public ICollection<UserDto> Get()
+        public async Task<ICollection<UserDto>> GetAsync()
         {
-            var dbUsers = _context.Users;
+            var dbUsers = await _context.Users.ToListAsync();
             List<UserDto> userResults = new List<UserDto>();
 
             foreach (var dbUser in dbUsers)
@@ -32,9 +32,19 @@ namespace Logic.Services
             return userResults;
         }
 
+        public async Task<UserDto> GetUserAsync(int userId)
+        {
+            var dbUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+
+            if (dbUser == null)
+                throw new Exception($"Kunde inte hitta användaren med id {userId}");
+
+            return UserTranslator.ToModel(dbUser);
+        }
+
         public async Task<UserDto> PostUserAsync(UserDto newUser)
         {
-            var foundUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == newUser.Id);
+            var foundUser = await _context.Users.FirstOrDefaultAsync(x => x.Email == newUser.Email);
 
             if (foundUser != null)
                 return UserTranslator.ToModel(foundUser);
@@ -51,8 +61,16 @@ namespace Logic.Services
                 Password = newUser.Password
             };
 
-            await _context.Users.AddAsync(userToAdd);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.Users.AddAsync(userToAdd);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("")
+            }
+
             return UserTranslator.ToModel(userToAdd);
         }
     }

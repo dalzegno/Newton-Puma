@@ -17,7 +17,7 @@ namespace PumaDbLibrary
         }
 
         [Key]
-        public long Id { get; set; }
+        public int Id { get; set; }
         [Required]
         [Column(TypeName = "DECIMAL")]
         public byte[] Latitude { get; set; }

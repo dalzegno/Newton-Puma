@@ -12,11 +12,11 @@ namespace PumaDbLibrary
     public partial class PoiTag
     {
         [Key]
-        public long Id { get; set; }
+        public int Id { get; set; }
         [Column("Tag_Id")]
-        public long TagId { get; set; }
+        public int TagId { get; set; }
         [Column("Point_Of_Interest_Id")]
-        public long PointOfInterestId { get; set; }
+        public int PointOfInterestId { get; set; }
 
         [ForeignKey(nameof(PointOfInterestId))]
         [InverseProperty("PoiTags")]
