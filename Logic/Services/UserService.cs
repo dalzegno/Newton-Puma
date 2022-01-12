@@ -68,7 +68,7 @@ namespace Logic.Services
             }
             catch (Exception e)
             {
-                throw new Exception("")
+                throw new Exception("Något gick fel vid sparande till databasen.");
             }
 
             return UserTranslator.ToModel(userToAdd);
