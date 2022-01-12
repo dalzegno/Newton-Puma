@@ -32,9 +32,9 @@ namespace Logic.Services
             return userResults;
         }
 
-        public async Task<UserDto> GetUserAsync(int userId)
+        public async Task<UserDto> GetUserAsync(int id)
         {
-            var dbUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            var dbUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
 
             if (dbUser == null)
                 return null;
@@ -47,28 +47,19 @@ namespace Logic.Services
             if (!IsNewUserRequestValid(newUser))
                 return null;
 
-            var foundUser = await _context.Users.FirstOrDefaultAsync(x => x.Email == newUser.Email);
+            var foundUser = await _context.Users.FirstOrDefaultAsync(x => x.Email == newUser.Email.ToLower());
 
             if (foundUser != null)
                 return UserTranslator.ToModel(foundUser);
 
-            User userToAdd = new()
-            {
-                Email = newUser.Email,
-                Comments = new List<Comment>(),
-                DisplayName = newUser.DisplayName ?? "",
-                FirstName = newUser.FirstName ?? "",
-                LastName = newUser.LastName ?? "",
-                Gradings = new List<Grading>(),
-                Password = newUser.Password
-            };
+            User userToAdd = UserTranslator.ToEntity(newUser);
 
             try
             {
                 await _context.Users.AddAsync(userToAdd);
                 await _context.SaveChangesAsync();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //throw new Exception("Något gick fel vid sparande till databasen.");
                 return null;
