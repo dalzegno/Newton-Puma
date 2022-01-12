@@ -8,11 +8,28 @@
     <AbsoluteLayout  VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
         
         <!-- MAP -->
-        <maps:Map   Background="White"
+        <maps:Map x:Name="map"  MapClicked="OnMapClicked"
+            MapType="Hybrid"
+                    Background="White"
                     BackgroundColor="White"
                       AbsoluteLayout.LayoutFlags="All"
-      AbsoluteLayout.LayoutBounds="0,0,1,1"
-                        />
+                     AbsoluteLayout.LayoutBounds="0,0,1,1"
+                        >
+        <x:Arguments>
+            <maps:MapSpan>
+                <x:Arguments>
+                    <maps:Position>
+                        <x:Arguments>
+                            <x:Double>36.9628066</x:Double>
+                            <x:Double>-122.0194722</x:Double>
+                        </x:Arguments>
+                    </maps:Position>
+                    <x:Double>111</x:Double>
+                    <x:Double>111</x:Double>
+                </x:Arguments>
+            </maps:MapSpan>
+        </x:Arguments>
+        </maps:Map>
         
         <!-- NAVBAR -->
         <StackLayout BackgroundColor="#CAE9FF"
