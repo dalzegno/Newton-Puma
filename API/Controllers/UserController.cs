@@ -75,7 +75,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<UserDto>> GetUser(string email)
+        public async Task<ActionResult<UserDto>> GetUser([FromQuery] string email)
         {
             if (string.IsNullOrWhiteSpace(email))
                 return BadRequest("Request contained null or faulty values");
@@ -107,13 +107,36 @@ namespace API.Controllers
 
             return Ok(createdUser);
         }
-
-        [HttpPut("SetAsInactive")]
+        /// <summary>
+        /// Set if user is active or not (true/false)
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [HttpPatch("SetActive")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<UserDto>> SetAsInactive (int id)
+        public async Task<ActionResult<UserDto>> SetActive([FromQuery] int id, [FromQuery] bool value)
         {
-            UserDto updatedUser = await _userService.SetUserAsInactive(id);
+            UserDto updatedUser = await _userService.SetActive(id, value);
+            if (updatedUser == null)
+                return NotFound();
+
+            return Ok(updatedUser);
+        }
+
+        /// <summary>
+        /// Set if user is admin or not (true/false)
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [HttpPatch("SetAdmin")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<UserDto>> SetAdmin([FromQuery] int id, [FromQuery] bool value)
+        {
+            UserDto updatedUser = await _userService.SetAdmin(id, value);
             if (updatedUser == null)
                 return NotFound();
 

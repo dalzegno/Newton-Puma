@@ -40,7 +40,6 @@ namespace API
                 var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
             });
-
             // TODO: Vet inte om dbContext ska instansieras här.
             services.AddScoped(_ => new PumaDbContext());
             services.AddScoped<UserService>();
