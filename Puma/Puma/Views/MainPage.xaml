@@ -1,24 +1,69 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Puma.MainPage">
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             x:Class="Puma.MainPage"
+             xmlns:local="clr-namespace:Client.CustomRenderer;assembly=Client"
+             >
+    <AbsoluteLayout  VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+        
+        <!-- MAP -->
+        <maps:Map x:Name="map"  MapClicked="OnMapClicked"
+            MapType="Hybrid"
+                    Background="White"
+                    BackgroundColor="White"
+                      AbsoluteLayout.LayoutFlags="All"
+                     AbsoluteLayout.LayoutBounds="0,0,1,1"
+                        >
+        <x:Arguments>
+            <maps:MapSpan>
+                <x:Arguments>
+                    <maps:Position>
+                        <x:Arguments>
+                            <x:Double>36.9628066</x:Double>
+                            <x:Double>-122.0194722</x:Double>
+                        </x:Arguments>
+                    </maps:Position>
+                    <x:Double>111</x:Double>
+                    <x:Double>111</x:Double>
+                </x:Arguments>
+            </maps:MapSpan>
+        </x:Arguments>
+        </maps:Map>
+        
+        <!-- NAVBAR -->
+        <StackLayout BackgroundColor="#CAE9FF"
+                    AbsoluteLayout.LayoutBounds="0, 0, 1, 60" 
+                    AbsoluteLayout.LayoutFlags="WidthProportional"
+                    Grid.RowSpan="3"
+                    Grid.ColumnSpan="2"
+                    Opacity=".9"
+                     Spacing="10"
+                     Padding="5"
+                     Orientation="Horizontal">
+                <Label Text="Hello World" FontSize="38"/>
+            
+                <!--<local:RoundedEntry HorizontalOptions="FillAndExpand"></local:RoundedEntry>-->
+            <Frame 
+                    Margin="5"
+                    BorderColor="LightGray"
+                    Padding="0"
+                   CornerRadius="15"
+                   IsClippedToBounds="False"
+                   HorizontalOptions="CenterAndExpand"
+                    WidthRequest="500"
+                   VerticalOptions="FillAndExpand"
+                    Opacity=".8">
+                <local:RoundedEntry Opacity=".8"></local:RoundedEntry>
+            </Frame>
+            <StackLayout Orientation="Horizontal" Margin="0,5,20,5">
+            <Button x:Name="btn_Login"
+                    Text="Log in"></Button>
+            <Label Text="|" VerticalOptions="Center"></Label>
+            <Button x:Name="btn_Signup"
+                    Text="Sign up"></Button>
+            </StackLayout>
+        </StackLayout>
 
-    <StackLayout>
-        <Frame BackgroundColor="#2196F3" Padding="24" CornerRadius="0">
-            <Label Text="Welcome to Xamarin.Forms!" HorizontalTextAlignment="Center" TextColor="White" FontSize="36"/>
-        </Frame>
-        <Label Text="Start developing now" FontSize="Title" Padding="30,10,30,10"/>
-        <Label Text="Make changes to your XAML file and save to see your UI update in the running app with XAML Hot Reload. Give it a try!" FontSize="16" Padding="30,0,30,0"/>
-        <Label FontSize="16" Padding="30,24,30,0">
-            <Label.FormattedText>
-                <FormattedString>
-                    <FormattedString.Spans>
-                        <Span Text="Learn more at "/>
-                        <Span Text="https://aka.ms/xamarin-quickstart" FontAttributes="Bold"/>
-                    </FormattedString.Spans>
-                </FormattedString>
-            </Label.FormattedText>
-        </Label>
-    </StackLayout>
-
+    </AbsoluteLayout>
 </ContentPage>
