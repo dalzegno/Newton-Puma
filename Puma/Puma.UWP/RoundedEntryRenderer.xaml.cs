@@ -13,17 +13,18 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+// The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
+
 namespace Puma.UWP
 {
-    public sealed partial class MainPage
+    /// <summary>
+    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// </summary>
+    public sealed partial class RoundedEntryRenderer : Page
     {
-        public string MapServiceToken { get; set; } = "TeY7G1WAvjb34E4Whm3O~rf_C1-AnJK93MZy_MauxdQ~AiFZAkkXvdlx_N3mXTm1W3_cIDvh1thBdovOaZHGxUf_a28xHDYE9403N7OJQX_v";
-
-        public MainPage()
+        public RoundedEntryRenderer()
         {
             this.InitializeComponent();
-            Xamarin.FormsMaps.Init(MapServiceToken);
-            LoadApplication(new Puma.App());
         }
     }
 }
