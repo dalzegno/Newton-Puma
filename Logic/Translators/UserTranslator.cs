@@ -18,7 +18,10 @@ namespace Logic.Translators
                 LastName = user.LastName,
                 DisplayName = user.DisplayName,
                 Email = user.Email.ToLower(),
-                Password = user.Password
+                Password = user.Password,
+                IsActive = user.IsActive,
+                IsAdmin = user.IsAdmin,
+                IsSuperAdmin = user.IsSuperAdmin
             };
         }
 
@@ -35,6 +38,9 @@ namespace Logic.Translators
                 DisplayName = user.DisplayName,
                 Email = user.Email.ToLower(),
                 Password = user.Password,
+                IsSuperAdmin = user.IsSuperAdmin,
+                IsAdmin = user.IsAdmin,
+                IsActive = user.IsActive,
                 Comments = new List<Comment>(),
                 Gradings = new List<Grading>()
             };

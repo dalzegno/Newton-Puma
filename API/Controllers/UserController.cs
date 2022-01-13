@@ -1,5 +1,4 @@
-﻿using API.Models;
-using Logic.Models;
+﻿using Logic.Models;
 using Logic.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -46,16 +45,45 @@ namespace API.Controllers
         /// <param name="id"></param>
         /// <returns>The requested user</returns>
         /// <response code="200">Returns the requested user</response>
-        /// <response code="400">If user couldn't be found</response>
-        [HttpGet("{id}")]
+        /// <response code="404">If user couldn't be found</response>
+        /// <response code="400">If request was faulty</response>
+        [HttpGet("GetUserById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<UserDto>> GetUser(int id)
+        public async Task<ActionResult<UserDto>> GetUser([FromQuery] int id)
         {
+            if (id == 0)
+                return BadRequest("Request parameter was 0");
+
             UserDto user = await _userService.GetUserAsync(id);
 
             if (user == null)
                 return NotFound($"Could not find a user with id: {id}");
+
+            return Ok(user);
+        }
+
+        /// <summary>
+        /// Get a user by email
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns>The requested user</returns>
+        /// <response code="200">Returns the requested user</response>
+        /// <response code="404">If user couldn't be found</response>
+        /// <response code="400">If user couldn't be found</response>
+        [HttpGet("GetUserByEmail")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<UserDto>> GetUser(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+                return BadRequest("Request contained null or faulty values");
+
+            UserDto user = await _userService.GetUserAsync(email.ToLower());
+
+            if (user == null)
+                return NotFound($"Could not find a user with email: {email}");
 
             return Ok(user);
         }
@@ -67,7 +95,7 @@ namespace API.Controllers
         /// <returns></returns>
         /// <response code="201">Returns the created user</response>
         /// <response code="400">If the user was null</response>
-        [HttpPost("{userToPost}")]
+        [HttpPost()]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<UserDto>> Post([FromBody] UserDto userToPost)
@@ -78,6 +106,18 @@ namespace API.Controllers
                 return BadRequest("The request body was null, or contained faulty values.");
 
             return Ok(createdUser);
+        }
+
+        [HttpPut("SetAsInactive")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<UserDto>> SetAsInactive (int id)
+        {
+            UserDto updatedUser = await _userService.SetUserAsInactive(id);
+            if (updatedUser == null)
+                return NotFound();
+
+            return Ok(updatedUser);
         }
     }
 }

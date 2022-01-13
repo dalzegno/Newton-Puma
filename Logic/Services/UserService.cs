@@ -42,6 +42,16 @@ namespace Logic.Services
             return UserTranslator.ToModel(dbUser);
         }
 
+        public async Task<UserDto> GetUserAsync(string email)
+        {
+            var dbUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+
+            if (dbUser == null)
+                return null;
+
+            return UserTranslator.ToModel(dbUser);
+        }
+
         public async Task<UserDto> PostUserAsync(UserDto newUser)
         {
             if (!IsNewUserRequestValid(newUser))
@@ -53,6 +63,7 @@ namespace Logic.Services
                 return UserTranslator.ToModel(foundUser);
 
             User userToAdd = UserTranslator.ToEntity(newUser);
+            userToAdd.IsActive = true;
 
             try
             {
@@ -66,6 +77,19 @@ namespace Logic.Services
             }
 
             return UserTranslator.ToModel(userToAdd);
+        }
+
+        public async Task<UserDto> SetUserAsInactive(int id)
+        {
+            var userToEdit = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+            if (userToEdit == null)
+                return null;
+
+            userToEdit.IsActive = false;
+            await _context.SaveChangesAsync();
+
+            return UserTranslator.ToModel(userToEdit);
         }
 
         private static bool IsNewUserRequestValid(UserDto newUser)
