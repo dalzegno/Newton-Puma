@@ -31,6 +31,12 @@ namespace PumaDbLibrary
         public string FirstName { get; set; }
         [Column(TypeName = "nvarchar(60)")]
         public string LastName { get; set; }
+        [Column(TypeName = "integer")]
+        public bool IsAdmin { get; set; }
+        [Column(TypeName = "integer")]
+        public bool IsSuperAdmin { get; set; }
+        [Column(TypeName = "integer")]
+        public bool IsActive { get; set; } = true;
 
         [InverseProperty(nameof(Comment.User))]
         public virtual ICollection<Comment> Comments { get; set; }
