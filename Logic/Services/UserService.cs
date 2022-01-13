@@ -22,7 +22,7 @@ namespace Logic.Services
         public async Task<ICollection<UserDto>> GetAsync()
         {
             var dbUsers = await _context.Users.ToListAsync();
-            List<UserDto> userResults = new List<UserDto>();
+            List<UserDto> userResults = new();
 
             foreach (var dbUser in dbUsers)
             {
@@ -32,46 +32,48 @@ namespace Logic.Services
             return userResults;
         }
 
-        public async Task<UserDto> GetUserAsync(int userId)
+        public async Task<UserDto> GetUserAsync(int id)
         {
-            var dbUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            var dbUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
 
             if (dbUser == null)
-                throw new Exception($"Kunde inte hitta användaren med id {userId}");
+                return null;
 
             return UserTranslator.ToModel(dbUser);
         }
 
         public async Task<UserDto> PostUserAsync(UserDto newUser)
         {
-            var foundUser = await _context.Users.FirstOrDefaultAsync(x => x.Email == newUser.Email);
+            if (!IsNewUserRequestValid(newUser))
+                return null;
+
+            var foundUser = await _context.Users.FirstOrDefaultAsync(x => x.Email == newUser.Email.ToLower());
 
             if (foundUser != null)
                 return UserTranslator.ToModel(foundUser);
 
-            User userToAdd = new()
-            {
-                Id = newUser.Id,
-                Comments = new List<Comment>(),
-                DisplayName = newUser.DisplayName ?? "",
-                FirstName = newUser.FirstName ?? "",
-                LastName = newUser.LastName ?? "",
-                Email = newUser.Email,
-                Gradings = new List<Grading>(),
-                Password = newUser.Password
-            };
+            User userToAdd = UserTranslator.ToEntity(newUser);
 
             try
             {
                 await _context.Users.AddAsync(userToAdd);
                 await _context.SaveChangesAsync();
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                throw new Exception("Något gick fel vid sparande till databasen.");
+                //throw new Exception("Något gick fel vid sparande till databasen.");
+                return null;
             }
 
             return UserTranslator.ToModel(userToAdd);
+        }
+
+        private static bool IsNewUserRequestValid(UserDto newUser)
+        {
+            if (newUser == null || string.IsNullOrEmpty(newUser.Email))
+                return false;
+
+            return true;
         }
     }
 }

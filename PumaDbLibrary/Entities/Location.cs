@@ -20,10 +20,10 @@ namespace PumaDbLibrary
         public int Id { get; set; }
         [Required]
         [Column(TypeName = "DECIMAL")]
-        public byte[] Latitude { get; set; }
+        public decimal Latitude { get; set; }
         [Required]
         [Column(TypeName = "DECIMAL")]
-        public byte[] Longitude { get; set; }
+        public decimal Longitude { get; set; }
         [Column(TypeName = "nvarchar")]
         public string Name { get; set; }
 
