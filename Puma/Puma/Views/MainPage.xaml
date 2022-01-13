@@ -9,12 +9,12 @@
         
         <!-- MAP -->
         <maps:Map x:Name="map"  MapClicked="OnMapClicked"
-            MapType="Hybrid"
+                    MapType="Hybrid"
                     Background="White"
                     BackgroundColor="White"
-                      AbsoluteLayout.LayoutFlags="All"
-                     AbsoluteLayout.LayoutBounds="0,0,1,1"
-                        >
+                    AbsoluteLayout.LayoutFlags="All"
+                    AbsoluteLayout.LayoutBounds="0,0,1,1"
+                    >
         <x:Arguments>
             <maps:MapSpan>
                 <x:Arguments>
@@ -35,8 +35,7 @@
         <StackLayout BackgroundColor="#CAE9FF"
                     AbsoluteLayout.LayoutBounds="0, 0, 1, 60" 
                     AbsoluteLayout.LayoutFlags="WidthProportional"
-                    Grid.RowSpan="3"
-                    Grid.ColumnSpan="2"
+                    
                     Opacity=".9"
                      Spacing="10"
                      Padding="5"
@@ -55,6 +54,7 @@
                    VerticalOptions="FillAndExpand"
                     Opacity=".8">
                 <local:RoundedEntry Opacity=".8"></local:RoundedEntry>
+                
             </Frame>
             <StackLayout Orientation="Horizontal" Margin="0,5,20,5">
             <Button x:Name="btn_Login"
@@ -64,6 +64,80 @@
                     Text="Sign up"></Button>
             </StackLayout>
         </StackLayout>
+
+        <Frame AbsoluteLayout.LayoutBounds=".5, .5, 300, 350" 
+                    AbsoluteLayout.LayoutFlags="PositionProportional"
+            Background="White"
+               Opacity=".9">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+        <StackLayout Spacing="22">
+                    <Button 
+                        BackgroundColor="Transparent"
+                        Margin="0,-10,-10,-30"
+                        Text="X" HorizontalOptions="EndAndExpand"></Button>
+                    <StackLayout Orientation="Horizontal"
+                                 Margin="10,0,10,0">
+                        <Button
+                            CornerRadius="15"
+                            BackgroundColor="Transparent"
+                                Text="Log in" 
+                                FontSize="32" 
+                           HorizontalOptions="Start"></Button>
+                        <Button 
+                            CornerRadius="15"
+                            BackgroundColor="Transparent"
+                            Text="Sign up" FontSize="32" 
+                           HorizontalOptions="EndAndExpand"></Button>
+                    </StackLayout>
+                    <Rectangle HeightRequest="2"
+                               HorizontalOptions="FillAndExpand"
+                               Background="black"/>
+                    <Frame 
+                    Margin="5"
+                    BorderColor="LightGray"
+                    Padding="0"
+                   CornerRadius="15"
+                   IsClippedToBounds="False"
+                   HorizontalOptions="CenterAndExpand"
+                    WidthRequest="500"
+                   VerticalOptions="FillAndExpand"
+                    Opacity=".8">
+                        <local:RoundedEntry 
+                            
+                            Opacity=".8" 
+                            Placeholder="Email"></local:RoundedEntry>
+
+                    </Frame>
+                    <Frame 
+                    Margin="5"
+                    BorderColor="LightGray"
+                    Padding="0"
+                   CornerRadius="15"
+                   IsClippedToBounds="False"
+                   HorizontalOptions="CenterAndExpand"
+                    WidthRequest="500"
+                   VerticalOptions="FillAndExpand"
+                    Opacity=".8">
+                        <local:RoundedEntry 
+                            IsPassword="True"
+                            Opacity=".8" 
+                            Placeholder="Password"></local:RoundedEntry>
+
+                    </Frame>
+                    <Button 
+                        CornerRadius="10"
+                        HorizontalOptions="Center"
+                        Text="Log in" 
+                        FontSize="20"></Button>
+                </StackLayout>
+            </Grid>
+        </Frame>
 
     </AbsoluteLayout>
 </ContentPage>

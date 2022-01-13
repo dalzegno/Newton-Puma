@@ -31,5 +31,7 @@ namespace Puma
             map.Pins.Add(pin);
             System.Diagnostics.Debug.WriteLine($"MapClick: {e.Position.Latitude}, {e.Position.Longitude}");
         }
+
+        
     }
 }
