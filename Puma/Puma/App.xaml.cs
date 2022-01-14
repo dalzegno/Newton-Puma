@@ -1,4 +1,5 @@
 ﻿using System;
+using Client.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
