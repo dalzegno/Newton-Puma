@@ -21,7 +21,10 @@ namespace Logic.Services
 
         public async Task<UserDto> LogIn(string email, string password)
         {
-            var foundUser = _context.Users.FirstOrDefaultAsync(u => u.Email == email.ToLower() && u.Password == EncryptionService.Encrypt(password));
+            string encryptedPassword = EncryptionService.Encrypt(password);
+
+            User foundUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == email.ToLower() && u.Password == encryptedPassword);
+
             if (foundUser == null)
                 return null;
 
