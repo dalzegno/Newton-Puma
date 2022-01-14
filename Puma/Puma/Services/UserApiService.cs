@@ -16,6 +16,7 @@ namespace Client.Services
 
         public EventHandler<string> ErrorMessage;
 
+
         protected virtual void OnErrorMessage(string e) => ErrorMessage?.Invoke(this, e);
 
         public async Task<UserDto> LogIn(string email, string password)
@@ -35,10 +36,12 @@ namespace Client.Services
                 return null;
 
             return await response.Content.ReadFromJsonAsync<UserDto>();
+
         }
 
         public async Task<UserDto> CreateUserAsync(UserDto userToCreate)
         {
+
             var response = await _httpClient.PostAsJsonAsync(_userApiUri, userToCreate);
 
             if (!await IsResponseSuccess(response))
@@ -57,6 +60,7 @@ namespace Client.Services
             }
 
             return true;
+
         }
 
     }

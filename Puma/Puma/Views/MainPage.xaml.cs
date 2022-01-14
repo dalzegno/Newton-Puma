@@ -1,5 +1,6 @@
 ﻿using Client.Models;
 using Client.Services;
+using Client.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,8 +9,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
+using Xamarin.Forms.Xaml;
 
-namespace Puma
+namespace Client.Views
 {
     public partial class MainPage : ContentPage
     {
@@ -21,17 +23,7 @@ namespace Puma
         }
         void OnMapClicked(object sender, MapClickedEventArgs e)
         {
-            map.Pins.Clear();
-            Pin pin = new Pin
-            {
-
-                Label = "",
-                Address = "",
-                Type = PinType.Generic,
-                Position = new Position(e.Position.Latitude, e.Position.Longitude)
-            };
-            map.Pins.Add(pin);
-            System.Diagnostics.Debug.WriteLine($"MapClick: {e.Position.Latitude}, {e.Position.Longitude}");
+            PopUp.Pinmethod(map, e);
         }
 
         private void btn_closePopup(object sender, EventArgs e)
@@ -42,31 +34,15 @@ namespace Puma
 
         private async void btn_Signup_Popup_Clicked(object sender, EventArgs e)
         {
-            signupPopupVisible();
-            //var users = await _userApiService.GetUsersAsync();
-            //foreach (var user in users)
-            //{
-            //    System.Diagnostics.Debug.WriteLine($"User firstname: {user.FirstName}, User lastname: {user.LastName}");
-            //}
+            PopUp.PublicVisibilityforTwo(signupPopup, loginPopup);
         }
 
         private async void btn_Login_Popup_Clicked(object sender, EventArgs e)
         {
-            loginPopupVisible();
-            
+            PopUp.PublicVisibilityforTwo(loginPopup, signupPopup);
         }
 
         //metoder
-        public void loginPopupVisible()
-        {
-            signupPopup.IsVisible = false;
-            loginPopup.IsVisible = true;
-        }
-        public void signupPopupVisible()
-        {
-            loginPopup.IsVisible = false;
-            signupPopup.IsVisible = true;
-        }
 
         private void btn_login_Clicked(object sender, EventArgs e)
         {
@@ -75,19 +51,7 @@ namespace Puma
 
         private async void btn_signup_Clicked(object sender, EventArgs e)
         {
-            var user = new UserDto()
-            {
-                Email = txt_signupEmail?.Text,
-                Password = txt_loginPassword?.Text,
-                DisplayName = txt_signupDisplayName?.Text,
-                FirstName = txt_signupFirstName?.Text ?? "",
-                LastName = txt_signupSurname?.Text ?? ""
-            };
-
-
-            var createdUser = await _userApiService.CreateUserAsync(user);
-            if (createdUser != null)
-                System.Diagnostics.Debug.WriteLine($"User created!: {createdUser.FirstName}, User lastname: {createdUser.LastName}");
+            PopUp.RegisterUser(txt_signupEmail, txt_signupPassword, txt_signupDisplayName, txt_signupFirstName, txt_signupSurname, _userApiService);
         }
 
         private void ReportErrorMessage(object sender, string message) => DisplayAlert("Error", $"{message}", "OK");
