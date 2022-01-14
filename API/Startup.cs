@@ -54,6 +54,7 @@ namespace API
             services.AddSingleton(mapper);
             services.AddDbContext<PumaDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("puma")));
             services.AddScoped<UserService>();
+            services.AddScoped<CrypteringService>();
 
             services.AddCors();
 

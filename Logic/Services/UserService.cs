@@ -12,11 +12,13 @@ namespace Logic.Services
     {
         private PumaDbContext _context;
         private IMapper _mapper;
+        private CrypteringService _crypteringService;
 
-        public UserService(PumaDbContext context, IMapper mapper)
+        public UserService(PumaDbContext context, IMapper mapper, CrypteringService crypteringService)
         {
             _context = context;
             _mapper = mapper;
+            _crypteringService = crypteringService;
         }
 
         public async Task<ICollection<UserDto>> GetAllAsync()
@@ -49,6 +51,11 @@ namespace Logic.Services
         {
             if (!IsNewUserRequestValid(newUser))
                 return null;
+
+            var test = _crypteringService.Cryptering("hello world");
+
+            newUser.Password = test;
+            
 
             var foundUser = await GetDbUserAsync(newUser.Email);
 
