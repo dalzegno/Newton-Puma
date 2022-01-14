@@ -94,10 +94,10 @@ namespace Logic.Services
 
             //EditUser(user, userToEdit);
 
-            userToEdit = _mapper.Map<User>(user);
+            User editedUser = _mapper.Map<User>(user);
 
             await _context.SaveChangesAsync();
-            return _mapper.Map<UserDto>(userToEdit);
+            return _mapper.Map<UserDto>(editedUser);
         }
 
         private async Task<User> GetDbUserAsync(int id)

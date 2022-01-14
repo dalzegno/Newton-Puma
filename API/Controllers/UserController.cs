@@ -28,7 +28,7 @@ namespace API.Controllers
             var user = await _userService.LogIn(email, password);
 
             if (user == null)
-                NotFound("Username or password was wrong.");
+                return NotFound("Username or password was wrong.");
 
             return Ok(user);
         }
@@ -97,7 +97,7 @@ namespace API.Controllers
             UserDto user = await _userService.GetUserAsync(email.ToLower());
 
             if (user == null)
-                return NotFound($"Could not find a user with email: {email}");
+                return NotFound($"Could not find a user with email: \"{email}\"");
 
             return Ok(user);
         }

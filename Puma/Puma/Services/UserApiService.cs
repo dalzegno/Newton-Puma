@@ -16,34 +16,47 @@ namespace Client.Services
 
         public EventHandler<string> ErrorMessage;
 
-        protected virtual void OnErrorMessage(string e) => ErrorMessage?.Invoke(this, e); 
+        protected virtual void OnErrorMessage(string e) => ErrorMessage?.Invoke(this, e);
 
-        public async Task<List<UserDto>> GetUsersAsync()
+        public async Task<UserDto> LogIn(string email, string password)
         {
-            var response = await _httpClient.GetAsync($"{_userApiUri}/GetAllUsers");
-
-            if (!response.IsSuccessStatusCode)
-            {
-                System.Diagnostics.Debug.WriteLine($"Error: {response}");
-                OnErrorMessage($"Could not get users. ResponseCode: {response.StatusCode}, message: {response}");
+            var response = await _httpClient.GetAsync($"{_userApiUri}/LogIn?email={email}&password={password}");
+            if (!await IsResponseSuccess(response))
                 return null;
-            }
 
-            return await response.Content.ReadFromJsonAsync<List<UserDto>>();
+            return await response.Content.ReadFromJsonAsync<UserDto>();
+        }
+
+        public async Task<UserDto> GetUserAsync(string email)
+        {
+            var response = await _httpClient.GetAsync($"{_userApiUri}/GetUserByEmail?email={email}");
+
+            if (!await IsResponseSuccess(response))
+                return null;
+
+            return await response.Content.ReadFromJsonAsync<UserDto>();
         }
 
         public async Task<UserDto> CreateUserAsync(UserDto userToCreate)
         {
-            var userContent = JsonContent.Create(userToCreate);
-            var response = await _httpClient.PostAsync(_userApiUri, userContent);
+            var response = await _httpClient.PostAsJsonAsync(_userApiUri, userToCreate);
 
-            if (!response.IsSuccessStatusCode)
-            {
-                OnErrorMessage($"Create user failed. Responsecode: {response.StatusCode}");
+            if (!await IsResponseSuccess(response))
                 return null;
-            }
 
             return await response.Content.ReadFromJsonAsync<UserDto>();
+        }
+
+        private async Task<bool> IsResponseSuccess(HttpResponseMessage response)
+        {
+            if (!response.IsSuccessStatusCode)
+            {
+                string responseBody = await response.Content.ReadAsStringAsync();
+                OnErrorMessage(responseBody);
+                return false;
+            }
+
+            return true;
         }
 
     }
