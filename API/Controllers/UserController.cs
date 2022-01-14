@@ -22,6 +22,18 @@ namespace API.Controllers
             _userService = userService;
         }
 
+        [HttpGet("LogIn")]
+        public async Task<ActionResult<UserDto>> Login([FromQuery] string email, [FromQuery] string password)
+        {
+            var user = await _userService.LogIn(email, password);
+
+            if (user == null)
+                NotFound("Username or password was wrong.");
+
+            return Ok(user);
+        }
+
+
         /// <summary>
         /// Gets all users
         /// </summary>

@@ -8,24 +8,26 @@ using System.Threading.Tasks;
 
 namespace Logic.Services
 {
-    public class CrypteringService
+    public class EncryptionService
     {
-
-
-        public string Cryptering(string str)
+        public string Encrypt(string stringToEncrypt)
         {
             //Hash a password using salt and streching
             byte[] encrypted = KeyDerivation.Pbkdf2(
-                password: str,
+                password: stringToEncrypt,
                 salt: Encoding.UTF8.GetBytes("j78Y#p)/saREN!y3@"),
                 prf: KeyDerivationPrf.HMACSHA512,
                 iterationCount: 100,
                 numBytesRequested: 64);
 
-            return Encoding.UTF8.GetString(encrypted,0,encrypted.Length);
+            var hash = BitConverter.ToString(encrypted).Replace("-", string.Empty);
 
+            return hash;
         }
 
+        //public string Decrypt(string key, string stringToDecrypt)
+        //{
 
+        //}
     }
 }
