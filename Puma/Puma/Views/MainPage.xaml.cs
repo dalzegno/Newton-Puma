@@ -1,6 +1,8 @@
 ﻿using Client.Models;
 using Client.Services;
 using Client.ViewModels;
+using Microsoft.Extensions.DependencyInjection;
+using Puma;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,6 +22,8 @@ namespace Client.Views
         {
             InitializeComponent();
             _userApiService.ErrorMessage += ReportErrorMessage;
+            var container = ((App)App.Current).Container;
+            BindingContext = ActivatorUtilities.GetServiceOrCreateInstance(container, typeof(MainViewModel));
         }
         void OnMapClicked(object sender, MapClickedEventArgs e)
         {
