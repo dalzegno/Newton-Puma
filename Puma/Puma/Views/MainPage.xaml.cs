@@ -1,4 +1,5 @@
 ﻿using Client.Models;
+using Client.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,18 +13,18 @@ namespace Puma
 {
     public partial class MainPage : ContentPage
     {
-       
+        UserApiService _userApiService = new UserApiService();
         public MainPage()
         {
-            
             InitializeComponent();
+            _userApiService.ErrorMessage += ReportErrorMessage;
         }
         void OnMapClicked(object sender, MapClickedEventArgs e)
         {
             map.Pins.Clear();
             Pin pin = new Pin
             {
-                
+
                 Label = "",
                 Address = "",
                 Type = PinType.Generic,
@@ -39,14 +40,20 @@ namespace Puma
             signupPopup.IsVisible = false;
         }
 
-        private void btn_Signup_Popup_Clicked(object sender, EventArgs e)
+        private async void btn_Signup_Popup_Clicked(object sender, EventArgs e)
         {
             signupPopupVisible();
+            //var users = await _userApiService.GetUsersAsync();
+            //foreach (var user in users)
+            //{
+            //    System.Diagnostics.Debug.WriteLine($"User firstname: {user.FirstName}, User lastname: {user.LastName}");
+            //}
         }
 
-        private void btn_Login_Popup_Clicked(object sender, EventArgs e)
+        private async void btn_Login_Popup_Clicked(object sender, EventArgs e)
         {
             loginPopupVisible();
+            
         }
 
         //metoder
@@ -66,7 +73,7 @@ namespace Puma
 
         }
 
-        private void btn_signup_Clicked(object sender, EventArgs e)
+        private async void btn_signup_Clicked(object sender, EventArgs e)
         {
             var user = new UserDto()
             {
@@ -78,6 +85,11 @@ namespace Puma
             };
 
 
+            var createdUser = await _userApiService.CreateUserAsync(user);
+            if (createdUser != null)
+                System.Diagnostics.Debug.WriteLine($"User created!: {createdUser.FirstName}, User lastname: {createdUser.LastName}");
         }
+
+        private void ReportErrorMessage(object sender, string message) => DisplayAlert("Error", $"{message}", "OK");
     }
 }

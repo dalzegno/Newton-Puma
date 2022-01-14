@@ -2,54 +2,47 @@
 using PumaDbLibrary;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Logic.Models;
-using Logic.Translators;
+using AutoMapper;
 
 namespace Logic.Services
 {
     public class UserService
     {
         private PumaDbContext _context;
+        private IMapper _mapper;
 
-        public UserService(PumaDbContext context)
+        public UserService(PumaDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
-        public async Task<ICollection<UserDto>> GetAsync()
+        public async Task<ICollection<UserDto>> GetAllAsync()
         {
             var dbUsers = await _context.Users.ToListAsync();
-            List<UserDto> userResults = new();
-
-            foreach (var dbUser in dbUsers)
-            {
-                userResults.Add(UserTranslator.ToModel(dbUser));
-            }
-
-            return userResults;
+            return _mapper.Map<ICollection<UserDto>>(dbUsers);
         }
 
         public async Task<UserDto> GetUserAsync(int id)
         {
-            var dbUser = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            User dbUser = await GetDbUserAsync(id);
 
             if (dbUser == null)
                 return null;
 
-            return UserTranslator.ToModel(dbUser);
+            return _mapper.Map<UserDto>(dbUser);
         }
 
         public async Task<UserDto> GetUserAsync(string email)
         {
-            var dbUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            var dbUser = await GetDbUserAsync(email);
 
             if (dbUser == null)
                 return null;
 
-            return UserTranslator.ToModel(dbUser);
+            return _mapper.Map<UserDto>(dbUser);
         }
 
         public async Task<UserDto> PostUserAsync(UserDto newUser)
@@ -57,12 +50,12 @@ namespace Logic.Services
             if (!IsNewUserRequestValid(newUser))
                 return null;
 
-            var foundUser = await _context.Users.FirstOrDefaultAsync(x => x.Email == newUser.Email.ToLower());
+            var foundUser = await GetDbUserAsync(newUser.Email);
 
             if (foundUser != null)
-                return UserTranslator.ToModel(foundUser);
+                return _mapper.Map<UserDto>(foundUser);
 
-            User userToAdd = UserTranslator.ToEntity(newUser);
+            User userToAdd = _mapper.Map<User>(newUser);
             userToAdd.IsActive = true;
 
             try
@@ -76,51 +69,63 @@ namespace Logic.Services
                 return null;
             }
 
-            return UserTranslator.ToModel(userToAdd);
+            return _mapper.Map<UserDto>(userToAdd);
         }
 
-        public async Task<UserDto> SetActive(int id, bool value)
+        public async Task<UserDto> EditUser(UserDto user)
         {
-            var userToEdit = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-            
-            if (userToEdit == null)
-                return null;
-
-            EditUserBoolProperty(userToEdit, "IsActive", value);
-
-            await _context.SaveChangesAsync();
-            return UserTranslator.ToModel(userToEdit);
-        }
-
-        public async Task<UserDto> SetAdmin(int id, bool value)
-        {
-            var userToEdit = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            var userToEdit = await GetDbUserAsync(user.Id);
 
             if (userToEdit == null)
                 return null;
 
-            EditUserBoolProperty(userToEdit, "IsAdmin", value);
+            //EditUser(user, userToEdit);
+
+            userToEdit = _mapper.Map<User>(user);
 
             await _context.SaveChangesAsync();
-            return UserTranslator.ToModel(userToEdit);
+            return _mapper.Map<UserDto>(userToEdit);
         }
 
-        private static void EditUserBoolProperty(User userToEdit, string property, bool value)
+        private async Task<User> GetDbUserAsync(int id)
         {
-            switch (property.ToLower())
-            {
-                case "isactive":
-                    userToEdit.IsActive = value;
-                    break;
-
-                case "isadmin":
-                    userToEdit.IsAdmin = value;
-                    break;
-
-                default:
-                    break;
-            }
+            return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
         }
+
+        private async Task<User> GetDbUserAsync(string email)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email.ToLower());
+        }
+
+        //public async Task<UserDto> SetAdmin(int id, bool value)
+        //{
+        //    var userToEdit = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+        //    if (userToEdit == null)
+        //        return null;
+
+        //    EditUserBoolProperty(userToEdit, "IsAdmin", value);
+
+        //    await _context.SaveChangesAsync();
+        //    return _mapper.Map<UserDto>(userToEdit);
+        //}
+
+        //private static void EditUserBoolProperty(User userToEdit, string property, bool value)
+        //{
+        //    switch (property.ToLower())
+        //    {
+        //        case "isactive":
+        //            userToEdit.IsActive = value;
+        //            break;
+
+        //        case "isadmin":
+        //            userToEdit.IsAdmin = value;
+        //            break;
+
+        //        default:
+        //            break;
+        //    }
+        //}
 
         private static bool IsNewUserRequestValid(UserDto newUser)
         {

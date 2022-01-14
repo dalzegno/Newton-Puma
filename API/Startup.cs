@@ -1,9 +1,11 @@
+using AutoMapper;
+using Logic.MappingProfiles;
 using Logic.Services;
-using Logic.Translators;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -40,10 +42,21 @@ namespace API
                 var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
             });
-            // TODO: Vet inte om dbContext ska instansieras här.
-            services.AddScoped(_ => new PumaDbContext());
+            // Automapping configuration
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                // TODO: Lägg profiles här 
+                mc.AddProfile(new UserMapping());
+            });
+
+            IMapper mapper = mapperConfig.CreateMapper();
+
+            services.AddSingleton(mapper);
+            services.AddDbContext<PumaDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("puma")));
             services.AddScoped<UserService>();
-            services.AddScoped<UserTranslator>();
+
+            services.AddCors();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,6 +78,14 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            app.UseCors(builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyHeader()
+                       .AllowAnyMethod()
+                       .WithExposedHeaders("Content-Disposition");
             });
         }
     }
