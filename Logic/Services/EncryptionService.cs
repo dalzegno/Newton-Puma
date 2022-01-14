@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Logic.Services
 {
-    public class EncryptionService
+    public static class EncryptionService
     {
-        public string Encrypt(string stringToEncrypt)
+        public static string Encrypt(string stringToEncrypt)
         {
             //Hash a password using salt and streching
             byte[] encrypted = KeyDerivation.Pbkdf2(
@@ -20,14 +20,7 @@ namespace Logic.Services
                 iterationCount: 100,
                 numBytesRequested: 64);
 
-            var hash = BitConverter.ToString(encrypted).Replace("-", string.Empty);
-
-            return hash;
+            return BitConverter.ToString(encrypted).Replace("-", string.Empty);
         }
-
-        //public string Decrypt(string key, string stringToDecrypt)
-        //{
-
-        //}
     }
 }

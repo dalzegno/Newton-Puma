@@ -12,18 +12,16 @@ namespace Logic.Services
     {
         private PumaDbContext _context;
         private IMapper _mapper;
-        private EncryptionService _encryptionService;
 
-        public UserService(PumaDbContext context, IMapper mapper, EncryptionService encryptionService)
+        public UserService(PumaDbContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
-            _encryptionService = encryptionService;
         }
 
         public async Task<UserDto> LogIn(string email, string password)
         {
-            var foundUser = _context.Users.FirstOrDefaultAsync(u => u.Email == email.ToLower() && u.Password == _encryptionService.Encrypt(password));
+            var foundUser = _context.Users.FirstOrDefaultAsync(u => u.Email == email.ToLower() && u.Password == EncryptionService.Encrypt(password));
             if (foundUser == null)
                 return null;
 
@@ -68,7 +66,7 @@ namespace Logic.Services
 
             User userToAdd = _mapper.Map<User>(newUser);
             userToAdd.IsActive = true;
-            userToAdd.Password = _encryptionService.Encrypt(newUser.Password);
+            userToAdd.Password = EncryptionService.Encrypt(newUser.Password);
 
             try
             {

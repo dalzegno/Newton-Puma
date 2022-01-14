@@ -42,8 +42,6 @@ namespace NorthwindApplication
             ////QueryDatabaseWithLinq();
             //#endregion
 
-            var encryptionService = new EncryptionService();
-
             //var hash = encryptionService.Encrypt("hej hej");
             //Console.WriteLine("Sträng innan kryptering: 'hej hej'");
             //Console.WriteLine($"Sträng efter kryptering: {hash}");
@@ -61,7 +59,7 @@ namespace NorthwindApplication
             };
 
             Console.Write("Hashar lösenord...");
-            peter.Password = encryptionService.Encrypt(peter.Password);
+            peter.Password = EncryptionService.Encrypt(peter.Password);
 
             var users = new List<UserDto>
             {
@@ -77,7 +75,7 @@ namespace NorthwindApplication
             Console.Write("Lösenord: ");
             string password = Console.ReadLine();
 
-            var hashedPassword = encryptionService.Encrypt(password);
+            var hashedPassword = EncryptionService.Encrypt(password);
 
             var foundUser = users.FirstOrDefault(u => u.Password == hashedPassword && u.Email == email);
 
