@@ -35,11 +35,6 @@ namespace Client.Views
         private async void btn_Signup_Popup_Clicked(object sender, EventArgs e)
         {
             PopUp.PublicVisibilityforTwo(signupPopup, loginPopup);
-            //var users = await _userApiService.GetUsersAsync();
-            //foreach (var user in users)
-            //{
-            //    System.Diagnostics.Debug.WriteLine($"User firstname: {user.FirstName}, User lastname: {user.LastName}");
-            //}
         }
 
         private async void btn_Login_Popup_Clicked(object sender, EventArgs e)
