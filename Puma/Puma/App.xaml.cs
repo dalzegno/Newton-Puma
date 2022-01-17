@@ -12,15 +12,20 @@ namespace Puma
         public IServiceProvider Container;
         public App()
         {
+            
             InitializeComponent();
             Container = ConfigureDependencyInjection();
+
             MainPage = new MainPage();
+
+
         }
         IServiceProvider ConfigureDependencyInjection()
         {
             var serviceCollection = new ServiceCollection();
 
             serviceCollection.AddScoped<UserApiService>();
+            serviceCollection.AddScoped<DialogService>();
 
             return serviceCollection.BuildServiceProvider();
         }
@@ -36,5 +41,6 @@ namespace Puma
         protected override void OnResume()
         {
         }
+
     }
 }

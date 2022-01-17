@@ -17,47 +17,49 @@ namespace Client.Views
 {
     public partial class MainPage : ContentPage
     {
-        UserApiService _userApiService = new UserApiService();
         public MainPage()
         {
             InitializeComponent();
-            _userApiService.ErrorMessage += ReportErrorMessage;
-            var container = ((App)App.Current).Container;
+
+            // Implementing dependecy injection
+            var container = ((App)Application.Current).Container;
             BindingContext = ActivatorUtilities.GetServiceOrCreateInstance(container, typeof(MainViewModel));
+            slCreateUserViewModel.BindingContext = ActivatorUtilities.GetServiceOrCreateInstance(container, typeof(NewUserViewModel));
         }
+
         void OnMapClicked(object sender, MapClickedEventArgs e)
         {
             PopUp.Pinmethod(map, e);
         }
 
-        private void btn_closePopup(object sender, EventArgs e)
-        {
-            loginPopup.IsVisible = false;
-            signupPopup.IsVisible = false;
-        }
+        //private void btn_closePopup(object sender, EventArgs e)
+        //{
+        //    loginPopup.IsVisible = false;
+        //    signupPopup.IsVisible = false;
+        //}
 
-        private async void btn_Signup_Popup_Clicked(object sender, EventArgs e)
-        {
-            PopUp.PublicVisibilityforTwo(signupPopup, loginPopup);
-        }
+        //private async void btn_Signup_Popup_Clicked(object sender, EventArgs e)
+        //{
+        //    PopUp.PublicVisibilityforTwo(signupPopup, loginPopup);
+        //}
 
-        private async void btn_Login_Popup_Clicked(object sender, EventArgs e)
-        {
-            PopUp.PublicVisibilityforTwo(loginPopup, signupPopup);
-        }
+        //private async void btn_Login_Popup_Clicked(object sender, EventArgs e)
+        //{
+        //    PopUp.PublicVisibilityforTwo(loginPopup, signupPopup);
+        //}
 
-        //metoder
+        ////metoder
 
         private void btn_login_Clicked(object sender, EventArgs e)
         {
 
         }
 
-        private async void btn_signup_Clicked(object sender, EventArgs e)
-        {
-            PopUp.RegisterUser(txt_signupEmail, txt_signupPassword, txt_signupDisplayName, txt_signupFirstName, txt_signupSurname, _userApiService);
-        }
+        ////private async void btn_signup_Clicked(object sender, EventArgs e)
+        ////{
+        ////    PopUp.RegisterUser(txt_signupEmail, txt_signupPassword, txt_signupDisplayName, txt_signupFirstName, txt_signupSurname, _userApiService);
+        ////}
 
-        private void ReportErrorMessage(object sender, string message) => DisplayAlert("Error", $"{message}", "OK");
+
     }
 }

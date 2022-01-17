@@ -13,10 +13,7 @@ namespace Client.Services
     {
         readonly HttpClient _httpClient = new HttpClient();
         readonly string _userApiUri = "http://localhost:64500/api/User";
-
         public EventHandler<string> ErrorMessage;
-
-
         protected virtual void OnErrorMessage(string e) => ErrorMessage?.Invoke(this, e);
 
         public async Task<UserDto> LogIn(string email, string password)
