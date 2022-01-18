@@ -1,8 +1,8 @@
-﻿using Client.Models;
+﻿using Puma.Models;
 using System;
 using System.Threading.Tasks;
 
-namespace Client.Services
+namespace Puma.Services
 {
     public interface IUserApiService
     {

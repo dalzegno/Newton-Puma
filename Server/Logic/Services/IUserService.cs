@@ -13,6 +13,7 @@ namespace Logic.Services
         Task<UserDto> GetUserAsync(string email);
         Task<UserDto> PostUserAsync(UserDto newUser);
         Task<UserDto> EditUserAsync(UserDto user);
+        Task<UserDto> DeleteUser(UserDto user);
 
     }
 }

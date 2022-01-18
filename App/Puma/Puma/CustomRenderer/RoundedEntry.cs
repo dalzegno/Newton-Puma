@@ -4,7 +4,7 @@ using System.Text;
 using Xamarin.Forms;
 
 
-namespace Client.CustomRenderer
+namespace Puma.CustomRenderer
 {
     public class RoundedEntry : Entry
     {

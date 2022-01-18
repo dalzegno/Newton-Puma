@@ -5,10 +5,10 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
-using Client.Views;
-using Client.Services;
+using Puma.Views;
+using Puma.Services;
 
-namespace Client.ViewModels
+namespace Puma.ViewModels
 {
     class MainViewModel : BaseViewModel
     {

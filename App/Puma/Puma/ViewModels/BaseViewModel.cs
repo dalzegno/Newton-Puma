@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-namespace Client.ViewModels
+
+namespace Puma.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {

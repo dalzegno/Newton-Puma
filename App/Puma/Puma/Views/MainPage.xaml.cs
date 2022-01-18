@@ -1,9 +1,9 @@
-﻿using Client.Services;
-using Client.ViewModels;
+﻿using Puma.Services;
+using Puma.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
-namespace Client.Views
+namespace Puma.Views
 {
     public partial class MainPage : ContentPage
     {

@@ -1,6 +1,6 @@
 ﻿using System;
-using Client.Services;
-using Client.Views;
+using Puma.Services;
+using Puma.Views;
 using Microsoft.Extensions.DependencyInjection;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;

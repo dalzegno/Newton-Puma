@@ -1,9 +1,9 @@
-﻿using Client.Models;
-using Client.Services;
+﻿using Puma.Models;
+using Puma.Services;
 using System.Windows.Input;
 using Xamarin.Forms;
 
-namespace Client.ViewModels
+namespace Puma.ViewModels
 {
     public class NewUserViewModel : BaseViewModel
     {

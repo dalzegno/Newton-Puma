@@ -117,5 +117,10 @@ namespace Logic.Services
 
             return true;
         }
+
+        public Task<UserDto> DeleteUser(UserDto user)
+        {
+            var deletedUser = _context.Users.FirstOrDefaultAsync(u => u.Id == user.Id);
+        }
     }
 }

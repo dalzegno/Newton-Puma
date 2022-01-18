@@ -4,14 +4,14 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Text;
-using Client.Models;
-using Client.Services;
-using Client.Views;
-using Client.CustomRenderer;
+using Puma.Models;
+using Puma.Services;
+using Puma.Views;
+using Puma.CustomRenderer;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
-namespace Client.ViewModels
+namespace Puma.ViewModels
 {
     class PopUp
     {

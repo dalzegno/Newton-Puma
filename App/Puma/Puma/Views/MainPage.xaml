@@ -2,9 +2,9 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
-             x:Class="Client.Views.MainPage"
-             xmlns:local="clr-namespace:Client.CustomRenderer;assembly=Puma"
-             xmlns:viewmodel="clr-namespace:Client.ViewModels" 
+             x:Class="Puma.Views.MainPage"
+             xmlns:local="clr-namespace:Puma.CustomRenderer;assembly=Puma"
+             xmlns:viewmodel="clr-namespace:Puma.ViewModels" 
     >
     
     <AbsoluteLayout  VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">

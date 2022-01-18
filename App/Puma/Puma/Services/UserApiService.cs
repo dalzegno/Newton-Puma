@@ -1,4 +1,4 @@
-﻿using Client.Models;
+﻿using Puma.Models;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -6,15 +6,15 @@ using System.Text;
 
 using System.Net.Http.Json; //Requires nuget package System.Net.Http.Json
 using System.Threading.Tasks;
-using Client.Services;
+using Puma.Services;
 using Xamarin.Forms;
 
 [assembly: Dependency(typeof(UserApiService))]
-namespace Client.Services
+namespace Puma.Services
 {
     public class UserApiService : IUserApiService
     {
-        readonly HttpClient _httpClient = new HttpClient();
+        readonly HttpClient _HttpClient = new HttpClient();
         readonly string _userApiUri = "http://localhost:64500/api/User";
         //readonly string _userApiUri = "http://localhost:44329/api/User";
         public EventHandler<string> ErrorMessage;
@@ -23,7 +23,7 @@ namespace Client.Services
 
         public async Task<UserDto> LogIn(string email, string password)
         {
-            var response = await _httpClient.GetAsync($"{_userApiUri}/LogIn?email={email}&password={password}");
+            var response = await _HttpClient.GetAsync($"{_userApiUri}/LogIn?email={email}&password={password}");
             if (!await IsResponseSuccess(response))
                 return null;
 
@@ -32,7 +32,7 @@ namespace Client.Services
 
         public async Task<UserDto> GetUserAsync(string email)
         {
-            var response = await _httpClient.GetAsync($"{_userApiUri}/GetUserByEmail?email={email}");
+            var response = await _HttpClient.GetAsync($"{_userApiUri}/GetUserByEmail?email={email}");
 
             if (!await IsResponseSuccess(response))
                 return null;
@@ -44,7 +44,7 @@ namespace Client.Services
         public async Task<UserDto> CreateUserAsync(UserDto userToCreate)
         {
 
-            var response = await _httpClient.PostAsJsonAsync(_userApiUri, userToCreate);
+            var response = await _HttpClient.PostAsJsonAsync(_userApiUri, userToCreate);
 
             if (!await IsResponseSuccess(response))
                 return null;
@@ -54,7 +54,7 @@ namespace Client.Services
 
         public async Task<UserDto> UpdateUserAsync(UserDto userToUpdate)
         {
-            var response = await _httpClient.PutAsJsonAsync(_userApiUri, userToUpdate);
+            var response = await _HttpClient.PutAsJsonAsync(_userApiUri, userToUpdate);
 
             if (!await IsResponseSuccess(response))
                 return null;
