@@ -7,13 +7,13 @@ namespace Logic.Services
 {
     public interface IUserService
     {
-        Task<UserDto> LogIn(string email, string password);
+        Task<UserDto> LogInAsync(string email, string password);
         Task<ICollection<UserDto>> GetAllAsync();
-        Task<UserDto> GetUserAsync(int id);
-        Task<UserDto> GetUserAsync(string email);
-        Task<UserDto> PostUserAsync(UserDto newUser);
-        Task<UserDto> EditUserAsync(UserDto user);
-        Task<UserDto> DeleteUser(UserDto user);
+        Task<UserDto> GetAsync(int id);
+        Task<UserDto> GetAsync(string email);
+        Task<UserDto> PostAsync(UserDto newUser);
+        Task<UserDto> EditAsync(UserDto user);
+        Task<UserDto> DeleteAsync(int id);
 
     }
 }

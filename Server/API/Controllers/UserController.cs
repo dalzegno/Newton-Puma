@@ -18,10 +18,21 @@ namespace API.Controllers
             _userService = userService;
         }
 
+        /// <summary>
+        /// Log in user
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="password"></param>
+        /// <response code="200">Returns logged in user</response>
+        /// <response code="404">Could not find a user with the provided values</response>
+        /// <response code="500">Server error</response>
         [HttpGet("LogIn")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<UserDto>> Login([FromQuery] string email, [FromQuery] string password)
         {
-            var user = await _userService.LogIn(email, password);
+            var user = await _userService.LogInAsync(email, password);
 
             if (user == null)
                 return NotFound("Username or password was wrong.");
@@ -67,7 +78,7 @@ namespace API.Controllers
             if (id == 0)
                 return BadRequest("Request parameter was 0");
 
-            UserDto user = await _userService.GetUserAsync(id);
+            UserDto user = await _userService.GetAsync(id);
 
             if (user == null)
                 return NotFound($"Could not find a user with id: {id}");
@@ -92,7 +103,7 @@ namespace API.Controllers
             if (string.IsNullOrWhiteSpace(email))
                 return BadRequest("Request contained null or faulty values");
 
-            UserDto user = await _userService.GetUserAsync(email.ToLower());
+            UserDto user = await _userService.GetAsync(email.ToLower());
 
             if (user == null)
                 return NotFound($"Could not find a user with email: \"{email}\"");
@@ -105,14 +116,14 @@ namespace API.Controllers
         /// </summary>
         /// <param name="userToPost"></param>
         /// <returns></returns>
-        /// <response code="201">Returns the created user</response>
+        /// <response code="200">Returns the created user</response>
         /// <response code="400">If the user was null</response>
         [HttpPost()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<UserDto>> Post([FromBody] UserDto userToPost)
         {
-            UserDto createdUser = await _userService.PostUserAsync(userToPost);
+            UserDto createdUser = await _userService.PostAsync(userToPost);
 
             if (createdUser == null)
                 return BadRequest("The request body was null, or contained faulty values.");
@@ -129,7 +140,7 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<UserDto>> EditUser([FromBody] UserDto user)
         {
-            UserDto updatedUser = await _userService.EditUserAsync(user);
+            UserDto updatedUser = await _userService.EditAsync(user);
 
             if (updatedUser == null)
                 return NotFound();
@@ -137,22 +148,26 @@ namespace API.Controllers
             return Ok(updatedUser);
         }
 
-        ///// <summary>
-        ///// Set if user is admin or not (true/false)
-        ///// </summary>
-        ///// <param name="id"></param>
-        ///// <param name="value"></param>
-        ///// <returns></returns>
-        //[HttpPut("SetAdmin")]
-        //[ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
-        //public async Task<ActionResult<UserDto>> SetAdmin([FromQuery] int id, [FromQuery] bool value)
-        //{
-        //    UserDto updatedUser = await _userService.SetAdmin(id, value);
-        //    if (updatedUser == null)
-        //        return NotFound();
+        /// <summary>
+        /// Delete user by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <response code="200">Returns the deleted user</response>
+        /// <response code="404">Not found</response>
+        /// <response code="500">Server error</response>
+        [HttpDelete()]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<UserDto>> DeleteUser([FromQuery]int id)
+        {
+            UserDto deletedUser = await _userService.DeleteAsync(id);
 
-        //    return Ok(updatedUser);
-        //}
+            if (deletedUser == null)
+                return NotFound();
+
+            return Ok(deletedUser);
+        }
+        
     }
 }

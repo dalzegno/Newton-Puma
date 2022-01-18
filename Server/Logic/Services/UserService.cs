@@ -19,7 +19,7 @@ namespace Logic.Services
             _mapper = mapper;
         }
 
-        public async Task<UserDto> LogIn(string email, string password)
+        public async Task<UserDto> LogInAsync(string email, string password)
         {
             string encryptedPassword = EncryptionHelper.Encrypt(password);
 
@@ -37,7 +37,7 @@ namespace Logic.Services
             return _mapper.Map<ICollection<UserDto>>(dbUsers);
         }
 
-        public async Task<UserDto> GetUserAsync(int id)
+        public async Task<UserDto> GetAsync(int id)
         {
             User dbUser = await GetDbUserAsync(id);
 
@@ -47,7 +47,7 @@ namespace Logic.Services
             return _mapper.Map<UserDto>(dbUser);
         }
 
-        public async Task<UserDto> GetUserAsync(string email)
+        public async Task<UserDto> GetAsync(string email)
         {
             var dbUser = await GetDbUserAsync(email);
 
@@ -57,10 +57,10 @@ namespace Logic.Services
             return _mapper.Map<UserDto>(dbUser);
         }
 
-        public async Task<UserDto> PostUserAsync(UserDto newUser)
+        public async Task<UserDto> PostAsync(UserDto newUser)
         {
             if (!IsNewUserRequestValid(newUser))
-                return null;            
+                return null;
 
             var foundUser = await GetDbUserAsync(newUser.Email);
 
@@ -85,7 +85,7 @@ namespace Logic.Services
             return _mapper.Map<UserDto>(userToAdd);
         }
 
-        public async Task<UserDto> EditUserAsync(UserDto user)
+        public async Task<UserDto> EditAsync(UserDto user)
         {
             var userToEdit = await GetDbUserAsync(user.Id);
 
@@ -110,17 +110,33 @@ namespace Logic.Services
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email.ToLower());
         }
 
+        public async Task<UserDto> DeleteAsync(int id)
+        {
+            var userToDelete = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+            if (userToDelete == null)
+                return null;
+
+            try
+            {
+                _context.Users.Remove(userToDelete);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                // TODO: Error handling
+                return null;
+            }
+
+            return _mapper.Map<UserDto>(userToDelete);
+        }
+
         private static bool IsNewUserRequestValid(UserDto newUser)
         {
             if (newUser == null || string.IsNullOrEmpty(newUser.Email))
                 return false;
 
             return true;
-        }
-
-        public Task<UserDto> DeleteUser(UserDto user)
-        {
-            var deletedUser = _context.Users.FirstOrDefaultAsync(u => u.Id == user.Id);
         }
     }
 }

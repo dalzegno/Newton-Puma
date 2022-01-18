@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logic", "Logic\Logic.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PumaDbLibrary", "PumaDbLibrary\PumaDbLibrary.csproj", "{6667BA53-52E6-4C0F-B7AB-41CEAFA7FCD5}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleApp", "ConsoleApp\ConsoleApp.csproj", "{68702B28-9D08-4215-9019-4AF0E3DF76EF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{6667BA53-52E6-4C0F-B7AB-41CEAFA7FCD5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6667BA53-52E6-4C0F-B7AB-41CEAFA7FCD5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6667BA53-52E6-4C0F-B7AB-41CEAFA7FCD5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68702B28-9D08-4215-9019-4AF0E3DF76EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68702B28-9D08-4215-9019-4AF0E3DF76EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68702B28-9D08-4215-9019-4AF0E3DF76EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68702B28-9D08-4215-9019-4AF0E3DF76EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
