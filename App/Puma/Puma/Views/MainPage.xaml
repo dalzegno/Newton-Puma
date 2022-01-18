@@ -10,7 +10,7 @@
     <AbsoluteLayout  VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
         
         <!-- MAP -->
-        <maps:Map x:Name="map"  MapClicked="OnMapClicked"
+        <maps:Map x:Name="map"  MapClicked="TestMap"
                     MapType="Hybrid"
                     Background="White"
                     BackgroundColor="White"
@@ -42,10 +42,9 @@
                      Spacing="10"
                      Padding="5"
                      Orientation="Horizontal">
-                <Label Text="Hello World" FontSize="38"/>
+                <!--<Label Text="Hello World" FontSize="38"/>-->
             
-                <!--<local:RoundedEntry HorizontalOptions="FillAndExpand"></local:RoundedEntry>-->
-            <Frame 
+            <Frame
                     Margin="5"
                     BorderColor="LightGray"
                     Padding="0"
@@ -55,7 +54,7 @@
                     WidthRequest="500"
                    VerticalOptions="FillAndExpand"
                     Opacity=".8">
-                <local:RoundedEntry Opacity=".8"></local:RoundedEntry>
+                <local:RoundedEntry x:Name="SearchField" Opacity=".8"></local:RoundedEntry>
                 
             </Frame>
             
@@ -205,6 +204,12 @@
             </StackLayout>
         </Frame>
             
+        <!--- TEST-->
+        <Frame>
+            <Button Text="Testa maps" Clicked="Button_Clicked">
+                
+            </Button>
+        </Frame>
         
 
         <!-- LOG IN POPUP-->
