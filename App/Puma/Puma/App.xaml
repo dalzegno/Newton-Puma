@@ -5,7 +5,16 @@
              >
     <Application.Resources>
         <ResourceDictionary>
-            
+            <Color x:Key="WindowBackgroundColor">LightGray</Color>
+            <Color x:Key="WindowBackgroundColorDark">Black</Color>
+            <Color x:Key="PopUpBackgroundColor">LightGray</Color>
+            <Color x:Key="PopUpBackgroundColorDark">Black</Color>
+            <Color x:Key="ButtonBackgroundColor">LightGray</Color>
+            <Color x:Key="ButtonBackgroundColorDark">Black</Color>
+            <Color x:Key="TextColor">#000000</Color>
+            <Color x:Key="TextColorDark">LightGray</Color>
+            <Color x:Key="BorderColor">#000000</Color>
+            <Color x:Key="BorderColorDark">LightGray</Color>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
