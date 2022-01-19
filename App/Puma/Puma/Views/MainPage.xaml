@@ -5,18 +5,21 @@
              x:Class="Puma.Views.MainPage"
              xmlns:local="clr-namespace:Puma.CustomRenderer;assembly=Puma"
              xmlns:viewmodel="clr-namespace:Puma.ViewModels" 
+             xmlns:views="clr-namespace:Puma.Views"
     >
     
     <AbsoluteLayout  VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
         
         <!-- MAP -->
         <maps:Map x:Name="map"  MapClicked="OnMapClicked"
+                    
                     MapType="Hybrid"
                     Background="White"
                     BackgroundColor="White"
                     AbsoluteLayout.LayoutFlags="All"
                     AbsoluteLayout.LayoutBounds="0,0,1,1"
                     >
+            
         <x:Arguments>
             <maps:MapSpan>
                 <x:Arguments>
@@ -32,7 +35,12 @@
             </maps:MapSpan>
         </x:Arguments>
         </maps:Map>
+
         
+        
+        
+
+
         <!-- NAVBAR -->
         <StackLayout BackgroundColor="#CAE9FF"
                     AbsoluteLayout.LayoutBounds="0, 0, 1, 60" 
@@ -207,7 +215,7 @@
             
         
 
-        <!-- LOG IN POPUP-->
+        <!-- LOG IN POPUP -->
         <Frame 
             x:Name="loginPopup"
             IsVisible="{Binding loginPopupState}"
@@ -293,6 +301,24 @@
                     </StackLayout>
                 </StackLayout>
             </Grid>
+        </Frame>
+
+        
+        <!-- POI POPUP -->
+        <Frame 
+            x:Name="poiPopup"
+            AbsoluteLayout.LayoutBounds="8,80,400,.8" 
+                    AbsoluteLayout.LayoutFlags="HeightProportional"
+            Background="White"
+               Opacity=".9">
+            <StackLayout >
+                <Label x:Name="lbl_latitude" Text="{Binding Latitude}" FontSize="24"></Label>
+                <Label x:Name="lbl_longitude" Text="{Binding Longitude}" FontSize="24"></Label>
+                <Label x:Name="lbl_adress" FontSize="24"></Label>
+                <Entry x:Name="entry_address"></Entry>
+                <Entry x:Name="entry_zip"></Entry>
+                <Entry x:Name="entry_country"></Entry>
+            </StackLayout>
         </Frame>
 
     </AbsoluteLayout>
