@@ -8,7 +8,6 @@ using System.Net.Http.Json; //Requires nuget package System.Net.Http.Json
 using System.Threading.Tasks;
 using Puma.Services;
 using Xamarin.Forms;
-using FluentValidation.Results;
 
 [assembly: Dependency(typeof(UserApiService))]
 namespace Puma.Services
@@ -44,6 +43,7 @@ namespace Puma.Services
 
         public async Task<UserDto> CreateUserAsync(UserDto userToCreate)
         {
+
             var response = await _HttpClient.PostAsJsonAsync(_userApiUri, userToCreate);
 
             if (!await IsResponseSuccess(response))

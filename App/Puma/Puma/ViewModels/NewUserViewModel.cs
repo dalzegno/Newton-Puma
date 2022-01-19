@@ -1,5 +1,4 @@
-﻿using FluentValidation.Results;
-using Puma.Models;
+﻿using Puma.Models;
 using Puma.Services;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -88,16 +87,6 @@ namespace Puma.ViewModels
                 FirstName = SignupFirstName ?? "",
                 LastName = SignupSurname ?? ""
             };
-
-            UserValidation validationRules = new UserValidation();
-            ValidationResult ans = validationRules.Validate(user);
-
-            if (ans == null || !ans.IsValid)
-            {
-                await _dialogService.ShowMessageAsync("Message", ans.Errors[0].ErrorMessage);
-            }
-
-
 
             var createdUser = await _userApiService.CreateUserAsync(user);
 
