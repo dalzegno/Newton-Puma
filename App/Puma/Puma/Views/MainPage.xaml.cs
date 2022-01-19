@@ -1,7 +1,9 @@
 ﻿using Puma.Services;
 using Puma.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
@@ -51,8 +53,10 @@ namespace Puma.Views
                 Position position = new Position(e.Position.Latitude, e.Position.Longitude);
                 IEnumerable<string> possibleAddresses = await geoCoder.GetAddressesForPositionAsync(position);
                 string address = possibleAddresses.FirstOrDefault();
+
+
                 System.Diagnostics.Debug.WriteLine("address:" + address);
-                var words = address?.Split('\n') ?? new string[0];
+                var words = address?.Split('\n') ?? Array.Empty<string>();
                 foreach (var word in words)
                     System.Diagnostics.Debug.WriteLine("w" + word);
 
@@ -91,6 +95,30 @@ namespace Puma.Views
             //    FillColor = Color.FromHex("#88FFC0CB")
             //};
             //map.MapElements.Add(circle);
+        }
+
+        async void btn_SearchLocation_Clicked(object sender, EventArgs e)
+        {
+            var search = entry_address.Text + entry_zip.Text + entry_country.Text;
+
+            List<Position> postionList = new List<Position>(await new Geocoder().GetPositionsForAddressAsync(search));
+            
+            map.Pins.Clear();
+            if (postionList.Count != 0)
+            {
+                var position = postionList.FirstOrDefault<Position>();
+                var adress = await new Geocoder().GetAddressesForPositionAsync(position);
+
+                map.Pins.Add(new Pin
+                {
+                    Address = adress.First(),
+                    Label = adress.First(),
+                    Type = PinType.SearchResult,
+                    Position = position
+                });
+
+                map.MoveToRegion(MapSpan.FromCenterAndRadius(position, Distance.FromKilometers(1)));
+            }
         }
     }
 }

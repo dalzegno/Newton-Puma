@@ -318,6 +318,7 @@
                 <Entry x:Name="entry_address"></Entry>
                 <Entry x:Name="entry_zip"></Entry>
                 <Entry x:Name="entry_country"></Entry>
+                <Button x:Name="btn_SearchLocation" Text="Search" Clicked="btn_SearchLocation_Clicked"></Button>
             </StackLayout>
         </Frame>
 
