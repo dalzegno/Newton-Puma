@@ -1,4 +1,5 @@
-﻿using Puma.Services;
+﻿using Puma.CustomRenderer;
+using Puma.Services;
 using Puma.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ namespace Puma.Views
             BindingContext = new MainViewModel(UserApiService);
             slCreateUserViewModel.BindingContext = new NewUserViewModel(UserApiService, DialogService);
             slLogIn.BindingContext = new LoginViewModel(UserApiService, DialogService);
+            slSettings.BindingContext = new SettingsViewModel();
         }
 
         async void TestMap(object sender, MapClickedEventArgs e)
