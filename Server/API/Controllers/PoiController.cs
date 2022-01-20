@@ -2,6 +2,7 @@
 using Logic.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -22,6 +23,27 @@ namespace API.Controllers
             var poi = await _poiService.GetAsync(id);
 
             return Ok(poi);
+        }
+
+        [HttpGet("GetTags")]
+        public async Task<ActionResult<ICollection<TagDto>>> GetTags()
+        {
+            var poi = await _poiService.GetTagsAsync();
+
+            if (poi == null)
+                return NotFound();
+
+            return Ok(poi);
+        }
+
+        [HttpPost("AddTag")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<PointOfInterestDto>> AddTag(string name)
+        {
+            TagDto createdTag = await _poiService.CreateTagAsync(name);
+
+            return Ok(createdTag);
         }
 
         /// <summary>

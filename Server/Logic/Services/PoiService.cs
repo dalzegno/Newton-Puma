@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Logic.Models;
@@ -66,7 +68,7 @@ namespace Logic.Services
             var poi = await _context.PointOfInterests.Include(p => p.Gradings)
                                                        .FirstOrDefaultAsync(poi => poi.Id == poiId);
             var previousGrade = await _context.Gradings.FirstOrDefaultAsync(g => g.UserId == userId && g.PointOfInterestId == poiId);
-            
+
             // User can either put one like or one dislike on a POI
             if (previousGrade != null && poi != null)
             {
@@ -105,6 +107,29 @@ namespace Logic.Services
 
             return _mapper.Map<PointOfInterestDto>(pointOfInterest);
         }
+
+        public async Task<TagDto> CreateTagAsync(string name)
+        {
+            var foundTag = await _context.Tags.FirstOrDefaultAsync(t => t.Name.ToLower() == name.ToLower());
+
+            if (foundTag != null)
+                return _mapper.Map<TagDto>(foundTag);
+
+            var dbTag = new Tag { Name = name };
+
+            try
+            {
+                var entity = await _context.Tags.AddAsync(dbTag);
+                dbTag = entity.Entity;
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                throw new Exception("Could not add the tag to database");
+            }
+            return _mapper.Map<TagDto>(dbTag);
+
+        }
         #endregion
 
         #region Read
@@ -116,6 +141,16 @@ namespace Logic.Services
                 return null;
 
             return _mapper.Map<PointOfInterestDto>(foundPoi);
+        }
+
+        public async Task<ICollection<TagDto>> GetTagsAsync()
+        {
+            var tags = await _context.Tags.ToListAsync();
+
+            if (tags?.Count < 1)
+                return null;
+
+            return tags.Select(t => _mapper.Map<TagDto>(t)).ToList();
         }
         #endregion
 
@@ -177,7 +212,7 @@ namespace Logic.Services
                                                                       .Include(poi => poi.Gradings)
                                                                       .FirstOrDefaultAsync(poi => poi.Name.ToLower() == name.ToLower() ||
                                                                                            poi.Position.Latitude == lat ||
-                                                                                           poi.Position.Longitude == lon );
+                                                                                           poi.Position.Longitude == lon);
         }
         #endregion
     }
