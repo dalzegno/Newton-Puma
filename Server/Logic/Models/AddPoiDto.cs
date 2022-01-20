@@ -2,15 +2,13 @@
 
 namespace Logic.Models
 {
-    public class PointOfInterestDto
+    public class AddPoiDto
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public PositionDto Position { get; set; }
         public AddressDto Address { get; set; }
-        public List<CommentDto> Comments{ get; set; }
-        public List<GradingDto> Gradings { get; set; }
-        public List<PoiTagDto> PoiTags { get; set; }
+        public List<int> TagIds { get; set; }
     }
 }
+

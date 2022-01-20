@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 #nullable disable
 
-namespace PumaDbLibrary
+namespace PumaDbLibrary.Entities
 {
     [Table("Comment")]
     public partial class Comment
@@ -24,6 +24,7 @@ namespace PumaDbLibrary
         [ForeignKey(nameof(PointOfInterestId))]
         [InverseProperty("Comments")]
         public virtual PointOfInterest PointOfInterest { get; set; }
+        
         [ForeignKey(nameof(UserId))]
         [InverseProperty("Comments")]
         public virtual User User { get; set; }

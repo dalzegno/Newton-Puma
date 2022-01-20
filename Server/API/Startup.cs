@@ -41,13 +41,15 @@ namespace API
             {
                 // TODO: Lägg profiles här 
                 mc.AddProfile(new UserMapping());
+                mc.AddProfile(new PoiMapping());
             });
 
             IMapper mapper = mapperConfig.CreateMapper();
 
             services.AddSingleton(mapper);
-            services.AddDbContext<PumaDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("puma")));
+            services.AddDbContext<PumaDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("peter")));
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IPoiService, PoiService>();
 
             services.AddCors();
         }

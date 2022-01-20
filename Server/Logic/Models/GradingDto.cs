@@ -1,5 +1,4 @@
 ﻿using Logic.Enums;
-using System.Collections.Generic;
 
 namespace Logic.Models
 {
@@ -7,7 +6,9 @@ namespace Logic.Models
     {
         public int Id { get; set; }
         public GradeType GradeType { get; set; }
-        public UserDto User { get; set; }
-        public List<PoiGradingDto> PoiGradings { get; set; }
+        public int UserId { get; set; }
+        public int PointOfInterestId { get; set; }
+        //public UserDto User { get; set; }
+        //public PointOfInterestDto PointOfInterest { get; set; }
     }
 }
