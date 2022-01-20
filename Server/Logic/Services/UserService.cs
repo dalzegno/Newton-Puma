@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PumaDbLibrary;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+
+using Microsoft.EntityFrameworkCore;
+using PumaDbLibrary;
 using Logic.Models;
 using AutoMapper;
+using PumaDbLibrary.Entities;
 
 namespace Logic.Services
 {
@@ -112,7 +114,9 @@ namespace Logic.Services
 
         public async Task<UserDto> DeleteAsync(int id)
         {
-            var userToDelete = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            var userToDelete = await _context.Users.Include(u => u.Comments)
+                                                   .Include(u => u.Gradings)
+                                                   .FirstOrDefaultAsync(u => u.Id == id);
 
             if (userToDelete == null)
                 return null;

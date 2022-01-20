@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 #nullable disable
 
-namespace PumaDbLibrary
+namespace PumaDbLibrary.Entities
 {
     [Table("Poi_Tag")]
     public partial class PoiTag

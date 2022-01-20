@@ -6,12 +6,12 @@ using Microsoft.EntityFrameworkCore;
 
 #nullable disable
 
-namespace PumaDbLibrary
+namespace PumaDbLibrary.Entities
 {
-    [Table("Location")]
-    public partial class Location
+    [Table("Position")]
+    public partial class Position
     {
-        public Location()
+        public Position()
         {
             PointOfInterests = new HashSet<PointOfInterest>();
         }
@@ -19,15 +19,13 @@ namespace PumaDbLibrary
         [Key]
         public int Id { get; set; }
         [Required]
-        [Column(TypeName = "DECIMAL")]
-        public decimal Latitude { get; set; }
+        [Column(TypeName = "DOUBLE")]
+        public double Latitude { get; set; }
         [Required]
-        [Column(TypeName = "DECIMAL")]
-        public decimal Longitude { get; set; }
-        [Column(TypeName = "nvarchar")]
-        public string Name { get; set; }
+        [Column(TypeName = "DOUBLE")]
+        public double Longitude { get; set; }
 
-        [InverseProperty(nameof(PointOfInterest.Location))]
+        [InverseProperty(nameof(PointOfInterest.Position))]
         public virtual ICollection<PointOfInterest> PointOfInterests { get; set; }
     }
 }

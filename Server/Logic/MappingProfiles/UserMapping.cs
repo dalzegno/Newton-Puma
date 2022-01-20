@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Logic.Models;
-using PumaDbLibrary;
+using PumaDbLibrary.Entities;
 
 namespace Logic.MappingProfiles
 {
