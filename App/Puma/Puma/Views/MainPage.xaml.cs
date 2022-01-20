@@ -85,7 +85,7 @@ namespace Puma.Views
                 entry_zip.Text = "";
                 entry_country.Text = "";
             }
-            
+
             //Circle circle = new Circle
             //{
             //    Center = e.Position,
@@ -95,6 +95,22 @@ namespace Puma.Views
             //    FillColor = Color.FromHex("#88FFC0CB")
             //};
             //map.MapElements.Add(circle);
+
+
+            //Tag Button Generator
+            //var myList = new List<string>(); //Replace string with tags event
+            //TagsList.Children.Clear(); //just in case so you can call this code several times np..
+            //foreach (var item in myList)
+            //{
+            //    var btn = new Button()
+            //    {
+            //        Text = item.id, //Whatever prop you wonna put as title;
+            //        StyleId = item.name //use a property from event as id to be passed to handler
+            //        };
+            //    btn.Clicked += OnDynamicBtnClicked;
+            //    TagsList.Children.Add(btn);
+            //}
+
         }
 
         async void btn_SearchLocation_Clicked(object sender, EventArgs e)
