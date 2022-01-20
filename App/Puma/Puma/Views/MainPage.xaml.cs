@@ -1,4 +1,5 @@
-﻿using Puma.Services;
+﻿using Puma.CustomRenderer;
+using Puma.Services;
 using Puma.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,7 @@ namespace Puma.Views
             
             slCreateUserViewModel.BindingContext = new NewUserViewModel(UserApiService, DialogService);
             slLogIn.BindingContext = new LoginViewModel(UserApiService, DialogService);
+
 
             geoCoder = new Geocoder();
         }
@@ -119,6 +121,41 @@ namespace Puma.Views
 
             List<Position> postionList = new List<Position>(await new Geocoder().GetPositionsForAddressAsync(search));
             
+            map.Pins.Clear();
+            if (postionList.Count != 0)
+            {
+                var position = postionList.FirstOrDefault<Position>();
+                var adress = await new Geocoder().GetAddressesForPositionAsync(position);
+
+            slSettings.BindingContext = new SettingsViewModel();
+        }
+
+        async void TestMap(object sender, MapClickedEventArgs e)
+        {
+            
+        }
+
+        void OnButtonClicked(object sender, EventArgs e)
+        {
+            Button button = sender as Button;
+            switch (button.Text)
+            {
+                case "Street":
+                    map.MapType = MapType.Street;
+                    break;
+                case "Satellite":
+                    map.MapType = MapType.Satellite;
+                    break;
+                case "Hybrid":
+                    map.MapType = MapType.Hybrid;
+                    break;
+            }
+        }
+
+        private async void Button_Clicked(object sender, System.EventArgs e)
+        {            
+            List<Position> postionList = new List<Position>(await new Geocoder().GetPositionsForAddressAsync(SearchField.Text));
+
             map.Pins.Clear();
             if (postionList.Count != 0)
             {

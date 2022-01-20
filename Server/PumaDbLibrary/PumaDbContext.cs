@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using PumaDbLibrary.Entities;
 
 #nullable disable
 
@@ -19,13 +20,12 @@ namespace PumaDbLibrary
 
         public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<Grading> Gradings { get; set; }
-        public virtual DbSet<Location> Locations { get; set; }
-        public virtual DbSet<PoiGrading> PoiGradings { get; set; }
+        public virtual DbSet<Position> Positions { get; set; }
         public virtual DbSet<PoiTag> PoiTags { get; set; }
         public virtual DbSet<PointOfInterest> PointOfInterests { get; set; }
         public virtual DbSet<Tag> Tags { get; set; }
         public virtual DbSet<User> Users { get; set; }
-
+        public virtual DbSet<Address> Addresses{ get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -33,55 +33,44 @@ namespace PumaDbLibrary
             {
                 entity.HasOne(d => d.PointOfInterest)
                     .WithMany(p => p.Comments)
-                    .HasForeignKey(d => d.PointOfInterestId)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
+                    .HasForeignKey(d => d.PointOfInterestId);
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Comments)
-                    .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
+                    .HasForeignKey(d => d.UserId);
             });
 
             modelBuilder.Entity<Grading>(entity =>
             {
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Gradings)
-                    .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
-            });
-
-            modelBuilder.Entity<PoiGrading>(entity =>
-            {
-                entity.HasOne(d => d.Grading)
-                    .WithMany(p => p.PoiGradings)
-                    .HasForeignKey(d => d.GradingId)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
+                    .HasForeignKey(d => d.UserId);
 
                 entity.HasOne(d => d.PointOfInterest)
-                    .WithMany(p => p.PoiGradings)
-                    .HasForeignKey(d => d.PointOfInterestId)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
+                      .WithMany(p => p.Gradings)
+                      .HasForeignKey(d => d.PointOfInterestId);
             });
 
             modelBuilder.Entity<PoiTag>(entity =>
             {
                 entity.HasOne(d => d.PointOfInterest)
                     .WithMany(p => p.PoiTags)
-                    .HasForeignKey(d => d.PointOfInterestId)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
+                    .HasForeignKey(d => d.PointOfInterestId);
 
                 entity.HasOne(d => d.Tag)
                     .WithMany(p => p.PoiTags)
-                    .HasForeignKey(d => d.TagId)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
+                    .HasForeignKey(d => d.TagId);
             });
 
             modelBuilder.Entity<PointOfInterest>(entity =>
             {
-                entity.HasOne(d => d.Location)
+                entity.HasOne(d => d.Position)
                     .WithMany(p => p.PointOfInterests)
-                    .HasForeignKey(d => d.LocationId)
-                    .OnDelete(DeleteBehavior.ClientSetNull);
+                    .HasForeignKey(d => d.PositionId);
+
+                entity.HasOne(d => d.Address)
+                      .WithMany(p => p.PointOfInterests)
+                      .HasForeignKey(d => d.AddressId);
             });
 
             OnModelCreatingPartial(modelBuilder);

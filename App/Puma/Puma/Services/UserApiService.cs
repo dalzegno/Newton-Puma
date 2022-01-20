@@ -23,21 +23,41 @@ namespace Puma.Services
 
         public async Task<UserDto> LogIn(string email, string password)
         {
-            var response = await _HttpClient.GetAsync($"{_userApiUri}/LogIn?email={email}&password={password}");
-            if (!await IsResponseSuccess(response))
-                return null;
+            try
+            {
+                var response = await _HttpClient.GetAsync($"{_userApiUri}/LogIn?email={email}&password={password}");
 
-            return await response.Content.ReadFromJsonAsync<UserDto>();
+                if (!await IsResponseSuccess(response))
+                    return null;
+
+                return await response.Content.ReadFromJsonAsync<UserDto>();
+            }
+            catch (Exception e)
+            {
+                // TODO: Error handling
+                // TODO: Borde injecta DialogService på något sätt här istället
+                await  App.Current.MainPage.DisplayAlert("Error",  e.Message,"Ok");
+                return null;
+            }
+
         }
 
         public async Task<UserDto> GetUserAsync(string email)
         {
-            var response = await _HttpClient.GetAsync($"{_userApiUri}/GetUserByEmail?email={email}");
+            try
+            {
+                var response = await _HttpClient.GetAsync($"{_userApiUri}/GetUserByEmail?email={email}");
 
-            if (!await IsResponseSuccess(response))
+                if (!await IsResponseSuccess(response))
+                    return null;
+
+                return await response.Content.ReadFromJsonAsync<UserDto>();
+
+            }
+            catch (Exception)
+            {
                 return null;
-
-            return await response.Content.ReadFromJsonAsync<UserDto>();
+            }
 
         }
 

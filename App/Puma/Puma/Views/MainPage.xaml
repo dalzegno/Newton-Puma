@@ -4,18 +4,27 @@
              xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
              x:Class="Puma.Views.MainPage"
              xmlns:local="clr-namespace:Puma.CustomRenderer;assembly=Puma"
-             xmlns:viewmodel="clr-namespace:Puma.ViewModels" 
-             xmlns:views="clr-namespace:Puma.Views"
+
+             xmlns:viewmodel="clr-namespace:Puma.ViewModels"
+             BackgroundColor="{AppThemeBinding 
+                              Dark={StaticResource WindowBackgroundColorDark}, 
+                              Light={StaticResource WindowBackgroundColor}}"
+
     >
     
     <AbsoluteLayout  VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
         
         <!-- MAP -->
+
         <maps:Map x:Name="map"  MapClicked="OnMapClicked"
-                    
+
                     MapType="Hybrid"
-                    Background="White"
-                    BackgroundColor="White"
+                    Background="{AppThemeBinding 
+                              Dark={StaticResource WindowBackgroundColorDark}, 
+                              Light={StaticResource WindowBackgroundColor}}"
+                    BackgroundColor="{AppThemeBinding 
+                              Dark={StaticResource WindowBackgroundColorDark}, 
+                              Light={StaticResource WindowBackgroundColor}}"
                     AbsoluteLayout.LayoutFlags="All"
                     AbsoluteLayout.LayoutBounds="0,0,1,1"
                     >
@@ -37,12 +46,28 @@
         </maps:Map>
 
         
-        
-        
 
+        <!-- MAP TYPES -->
+        <StackLayout
+            VerticalOptions="Center"
+            AbsoluteLayout.LayoutBounds="1, 1, 100, 150" 
+            AbsoluteLayout.LayoutFlags="PositionProportional"
+            x:Name="slMapTypes"
+            >
+            <Button Clicked="OnButtonClicked"
+                BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
+            Light={StaticResource PopUpBackgroundColor}}" Text="Satellite"></Button>
+            <Button Clicked="OnButtonClicked"
+                BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
+            Light={StaticResource PopUpBackgroundColor}}" Text="Hybrid"></Button>
+            <Button Clicked="OnButtonClicked"
+                BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
+            Light={StaticResource PopUpBackgroundColor}}" Text="Street"></Button>
+        </StackLayout>
 
         <!-- NAVBAR -->
-        <StackLayout BackgroundColor="#CAE9FF"
+        <StackLayout BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
+            Light={StaticResource PopUpBackgroundColor}}"
                     AbsoluteLayout.LayoutBounds="0, 0, 1, 60" 
                     AbsoluteLayout.LayoutFlags="WidthProportional"
                     
@@ -50,12 +75,12 @@
                      Spacing="10"
                      Padding="5"
                      Orientation="Horizontal">
-                <Label Text="Hello World" FontSize="38"/>
+          
+                <Label TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" Text="Hello World" FontSize="38"/>
             
-                <!--<local:RoundedEntry HorizontalOptions="FillAndExpand"></local:RoundedEntry>-->
-            <Frame 
+            <Frame
                     Margin="5"
-                    BorderColor="LightGray"
+                    BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
                     Padding="0"
                    CornerRadius="15"
                    IsClippedToBounds="False"
@@ -63,19 +88,30 @@
                     WidthRequest="500"
                    VerticalOptions="FillAndExpand"
                     Opacity=".8">
-                <local:RoundedEntry Opacity=".8"></local:RoundedEntry>
+                <local:RoundedEntry x:Name="SearchField" Opacity=".8"></local:RoundedEntry>
                 
             </Frame>
             
             <!-- Navbar Login/Signup buttons -->
-            <StackLayout Orientation="Horizontal" Margin="0,5,20,5">
-               
-            <Button x:Name="btn_Login_Popup"
+            <StackLayout Orientation="Horizontal" Margin="0,5,20,5" BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
+            Light={StaticResource PopUpBackgroundColor}}">
+
+                <Button x:Name="btn_Settings_Popup"
+                    Command="{Binding OpenSettingsCommand}"
+                    TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+                    BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
+                    Text="Settings"></Button>
+                <Label TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" Text="|" VerticalOptions="Center"></Label>
+                <Button x:Name="btn_Login_Popup"
                     Command="{Binding OpenLoginCommand}"
+                    TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+                    BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
                     Text="Log in"></Button>
-            <Label Text="|" VerticalOptions="Center"></Label>
-            <Button x:Name="btn_Signup_Popup"
+                <Label TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" Text="|" VerticalOptions="Center"></Label>
+                <Button x:Name="btn_Signup_Popup"
                     Command="{Binding OpenSignupCommand}"
+                    TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+                    BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
                     Text="Sign up"></Button>
             </StackLayout>
         </StackLayout>
@@ -86,29 +122,45 @@
             x:Name="signupPopup"
             AbsoluteLayout.LayoutBounds=".5, .5, 300, 480" 
             AbsoluteLayout.LayoutFlags="PositionProportional"
-            Background="White"
+            BackgroundColor="{AppThemeBinding 
+                              Dark={StaticResource PopUpBackgroundColorDark}, 
+                              Light={StaticResource PopUpBackgroundColor}}"
+            BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
             Opacity=".9">
             
                 <StackLayout Spacing="15">
                     <Button 
                         Command="{Binding ClosePopupCommand}"
                         CornerRadius="15"
-                        BackgroundColor="Transparent"
+                        BackgroundColor="{AppThemeBinding 
+                              Dark={StaticResource ButtonBackgroundColorDark}, 
+                              Light={StaticResource ButtonBackgroundColor}}"
+                        BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
                         Margin="0,-10,-10,-15"
+                        TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                         Text="X" HorizontalOptions="EndAndExpand"></Button>
                     <StackLayout Orientation="Horizontal"
                                  Margin="10,0,10,0">
                         <Button
                             Command="{Binding OpenLoginCommand}"
                             CornerRadius="15"
-                            BackgroundColor="Transparent"
+                            BackgroundColor="{AppThemeBinding 
+                              Dark={StaticResource ButtonBackgroundColorDark}, 
+                              Light={StaticResource ButtonBackgroundColor}}"
+                            BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
+                            TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                                 Text="Log in" 
                                 FontSize="32" 
                            HorizontalOptions="Start"></Button>
-                        <Label VerticalOptions="Center">|</Label>
-                        <Button 
+                    <Label TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" Text="|" VerticalOptions="Center"></Label>
+                    <Button 
                             Command="{Binding OpenSignupCommand}"
                             CornerRadius="15"
+                            BackgroundColor="{AppThemeBinding 
+                              Dark={StaticResource ButtonBackgroundColorDark}, 
+                              Light={StaticResource ButtonBackgroundColor}}"
+                            BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
+                            TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                             Text="Sign up" FontSize="32" 
                            HorizontalOptions="EndAndExpand"></Button>
                     </StackLayout>
@@ -205,7 +257,10 @@
                 <Button 
                             Command="{Binding CreateUserCommand}"
                             CornerRadius="10"
+                            BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
                             HorizontalOptions="Center"
+                            BackgroundColor="{AppThemeBinding Dark={StaticResource ButtonBackgroundColorDark}, Light={StaticResource ButtonBackgroundColor}}"
+                            TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                             Text="Sign up" 
                             FontSize="20">
                 </Button>
@@ -213,6 +268,12 @@
             </StackLayout>
         </Frame>
             
+        <!--- TEST-->
+        <Frame>
+            <Button Text="Testa maps" Clicked="Button_Clicked">
+                
+            </Button>
+        </Frame>
         
 
         <!-- LOG IN POPUP -->
@@ -221,7 +282,7 @@
             IsVisible="{Binding loginPopupState}"
             AbsoluteLayout.LayoutBounds=".5, .5, 300, 350" 
                     AbsoluteLayout.LayoutFlags="PositionProportional"
-            Background="White"
+            BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
                Opacity=".9">
             <Grid>
                 <Grid.RowDefinitions>
@@ -234,7 +295,11 @@
                     <Button
                         Command="{Binding ClosePopupCommand}"
                         CornerRadius="15"
-                        BackgroundColor="Transparent"
+                         BackgroundColor="{AppThemeBinding 
+                              Dark={StaticResource ButtonBackgroundColorDark}, 
+                              Light={StaticResource ButtonBackgroundColor}}"
+                            BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
+                            TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                         Margin="0,-10,-10,-15"
                         Text="X" HorizontalOptions="EndAndExpand"></Button>
                     <StackLayout Orientation="Horizontal"
@@ -242,14 +307,23 @@
                         <Button
                             Command="{Binding OpenLoginCommand}"
                             CornerRadius="15"
+                             BackgroundColor="{AppThemeBinding 
+                              Dark={StaticResource ButtonBackgroundColorDark}, 
+                              Light={StaticResource ButtonBackgroundColor}}"
+                            BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
+                            TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                                 Text="Log in" 
                                 FontSize="32" 
                            HorizontalOptions="Start"></Button>
-                        <Label VerticalOptions="Center">|</Label>
+                        <Label TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" VerticalOptions="Center">|</Label>
                         <Button 
                             Command="{Binding OpenSignupCommand}"
                             CornerRadius="15"
-                            BackgroundColor="Transparent"
+                             BackgroundColor="{AppThemeBinding 
+                              Dark={StaticResource ButtonBackgroundColorDark}, 
+                              Light={StaticResource ButtonBackgroundColor}}"
+                            BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
+                            TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                             Text="Sign up" FontSize="32" 
                            HorizontalOptions="EndAndExpand"></Button>
                     </StackLayout>
@@ -259,7 +333,8 @@
                     <StackLayout x:Name="slLogIn">
                     <Frame 
                     Margin="5"
-                    BorderColor="LightGray"
+                    BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
+                    BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
                     Padding="0"
                    CornerRadius="15"
                    IsClippedToBounds="False"
@@ -275,7 +350,8 @@
                     </Frame>
                     <Frame 
                     Margin="5"
-                    BorderColor="LightGray"
+                    BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
+                    BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
                     Padding="0"
                    CornerRadius="15"
                    IsClippedToBounds="False"
@@ -296,6 +372,8 @@
                         x:Name="btn_login"
                         CornerRadius="10"
                         HorizontalOptions="Center"
+                        BackgroundColor="{AppThemeBinding Dark={StaticResource ButtonBackgroundColorDark}, Light={StaticResource ButtonBackgroundColor}}"
+                        TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                         Text="Log in" 
                         FontSize="20"></Button>
                     </StackLayout>
@@ -335,6 +413,59 @@
                 <local:RoundedEntry x:Name="entry_Description" HeightRequest="250" VerticalOptions="Center" VerticalTextAlignment="Start" FontSize="24" Placeholder="Description.."></local:RoundedEntry>
                 <StackLayout x:Name="TagsList"/>
             </StackLayout>
+
+        <!-- SETTINGS POPUP -->
+        <Frame 
+            x:Name="settingsPopup"
+            IsVisible="{Binding settingsPopupState}"
+            AbsoluteLayout.LayoutBounds=".5, .5, 300, 350" 
+                    AbsoluteLayout.LayoutFlags="PositionProportional"
+            BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
+               Opacity=".9">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="1*"/>
+                </Grid.RowDefinitions>
+                <StackLayout Spacing="15">
+                    <Button
+                        Command="{Binding ClosePopupCommand}"
+                        CornerRadius="15"
+                         BackgroundColor="{AppThemeBinding 
+                              Dark={StaticResource ButtonBackgroundColorDark}, 
+                              Light={StaticResource ButtonBackgroundColor}}"
+                            BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
+                            TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+                        Margin="0,-10,-10,-15"
+                        Text="X" HorizontalOptions="EndAndExpand"></Button>
+                    <Label TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" Text="Settings" FontSize="32" 
+                           HorizontalOptions="Center"/>
+                    <Rectangle HeightRequest="2"
+                               HorizontalOptions="FillAndExpand"
+                               Background="black"
+                               />
+                    <Label Text="LightMode" TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"></Label>
+                    <RadioButton x:Name="themeRadioButtonLight"
+                                 HorizontalOptions="Center"
+                                 
+                                 >
+                    </RadioButton>
+                    <Label Text="DarkMode" TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"></Label>
+                    <RadioButton x:Name="themeRadioButtonDark"
+                                 HorizontalOptions="Center"
+                                 
+                                 >
+                    </RadioButton>
+
+                    <StackLayout x:Name="slSettings">
+                        <Rectangle HeightRequest="2"
+                               HorizontalOptions="FillAndExpand"
+                               Background="black"/>
+                    </StackLayout>
+                </StackLayout>
+            </Grid>
         </Frame>
 
     </AbsoluteLayout>
