@@ -78,9 +78,10 @@ namespace API.Controllers
         }
 
         [HttpPost("AddGrade")]
-        public async Task<ActionResult<PointOfInterestDto>> AddGrade([FromQuery]int poiId, [FromQuery] int userId, [FromQuery] int gradeType)
+        public async Task<ActionResult<PointOfInterestDto>> AddGrade([FromBody] AddGradeDto addGradeDto)
         {
-            var poi = await _poiService.AddGrade(poiId, userId, gradeType);
+
+            var poi = await _poiService.AddGrade(addGradeDto);
 
             if (poi == null)
                 return NotFound();

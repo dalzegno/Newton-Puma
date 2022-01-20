@@ -79,7 +79,7 @@ namespace Puma.ViewModels
         private bool CanCreate() => !string.IsNullOrWhiteSpace(SignupEmail) && !string.IsNullOrWhiteSpace(SignupPassword) && !string.IsNullOrWhiteSpace(SignupDisplayName);
         private async void CreateUser()
         {
-            var user = new UserDto()
+            var user = new User()
             {
                 Email = SignupEmail,
                 Password = SignupPassword,

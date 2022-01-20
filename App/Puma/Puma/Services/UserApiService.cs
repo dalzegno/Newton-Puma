@@ -14,23 +14,23 @@ namespace Puma.Services
 {
     public class UserApiService : IUserApiService
     {
-        readonly HttpClient _HttpClient = new HttpClient();
+        readonly HttpClient _httpClient = new HttpClient();
         readonly string _userApiUri = "http://localhost:64500/api/User";
         //readonly string _userApiUri = "http://localhost:44329/api/User";
         public EventHandler<string> ErrorMessage;
 
         protected virtual void OnErrorMessage(string e) => ErrorMessage?.Invoke(this, e);
 
-        public async Task<UserDto> LogIn(string email, string password)
+        public async Task<User> LogIn(string email, string password)
         {
             try
             {
-                var response = await _HttpClient.GetAsync($"{_userApiUri}/LogIn?email={email}&password={password}");
+                var response = await _httpClient.GetAsync($"{_userApiUri}/LogIn?email={email}&password={password}");
 
                 if (!await IsResponseSuccess(response))
                     return null;
 
-                return await response.Content.ReadFromJsonAsync<UserDto>();
+                return await response.Content.ReadFromJsonAsync<User>();
             }
             catch (Exception e)
             {
@@ -42,16 +42,16 @@ namespace Puma.Services
 
         }
 
-        public async Task<UserDto> GetUserAsync(string email)
+        public async Task<User> GetUserAsync(string email)
         {
             try
             {
-                var response = await _HttpClient.GetAsync($"{_userApiUri}/GetUserByEmail?email={email}");
+                var response = await _httpClient.GetAsync($"{_userApiUri}/GetUserByEmail?email={email}");
 
                 if (!await IsResponseSuccess(response))
                     return null;
 
-                return await response.Content.ReadFromJsonAsync<UserDto>();
+                return await response.Content.ReadFromJsonAsync<User>();
 
             }
             catch (Exception)
@@ -61,28 +61,28 @@ namespace Puma.Services
 
         }
 
-        public async Task<UserDto> CreateUserAsync(UserDto userToCreate)
+        public async Task<User> CreateUserAsync(User userToCreate)
         {
 
-            var response = await _HttpClient.PostAsJsonAsync(_userApiUri, userToCreate);
+            var response = await _httpClient.PostAsJsonAsync(_userApiUri, userToCreate);
 
             if (!await IsResponseSuccess(response))
                 return null;
 
-            return await response.Content.ReadFromJsonAsync<UserDto>();
+            return await response.Content.ReadFromJsonAsync<User>();
         }
 
-        public async Task<UserDto> UpdateUserAsync(UserDto userToUpdate)
+        public async Task<User> UpdateUserAsync(User userToUpdate)
         {
-            var response = await _HttpClient.PutAsJsonAsync(_userApiUri, userToUpdate);
+            var response = await _httpClient.PutAsJsonAsync(_userApiUri, userToUpdate);
 
             if (!await IsResponseSuccess(response))
                 return null;
 
-            return await response.Content.ReadFromJsonAsync<UserDto>();
+            return await response.Content.ReadFromJsonAsync<User>();
         }
 
-        public Task<UserDto> DeleteUserAsync(string email)
+        public Task<User> DeleteUserAsync(string email)
         {
             throw new NotImplementedException();
         }
@@ -97,7 +97,6 @@ namespace Puma.Services
             }
 
             return true;
-
         }
     }
 }

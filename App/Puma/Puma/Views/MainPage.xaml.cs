@@ -1,4 +1,5 @@
 ﻿using Puma.CustomRenderer;
+using Puma.Models;
 using Puma.Services;
 using Puma.ViewModels;
 using System;
@@ -13,6 +14,7 @@ namespace Puma.Views
     public partial class MainPage : ContentPage
     {
         IUserApiService UserApiService => DependencyService.Get<IUserApiService>();
+        IPoiService PoiService => DependencyService.Get<IPoiService>();
         IDialogService DialogService => DependencyService.Get<IDialogService>();
 
         Geocoder geoCoder;
@@ -142,7 +144,7 @@ namespace Puma.Views
 
         async void TestMap(object sender, MapClickedEventArgs e)
         {
-            
+
         }
 
         void OnButtonClicked(object sender, EventArgs e)
@@ -163,7 +165,7 @@ namespace Puma.Views
         }
 
         private async void Button_Clicked(object sender, System.EventArgs e)
-        {            
+        {
             List<Position> postionList = new List<Position>(await new Geocoder().GetPositionsForAddressAsync(SearchField.Text));
 
             map.Pins.Clear();
@@ -181,6 +183,29 @@ namespace Puma.Views
                 });
 
                 map.MoveToRegion(MapSpan.FromCenterAndRadius(position, Distance.FromKilometers(1)));
+
+                // Om ni vill testa poiService :) 
+                //    var poiService = new PoiApiService();
+
+
+                //var response = await poiService.CreatePoiAsync(new AddPoiDto
+                //{
+                //    Name = "Test test",
+                //    Description = "Yo description",
+                //    Position = new PositionPoi
+                //    {
+                //        Latitude = 59.37787,
+                //        Longitude = 17.02502
+                //    },
+                //    Address = new Address
+                //    {
+                //        Country = "Sverige",
+                //        City = "Test",
+                //        StreetName = "Cool gata",
+                //        ZipCode = "Zipcode"
+                //    },
+                //    TagIds = new List<int> { 1, 2 }
+                //});
             }
         }
     }
