@@ -72,6 +72,8 @@
             </StackLayout>
         </StackLayout>
         
+
+       
         <!--Signup Popup -->
         <Frame
             IsVisible="{Binding signupPopupState}"
@@ -82,21 +84,25 @@
             Opacity=".9">
             
                 <StackLayout Spacing="15">
+                    
+                  
+                    
                     <Button 
                         Command="{Binding ClosePopupCommand}"
                         CornerRadius="15"
                         BackgroundColor="Transparent"
                         Margin="0,-10,-10,-15"
-                        Text="X" HorizontalOptions="EndAndExpand"></Button>
+                        Text="X" HorizontalOptions="EndAndExpand"/>
+                        
                     <StackLayout Orientation="Horizontal"
                                  Margin="10,0,10,0">
                         <Button
                             Command="{Binding OpenLoginCommand}"
                             CornerRadius="15"
                             BackgroundColor="Transparent"
-                                Text="Log in" 
-                                FontSize="32" 
-                           HorizontalOptions="Start"></Button>
+                            Text="Log in" 
+                            FontSize="32" 
+                            HorizontalOptions="Start"/>
                         <Label VerticalOptions="Center">|</Label>
                         <Button 
                             Command="{Binding OpenSignupCommand}"
@@ -104,36 +110,72 @@
                             Text="Sign up" FontSize="32" 
                            HorizontalOptions="EndAndExpand"></Button>
                     </StackLayout>
-                    <Rectangle HeightRequest="2"
-                               HorizontalOptions="FillAndExpand"
-                               Background="black"/>
+                  
                     
-                <StackLayout x:Name="slCreateUserViewModel">
+                    <StackLayout x:Name="slCreateUserViewModel">
+                        
+                    <Grid RowSpacing="2" Margin="0,20,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height = "Auto"/>
+                            <RowDefinition Height = "Auto"/>
+                            <RowDefinition Height = "Auto"/>
+                            <RowDefinition Height = "Auto"/>
+                            <RowDefinition Height = "Auto"/>
+                            <RowDefinition Height = "Auto"/>
+                            <RowDefinition Height = "Auto"/>
+                            <RowDefinition Height = "Auto"/>
+                            <RowDefinition Height = "Auto"/>
+                            <RowDefinition Height = "0.8*"/>
+                
+                        </Grid.RowDefinitions>
+
+
+
                     <Frame 
-                    Margin="5"
-                    BorderColor="LightGray"
-                    Padding="0"
-                   CornerRadius="15"
-                   IsClippedToBounds="False"
-                   HorizontalOptions="CenterAndExpand"
-                    WidthRequest="500"
-                   VerticalOptions="FillAndExpand"
-                    Opacity=".8">
-                    <local:RoundedEntry
+                        Grid.Row="0"                        
+                        BorderColor="LightGray"
+                        Padding="0"
+                        CornerRadius="15"
+                        IsClippedToBounds="False"
+                        HorizontalOptions="CenterAndExpand"
+                        WidthRequest="500"
+                        VerticalOptions="FillAndExpand"
+                        Opacity=".8">
+                        
+                        <local:RoundedEntry
                             x:Name="txt_signupEmail"
                             Opacity=".8" 
                             Placeholder="Email *"
                             Text="{Binding SignupEmail}"></local:RoundedEntry>
                     </Frame>
-                <Frame 
-                    Margin="5"
+                        
+                    <Label
+                          
+                          Grid.Row="1"
+                          Margin="0" 
+                          Padding="0" 
+                          FontSize="13"
+                          x:Name="emailErrorMsg"
+                          HorizontalTextAlignment="Center"
+                          Text="Hello"
+                          TextColor="#C3FF0000"
+                          />
+
+                            
+                            
+                            
+               
+                        
+                                       
+                <Frame
+                    Grid.Row="2"
                     BorderColor="LightGray"
                     Padding="0"
-                   CornerRadius="15"
-                   IsClippedToBounds="False"
-                   HorizontalOptions="CenterAndExpand"
+                    CornerRadius="15"
+                    IsClippedToBounds="False"
+                    HorizontalOptions="CenterAndExpand"
                     WidthRequest="500"
-                   VerticalOptions="FillAndExpand"
+                    VerticalOptions="FillAndExpand"
                     Opacity=".8">
                         <local:RoundedEntry 
                            
@@ -143,9 +185,19 @@
                             Opacity=".8" 
                             Placeholder="Password *"></local:RoundedEntry>
                     </Frame>
+                   <Label 
+                          Grid.Row="3"
+                          Margin="0" 
+                          Padding="0" 
+                          FontSize="13"
+                          x:Name="passErrorMsg"
+                          HorizontalTextAlignment="Center"
+                          Text="Hello"
+                          TextColor="#C3FF0000"
+                          />
 
-                <Frame 
-                    Margin="5"
+                <Frame
+                     Grid.Row="4"
                     BorderColor="LightGray"
                     Padding="0"
                    CornerRadius="15"
@@ -160,25 +212,48 @@
                             Opacity=".8" 
                             Placeholder="Display name *"></local:RoundedEntry>
                     </Frame>
+                   <Label
+                          Grid.Row="5"
+                          Margin="0" 
+                          Padding="0" 
+                          FontSize="13"
+                          x:Name="displayNameErrorMsg"
+                          HorizontalTextAlignment="Center"
+                          Text="Hello"
+                          TextColor="#C3FF0000"
+                          />
                     <Frame 
-                    Margin="5"
-                    BorderColor="LightGray"
-                    Padding="0"
-                   CornerRadius="15"
-                   IsClippedToBounds="False"
-                   HorizontalOptions="CenterAndExpand"
-                    WidthRequest="500"
-                   VerticalOptions="FillAndExpand"
+                          Grid.Row="6"
+                    
+                            BorderColor="LightGray"
+                            Padding="0"
+                           CornerRadius="15"
+                           IsClippedToBounds="False"
+                           HorizontalOptions="CenterAndExpand"
+                            WidthRequest="500"
+                           VerticalOptions="FillAndExpand"
                     Opacity=".8">
-                        <local:RoundedEntry 
+                            <local:RoundedEntry 
                             x:Name="txt_signupFirstName"
                              Text="{Binding SignupFirstName}"
                             Opacity=".8" 
                             Placeholder="First name"></local:RoundedEntry>
                     </Frame>
+                    
+                   <Label
+                          Grid.Row="7"
+                          Margin="0" 
+                          Padding="0" 
+                          FontSize="13"
+                          x:Name="firstnameErrorMsg"
+                          HorizontalTextAlignment="Center"
+                          Text="Hello"
+                          TextColor="#C3FF0000"
+                          />
                 
                 <Frame 
-                    Margin="5"
+                                            Grid.Row="8"
+                    
                     BorderColor="LightGray"
                     Padding="0"
                    CornerRadius="15"
@@ -193,20 +268,36 @@
                             Opacity=".8" 
                             Placeholder="Surname"></local:RoundedEntry>
                     </Frame>
-                
+                   <Label 
+                                                    Grid.Row="9"
+                       Margin="0" 
+                          Padding="0" 
+                          FontSize="13"
+                          x:Name="surnameErrorMsg"
+                          HorizontalTextAlignment="Center"
+                          Text="Hello"
+                          TextColor="#C3FF0000"
+                          />                
                 <Button 
+                                            Grid.Row="10"
                             Command="{Binding CreateUserCommand}"
                             CornerRadius="10"
                             HorizontalOptions="Center"
                             Text="Sign up" 
                             FontSize="20">
                 </Button>
+                    
+                    </Grid>                
+
                 </StackLayout>
+                
             </StackLayout>
+                    
+                    
         </Frame>
             
         
-
+            
         <!-- LOG IN POPUP-->
         <Frame 
             x:Name="loginPopup"

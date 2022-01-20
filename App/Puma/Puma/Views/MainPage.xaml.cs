@@ -23,6 +23,7 @@ namespace Puma.Views
         void OnMapClicked(object sender, MapClickedEventArgs e)
         {
             PopUp.Pinmethod(map, e);
+            
         }
 
 

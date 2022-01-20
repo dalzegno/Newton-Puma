@@ -2,6 +2,8 @@
 using Puma.Services;
 using System.Windows.Input;
 using Xamarin.Forms;
+using FluentValidation;
+using FluentValidation.Results;
 
 namespace Puma.ViewModels
 {
@@ -73,6 +75,9 @@ namespace Puma.ViewModels
             {
                 _signupSurname = value;
                 OnPropertyChanged();
+                
+
+                
             }
         }
 
@@ -88,13 +93,37 @@ namespace Puma.ViewModels
                 LastName = SignupSurname ?? ""
             };
 
-            var createdUser = await _userApiService.CreateUserAsync(user);
+            UserValidationService validationRules = new UserValidationService();
+            ValidationResult ans = validationRules.Validate(user);
+           
+        
 
-            if (createdUser != null)
+
+
+
+
+
+            if (ans == null || !ans.IsValid)
             {
-                await _dialogService.ShowMessageAsync("Welcome!", $"Welcome to PUMA \"{createdUser.DisplayName}\".");
-                return;
+                await _dialogService.ShowMessageAsync("Message", ans.Errors[0].ErrorMessage);
+                
+
             }
+            else
+            {
+                var createdUser = await _userApiService.CreateUserAsync(user);
+
+                if (createdUser != null)
+                {
+                    await _dialogService.ShowMessageAsync("Welcome!", $"Welcome to PUMA \"{createdUser.DisplayName}\".");
+                    return;
+                }
+
+            }
+
+
+
+
         }
 
         private async void ReportErrorMessage(object sender, string message) => await _dialogService.ShowMessageAsync("Error", $"{message}");
