@@ -189,9 +189,8 @@
                           Margin="0" 
                           Padding="0" 
                           FontSize="13"
-                          x:Name="passErrorMsg"
                           HorizontalTextAlignment="Center"
-                          Text="Hello"
+                          Text="{Binding PaaswordErrorMSG}"
                           TextColor="#C3FF0000"
                           />
 
@@ -216,9 +215,8 @@
                           Margin="0" 
                           Padding="0" 
                           FontSize="13"
-                          x:Name="displayNameErrorMsg"
                           HorizontalTextAlignment="Center"
-                          Text="Hello"
+                          Text="{Binding DisplayNameErrorMSG}"
                           TextColor="#C3FF0000"
                           />
                     <Frame 
