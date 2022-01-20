@@ -63,16 +63,16 @@ namespace Logic.Services
 
             return _mapper.Map<PointOfInterestDto>(dbPoi);
         }
-        public async Task<PointOfInterestDto> AddGrade(int poiId, int userId, int gradeType)
+        public async Task<PointOfInterestDto> AddGrade(AddGradeDto grading)
         {
             var poi = await _context.PointOfInterests.Include(p => p.Gradings)
-                                                       .FirstOrDefaultAsync(poi => poi.Id == poiId);
-            var previousGrade = await _context.Gradings.FirstOrDefaultAsync(g => g.UserId == userId && g.PointOfInterestId == poiId);
+                                                       .FirstOrDefaultAsync(poi => poi.Id == grading.PoiId);
+            var previousGrade = await _context.Gradings.FirstOrDefaultAsync(g => g.UserId == grading.UserId && g.PointOfInterestId == grading.PoiId);
 
             // User can either put one like or one dislike on a POI
             if (previousGrade != null && poi != null)
             {
-                previousGrade.GradeType = gradeType;
+                previousGrade.GradeType = grading.Grade;
                 await _context.SaveChangesAsync();
 
                 return _mapper.Map<PointOfInterestDto>(poi); ;
@@ -83,9 +83,9 @@ namespace Logic.Services
 
             poi.Gradings.Add(new Grading
             {
-                GradeType = gradeType,
-                PointOfInterestId = poiId,
-                UserId = userId
+                GradeType = grading.Grade,
+                PointOfInterestId = grading.PoiId,
+                UserId = grading.UserId
             });
 
             await _context.SaveChangesAsync();
@@ -128,7 +128,6 @@ namespace Logic.Services
                 throw new Exception("Could not add the tag to database");
             }
             return _mapper.Map<TagDto>(dbTag);
-
         }
         #endregion
 
@@ -166,7 +165,7 @@ namespace Logic.Services
         {
             PointOfInterest objectToDelete = await GetPoiFromDbAsync(id);
 
-            if (objectToDelete != null)
+            if (objectToDelete == null)
                 return null;
 
             try
