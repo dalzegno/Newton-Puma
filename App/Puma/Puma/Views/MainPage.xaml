@@ -155,9 +155,8 @@
                           Margin="0" 
                           Padding="0" 
                           FontSize="13"
-                          x:Name="emailErrorMsg"
                           HorizontalTextAlignment="Center"
-                          Text="Hello"
+                          Text="{Binding EmailErrorMSG}"
                           TextColor="#C3FF0000"
                           />
 

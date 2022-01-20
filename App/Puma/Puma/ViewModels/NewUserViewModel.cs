@@ -29,6 +29,20 @@ namespace Puma.ViewModels
         string _signupFirstName;
         string _signupSurname;
 
+        string _emailErrorMSG;
+
+
+        public string EmailErrorMSG
+        {
+            get => _emailErrorMSG;
+            set
+            {
+                _emailErrorMSG = value;
+                OnPropertyChanged();
+                CreateUserCommand.ChangeCanExecute();
+            }
+        }
+
         public string SignupEmail
         {
             get => _signupEmail;
@@ -94,20 +108,15 @@ namespace Puma.ViewModels
             };
 
             UserValidationService validationRules = new UserValidationService();
-            ValidationResult ans = validationRules.Validate(user);
-           
-        
-
-
-
-
+            ValidationResult ans = validationRules.Validate(user);       
+    
 
 
             if (ans == null || !ans.IsValid)
             {
                 await _dialogService.ShowMessageAsync("Message", ans.Errors[0].ErrorMessage);
                 
-
+                _emailErrorMSG = ans.Errors[0].ErrorMessage;
             }
             else
             {
