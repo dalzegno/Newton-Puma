@@ -383,7 +383,7 @@
 
         
         <!-- POI POPUP, is Invisible-->
-        <Frame 
+        <!--<Frame 
             x:Name="poiPopup"
             AbsoluteLayout.LayoutBounds="8,80,400,.8" 
                     AbsoluteLayout.LayoutFlags="HeightProportional"
@@ -399,7 +399,7 @@
                 <Entry x:Name="entry_country"></Entry>
                 <Button x:Name="btn_SearchLocation" Text="Search" Clicked="btn_SearchLocation_Clicked"></Button>
             </StackLayout>
-        </Frame>
+        </Frame>-->
 
         <!-- POI CREATION POPUP -->
         <Frame
@@ -410,8 +410,15 @@
             Opacity=".9">
             <StackLayout>
                 <local:RoundedEntry x:Name="entry_Name" FontSize="24" Margin="0,0,0,10" Placeholder="Name of Location.."></local:RoundedEntry>
-                <local:RoundedEntry x:Name="entry_Description" HeightRequest="250" VerticalOptions="Center" VerticalTextAlignment="Start" FontSize="24" Placeholder="Description.."></local:RoundedEntry>
+                <Editor x:Name="entry_Description" HeightRequest="250" VerticalOptions="Center" FontSize="24" Placeholder="Description.."></Editor>
                 <StackLayout x:Name="TagsList"/>
+                <local:RoundedEntry x:Name="entry_address"></local:RoundedEntry>
+                <local:RoundedEntry x:Name="entry_zip"></local:RoundedEntry>
+                <local:RoundedEntry x:Name="entry_country"></local:RoundedEntry>
+                <Button x:Name="btn_SearchLocation" Text="Search" Clicked="btn_SearchLocation_Clicked"></Button>
+                <Label x:Name="lbl_latitude" Text="{Binding Latitude}" FontSize="12"></Label>
+                <Label x:Name="lbl_longitude" Text="{Binding Longitude}" FontSize="12"></Label>
+                <Label x:Name="lbl_adress" FontSize="8"></Label>
             </StackLayout>
         </Frame>
 

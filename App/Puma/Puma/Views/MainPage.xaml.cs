@@ -27,6 +27,7 @@ namespace Puma.Views
             slCreateUserViewModel.BindingContext = new NewUserViewModel(UserApiService, DialogService);
             slLogIn.BindingContext = new LoginViewModel(UserApiService, DialogService);
 
+            slSettings.BindingContext = new SettingsViewModel();
 
             geoCoder = new Geocoder();
         }
@@ -120,14 +121,23 @@ namespace Puma.Views
             var search = entry_address.Text + entry_zip.Text + entry_country.Text;
 
             List<Position> postionList = new List<Position>(await new Geocoder().GetPositionsForAddressAsync(search));
-            
+
             map.Pins.Clear();
             if (postionList.Count != 0)
             {
                 var position = postionList.FirstOrDefault<Position>();
                 var adress = await new Geocoder().GetAddressesForPositionAsync(position);
+
+                map.Pins.Add(new Pin
+                {
+                    Address = adress.First(),
+                    Label = adress.First(),
+                    Type = PinType.SearchResult,
+                    Position = position
+                });
+
+                map.MoveToRegion(MapSpan.FromCenterAndRadius(position, Distance.FromKilometers(1)));
             }
-            slSettings.BindingContext = new SettingsViewModel();
         }
 
         async void TestMap(object sender, MapClickedEventArgs e)
