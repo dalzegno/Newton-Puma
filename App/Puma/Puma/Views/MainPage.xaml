@@ -40,6 +40,13 @@
         </x:Arguments>
         </maps:Map>
         
+        <!-- MAP TYPES -->
+        <StackLayout AbsoluteLayout.LayoutBounds="0,0,0,0" AbsoluteLayout.LayoutFlags="All">
+            <Button Text="Satellite"></Button>
+            <Button Text="Hybrid"></Button>
+            <Button Text="Street"></Button>
+        </StackLayout>
+        
         <!-- NAVBAR -->
         <StackLayout BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
             Light={StaticResource PopUpBackgroundColor}}"
