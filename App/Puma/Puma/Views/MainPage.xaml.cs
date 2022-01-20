@@ -1,6 +1,7 @@
 ﻿using Puma.CustomRenderer;
 using Puma.Services;
 using Puma.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Xamarin.Forms;
@@ -27,6 +28,23 @@ namespace Puma.Views
         async void TestMap(object sender, MapClickedEventArgs e)
         {
             
+        }
+
+        void OnButtonClicked(object sender, EventArgs e)
+        {
+            Button button = sender as Button;
+            switch (button.Text)
+            {
+                case "Street":
+                    map.MapType = MapType.Street;
+                    break;
+                case "Satellite":
+                    map.MapType = MapType.Satellite;
+                    break;
+                case "Hybrid":
+                    map.MapType = MapType.Hybrid;
+                    break;
+            }
         }
 
         private async void Button_Clicked(object sender, System.EventArgs e)

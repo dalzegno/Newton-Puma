@@ -41,10 +41,21 @@
         </maps:Map>
         
         <!-- MAP TYPES -->
-        <StackLayout AbsoluteLayout.LayoutBounds="0,0,0,0" AbsoluteLayout.LayoutFlags="All">
-            <Button Text="Satellite"></Button>
-            <Button Text="Hybrid"></Button>
-            <Button Text="Street"></Button>
+        <StackLayout
+            VerticalOptions="Center"
+            AbsoluteLayout.LayoutBounds="1, 1, 100, 150" 
+            AbsoluteLayout.LayoutFlags="PositionProportional"
+            x:Name="slMapTypes"
+            >
+            <Button Clicked="OnButtonClicked"
+                BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
+            Light={StaticResource PopUpBackgroundColor}}" Text="Satellite"></Button>
+            <Button Clicked="OnButtonClicked"
+                BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
+            Light={StaticResource PopUpBackgroundColor}}" Text="Hybrid"></Button>
+            <Button Clicked="OnButtonClicked"
+                BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
+            Light={StaticResource PopUpBackgroundColor}}" Text="Street"></Button>
         </StackLayout>
         
         <!-- NAVBAR -->
