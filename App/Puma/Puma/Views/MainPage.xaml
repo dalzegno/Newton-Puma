@@ -428,5 +428,38 @@
             </Grid>
         </Frame>
 
+        <!-- POI POPUP, is Invisible-->
+        <Frame 
+            x:Name="poiPopup"
+            AbsoluteLayout.LayoutBounds="8,80,400,.8" 
+                    AbsoluteLayout.LayoutFlags="HeightProportional"
+            Background="White"
+               Opacity=".9"
+            IsVisible="false">
+            <StackLayout >
+                <Label x:Name="lbl_latitude" Text="{Binding Latitude}" FontSize="24"></Label>
+                <Label x:Name="lbl_longitude" Text="{Binding Longitude}" FontSize="24"></Label>
+                <Label x:Name="lbl_adress" FontSize="24"></Label>
+                <Entry x:Name="entry_address"></Entry>
+                <Entry x:Name="entry_zip"></Entry>
+                <Entry x:Name="entry_country"></Entry>
+                <Button x:Name="btn_SearchLocation" Text="Search" Clicked="btn_SearchLocation_Clicked"></Button>
+            </StackLayout>
+        </Frame>
+
+        <!-- POI CREATION POPUP -->
+        <Frame
+            x:Name="poi2Popup"
+            AbsoluteLayout.LayoutBounds="8,80,400,.8" 
+            AbsoluteLayout.LayoutFlags="HeightProportional"
+            Background="White"
+            Opacity=".9">
+            <StackLayout>
+                <local:RoundedEntry x:Name="entry_Name" FontSize="24" Margin="0,0,0,10" Placeholder="Name of Location.."></local:RoundedEntry>
+                <local:RoundedEntry x:Name="entry_Description" HeightRequest="500" VerticalOptions="Center" VerticalTextAlignment="Start" FontSize="24" Placeholder="Description.."></local:RoundedEntry>
+                <StackLayout x:Name="TagsList"/>
+            </StackLayout>
+        </Frame>
+
     </AbsoluteLayout>
 </ContentPage>

@@ -32,7 +32,7 @@ namespace API.Controllers
 
             if (poi == null)
                 return NotFound();
-
+            
             return Ok(poi);
         }
 
