@@ -37,7 +37,7 @@ namespace Puma.ViewModels
 
         public async static void RegisterUser(RoundedEntry email, RoundedEntry password, RoundedEntry displayname, RoundedEntry firstname, RoundedEntry surname, UserApiService _userApiService)
         {
-            var user = new UserDto()
+            var user = new User()
             {
                 Email = email?.Text,
                 Password = password?.Text,
