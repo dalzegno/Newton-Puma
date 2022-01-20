@@ -413,6 +413,7 @@
                 <local:RoundedEntry x:Name="entry_Description" HeightRequest="250" VerticalOptions="Center" VerticalTextAlignment="Start" FontSize="24" Placeholder="Description.."></local:RoundedEntry>
                 <StackLayout x:Name="TagsList"/>
             </StackLayout>
+        </Frame>
 
         <!-- SETTINGS POPUP -->
         <Frame 

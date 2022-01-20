@@ -126,7 +126,7 @@ namespace Puma.Views
             {
                 var position = postionList.FirstOrDefault<Position>();
                 var adress = await new Geocoder().GetAddressesForPositionAsync(position);
-
+            }
             slSettings.BindingContext = new SettingsViewModel();
         }
 
