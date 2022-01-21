@@ -32,13 +32,13 @@ namespace Logic.Services
             {
                 Description = pointOfInterest.Description ?? "",
                 Name = pointOfInterest.Name,
-                Address = await _context.Addresses.FirstOrDefaultAsync(a => a.Id == pointOfInterest.Address.Id || a.StreetName == pointOfInterest.Address.StreetName)
+                Address = await _context.Addresses.FirstOrDefaultAsync(a => a.StreetName == pointOfInterest.Address.StreetName || a.Area == pointOfInterest.Address.Area)
                           ?? _mapper.Map<Address>(pointOfInterest.Address),
                 Position = await _context.Positions.FirstOrDefaultAsync(p => p.Latitude == pointOfInterest.Position.Latitude || p.Longitude == pointOfInterest.Position.Longitude)
                            ?? _mapper.Map<Position>(pointOfInterest.Position)
             };
 
-            if (pointOfInterest.TagIds.Count > 0)
+            if (pointOfInterest.TagIds?.Count > 0)
             {
                 foreach (var tagId in pointOfInterest.TagIds)
                 {
@@ -75,7 +75,7 @@ namespace Logic.Services
                 previousGrade.GradeType = grading.Grade;
                 await _context.SaveChangesAsync();
 
-                return _mapper.Map<PointOfInterestDto>(poi); ;
+                return _mapper.Map<PointOfInterestDto>(poi);
             }
 
             if (poi == null)
