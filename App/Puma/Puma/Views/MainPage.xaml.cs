@@ -54,6 +54,7 @@ namespace Puma.Views
             List<Position> postionList = new List<Position>(await new Geocoder().GetPositionsForAddressAsync(SearchField.Text));
 
             map.Pins.Clear();
+
             if (postionList.Count != 0)
             {
                 var position = postionList.FirstOrDefault<Position>();

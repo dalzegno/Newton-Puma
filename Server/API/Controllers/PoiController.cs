@@ -22,6 +22,9 @@ namespace API.Controllers
         {
             var poi = await _poiService.GetAsync(id);
 
+            if (poi == null)
+                return NotFound();
+
             return Ok(poi);
         }
 

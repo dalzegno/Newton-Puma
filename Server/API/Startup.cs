@@ -47,7 +47,7 @@ namespace API
             IMapper mapper = mapperConfig.CreateMapper();
 
             services.AddSingleton(mapper);
-            services.AddDbContext<PumaDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("peter")));
+            services.AddDbContext<PumaDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("puma")));
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPoiService, PoiService>();
 
