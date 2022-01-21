@@ -18,6 +18,8 @@ namespace API.Controllers
         }
 
         [HttpGet()]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<PointOfInterestDto>> Get(int id)
         {
             var poi = await _poiService.GetAsync(id);
@@ -29,19 +31,21 @@ namespace API.Controllers
         }
 
         [HttpGet("GetTags")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<ICollection<TagDto>>> GetTags()
         {
-            var poi = await _poiService.GetTagsAsync();
+            var tags = await _poiService.GetTagsAsync();
 
-            if (poi == null)
+            if (tags == null)
                 return NotFound();
 
-            return Ok(poi);
+            return Ok(tags);
         }
 
         [HttpPost("AddTag")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<PointOfInterestDto>> AddTag(string name)
         {
             TagDto createdTag = await _poiService.CreateTagAsync(name);
@@ -81,6 +85,8 @@ namespace API.Controllers
         }
 
         [HttpPost("AddGrade")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<PointOfInterestDto>> AddGrade([FromBody] AddGradeDto addGradeDto)
         {
 
@@ -93,6 +99,8 @@ namespace API.Controllers
         }
 
         [HttpDelete()]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<PointOfInterestDto>> Delete([FromQuery] int id)
         {
             var deletedPoi = await _poiService.DeleteAsync(id);
