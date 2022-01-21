@@ -18,7 +18,6 @@ namespace Puma.Views
         IDialogService DialogService => DependencyService.Get<IDialogService>();
 
         Geocoder geoCoder;
-
         public MainPage()
         {
             InitializeComponent();
@@ -32,10 +31,20 @@ namespace Puma.Views
             slSettings.BindingContext = new SettingsViewModel();
 
             geoCoder = new Geocoder();
+            
         }
         
         async void OnMapClicked(object sender, MapClickedEventArgs e)
         {
+            var poiService = new PoiApiService();
+            var tags = await poiService.GetTags();
+            List<string>tagList = new List<string>();
+            foreach (var t in tags)
+                 tagList.Add(t.Name);
+            TagsList.ItemsSource = tagList;
+
+          
+
             map.Pins.Clear();
             Pin pin = new Pin
             {
@@ -48,7 +57,6 @@ namespace Puma.Views
             map.Pins.Add(pin);
             System.Diagnostics.Debug.WriteLine($"MapClick: {e.Position.Latitude}, {e.Position.Longitude}");
 
-           
 
             lbl_longitude.Text = $"longitude: {e.Position.Longitude}";
             lbl_latitude.Text = $"latitude: {e.Position.Latitude}";
@@ -139,6 +147,7 @@ namespace Puma.Views
                 });
 
                 map.MoveToRegion(MapSpan.FromCenterAndRadius(position, Distance.FromKilometers(1)));
+              
             }
         }
 
@@ -207,6 +216,11 @@ namespace Puma.Views
                 //    TagIds = new List<int> { 1, 2 }
                 //});
             }
+        }
+
+        private void TagsList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+              
         }
     }
 }
