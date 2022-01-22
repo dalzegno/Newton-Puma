@@ -1,6 +1,6 @@
 ﻿
 
-namespace Logic.Models
+namespace Puma.Models
 {
 
     public class WeatherApiData
@@ -8,7 +8,7 @@ namespace Logic.Models
         public string cod { get; set; }
         public int message { get; set; }
         public int cnt { get; set; }
-        public ICollection[] list { get; set; }
+        public List[] list { get; set; }
         public City city { get; set; }
     }
 
@@ -30,7 +30,7 @@ namespace Logic.Models
         public float lon { get; set; }
     }
 
-    public class ICollection
+    public class List
     {
         public int dt { get; set; }
         public Main main { get; set; }
