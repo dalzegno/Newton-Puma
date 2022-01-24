@@ -28,6 +28,8 @@ namespace Puma.Views
             slCreateUserViewModel.BindingContext = new NewUserViewModel(UserApiService, DialogService);
             slLogIn.BindingContext = new LoginViewModel(UserApiService, DialogService);
 
+            slPoiPopup.BindingContext = new PoiViewModel(PoiService, DialogService);
+
             slSettings.BindingContext = new SettingsViewModel();
 
             geoCoder = new Geocoder();
@@ -36,12 +38,11 @@ namespace Puma.Views
         
         async void OnMapClicked(object sender, MapClickedEventArgs e)
         {
-            var poiService = new PoiApiService();
-            var tags = await poiService.GetTags();
-            List<string>tagList = new List<string>();
-            foreach (var t in tags)
-                 tagList.Add(t.Name);
-            TagsList.ItemsSource = tagList;
+            //var poiService = new PoiApiService();
+            //var tags = await poiService.GetTags();
+            //List<string>tagList = new List<string>();
+            //foreach (var t in tags)
+            //     tagList.Add(t.Name);
 
           
 
@@ -58,8 +59,8 @@ namespace Puma.Views
             System.Diagnostics.Debug.WriteLine($"MapClick: {e.Position.Latitude}, {e.Position.Longitude}");
 
 
-            lbl_longitude.Text = $"longitude: {e.Position.Longitude}";
-            lbl_latitude.Text = $"latitude: {e.Position.Latitude}";
+            lbl_longitude.Text = $"{e.Position.Longitude}";
+            lbl_latitude.Text = $"{e.Position.Latitude}";
 
             if (e.Position.Latitude != null && e.Position.Longitude != null)
             {

@@ -408,14 +408,15 @@
             AbsoluteLayout.LayoutFlags="HeightProportional"
             Background="White"
             Opacity=".9">
-            <StackLayout>
-                <local:RoundedEntry x:Name="entry_Name" FontSize="24" Margin="0,0,0,10" Placeholder="Name of Location.."></local:RoundedEntry>
-                <Editor x:Name="entry_Description" HeightRequest="250" VerticalOptions="Center" FontSize="24" Placeholder="Description.."></Editor>
+            <StackLayout x:Name="slPoiPopup">
+                <local:RoundedEntry x:Name="entry_Name" Text="{Binding Name}" FontSize="24" Margin="0,0,0,10" Placeholder="Name of Location.."></local:RoundedEntry>
+                <local:CustomEditor x:Name="entry_Description" Text="{Binding Description}" HeightRequest="250" VerticalOptions="Center" FontSize="24" Placeholder="Description.."></local:CustomEditor>
                 <StackLayout x:Name="TagsList"/>
-                <local:RoundedEntry x:Name="entry_address"></local:RoundedEntry>
-                <local:RoundedEntry x:Name="entry_zip"></local:RoundedEntry>
-                <local:RoundedEntry x:Name="entry_country"></local:RoundedEntry>
+                <local:RoundedEntry x:Name="entry_address" Text="{Binding StreetName}"></local:RoundedEntry>
+                <local:RoundedEntry x:Name="entry_zip" Text="{Binding Area}"></local:RoundedEntry>
+                <local:RoundedEntry x:Name="entry_country" Text="{Binding Country}"></local:RoundedEntry>
                 <Button x:Name="btn_SearchLocation" Text="Search" Clicked="btn_SearchLocation_Clicked"></Button>
+                <Button Text="Add Point of Interest" Command="{Binding CreatePoiCommand}"/>
                 <Label x:Name="lbl_latitude" Text="{Binding Latitude}" FontSize="12"></Label>
                 <Label x:Name="lbl_longitude" Text="{Binding Longitude}" FontSize="12"></Label>
                 <Label x:Name="lbl_adress" FontSize="8"></Label>
