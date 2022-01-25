@@ -50,27 +50,23 @@ namespace Logic.Services
                 }
             }
 
-            try
-            {
-                await _context.PointOfInterests.AddAsync(dbPoi);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-                // TODO: Errorhandling
-                return null;
-            }
+            await _context.PointOfInterests.AddAsync(dbPoi);
+            await _context.SaveChangesAsync();
 
             return _mapper.Map<PointOfInterestDto>(dbPoi);
         }
         public async Task<PointOfInterestDto> AddGrade(AddGradeDto grading)
         {
             var poi = await _context.PointOfInterests.Include(p => p.Gradings)
-                                                       .FirstOrDefaultAsync(poi => poi.Id == grading.PoiId);
-            var previousGrade = await _context.Gradings.FirstOrDefaultAsync(g => g.UserId == grading.UserId && g.PointOfInterestId == grading.PoiId);
+                                                     .FirstOrDefaultAsync(poi => poi.Id == grading.PoiId);
+
+            if (poi == null)
+                return null;
+
+            var previousGrade = poi.Gradings.FirstOrDefault(g => g.UserId == grading.UserId);
 
             // User can either put one like or one dislike on a POI
-            if (previousGrade != null && poi != null)
+            if (previousGrade != null && previousGrade.GradeType != grading.Grade)
             {
                 previousGrade.GradeType = grading.Grade;
                 await _context.SaveChangesAsync();
@@ -78,8 +74,6 @@ namespace Logic.Services
                 return _mapper.Map<PointOfInterestDto>(poi);
             }
 
-            if (poi == null)
-                return null;
 
             poi.Gradings.Add(new Grading
             {
@@ -117,16 +111,11 @@ namespace Logic.Services
 
             var dbTag = new Tag { Name = name };
 
-            try
-            {
-                var entity = await _context.Tags.AddAsync(dbTag);
-                dbTag = entity.Entity;
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-                throw new Exception("Could not add the tag to database");
-            }
+            var entity = await _context.Tags.AddAsync(dbTag);
+            dbTag = entity.Entity;
+
+            await _context.SaveChangesAsync();
+
             return _mapper.Map<TagDto>(dbTag);
         }
         #endregion
@@ -174,15 +163,8 @@ namespace Logic.Services
             if (objectToDelete == null)
                 return null;
 
-            try
-            {
-                _context.PointOfInterests.Remove(objectToDelete);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-                throw new Exception("Could not remove POI.");
-            }
+            _context.PointOfInterests.Remove(objectToDelete);
+            await _context.SaveChangesAsync();
 
             return _mapper.Map<PointOfInterestDto>(objectToDelete);
         }
