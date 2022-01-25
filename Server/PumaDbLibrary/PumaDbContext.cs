@@ -9,7 +9,7 @@ namespace PumaDbLibrary
 {
     public partial class PumaDbContext : DbContext
     {
-        public PumaDbContext() 
+        public PumaDbContext()
         {
         }
 
@@ -25,7 +25,8 @@ namespace PumaDbLibrary
         public virtual DbSet<PointOfInterest> PointOfInterests { get; set; }
         public virtual DbSet<Tag> Tags { get; set; }
         public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<Address> Addresses{ get; set; }
+        public virtual DbSet<Address> Addresses { get; set; }
+        public virtual DbSet<Api> Apis { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace Puma.Helpers
+namespace Logic.Helpers
 {
     public static class StringHelper
     {

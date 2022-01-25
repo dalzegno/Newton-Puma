@@ -16,7 +16,7 @@ namespace API.Controllers
         {
             _poiService = poiService;
         }
-
+        
         [HttpGet()]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]

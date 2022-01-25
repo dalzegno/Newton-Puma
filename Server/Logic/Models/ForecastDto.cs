@@ -2,13 +2,23 @@
 using System.Linq;
 using System.Collections.Generic;
 
-namespace Puma.Models
+namespace Logic.Models
 {
-    public class Forecast
+    public class ForecastDto
     {
         public string City { get; set; }
-        public double AverageTemperatureToday { get; }
-        public double AverageTemperatureTomorrow {
+        public double AverageTemperatureToday
+        {
+            get
+            {
+                var average = Items?.Count > 0 ? Items.Where(f => f.DateTime.Day == DateTime.Now.Day)
+                                                      .Average(f => f.Temperature)
+                              : 0.0;
+                return Math.Round(average, 1);
+            }
+        }
+        public double AverageTemperatureTomorrow
+        {
             get
             {
                 var average = Items?.Count > 0 ? Items.Where(f => f.DateTime.Day == DateTime.Now.Day + 1)
@@ -38,14 +48,14 @@ namespace Puma.Models
         // Sätt dessa till <Image Source="{Binding AverageIconTodayUrl}">
         public string AverageIconTodayUrl { get => $"http://openweathermap.org/img/wn/{AverageIconToday}@2x.png"; }
         public string AverageIconTomorrowUrl { get => $"http://openweathermap.org/img/wn/{AverageIconTomorrow}@2x.png"; }
-        public List<ForecastItem> Items { get; set; }
-
+        public List<ForecastItemDto> Items { get; set; }
     }
+
 
     // TODO: Den här kan vi implementera om vi vill lista alla väderuppgifter framöver (kan bindas till en CollectionView)
     public class GroupedForecast
     {
         public string City { get; set; }
-        public IEnumerable<IGrouping<DateTime, ForecastItem>> Items { get; set; }
+        public IEnumerable<IGrouping<DateTime, ForecastItemDto>> Items { get; set; }
     }
 }
