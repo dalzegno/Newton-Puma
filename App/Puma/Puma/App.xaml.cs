@@ -56,6 +56,5 @@ namespace Puma
                 Theme.SetTheme();
             });
         }
-
     }
 }

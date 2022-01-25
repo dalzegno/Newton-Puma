@@ -11,5 +11,7 @@ namespace Puma.Services
         Task<User> CreateUserAsync(User userToCreate);
         Task<User> UpdateUserAsync(User userToUpdate);
         Task<User> DeleteUserAsync(string email);
+        Task<User> GetCurrentUserAsync(string email, User currentUser);
+
     }
 }

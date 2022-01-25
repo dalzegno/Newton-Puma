@@ -10,7 +10,7 @@
                               Light={StaticResource WindowBackgroundColor}}"
     >
     
-    <AbsoluteLayout  VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+    <AbsoluteLayout   VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
         
         <!-- MAP -->
         <maps:Map x:Name="map"  MapClicked="TestMap"
@@ -99,13 +99,16 @@
                     Command="{Binding OpenLoginCommand}"
                     TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                     BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
+                   
                     Text="Log in"></Button>
                 <Label TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" Text="|" VerticalOptions="Center"></Label>
                 <Button x:Name="btn_Signup_Popup"
                     Command="{Binding OpenSignupCommand}"
                     TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                     BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
-                    Text="Sign up"></Button>
+                    
+                    Text="Sign up">
+                </Button>
             </StackLayout>
         </StackLayout>
         
@@ -371,6 +374,7 @@
                         FontSize="20"></Button>
                     </StackLayout>
                 </StackLayout>
+                
             </Grid>
         </Frame>
 

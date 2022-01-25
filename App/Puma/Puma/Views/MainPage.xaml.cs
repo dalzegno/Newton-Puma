@@ -15,16 +15,18 @@ namespace Puma.Views
         IUserApiService UserApiService => DependencyService.Get<IUserApiService>();
         IPoiService PoiService => DependencyService.Get<IPoiService>();
         IDialogService DialogService => DependencyService.Get<IDialogService>();
-
+        bool value = true;
         public MainPage()
         {
             InitializeComponent();
-
+            
             // Implementing dependecy injection
             BindingContext = new MainViewModel(UserApiService);
             slCreateUserViewModel.BindingContext = new NewUserViewModel(UserApiService, DialogService);
             slLogIn.BindingContext = new LoginViewModel(UserApiService, DialogService);
             slSettings.BindingContext = new SettingsViewModel();
+            btn_Login_Popup.IsVisible = value;
+            btn_Settings_Popup.IsVisible = value;
         }
 
         async void TestMap(object sender, MapClickedEventArgs e)
@@ -94,5 +96,12 @@ namespace Puma.Views
                 //});
             }
         }
+        public void LoggedIn()
+        {
+            value = false;
+            btn_Login_Popup.IsVisible = value;
+            btn_Signup_Popup.IsVisible = value;
+        }
+        
     }
 }

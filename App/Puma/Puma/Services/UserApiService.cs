@@ -18,7 +18,7 @@ namespace Puma.Services
         readonly string _userApiUri = "http://localhost:64500/api/User";
         //readonly string _userApiUri = "http://localhost:44329/api/User";
         public EventHandler<string> ErrorMessage;
-
+        public User CurrentUser;
         protected virtual void OnErrorMessage(string e) => ErrorMessage?.Invoke(this, e);
 
         public async Task<User> LogIn(string email, string password)
@@ -26,7 +26,7 @@ namespace Puma.Services
             try
             {
                 var response = await _httpClient.GetAsync($"{_userApiUri}/LogIn?email={email}&password={password}");
-
+   
                 if (!await IsResponseSuccess(response))
                     return null;
 
@@ -47,7 +47,6 @@ namespace Puma.Services
             try
             {
                 var response = await _httpClient.GetAsync($"{_userApiUri}/GetUserByEmail?email={email}");
-
                 if (!await IsResponseSuccess(response))
                     return null;
 
@@ -97,6 +96,25 @@ namespace Puma.Services
             }
 
             return true;
+        }
+        public async Task<User> GetCurrentUserAsync(string email, User currentUser)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"{_userApiUri}/GetUserByEmail?email={email}");
+                currentUser = await response.Content.ReadFromJsonAsync<User>();
+                CurrentUser = currentUser;
+                if (!await IsResponseSuccess(response))
+                    return null;
+
+                return await response.Content.ReadFromJsonAsync<User>();
+
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
         }
     }
 }
