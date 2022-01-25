@@ -129,6 +129,7 @@ namespace Puma.Views
 
         async void btn_SearchLocation_Clicked(object sender, EventArgs e)
         {
+
             var search = entry_address.Text + entry_zip.Text + entry_country.Text;
 
             List<Position> postionList = new List<Position>(await new Geocoder().GetPositionsForAddressAsync(search));
@@ -154,8 +155,8 @@ namespace Puma.Views
 
         async void TestMap(object sender, MapClickedEventArgs e)
         {
-
         }
+       
 
         void OnButtonClicked(object sender, EventArgs e)
         {
@@ -220,9 +221,26 @@ namespace Puma.Views
             }
         }
 
-        private void TagsList_SelectedIndexChanged(object sender, EventArgs e)
+      
+
+        private void TagPicker_SelectedIndexChanged(object sender, EventArgs e)
         {
-              
+            //var btn = new Button();
+            //btn.Text = TagPicker.SelectedItem.ToString();
+            //TagsList.Children.Add(btn);
+        }
+
+        private void TagPicker_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+            //var btn = new Button();
+            //var text = TagPicker.SelectedIndex;
+            //btn.Text = text;
+            //TagsList.Children.Add(btn);
+        }
+
+        private void Button_Clicked_1(object sender, EventArgs e)
+        {
+            
         }
     }
 }

@@ -411,7 +411,39 @@
             <StackLayout x:Name="slPoiPopup">
                 <local:RoundedEntry x:Name="entry_Name" Text="{Binding Name}" FontSize="24" Margin="0,0,0,10" Placeholder="Name of Location.."></local:RoundedEntry>
                 <local:CustomEditor x:Name="entry_Description" Text="{Binding Description}" HeightRequest="250" VerticalOptions="Center" FontSize="24" Placeholder="Description.."></local:CustomEditor>
-                <StackLayout x:Name="TagsList"/>
+
+
+                <StackLayout HeightRequest="50">
+                    <CollectionView 
+                        HorizontalOptions="Center" 
+                        Margin="0" 
+                        ItemsLayout="HorizontalList" 
+                        SelectionMode="Single"
+                        SelectionChangedCommand="{Binding RemoveTagCommand, Mode=TwoWay}"
+                        ItemsSource="{Binding TagButtons}"
+                        >
+
+                        <CollectionView.ItemTemplate>
+
+                            <DataTemplate>
+
+                                <Button 
+                                       
+                                        Margin="10" 
+                                        WidthRequest="100" 
+                                        HorizontalOptions="FillAndExpand"
+                                        VerticalOptions="FillAndExpand" 
+                                        Text="{Binding Name}" 
+                                        FontSize="12">
+                                    
+                                </Button>
+                                
+                            </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                </StackLayout>
+                <!--<Button Text="{Binding SelectedTagInfo.Name}" FontSize="12"/>-->
+                <Picker x:Name="TagPicker" SelectedIndexChanged="TagPicker_SelectedIndexChanged_1" SelectedItem="{Binding SelectedTagInfo}" ItemsSource="{Binding Tags}" ItemDisplayBinding="{Binding Name}"/>
                 <local:RoundedEntry x:Name="entry_address" Text="{Binding StreetName}"></local:RoundedEntry>
                 <local:RoundedEntry x:Name="entry_zip" Text="{Binding Area}"></local:RoundedEntry>
                 <local:RoundedEntry x:Name="entry_country" Text="{Binding Country}"></local:RoundedEntry>
