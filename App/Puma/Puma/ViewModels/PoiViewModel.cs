@@ -7,6 +7,7 @@ using Puma.Services;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Xamarin.Forms.Xaml;
+using System.Linq;
 
 namespace Puma.ViewModels
 {
@@ -157,9 +158,6 @@ namespace Puma.ViewModels
         private bool CanCreate() => !string.IsNullOrWhiteSpace(Description)  && !string.IsNullOrWhiteSpace(Name);
         private async void CreatePoi()
         {
-
-
-
             var poi = new AddPoiDto()
             {
                 Name = Name,
@@ -175,7 +173,7 @@ namespace Puma.ViewModels
                     Area = Area,
                     Country = Country
                 },
-                TagIds = new List<int>() { 1, 2, 3 }
+                TagIds = TagButtons.Count > 0 ? TagButtons.Select(x => x.Id).ToList() : new List<int>()
             };
 
             var createdPoi = await _poiService.CreatePoiAsync(poi);
@@ -186,11 +184,9 @@ namespace Puma.ViewModels
             }
         }
 
-        private void RemoveTag()
+        private void RemoveTag(object tag)
         {
-            
-            //TagButtons.Remove((Tag)tag);
-            System.Diagnostics.Debug.WriteLine("tag");
+            TagButtons.Remove((Tag)tag);
         }
     }
 }
