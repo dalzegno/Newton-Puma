@@ -417,8 +417,8 @@
                 <local:RoundedEntry x:Name="entry_country" Text="{Binding Country}"></local:RoundedEntry>
                 <Button x:Name="btn_SearchLocation" Text="Search" Clicked="btn_SearchLocation_Clicked"></Button>
                 <Button Text="Add Point of Interest" Command="{Binding CreatePoiCommand}"/>
-                <Label x:Name="lbl_latitude" Text="{Binding Latitude}" FontSize="12"></Label>
-                <Label x:Name="lbl_longitude" Text="{Binding Longitude}" FontSize="12"></Label>
+                <local:RoundedEntry IsVisible="false" x:Name="lbl_latitude" Text="{Binding Latitude}" FontSize="12"></local:RoundedEntry>
+                <local:RoundedEntry IsVisible="false" x:Name="lbl_longitude" Text="{Binding Longitude}" FontSize="12"></local:RoundedEntry>
                 <Label x:Name="lbl_adress" FontSize="8"></Label>
             </StackLayout>
         </Frame>
