@@ -1,6 +1,7 @@
 ﻿using Puma.Services;
 using Xamarin.Forms;
 using Puma.Models;
+using Puma.Views;
 
 namespace Puma.ViewModels
 {
@@ -8,13 +9,17 @@ namespace Puma.ViewModels
     {
         private IUserApiService _userApiService;
         private IDialogService _dialogService;
+        private INavigation _navigation;
 
-
-        public LoginViewModel(IUserApiService userApiService, IDialogService dialogService)
+        IUserApiService UserApiService => DependencyService.Get<IUserApiService>();
+        IDialogService DialogService => DependencyService.Get<IDialogService>();
+        public LoginViewModel(IUserApiService userApiService,
+                              IDialogService dialogService,
+                              INavigation navigation)
         {
             _userApiService = userApiService;
             _dialogService = dialogService;
-
+            _navigation = navigation;
         }
 
         Command _logInCommand;
@@ -22,7 +27,7 @@ namespace Puma.ViewModels
 
         string _loginEmail;
         string _loginPassword;
-
+        // Kommer inte gå :P
         public string LoginEmail
         {
             get => _loginEmail;
@@ -51,14 +56,16 @@ namespace Puma.ViewModels
         public async void LogIn()
         {
             var loggedInUser = await _userApiService.LogIn(LoginEmail, LoginPassword);
-            if (loggedInUser != null)
+
+            if (loggedInUser == null)
             {
-                StaticUser.LoggedInUser = loggedInUser;
-                await _dialogService.ShowMessageAsync("Login", $"Welcome {loggedInUser.DisplayName}!");
+                await _dialogService.ShowErrorAsync("Login", $"Mail or password was wrong.", "OK");
                 return;
             }
 
-            await _dialogService.ShowErrorAsync("Login", $"Mail or password was wrong.", "OK");
+            StaticUser.LoggedInUser = loggedInUser;
+            await _dialogService.ShowMessageAsync("Login", $"Welcome {loggedInUser.DisplayName}!");
+            MainPage.Instance.MainViewModel.UserLoggedInCommand.Execute(null);
         }
     }
 }
