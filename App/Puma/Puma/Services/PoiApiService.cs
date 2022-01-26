@@ -1,5 +1,4 @@
 ﻿
-using Puma.Enums;
 using Puma.Models;
 using Puma.Services;
 using System;
@@ -12,7 +11,7 @@ using Xamarin.Forms;
 [assembly: Dependency(typeof(PoiApiService))]
 namespace Puma.Services
 {
-    public class PoiApiService
+    public class PoiApiService : IPoiService
     {
         readonly HttpClient _httpClient = new HttpClient();
         readonly string _poiApiUri = "http://localhost:64500/api/Poi";

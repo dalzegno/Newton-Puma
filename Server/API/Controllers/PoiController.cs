@@ -16,7 +16,7 @@ namespace API.Controllers
         {
             _poiService = poiService;
         }
-
+        
         [HttpGet()]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -28,6 +28,28 @@ namespace API.Controllers
                 return NotFound();
 
             return Ok(poi);
+        }
+
+
+        /// <summary>
+        /// Gets all POI
+        /// </summary>
+        /// <returns></returns>
+        /// <response code="200">Returns all users</response>
+        /// <response code="404">If users could not be found</response>
+        /// <response code="500">Internal server error</response>
+        [HttpGet("GetAllPoi")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<ICollection<PointOfInterestDto>>> Get()
+        {
+            ICollection<PointOfInterestDto> pois = await _poiService.GetAllAsync();
+
+            if (pois.Count == 0)
+                return NotFound();
+
+            return Ok(pois);
         }
 
         [HttpGet("GetTags")]

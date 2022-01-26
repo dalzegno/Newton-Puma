@@ -11,27 +11,13 @@ namespace Puma
 {
     public partial class App : Application
     {
-        //public IServiceProvider Container;
         public App()
         {
-            
+
             InitializeComponent();
-            //Container = ConfigureDependencyInjection();
-
             MainPage = new MainPage();
-
-
         }
-        //IServiceProvider ConfigureDependencyInjection()
-        //{
-        //    var serviceCollection = new ServiceCollection();
-
-        //    serviceCollection.AddScoped<UserApiService>();
-        //    serviceCollection.AddScoped<DialogService>();
-
-        //    return serviceCollection.BuildServiceProvider();
-        //}
-
+      
         protected override void OnStart()
         {
             OnResume();
