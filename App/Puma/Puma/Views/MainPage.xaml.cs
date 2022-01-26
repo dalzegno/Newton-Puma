@@ -18,7 +18,7 @@ namespace Puma.Views
         IPoiService PoiService => DependencyService.Get<IPoiService>();
         IOpenWeatherService WeatherService => DependencyService.Get<IOpenWeatherService>();
 
-        Geocoder geoCode
+        Geocoder geoCoder;
         public MainPage()
         {
             InitializeComponent();
