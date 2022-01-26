@@ -3,6 +3,7 @@ using Puma.Models;
 using Puma.Services;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -74,6 +75,22 @@ namespace Puma.Services
                     return null;
 
                 return await response.Content.ReadFromJsonAsync<PointOfInterest>();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+        public async Task<ObservableCollection<PointOfInterest>> GetAllAsync()
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync($"{_poiApiUri}/GetAllPoi");
+
+                if (!await IsResponseSuccess(response))
+                    return null;
+
+                return await response.Content.ReadFromJsonAsync<ObservableCollection<PointOfInterest>>();
             }
             catch (Exception)
             {

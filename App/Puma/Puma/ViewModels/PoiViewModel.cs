@@ -29,12 +29,13 @@ namespace Puma.ViewModels
         Command _createPoiCommand;
         Command _removeTagCommand;
         Command _poiCollectionPopupCommand;
+        Command _poiCreationPopupCommand;
 
         public Command CreatePoiCommand => _createPoiCommand ?? (_createPoiCommand = new Command(CreatePoi, CanCreate));
         public Command RemoveTagCommand => _removeTagCommand ?? (_removeTagCommand = new Command(RemoveTag));
 
         public Command PoiCollectionPopupCommand => _poiCollectionPopupCommand ?? (_poiCollectionPopupCommand = new Command(PoiCollectionPopup));
-        //public ICommand RemoveTagCommand { get; }
+        public Command PoiCreationPopupCommand => _poiCreationPopupCommand ?? (_poiCreationPopupCommand = new Command(PoiCreationPopup));
 
         public string _name;
         public string _description;
@@ -43,15 +44,30 @@ namespace Puma.ViewModels
         public string _streetName;
         public string _longitude;
         public string _latitude;
-        public List<Tag> _tags;
 
+        public bool openPoiCreationBool { get; set; } = false;
         public bool openPoiCollectionBool { get; set; } = false;
         public async void GetTagsFromDb()
         {
 
             Tags = await _poiService.GetTags();
         }
-        
+
+        // Poi Collection
+        public ObservableCollection<PointOfInterest> _poiCollection;
+        public ObservableCollection<PointOfInterest> PoiCollection
+        {
+            get => _poiCollection;
+            set
+            {
+                _poiCollection = value;
+                OnPropertyChanged(nameof(PoiCollection));
+            }
+        }
+
+
+        // TAGS
+        public List<Tag> _tags;
         public List<Tag> Tags
         {
             get => _tags;
@@ -192,10 +208,23 @@ namespace Puma.ViewModels
         {
             TagButtons.Remove((Tag)tag);
         }
-        private void PoiCollectionPopup()
+        private async void PoiCollectionPopup()
         {
-            openPoiCollectionBool = true;
+            openPoiCollectionBool = !openPoiCollectionBool;
+            openPoiCreationBool = false;
+            OnPropertyChanged(nameof(poiCollectionPopupState));
+            OnPropertyChanged(nameof(PoiCreationPopupState));
+            PoiCollection = await _poiService.GetAllAsync();
+           
         }
+        private void PoiCreationPopup()
+        {
+            openPoiCreationBool = !openPoiCreationBool;
+            openPoiCollectionBool = false;
+            OnPropertyChanged(nameof(PoiCreationPopupState));
+            OnPropertyChanged(nameof(poiCollectionPopupState));
+        }
+        public bool PoiCreationPopupState => openPoiCreationBool;
         public bool poiCollectionPopupState => openPoiCollectionBool;
     }
 }
