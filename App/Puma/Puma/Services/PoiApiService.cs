@@ -1,5 +1,4 @@
 ﻿
-using Puma.Enums;
 using Puma.Models;
 using Puma.Services;
 using System;
@@ -8,11 +7,12 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using Xamarin.Forms.Maps;
 
 [assembly: Dependency(typeof(PoiApiService))]
 namespace Puma.Services
 {
-    public class PoiApiService
+    public class PoiApiService : IPoiService
     {
         readonly HttpClient _httpClient = new HttpClient();
         readonly string _poiApiUri = "http://localhost:64500/api/Poi";
@@ -80,6 +80,16 @@ namespace Puma.Services
             {
                 return null;
             }
+        }
+
+        public async Task<List<PointOfInterest>> GetAsync(Position searchedPosition)
+        {
+            var response = await _httpClient.GetAsync($"{_poiApiUri}/GetPoisFromLatAndLon?lat={searchedPosition.Latitude}&lon={searchedPosition.Longitude}");
+
+            if (!await IsResponseSuccess(response))
+                return null;
+
+            return await response.Content.ReadFromJsonAsync<List<PointOfInterest>>();
         }
         public async Task<List<Tag>> GetTags()
         {

@@ -4,15 +4,19 @@
              xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
              x:Class="Puma.Views.MainPage"
              xmlns:local="clr-namespace:Puma.CustomRenderer;assembly=Puma"
+
              xmlns:viewmodel="clr-namespace:Puma.ViewModels"
              BackgroundColor="{AppThemeBinding 
                               Dark={StaticResource WindowBackgroundColorDark}, 
                               Light={StaticResource WindowBackgroundColor}}"
+
     >
     <AbsoluteLayout   VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
         
         <!-- MAP -->
-        <maps:Map x:Name="map"  MapClicked="TestMap"
+
+        <maps:Map x:Name="map"  MapClicked="OnMapClicked" IsShowingUser="True"
+
                     MapType="Hybrid"
                     Background="{AppThemeBinding 
                               Dark={StaticResource WindowBackgroundColorDark}, 
@@ -23,6 +27,7 @@
                     AbsoluteLayout.LayoutFlags="All"
                     AbsoluteLayout.LayoutBounds="0,0,1,1"
                     >
+            
         <x:Arguments>
             <maps:MapSpan>
                 <x:Arguments>
@@ -38,7 +43,9 @@
             </maps:MapSpan>
         </x:Arguments>
         </maps:Map>
+
         
+
         <!-- MAP TYPES -->
         <StackLayout
             VerticalOptions="Center"
@@ -56,7 +63,7 @@
                 BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
             Light={StaticResource PopUpBackgroundColor}}" Text="Street"></Button>
         </StackLayout>
-        
+
         <!-- NAVBAR -->
         <StackLayout BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
             Light={StaticResource PopUpBackgroundColor}}"
@@ -272,7 +279,7 @@
         </Frame>
         
 
-        <!-- LOG IN POPUP-->
+        <!-- LOG IN POPUP -->
         <Frame 
             x:Name="loginPopup"
             IsVisible="{Binding loginPopupState}"
@@ -376,6 +383,81 @@
                 </StackLayout>
                 
             </Grid>
+        </Frame>
+
+        
+        <!-- POI POPUP, is Invisible-->
+        <!--<Frame 
+            x:Name="poiPopup"
+            AbsoluteLayout.LayoutBounds="8,80,400,.8" 
+                    AbsoluteLayout.LayoutFlags="HeightProportional"
+            Background="White"
+               Opacity=".9"
+            IsVisible="false">
+            <StackLayout >
+                <Label x:Name="lbl_latitude" Text="{Binding Latitude}" FontSize="24"></Label>
+                <Label x:Name="lbl_longitude" Text="{Binding Longitude}" FontSize="24"></Label>
+                <Label x:Name="lbl_adress" FontSize="24"></Label>
+                <Entry x:Name="entry_address"></Entry>
+                <Entry x:Name="entry_zip"></Entry>
+                <Entry x:Name="entry_country"></Entry>
+                <Button x:Name="btn_SearchLocation" Text="Search" Clicked="btn_SearchLocation_Clicked"></Button>
+            </StackLayout>
+        </Frame>-->
+
+        <!-- POI CREATION POPUP -->
+        <Frame
+            x:Name="poi2Popup"
+            AbsoluteLayout.LayoutBounds="8,80,400,.8" 
+            AbsoluteLayout.LayoutFlags="HeightProportional"
+            Background="White"
+            Opacity=".9">
+            <StackLayout x:Name="slPoiPopup">
+                <local:RoundedEntry x:Name="entry_Name" Text="{Binding Name}" FontSize="24" Margin="0,0,0,10" Placeholder="Name of Location.."></local:RoundedEntry>
+                <local:CustomEditor x:Name="entry_Description" Text="{Binding Description}" HeightRequest="250" VerticalOptions="Center" FontSize="24" Placeholder="Description.."></local:CustomEditor>
+
+
+                <StackLayout HeightRequest="50">
+                    <CollectionView 
+                        x:Name="cwTags"
+                        HorizontalOptions="Center" 
+                        Margin="0" 
+                        ItemsLayout="HorizontalList" 
+                        SelectionMode="Single"
+                        ItemsSource="{Binding TagButtons}"
+                        >
+
+                        <CollectionView.ItemTemplate>
+
+                            <DataTemplate>
+
+                                <Button 
+                                       Command="{Binding Path=BindingContext.RemoveTagCommand, Source={x:Reference Name=cwTags}}"
+                                        CommandParameter="{Binding}"
+                                        Margin="10" 
+                                        WidthRequest="100" 
+                                        HorizontalOptions="FillAndExpand"
+                                        VerticalOptions="FillAndExpand" 
+                                        Text="{Binding Name, StringFormat='X    {0:F0}'}" 
+                                        FontSize="12">
+                                    
+                                </Button>
+                                
+                            </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                </StackLayout>
+                <!--<Button Text="{Binding SelectedTagInfo.Name}" FontSize="12"/>-->
+                <Picker x:Name="TagPicker" SelectedIndexChanged="TagPicker_SelectedIndexChanged_1" SelectedItem="{Binding SelectedTagInfo}" ItemsSource="{Binding Tags}" ItemDisplayBinding="{Binding Name}"/>
+                <local:RoundedEntry x:Name="entry_address" Text="{Binding StreetName}"></local:RoundedEntry>
+                <local:RoundedEntry x:Name="entry_zip" Text="{Binding Area}"></local:RoundedEntry>
+                <local:RoundedEntry x:Name="entry_country" Text="{Binding Country}"></local:RoundedEntry>
+                <Button x:Name="btn_SearchLocation" Text="Search" Clicked="btn_SearchLocation_Clicked"></Button>
+                <Button Text="Add Point of Interest" Command="{Binding CreatePoiCommand}"/>
+                <local:RoundedEntry IsVisible="false" x:Name="lbl_latitude" Text="{Binding Latitude}" FontSize="12"></local:RoundedEntry>
+                <local:RoundedEntry IsVisible="false" x:Name="lbl_longitude" Text="{Binding Longitude}" FontSize="12"></local:RoundedEntry>
+                <Label x:Name="lbl_adress" FontSize="8"></Label>
+            </StackLayout>
         </Frame>
 
         <!-- SETTINGS POPUP -->

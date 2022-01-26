@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Puma;
 using Puma.CustomRenderer;
+using Puma;
 using Puma.UWP;
 using Windows.UI;
 using Xamarin.Forms;
@@ -12,15 +13,15 @@ using Xamarin.Forms.Platform.UWP;
 using SolidColorBrush = Windows.UI.Xaml.Media.SolidColorBrush;
 using CornerRadius = Windows.UI.Xaml.CornerRadius;
 
-[assembly: ExportRenderer(typeof(RoundedEntry), typeof(RoundedEntryRenderer))]
+[assembly: ExportRenderer(typeof(CustomEditor), typeof(CustomEditorRenderer))]
 namespace Puma.UWP
 {
-    class RoundedEntryRenderer : EntryRenderer
+    public class CustomEditorRenderer : EditorRenderer
     {
-        protected override void OnElementChanged(ElementChangedEventArgs<Entry> e)
+        protected override void OnElementChanged(ElementChangedEventArgs<Editor> e)
         {
             base.OnElementChanged(e);
-            
+
             if (Control != null)
             {
                 Control.BorderBrush = new SolidColorBrush(Colors.Transparent);

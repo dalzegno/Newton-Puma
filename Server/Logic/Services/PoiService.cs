@@ -131,6 +131,29 @@ namespace Logic.Services
             return _mapper.Map<PointOfInterestDto>(foundPoi);
         }
 
+        public async Task<ICollection<PointOfInterestDto>> GetAsync(double lat, double lon)
+        {
+            var pois = await _context.PointOfInterests.Include(poi => poi.Address)
+                                                 .Include(poi => poi.Position)
+                                                 .Include(poi => poi.Comments)
+                                                 .Include(poi => poi.PoiTags)
+                                                 .Include(poi => poi.Gradings)
+                                                 .Where(poi => poi.Position.Latitude < (lat + 0.1) && poi.Position.Latitude > (lat - 0.1) &&
+                                                               poi.Position.Longitude < (lon + 0.1) && poi.Position.Longitude > (lon - 0.1))
+                                                 .ToListAsync();
+
+            if (pois == null || pois.Count == 0)
+                return null;
+
+            return _mapper.Map<ICollection<PointOfInterestDto>>(pois);
+        }                                             
+
+        public async Task<ICollection<PointOfInterestDto>> GetAllAsync()
+        {
+            //var dbPois = await _context.PointOfInterests.ToListAsync();
+            return _mapper.Map<ICollection<PointOfInterestDto>>(await GetPoiFromDbAsync());
+        }
+
         public async Task<ICollection<TagDto>> GetTagsAsync()
         {
             var tags = await _context.Tags.ToListAsync();
@@ -173,11 +196,25 @@ namespace Logic.Services
         private async Task<PointOfInterest> GetPoiFromDbAsync(int id)
         {
             return await _context.PointOfInterests.Include(poi => poi.Address)
-                                                          .Include(poi => poi.Position)
-                                                          .Include(poi => poi.Comments)
-                                                          .Include(poi => poi.PoiTags)
-                                                          .Include(poi => poi.Gradings)
-                                                          .FirstOrDefaultAsync(poi => poi.Id == id);
+                                                  .Include(poi => poi.Position)
+                                                  .Include(poi => poi.Comments)
+                                                  .Include(poi => poi.PoiTags)
+                                                  .Include(poi => poi.Gradings)
+                                                  .FirstOrDefaultAsync(poi => poi.Id == id);
+        }
+        /// <summary>
+        /// Get all POI from Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        private async Task<ICollection<PointOfInterest>> GetPoiFromDbAsync()
+        {
+            return await _context.PointOfInterests.Include(poi => poi.Address)
+                                                  .Include(poi => poi.Position)
+                                                  .Include(poi => poi.Comments)
+                                                  .Include(poi => poi.PoiTags)
+                                                  .Include(poi => poi.Gradings)
+                                                  .ToListAsync();
         }
         /// <summary>
         /// Get a POI on Name, Latitude and Longitude
@@ -191,9 +228,9 @@ namespace Logic.Services
                                                                       .Include(poi => poi.Comments)
                                                                       .Include(poi => poi.PoiTags)
                                                                       .Include(poi => poi.Gradings)
-                                                                      .FirstOrDefaultAsync(poi => poi.Name.ToLower() == name.ToLower() ||
-                                                                                           poi.Position.Latitude == lat ||
-                                                                                           poi.Position.Longitude == lon);
+                                                                      .FirstOrDefaultAsync(poi => poi.Name.ToLower() == name.ToLower() &&
+                                                                                           (poi.Position.Latitude == lat &&
+                                                                                           poi.Position.Longitude == lon));
         }
         #endregion
     }

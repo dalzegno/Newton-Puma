@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
+using Xamarin.Forms.Maps;
 using Puma.Views;
 using Puma.Services;
 using Puma.Models;
@@ -90,7 +91,24 @@ namespace Puma.ViewModels
         public bool isUserLoggedInState => isUserLoggedIn;
 
         #endregion
+        
+        //void OnMapClicked(object sender, MapClickedEventArgs e)
+        //{
+        //    map.Pins.Clear();
+        //    Pin pin = new Pin
+        //    {
 
+        //        Label = "",
+        //        Address = "",
+        //        Type = PinType.Generic,
+        //        Position = new Position(e.Position.Latitude, e.Position.Longitude)
+        //    };
+        //    map.Pins.Add(pin);
+        //    System.Diagnostics.Debug.WriteLine($"MapClick: {e.Position.Latitude}, {e.Position.Longitude}");
+
+        //    Latitude = $"latitude: {e.Position.Latitude}";
+        //    Longitude = $"longitude: {e.Position.Longitude}";
+        //}
 
     }
 }
