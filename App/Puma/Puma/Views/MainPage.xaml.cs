@@ -15,6 +15,7 @@ namespace Puma.Views
         IUserApiService UserApiService => DependencyService.Get<IUserApiService>();
         IPoiService PoiService => DependencyService.Get<IPoiService>();
         IDialogService DialogService => DependencyService.Get<IDialogService>();
+
         bool value = true;
         public MainPage()
         {
@@ -29,7 +30,7 @@ namespace Puma.Views
 
         async void TestMap(object sender, MapClickedEventArgs e)
         {
-
+            
         }
 
         void OnButtonClicked(object sender, EventArgs e)
@@ -51,6 +52,9 @@ namespace Puma.Views
 
         private async void Button_Clicked(object sender, System.EventArgs e)
         {
+            
+
+
             List<Position> postionList = new List<Position>(await new Geocoder().GetPositionsForAddressAsync(SearchField.Text));
 
             map.Pins.Clear();

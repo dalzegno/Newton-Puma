@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Xamarin.Essentials;
+using Puma.Models;
 
 namespace Puma
 {

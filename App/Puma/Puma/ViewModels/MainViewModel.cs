@@ -7,6 +7,7 @@ using System.Windows.Input;
 using Xamarin.Forms;
 using Puma.Views;
 using Puma.Services;
+using Puma.Models;
 
 namespace Puma.ViewModels
 {
@@ -20,18 +21,32 @@ namespace Puma.ViewModels
             OpenSignupCommand = new Command(OpenSignup);
             OpenLoginCommand = new Command(OpenLogin);
             OpenSettingsCommand = new Command(OpenSettings);
+
         }
         #region Popup states for Login and Signup
         public ICommand ClosePopupCommand { get; }
         public ICommand OpenSignupCommand { get; }
         public ICommand OpenLoginCommand { get; }
         public ICommand OpenSettingsCommand { get; }
+        public ICommand UserLoggedInCommand { get; }
 
         public bool openLoginBool { get; set; } = false;
         public bool openSignupBool { get; set; } = false;
-
         public bool openSettingsBool { get; set; } = false;
+        public bool isUserLoggedIn { get; set; } = true;
+        
+        public void UserLoggedIn()
+        {
+            if (StaticUser.LoggedInUser == null)
+            {
+                isUserLoggedIn = !false;
+                OnPropertyChanged(nameof(isUserLoggedInState));
+                return;
+            }
 
+            isUserLoggedIn = !true;
+            OnPropertyChanged(nameof(isUserLoggedInState));
+        }
         public void ClosePopup()
         {
             openLoginBool = false;
@@ -68,12 +83,14 @@ namespace Puma.ViewModels
             OnPropertyChanged(nameof(loginPopupState));
             OnPropertyChanged(nameof(settingsPopupState));
         }
+
         public bool signupPopupState => openSignupBool;
         public bool loginPopupState => openLoginBool;
         public bool settingsPopupState => openSettingsBool;
+        public bool isUserLoggedInState => isUserLoggedIn;
 
         #endregion
 
-        
+
     }
 }
