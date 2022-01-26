@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Puma.App"
+             >
+    <Application.Resources>
+        <ResourceDictionary>
+            <Color x:Key="WindowBackgroundColor">LightGray</Color>
+            <Color x:Key="WindowBackgroundColorDark">Black</Color>
+            <Color x:Key="PopUpBackgroundColor">LightGray</Color>
+            <Color x:Key="PopUpBackgroundColorDark">Black</Color>
+            <Color x:Key="ButtonBackgroundColor">LightGray</Color>
+            <Color x:Key="ButtonBackgroundColorDark">Black</Color>
+            <Color x:Key="TextColor">#000000</Color>
+            <Color x:Key="TextColorDark">LightGray</Color>
+            <Color x:Key="BorderColor">#000000</Color>
+            <Color x:Key="BorderColorDark">LightGray</Color>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
