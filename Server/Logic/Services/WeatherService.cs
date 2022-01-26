@@ -41,6 +41,8 @@ namespace Logic.Services
             var uri = $"https://api.openweathermap.org/data/2.5/forecast?lat={latitude}&lon={longitude}&units=metric&lang={language}&appid={apiKey}";
 
             ForecastDto forecast = await ReadWebApiAsync(uri);
+            SetAveragesForForecast(forecast);
+
             return forecast;
         }
 
@@ -60,6 +62,52 @@ namespace Logic.Services
 
                 return ForecastTranslator.ToModel(weatherData); // Converts WeatherApiData to ForecastDto
             }
+        }
+
+        private static void SetAveragesForForecast(ForecastDto forecast)
+        {
+            bool today = true;
+            SetAverageTemperature(forecast, today);
+            SetAverageTemperature(forecast, !today);
+
+            SetAverageIcon(forecast, today);
+            SetAverageIcon(forecast, !today);
+        }
+
+        private static void SetAverageIcon(ForecastDto forecast, bool today)
+        {
+            var average = forecast.Items?.Count > 0 ?
+                                        forecast.Items.Where(foreCastItem => !string.IsNullOrEmpty(foreCastItem.Icon) &&
+                                                            foreCastItem.DateTime.Day == (today ? DateTime.Now.Day : DateTime.Now.Day + 1))
+                                                      .GroupBy(f => f.Icon)
+                                                      .OrderByDescending(groupedForecasts => groupedForecasts.Key)
+                                                      .FirstOrDefault().Key
+                                                      : "";
+
+            if (today)
+            {
+                forecast.AverageIconToday = average;
+                return;
+            }
+
+            forecast.AverageIconTomorrow = average;
+        }
+
+        private static void SetAverageTemperature(ForecastDto forecast, bool today)
+        {
+
+            var average = forecast.Items?.Count > 0 ?
+                                        forecast.Items.Where(f => f.DateTime.Day == (today ? DateTime.Now.Day : DateTime.Now.Day + 1))
+                                                      .Average(f => f.Temperature)
+                                        : 0.0;
+
+            if (today)
+            {
+                forecast.AverageTemperatureToday = Math.Round(average, 1);
+                return;
+            }
+
+            forecast.AverageTemperatureTomorrow = Math.Round(average, 1);
         }
     }
 }
