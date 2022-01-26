@@ -14,8 +14,9 @@ namespace Puma.Views
     public partial class MainPage : ContentPage
     {
         IUserApiService UserApiService => DependencyService.Get<IUserApiService>();
-        IPoiService PoiService => DependencyService.Get<IPoiService>();
         IDialogService DialogService => DependencyService.Get<IDialogService>();
+        IPoiService PoiService => DependencyService.Get<IPoiService>();
+        IOpenWeatherService WeatherService => DependencyService.Get<IOpenWeatherService>();
 
         Geocoder geoCoder;
         public MainPage()

@@ -51,6 +51,7 @@ namespace API
             services.AddDbContext<PumaDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("puma")));
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPoiService, PoiService>();
+            services.AddScoped<IWeatherService, WeatherService>();
 
             services.AddCors();
         }
