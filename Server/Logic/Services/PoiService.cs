@@ -131,6 +131,23 @@ namespace Logic.Services
             return _mapper.Map<PointOfInterestDto>(foundPoi);
         }
 
+        public async Task<ICollection<PointOfInterestDto>> GetAsync(double lat, double lon)
+        {
+            var pois = await _context.PointOfInterests.Include(poi => poi.Address)
+                                                 .Include(poi => poi.Position)
+                                                 .Include(poi => poi.Comments)
+                                                 .Include(poi => poi.PoiTags)
+                                                 .Include(poi => poi.Gradings)
+                                                 .Where(poi => poi.Position.Latitude < (lat + 0.1) && poi.Position.Latitude > (lat - 0.1) &&
+                                                               poi.Position.Longitude < (lon + 0.1) && poi.Position.Longitude > (lon - 0.1))
+                                                 .ToListAsync();
+
+            if (pois == null || pois.Count == 0)
+                return null;
+
+            return _mapper.Map<ICollection<PointOfInterestDto>>(pois);
+        }                                             
+
         public async Task<ICollection<PointOfInterestDto>> GetAllAsync()
         {
             //var dbPois = await _context.PointOfInterests.ToListAsync();

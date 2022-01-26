@@ -25,7 +25,7 @@ namespace Puma.Views
 
             // Implementing dependecy injection
             BindingContext = new MainViewModel(UserApiService);
-            
+
             slCreateUserViewModel.BindingContext = new NewUserViewModel(UserApiService, DialogService);
             slLogIn.BindingContext = new LoginViewModel(UserApiService, DialogService);
 
@@ -34,9 +34,9 @@ namespace Puma.Views
             slSettings.BindingContext = new SettingsViewModel();
 
             geoCoder = new Geocoder();
-            
+
         }
-        
+
         async void OnMapClicked(object sender, MapClickedEventArgs e)
         {
             //var poiService = new PoiApiService();
@@ -45,7 +45,7 @@ namespace Puma.Views
             //foreach (var t in tags)
             //     tagList.Add(t.Name);
 
-          
+
 
             map.Pins.Clear();
             Pin pin = new Pin
@@ -81,7 +81,7 @@ namespace Puma.Views
                     entry_zip.Text = words[0];
                     entry_country.Text = words[1];
                 }
-                else if(words.Length == 3)
+                else if (words.Length == 3)
                 {
                     entry_address.Text = words[0];
                     entry_zip.Text = words[1];
@@ -150,14 +150,14 @@ namespace Puma.Views
                 });
 
                 map.MoveToRegion(MapSpan.FromCenterAndRadius(position, Distance.FromKilometers(1)));
-              
+
             }
         }
 
         async void TestMap(object sender, MapClickedEventArgs e)
         {
         }
-       
+
 
         void OnButtonClicked(object sender, EventArgs e)
         {
@@ -178,51 +178,80 @@ namespace Puma.Views
 
         private async void Button_Clicked(object sender, System.EventArgs e)
         {
+            if (SearchField.Text == null)
+                return;
+
             List<Position> postionList = new List<Position>(await new Geocoder().GetPositionsForAddressAsync(SearchField.Text));
 
             map.Pins.Clear();
 
-            if (postionList.Count != 0)
+            if (postionList.Count == 0)
+                return;
+
+            var position = postionList.FirstOrDefault<Position>();
+            var adress = await new Geocoder().GetAddressesForPositionAsync(position);
+
+            var poiService = new PoiApiService();
+            var pois = await poiService.GetAsync(position);
+
+            if (pois == null || pois.Count == 0)
+                return;
+
+            foreach (var poi in pois)
             {
-                var position = postionList.FirstOrDefault<Position>();
-                var adress = await new Geocoder().GetAddressesForPositionAsync(position);
-
-                map.Pins.Add(new Pin
+                var pin = new Pin
                 {
-                    Address = adress.First(),
-                    Label = adress.First(),
-                    Type = PinType.SearchResult,
-                    Position = position
-                });
+                    Address = poi.Description,
+                    Type = PinType.Place,
+                    Position = new Position(poi.Position.Latitude, poi.Position.Longitude),
+                    Label = poi.Name
+                };
+                map.Pins.Add(pin);
 
-                map.MoveToRegion(MapSpan.FromCenterAndRadius(position, Distance.FromKilometers(1)));
-
-                // Om ni vill testa poiService :) 
-                //    var poiService = new PoiApiService();
-
-
-                //var response = await poiService.CreatePoiAsync(new AddPoiDto
-                //{
-                //    Name = "Test test",
-                //    Description = "Yo description",
-                //    Position = new PositionPoi
-                //    {
-                //        Latitude = 59.37787,
-                //        Longitude = 17.02502
-                //    },
-                //    Address = new Address
-                //    {
-                //        Country = "Sverige",
-                //        City = "Test",
-                //        StreetName = "Cool gata",
-                //        ZipCode = "Zipcode"
-                //    },
-                //    TagIds = new List<int> { 1, 2 }
-                //});
+                pin.MarkerClicked += (sender2, args) =>
+                {
+                    args.HideInfoWindow = false;
+                    //DisplayAlert("Tapped!", "Pin was tapped.", "OK");
+                };
             }
+
+            // Sökta positionen
+            map.Pins.Add(new Pin
+            {
+                Address = adress.First(),
+                Label = adress.First(),
+                Type = PinType.SearchResult,
+                Position = position
+            });
+
+            map.MoveToRegion(MapSpan.FromCenterAndRadius(position, Distance.FromKilometers(5)));
+
+            // Om ni vill testa poiService :) 
+            //    var poiService = new PoiApiService();
+
+
+            //var response = await poiService.CreatePoiAsync(new AddPoiDto
+            //{
+            //    Name = "Test test",
+            //    Description = "Yo description",
+            //    Position = new PositionPoi
+            //    {
+            //        Latitude = 59.37787,
+            //        Longitude = 17.02502
+            //    },
+            //    Address = new Address
+            //    {
+            //        Country = "Sverige",
+            //        City = "Test",
+            //        StreetName = "Cool gata",
+            //        ZipCode = "Zipcode"
+            //    },
+            //    TagIds = new List<int> { 1, 2 }
+            //});
+
         }
 
-      
+
 
         private void TagPicker_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -241,7 +270,7 @@ namespace Puma.Views
 
         private void Button_Clicked_1(object sender, EventArgs e)
         {
-            
+
         }
     }
 }
