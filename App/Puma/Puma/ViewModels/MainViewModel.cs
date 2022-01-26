@@ -22,6 +22,7 @@ namespace Puma.ViewModels
             OpenSignupCommand = new Command(OpenSignup);
             OpenLoginCommand = new Command(OpenLogin);
             OpenSettingsCommand = new Command(OpenSettings);
+            UserLoggedInCommand = new Command(UserLoggedIn);
 
         }
         #region Popup states for Login and Signup
@@ -34,19 +35,21 @@ namespace Puma.ViewModels
         public bool openLoginBool { get; set; } = false;
         public bool openSignupBool { get; set; } = false;
         public bool openSettingsBool { get; set; } = false;
-        public bool isUserLoggedIn { get; set; } = true;
+        public bool isUserLoggedOut { get; set; } = true;
         
         public void UserLoggedIn()
         {
             if (StaticUser.LoggedInUser == null)
             {
-                isUserLoggedIn = !false;
-                OnPropertyChanged(nameof(isUserLoggedInState));
+                isUserLoggedOut = true;
+                OnPropertyChanged(nameof(userLoginState));
                 return;
             }
 
-            isUserLoggedIn = !true;
-            OnPropertyChanged(nameof(isUserLoggedInState));
+            isUserLoggedOut = false;
+            openLoginBool = false;
+            OnPropertyChanged(nameof(userLoginState));
+            OnPropertyChanged(nameof(loginPopupState));
         }
         public void ClosePopup()
         {
@@ -88,7 +91,7 @@ namespace Puma.ViewModels
         public bool signupPopupState => openSignupBool;
         public bool loginPopupState => openLoginBool;
         public bool settingsPopupState => openSettingsBool;
-        public bool isUserLoggedInState => isUserLoggedIn;
+        public bool userLoginState => isUserLoggedOut;
 
         #endregion
         
