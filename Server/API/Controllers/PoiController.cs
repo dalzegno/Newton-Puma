@@ -30,6 +30,17 @@ namespace API.Controllers
             return Ok(poi);
         }
 
+        [HttpGet("GetPoisFromLatAndLon")]
+        public async Task<ActionResult<ICollection<PointOfInterestDto>>> Get([FromQuery]double lat, [FromQuery]double lon)
+        {
+            var pois = await _poiService.GetAsync(lat, lon);
+
+            if (pois == null || pois.Count < 1)
+                return NotFound();
+
+            return Ok(pois);
+        }
+
 
         /// <summary>
         /// Gets all POI
