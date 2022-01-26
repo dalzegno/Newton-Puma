@@ -75,7 +75,7 @@
                      Padding="5"
                      Orientation="Horizontal">
           
-                <Label TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" Text="Hello World" FontSize="38"/>
+                <!--<Label TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" Text="Hello World" FontSize="38"/>-->
             
             <Frame
                     Margin="5"
@@ -103,12 +103,12 @@
                 <Label TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" Text="|" VerticalOptions="Center"></Label>
                 <Button x:Name="btn_Login_Popup"
                     Command="{Binding OpenLoginCommand}"
-                    IsVisible="{Binding isUserLoggedInState}"
+                    IsVisible="{Binding userLoginState}"
                     TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                     BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
                    
                     Text="Log in"></Button>
-                <Label TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" Text="|" VerticalOptions="Center"></Label>
+                <Label IsVisible="{Binding userLoginState}" TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" Text="|" VerticalOptions="Center"></Label>
                 <Button x:Name="btn_Signup_Popup"
                     Command="{Binding OpenSignupCommand}"
                     TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"

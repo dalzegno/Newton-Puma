@@ -18,13 +18,17 @@ namespace Puma.Views
         IPoiService PoiService => DependencyService.Get<IPoiService>();
         IOpenWeatherService WeatherService => DependencyService.Get<IOpenWeatherService>();
 
-        Geocoder geoCode
+        public static MainPage Instance { get; set; }
+        internal MainViewModel MainViewModel { get; }
+
+        Geocoder geoCoder;
         public MainPage()
         {
             InitializeComponent();
-            
+            Instance = this;
+            MainViewModel = new MainViewModel(UserApiService);
             // Implementing dependecy injection
-            BindingContext = new MainViewModel(UserApiService);
+            BindingContext = MainViewModel;
 
             slCreateUserViewModel.BindingContext = new NewUserViewModel(UserApiService, DialogService);
             slLogIn.BindingContext = new LoginViewModel(UserApiService, DialogService);
@@ -59,7 +63,7 @@ namespace Puma.Views
             lbl_longitude.Text = $"{e.Position.Longitude}";
             lbl_latitude.Text = $"{e.Position.Latitude}";
 
-            if (e.Position.Latitude != null && e.Position.Longitude != null)
+            if (e.Position.Latitude != 0 && e.Position.Longitude != 0)
             {
                 Position position = new Position(e.Position.Latitude, e.Position.Longitude);
                 IEnumerable<string> possibleAddresses = await geoCoder.GetAddressesForPositionAsync(position);
@@ -161,9 +165,9 @@ namespace Puma.Views
             }
         }
 
-        async void TestMap(object sender, MapClickedEventArgs e)
-        {
-        }
+        //async void TestMap(object sender, MapClickedEventArgs e)
+        //{
+        //}
 
 
         void OnButtonClicked(object sender, EventArgs e)
@@ -218,8 +222,8 @@ namespace Puma.Views
 
                 pin.MarkerClicked += (sender2, args) =>
                 {
-                    args.HideInfoWindow = false;
-                    //DisplayAlert("Tapped!", "Pin was tapped.", "OK");
+
+                    DisplayAlert("Tapped!", $"{pin.Label}", "OK");
                 };
             }
 
@@ -232,7 +236,7 @@ namespace Puma.Views
                 Position = position
             });
 
-            map.MoveToRegion(MapSpan.FromCenterAndRadius(position, Distance.FromKilometers(5)));
+            map.MoveToRegion(MapSpan.FromCenterAndRadius(position, Distance.FromKilometers(1)));
 
             // Om ni vill testa poiService :) 
             //    var poiService = new PoiApiService();
