@@ -28,9 +28,12 @@ namespace Puma.ViewModels
 
         Command _createPoiCommand;
         Command _removeTagCommand;
+        Command _poiCollectionPopupCommand;
+
         public Command CreatePoiCommand => _createPoiCommand ?? (_createPoiCommand = new Command(CreatePoi, CanCreate));
         public Command RemoveTagCommand => _removeTagCommand ?? (_removeTagCommand = new Command(RemoveTag));
 
+        public Command PoiCollectionPopupCommand => _poiCollectionPopupCommand ?? (_poiCollectionPopupCommand = new Command(PoiCollectionPopup));
         //public ICommand RemoveTagCommand { get; }
 
         public string _name;
@@ -42,6 +45,7 @@ namespace Puma.ViewModels
         public string _latitude;
         public List<Tag> _tags;
 
+        public bool openPoiCollectionBool { get; set; } = false;
         public async void GetTagsFromDb()
         {
 
@@ -188,5 +192,10 @@ namespace Puma.ViewModels
         {
             TagButtons.Remove((Tag)tag);
         }
+        private void PoiCollectionPopup()
+        {
+            openPoiCollectionBool = true;
+        }
+        public bool poiCollectionPopupState => openPoiCollectionBool;
     }
 }
