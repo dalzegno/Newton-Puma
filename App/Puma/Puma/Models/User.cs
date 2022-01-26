@@ -13,5 +13,6 @@ namespace Puma.Models
         public bool? IsAdmin { get; set; }
         public bool? IsSuperAdmin { get; set; }
         public bool? IsActive { get; set; }
+        public bool? IsLoggedIn { get; set; }
     }
 }
