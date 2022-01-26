@@ -12,6 +12,5 @@ namespace Puma.Models
         public string LastName { get; set; }
         public bool? IsAdmin { get; set; }
         public bool? IsSuperAdmin { get; set; }
-        public bool? IsActive { get; set; }
     }
 }

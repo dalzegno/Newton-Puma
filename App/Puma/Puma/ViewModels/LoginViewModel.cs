@@ -1,8 +1,6 @@
 ﻿using Puma.Services;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xamarin.Forms;
+using Puma.Models;
 
 namespace Puma.ViewModels
 {
@@ -11,10 +9,12 @@ namespace Puma.ViewModels
         private IUserApiService _userApiService;
         private IDialogService _dialogService;
 
+
         public LoginViewModel(IUserApiService userApiService, IDialogService dialogService)
         {
             _userApiService = userApiService;
             _dialogService = dialogService;
+
         }
 
         Command _logInCommand;
@@ -46,17 +46,19 @@ namespace Puma.ViewModels
         }
 
         private bool CanLogIn() => !string.IsNullOrWhiteSpace(LoginEmail) && !string.IsNullOrWhiteSpace(LoginPassword);
+        public bool IsNotLoggedIn => StaticUser.LoggedInUser == null;
 
         public async void LogIn()
         {
             var loggedInUser = await _userApiService.LogIn(LoginEmail, LoginPassword);
             if (loggedInUser != null)
             {
-                await _dialogService.ShowMessageAsync("Login", $"Loggar in användare {loggedInUser.DisplayName}");
+                StaticUser.LoggedInUser = loggedInUser;
+                await _dialogService.ShowMessageAsync("Login", $"Welcome {loggedInUser.DisplayName}!");
                 return;
             }
 
-            await _dialogService.ShowErrorAsync("Login", $"Mail eller lösenord fel.", "OK");
+            await _dialogService.ShowErrorAsync("Login", $"Mail or password was wrong.", "OK");
         }
     }
 }

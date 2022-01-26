@@ -18,11 +18,11 @@ namespace Puma.Views
         IPoiService PoiService => DependencyService.Get<IPoiService>();
         IOpenWeatherService WeatherService => DependencyService.Get<IOpenWeatherService>();
 
-        Geocoder geoCoder;
+        Geocoder geoCode
         public MainPage()
         {
             InitializeComponent();
-
+            
             // Implementing dependecy injection
             BindingContext = new MainViewModel(UserApiService);
 
@@ -180,6 +180,7 @@ namespace Puma.Views
         {
             if (SearchField.Text == null)
                 return;
+
 
             List<Position> postionList = new List<Position>(await new Geocoder().GetPositionsForAddressAsync(SearchField.Text));
 
