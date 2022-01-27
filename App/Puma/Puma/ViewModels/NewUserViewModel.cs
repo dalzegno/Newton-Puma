@@ -45,8 +45,7 @@ namespace Puma.ViewModels
                 CreateUserCommand.ChangeCanExecute();
             }
         }
-
-        public string PaaswordErrorMSG
+        public string PasswordErrorMSG
         {
             get => _passwordErrorMSG;
             set
@@ -56,7 +55,6 @@ namespace Puma.ViewModels
                 CreateUserCommand.ChangeCanExecute();
             }
         }
-
         public string DisplayNameErrorMSG
         {
             get => _displayNameErrorMSG ;
@@ -68,9 +66,6 @@ namespace Puma.ViewModels
                 
             }
         }
-
-
-
         public string SignupEmail
         {
             get => _signupEmail;
@@ -100,7 +95,6 @@ namespace Puma.ViewModels
                 _signupDisplayName = value;
                 OnPropertyChanged();
                 CreateUserCommand.ChangeCanExecute();
-
             }
         }
         public string SignupFirstName
@@ -119,26 +113,15 @@ namespace Puma.ViewModels
             {
                 _signupSurname = value;
                 OnPropertyChanged();
-                
-
-                
             }
         }
 
         private bool CanCreate() => !string.IsNullOrWhiteSpace(SignupEmail) && !string.IsNullOrWhiteSpace(SignupPassword) && !string.IsNullOrWhiteSpace(SignupDisplayName);
 
-
-
-
-        public bool Uservalidation(User user)
+        public bool Uservalidation(AddUserDto user)
         {
             UserValidationService validationRules = new UserValidationService();
             ValidationResult ans = validationRules.Validate(user);
-
-
-
-
-
 
             Dictionary<string, string> errorPropertyName = new Dictionary<string, string>();
 
@@ -151,25 +134,26 @@ namespace Puma.ViewModels
 
                 }
 
+                if (errorPropertyName.ContainsKey("Email")) 
+                    EmailErrorMSG = errorPropertyName["Email"];
+                else 
+                    EmailErrorMSG = "";
 
+                if (errorPropertyName.ContainsKey("Password")) 
+                    PasswordErrorMSG = errorPropertyName["Password"];
+                else 
+                    PasswordErrorMSG = "";
 
-                if (errorPropertyName.ContainsKey("Email")) EmailErrorMSG = errorPropertyName["Email"];
-                else EmailErrorMSG = "";
-
-                if (errorPropertyName.ContainsKey("Password")) PaaswordErrorMSG = errorPropertyName["Password"];
-                else PaaswordErrorMSG = "";
-
-                if (errorPropertyName.ContainsKey("DisplayName")) DisplayNameErrorMSG = errorPropertyName["DisplayName"];
-                else DisplayNameErrorMSG = "";
-
+                if (errorPropertyName.ContainsKey("DisplayName")) 
+                    DisplayNameErrorMSG = errorPropertyName["DisplayName"];
+                else 
+                    DisplayNameErrorMSG = "";
 
                 return false;
-
-                
             }
 
             EmailErrorMSG = "";
-            PaaswordErrorMSG = "";
+            PasswordErrorMSG = "";
             DisplayNameErrorMSG = "";
 
             return true;
@@ -177,7 +161,7 @@ namespace Puma.ViewModels
         }
         private async void CreateUser()
         {
-            var user = new User()
+            var user = new AddUserDto()
             {
                 Email = SignupEmail,
                 Password = SignupPassword,
@@ -185,9 +169,6 @@ namespace Puma.ViewModels
                 FirstName = SignupFirstName ?? "",
                 LastName = SignupSurname ?? ""
             };
-
-
-
 
             if (Uservalidation(user))
             {
@@ -198,15 +179,7 @@ namespace Puma.ViewModels
                     await _dialogService.ShowMessageAsync("Welcome!", $"Welcome to PUMA \"{createdUser.DisplayName}\".");
                     return;
                 }
-
             }
-
-
-
-
-
-
-
         }
 
         private async void ReportErrorMessage(object sender, string message) => await _dialogService.ShowMessageAsync("Error", $"{message}");

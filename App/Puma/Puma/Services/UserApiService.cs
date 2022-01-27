@@ -8,6 +8,7 @@ using System.Net.Http.Json; //Requires nuget package System.Net.Http.Json
 using System.Threading.Tasks;
 using Puma.Services;
 using Xamarin.Forms;
+using System.Linq;
 
 [assembly: Dependency(typeof(UserApiService))]
 namespace Puma.Services
@@ -44,6 +45,8 @@ namespace Puma.Services
 
         public async Task<User> GetUserAsync(string email)
         {
+            SetHeader();
+
             try
             {
                 var response = await _httpClient.GetAsync($"{_userApiUri}/GetUserByEmail?email={email}");
@@ -60,9 +63,8 @@ namespace Puma.Services
 
         }
 
-        public async Task<User> CreateUserAsync(User userToCreate)
+        public async Task<User> CreateUserAsync(AddUserDto userToCreate)
         {
-
             var response = await _httpClient.PostAsJsonAsync(_userApiUri, userToCreate);
 
             if (!await IsResponseSuccess(response))
@@ -71,8 +73,10 @@ namespace Puma.Services
             return await response.Content.ReadFromJsonAsync<User>();
         }
 
-        public async Task<User> UpdateUserAsync(User userToUpdate)
+        public async Task<User> UpdateUserAsync(AddUserDto userToUpdate)
         {
+            SetHeader();
+
             var response = await _httpClient.PutAsJsonAsync(_userApiUri, userToUpdate);
 
             if (!await IsResponseSuccess(response))
@@ -81,9 +85,16 @@ namespace Puma.Services
             return await response.Content.ReadFromJsonAsync<User>();
         }
 
-        public Task<User> DeleteUserAsync(string email)
+        public async Task<User> DeleteUserAsync(int id)
         {
-            throw new NotImplementedException();
+            SetHeader();
+
+            var response = await _httpClient.DeleteAsync($"{_userApiUri}?id={id}");
+
+            if (!await IsResponseSuccess(response))
+                return null;
+
+            return await response.Content.ReadFromJsonAsync<User>();
         }
 
         private async Task<bool> IsResponseSuccess(HttpResponseMessage response)
@@ -115,6 +126,17 @@ namespace Puma.Services
                 return null;
             }
 
+        }
+
+        private void SetHeader()
+        {
+            if (StaticUser.LoggedInUser == null)
+                return;
+
+            var header = _httpClient.DefaultRequestHeaders.FirstOrDefault(a => a.Key == "apiKey");
+
+            if (header.Value == null)
+                _httpClient.DefaultRequestHeaders.Add("apiKey", StaticUser.LoggedInUser.ApiKey);
         }
     }
 }

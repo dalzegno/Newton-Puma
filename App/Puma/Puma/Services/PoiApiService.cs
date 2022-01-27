@@ -25,6 +25,8 @@ namespace Puma.Services
         #region Create
         public async Task<PointOfInterest> CreatePoiAsync(AddPoiDto poi)
         {
+            SetHeader();
+
             var response = await _httpClient.PostAsJsonAsync(_poiApiUri, poi);
 
             if (!await IsResponseSuccess(response))
@@ -34,6 +36,8 @@ namespace Puma.Services
         }
         public async Task<Tag> CreateTagAsync(string name)
         {
+            SetHeader();
+
             StringContent query = new StringContent(name);
 
             var response = await _httpClient.PostAsync($"{_poiApiUri}/AddTag", query);
@@ -46,6 +50,7 @@ namespace Puma.Services
 
         public async Task<PointOfInterest> AddCommentAsync(AddCommentDto addCommentDto)
         {
+            SetHeader();
 
             var response = await _httpClient.PostAsJsonAsync($"{_poiApiUri}/AddComment", addCommentDto);
 
@@ -57,6 +62,8 @@ namespace Puma.Services
 
         public async Task<PointOfInterest> AddGradeAsync(AddGradeDto addGradeDto)
         {
+            SetHeader();
+
             var response = await _httpClient.PostAsJsonAsync($"{_poiApiUri}/AddGrade", addGradeDto);
 
             if (!await IsResponseSuccess(response))
@@ -98,6 +105,7 @@ namespace Puma.Services
         }
         public async Task<ObservableCollection<PointOfInterest>> GetAllAsync()
         {
+            SetHeader();
             try
             {
                 var response = await _httpClient.GetAsync($"{_poiApiUri}/GetAllPoi");
@@ -114,6 +122,8 @@ namespace Puma.Services
         }
         public async Task<List<Tag>> GetTags()
         {
+            SetHeader();
+
             try
             {
                 var response = await _httpClient.GetAsync($"{_poiApiUri}/GetTags");
@@ -133,6 +143,8 @@ namespace Puma.Services
         #region Delete
         public async Task<PointOfInterest> Delete(int poiId)
         {
+            SetHeader();
+
             var response = await _httpClient.DeleteAsync($"{_poiApiUri}/?id={poiId}");
 
             if (!await IsResponseSuccess(response))
@@ -151,13 +163,16 @@ namespace Puma.Services
             }
 
             return true;
-        }
+        }  
 
         private void SetHeader()
         {
+            if (StaticUser.LoggedInUser == null)
+                return;
+
             var header = _httpClient.DefaultRequestHeaders.FirstOrDefault(a => a.Key == "apiKey");
 
-            if (header.Value == null && StaticUser.LoggedInUser != null)
+            if (header.Value == null)
                 _httpClient.DefaultRequestHeaders.Add("apiKey", StaticUser.LoggedInUser.ApiKey);
         }
 

@@ -107,16 +107,8 @@ namespace Logic.Services
             if (userToDelete == null)
                 return null;
 
-            try
-            {
-                _context.Users.Remove(userToDelete);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-                // TODO: Error handling
-                return null;
-            }
+            _context.Users.Remove(userToDelete);
+            await _context.SaveChangesAsync();
 
             return _mapper.Map<UserDto>(userToDelete);
         }

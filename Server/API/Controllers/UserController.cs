@@ -79,8 +79,8 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<ICollection<UserDto>>> Get([FromHeader] string apiKey)
         {
-            if (!await _userService.IsUserAuthorizedAsync(apiKey))
-                return Unauthorized();
+            //if (!await _userService.IsUserAuthorizedAsync(apiKey))
+            //    return Unauthorized();
 
             ICollection<UserDto> users = await _userService.GetAllAsync();
 

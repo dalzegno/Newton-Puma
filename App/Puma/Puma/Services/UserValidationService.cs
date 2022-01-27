@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 namespace Puma.Services
 {
-    internal class UserValidationService : AbstractValidator<User>
+    internal class UserValidationService : AbstractValidator<AddUserDto>
     {
         Regex emailRegex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
         public UserValidationService()
