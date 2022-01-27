@@ -1,8 +1,7 @@
 ﻿using Puma.Services;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xamarin.Forms;
+using Puma.Models;
+using Puma.Views;
 
 namespace Puma.ViewModels
 {
@@ -11,7 +10,10 @@ namespace Puma.ViewModels
         private IUserApiService _userApiService;
         private IDialogService _dialogService;
 
-        public LoginViewModel(IUserApiService userApiService, IDialogService dialogService)
+        IUserApiService UserApiService => DependencyService.Get<IUserApiService>();
+        IDialogService DialogService => DependencyService.Get<IDialogService>();
+        public LoginViewModel(IUserApiService userApiService,
+                              IDialogService dialogService)
         {
             _userApiService = userApiService;
             _dialogService = dialogService;
@@ -22,7 +24,6 @@ namespace Puma.ViewModels
 
         string _loginEmail;
         string _loginPassword;
-
         public string LoginEmail
         {
             get => _loginEmail;
@@ -46,17 +47,21 @@ namespace Puma.ViewModels
         }
 
         private bool CanLogIn() => !string.IsNullOrWhiteSpace(LoginEmail) && !string.IsNullOrWhiteSpace(LoginPassword);
+        public bool IsNotLoggedIn => StaticUser.LoggedInUser == null;
 
         public async void LogIn()
         {
             var loggedInUser = await _userApiService.LogIn(LoginEmail, LoginPassword);
-            if (loggedInUser != null)
+
+            if (loggedInUser == null)
             {
-                await _dialogService.ShowMessageAsync("Login", $"Loggar in användare {loggedInUser.DisplayName}");
+                await _dialogService.ShowErrorAsync("Login", $"Mail or password was wrong.", "OK");
                 return;
             }
 
-            await _dialogService.ShowErrorAsync("Login", $"Mail eller lösenord fel.", "OK");
+            StaticUser.LoggedInUser = loggedInUser;
+            await _dialogService.ShowMessageAsync("Login", $"Welcome {loggedInUser.DisplayName}!");
+            MainPage.Instance.MainViewModel.UserLoggedInCommand.Execute(null);
         }
     }
 }

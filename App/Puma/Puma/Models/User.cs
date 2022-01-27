@@ -13,5 +13,6 @@ namespace Puma.Models
         public bool IsAdmin { get; set; }
         public bool IsSuperAdmin { get; set; }
         public string ApiKey { get; set; }
+
     }
 }

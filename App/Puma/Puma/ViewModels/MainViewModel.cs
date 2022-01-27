@@ -8,6 +8,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 using Puma.Views;
 using Puma.Services;
+using Puma.Models;
 
 namespace Puma.ViewModels
 {
@@ -21,18 +22,35 @@ namespace Puma.ViewModels
             OpenSignupCommand = new Command(OpenSignup);
             OpenLoginCommand = new Command(OpenLogin);
             OpenSettingsCommand = new Command(OpenSettings);
+            UserLoggedInCommand = new Command(UserLoggedIn);
+
         }
         #region Popup states for Login and Signup
         public ICommand ClosePopupCommand { get; }
         public ICommand OpenSignupCommand { get; }
         public ICommand OpenLoginCommand { get; }
         public ICommand OpenSettingsCommand { get; }
+        public ICommand UserLoggedInCommand { get; }
 
         public bool openLoginBool { get; set; } = false;
         public bool openSignupBool { get; set; } = false;
-
         public bool openSettingsBool { get; set; } = false;
+        public bool isUserLoggedOut { get; set; } = true;
+        
+        public void UserLoggedIn()
+        {
+            if (StaticUser.LoggedInUser == null)
+            {
+                isUserLoggedOut = true;
+                OnPropertyChanged(nameof(userLoginState));
+                return;
+            }
 
+            isUserLoggedOut = false;
+            openLoginBool = false;
+            OnPropertyChanged(nameof(userLoginState));
+            OnPropertyChanged(nameof(loginPopupState));
+        }
         public void ClosePopup()
         {
             openLoginBool = false;
@@ -69,12 +87,13 @@ namespace Puma.ViewModels
             OnPropertyChanged(nameof(loginPopupState));
             OnPropertyChanged(nameof(settingsPopupState));
         }
+
         public bool signupPopupState => openSignupBool;
         public bool loginPopupState => openLoginBool;
         public bool settingsPopupState => openSettingsBool;
+        public bool userLoginState => isUserLoggedOut;
 
         #endregion
-
         
         //void OnMapClicked(object sender, MapClickedEventArgs e)
         //{
@@ -93,5 +112,6 @@ namespace Puma.ViewModels
         //    Latitude = $"latitude: {e.Position.Latitude}";
         //    Longitude = $"longitude: {e.Position.Longitude}";
         //}
+
     }
 }

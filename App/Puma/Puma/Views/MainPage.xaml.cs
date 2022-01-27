@@ -18,18 +18,26 @@ namespace Puma.Views
         IPoiService PoiService => DependencyService.Get<IPoiService>();
         IOpenWeatherService WeatherService => DependencyService.Get<IOpenWeatherService>();
 
+        public static MainPage Instance { get; set; }
+        internal MainViewModel MainViewModel { get; }
+
         Geocoder geoCoder;
         public MainPage()
         {
             InitializeComponent();
-
+            Instance = this;
+            MainViewModel = new MainViewModel(UserApiService);
             // Implementing dependecy injection
-            BindingContext = new MainViewModel(UserApiService);
+            BindingContext = MainViewModel;
 
             slCreateUserViewModel.BindingContext = new NewUserViewModel(UserApiService, DialogService);
             slLogIn.BindingContext = new LoginViewModel(UserApiService, DialogService);
 
-            slPoiPopup.BindingContext = new PoiViewModel(PoiService, DialogService);
+            var poiViewModel = new PoiViewModel(PoiService, DialogService);
+            slPoiPopover.BindingContext = poiViewModel;
+            slPoiPopup.BindingContext = poiViewModel;
+            poiCollectionView.BindingContext = poiViewModel;
+            poiCreationPopup.BindingContext = poiViewModel;
 
             slSettings.BindingContext = new SettingsViewModel();
 
@@ -39,14 +47,6 @@ namespace Puma.Views
 
         async void OnMapClicked(object sender, MapClickedEventArgs e)
         {
-            //var poiService = new PoiApiService();
-            //var tags = await poiService.GetTags();
-            //List<string>tagList = new List<string>();
-            //foreach (var t in tags)
-            //     tagList.Add(t.Name);
-
-
-
             map.Pins.Clear();
             Pin pin = new Pin
             {
@@ -63,7 +63,7 @@ namespace Puma.Views
             lbl_longitude.Text = $"{e.Position.Longitude}";
             lbl_latitude.Text = $"{e.Position.Latitude}";
 
-            if (e.Position.Latitude != null && e.Position.Longitude != null)
+            if (e.Position.Latitude != 0 && e.Position.Longitude != 0)
             {
                 Position position = new Position(e.Position.Latitude, e.Position.Longitude);
                 IEnumerable<string> possibleAddresses = await geoCoder.GetAddressesForPositionAsync(position);
@@ -71,31 +71,42 @@ namespace Puma.Views
 
 
                 System.Diagnostics.Debug.WriteLine("address:" + address);
-                var words = address?.Split('\n') ?? Array.Empty<string>();
-                foreach (var word in words)
-                    System.Diagnostics.Debug.WriteLine("w" + word);
+               
 
                 ClearPoiEntries();
+                FillAddressBoxes(address);
+            }
+
+            void FillAddressBoxes(string address)
+            {
+                var words = address?.Split('\n') ?? Array.Empty<string>();
                 if (words.Length == 2)
                 {
+                    lbl_Area.Text = words[0];
+                    lbl_Country.Text = words[1];
+
                     entry_zip.Text = words[0];
                     entry_country.Text = words[1];
                 }
                 else if (words.Length == 3)
                 {
+                    lbl_StreetName.Text = words[0];
+                    lbl_Area.Text = words[1];
+                    lbl_Country.Text = words[2];
+
                     entry_address.Text = words[0];
                     entry_zip.Text = words[1];
                     entry_country.Text = words[2];
-                }
-                else
-                {
-
                 }
                 lbl_adress.Text = address;
             }
 
             void ClearPoiEntries()
             {
+                lbl_StreetName.Text = "";
+                lbl_Area.Text = "";
+                lbl_Country.Text = "";
+
                 entry_address.Text = "";
                 entry_zip.Text = "";
                 entry_country.Text = "";
@@ -154,9 +165,9 @@ namespace Puma.Views
             }
         }
 
-        async void TestMap(object sender, MapClickedEventArgs e)
-        {
-        }
+        //async void TestMap(object sender, MapClickedEventArgs e)
+        //{
+        //}
 
 
         void OnButtonClicked(object sender, EventArgs e)
@@ -181,6 +192,7 @@ namespace Puma.Views
             if (SearchField.Text == null)
                 return;
 
+
             List<Position> postionList = new List<Position>(await new Geocoder().GetPositionsForAddressAsync(SearchField.Text));
 
             map.Pins.Clear();
@@ -195,7 +207,17 @@ namespace Puma.Views
             var pois = await poiService.GetAsync(position);
 
             if (pois == null || pois.Count == 0)
+            {
+                map.Pins.Add(new Pin
+                {
+                    Address = adress.First(),
+                    Label = adress.First(),
+                    Type = PinType.SearchResult,
+                    Position = position
+                });
+                map.MoveToRegion(MapSpan.FromCenterAndRadius(position, Distance.FromKilometers(1)));
                 return;
+            }
 
             foreach (var poi in pois)
             {
@@ -210,8 +232,8 @@ namespace Puma.Views
 
                 pin.MarkerClicked += (sender2, args) =>
                 {
-                    args.HideInfoWindow = false;
-                    //DisplayAlert("Tapped!", "Pin was tapped.", "OK");
+
+                    DisplayAlert("Tapped!", $"{pin.Label}", "OK");
                 };
             }
 
@@ -224,7 +246,7 @@ namespace Puma.Views
                 Position = position
             });
 
-            map.MoveToRegion(MapSpan.FromCenterAndRadius(position, Distance.FromKilometers(5)));
+            map.MoveToRegion(MapSpan.FromCenterAndRadius(position, Distance.FromKilometers(1)));
 
             // Om ni vill testa poiService :) 
             //    var poiService = new PoiApiService();
