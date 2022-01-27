@@ -207,7 +207,17 @@ namespace Puma.Views
             var pois = await poiService.GetAsync(position);
 
             if (pois == null || pois.Count == 0)
+            {
+                map.Pins.Add(new Pin
+                {
+                    Address = adress.First(),
+                    Label = adress.First(),
+                    Type = PinType.SearchResult,
+                    Position = position
+                });
+                map.MoveToRegion(MapSpan.FromCenterAndRadius(position, Distance.FromKilometers(1)));
                 return;
+            }
 
             foreach (var poi in pois)
             {

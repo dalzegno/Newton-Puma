@@ -15,7 +15,7 @@
         
         <!-- MAP -->
 
-        <maps:Map x:Name="map"  MapClicked="OnMapClicked" IsShowingUser="True"
+        <maps:Map x:Name="map"  MapClicked="OnMapClicked" IsShowingUser="False"
 
                     MapType="Hybrid"
                     Background="{AppThemeBinding 
