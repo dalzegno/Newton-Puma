@@ -150,7 +150,6 @@ namespace Logic.Services
 
         public async Task<ICollection<PointOfInterestDto>> GetAllAsync()
         {
-            //var dbPois = await _context.PointOfInterests.ToListAsync();
             return _mapper.Map<ICollection<PointOfInterestDto>>(await GetPoiFromDbAsync());
         }
 

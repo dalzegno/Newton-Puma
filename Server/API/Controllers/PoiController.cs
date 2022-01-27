@@ -12,15 +12,87 @@ namespace API.Controllers
     public class PoiController : Controller
     {
         IPoiService _poiService;
-        public PoiController(IPoiService poiService)
+        IUserService _userService;
+        public PoiController(IPoiService poiService, IUserService userService)
         {
             _poiService = poiService;
+            _userService = userService;
         }
-        
+
+        #region Create
+        /// <summary>
+        /// Creates a new point of interest
+        /// </summary>
+        /// <param name="poi"></param>
+        /// <param name="apiKey"></param>
+        /// <returns></returns>
+        /// <response code="200">Returns the created point of interest or the the found poi</response>
+        /// <response code="400">If request contained faulty values</response>
+        [HttpPost()]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<PointOfInterestDto>> Post([FromBody] AddPoiDto poi, [FromHeader] string apiKey)
+        {
+            if (!await _userService.IsUserAuthorizedAsync(apiKey))
+                return Unauthorized();
+
+            PointOfInterestDto createdPoi = await _poiService.CreateAsync(poi);
+
+            if (createdPoi == null)
+                return BadRequest("The request body was null, or contained faulty values.");
+
+            return Ok(createdPoi);
+        }
+
+        [HttpPost("AddTag")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<PointOfInterestDto>> AddTag([FromQuery] string name, [FromHeader] string apiKey)
+        {
+            if (!await _userService.IsUserAuthorizedAsync(apiKey))
+                return Unauthorized();
+
+            TagDto createdTag = await _poiService.CreateTagAsync(name);
+
+            return Ok(createdTag);
+        }
+
+        [HttpPost("AddComment")]
+        public async Task<ActionResult<PointOfInterestDto>> AddComment([FromBody] AddCommentDto comment, [FromHeader] string apiKey)
+        {
+            if (!await _userService.IsUserAuthorizedAsync(apiKey))
+                return Unauthorized();
+
+            var poiCommentAdded = await _poiService.AddCommentAsync(comment);
+
+            if (poiCommentAdded == null)
+                return BadRequest();
+
+            return Ok(poiCommentAdded);
+        }
+
+        [HttpPost("AddGrade")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<PointOfInterestDto>> AddGrade([FromBody] AddGradeDto addGradeDto, [FromHeader] string apiKey)
+        {
+            if (!await _userService.IsUserAuthorizedAsync(apiKey))
+                return Unauthorized();
+
+            var poi = await _poiService.AddGrade(addGradeDto);
+
+            if (poi == null)
+                return NotFound();
+
+            return Ok(poi);
+        }
+        #endregion
+
+        #region Read
         [HttpGet()]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<PointOfInterestDto>> Get(int id)
+        public async Task<ActionResult<PointOfInterestDto>> Get([FromQuery] int id)
         {
             var poi = await _poiService.GetAsync(id);
 
@@ -31,7 +103,7 @@ namespace API.Controllers
         }
 
         [HttpGet("GetPoisFromLatAndLon")]
-        public async Task<ActionResult<ICollection<PointOfInterestDto>>> Get([FromQuery]double lat, [FromQuery]double lon)
+        public async Task<ActionResult<ICollection<PointOfInterestDto>>> Get([FromQuery] double lat, [FromQuery] double lon)
         {
             var pois = await _poiService.GetAsync(lat, lon);
 
@@ -40,7 +112,6 @@ namespace API.Controllers
 
             return Ok(pois);
         }
-
 
         /// <summary>
         /// Gets all POI
@@ -66,8 +137,11 @@ namespace API.Controllers
         [HttpGet("GetTags")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<ICollection<TagDto>>> GetTags()
+        public async Task<ActionResult<ICollection<TagDto>>> GetTags([FromHeader] string apiKey)
         {
+            if (!await _userService.IsUserAuthorizedAsync(apiKey))
+                return Unauthorized();
+
             var tags = await _poiService.GetTagsAsync();
 
             if (tags == null)
@@ -75,67 +149,21 @@ namespace API.Controllers
 
             return Ok(tags);
         }
+        #endregion
 
-        [HttpPost("AddTag")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<PointOfInterestDto>> AddTag(string name)
-        {
-            TagDto createdTag = await _poiService.CreateTagAsync(name);
+        #region Update
 
-            return Ok(createdTag);
-        }
+        #endregion
 
-        /// <summary>
-        /// Creates a new point of interest
-        /// </summary>
-        /// <param name="poi"></param>
-        /// <returns></returns>
-        /// <response code="200">Returns the created point of interest or the the found poi</response>
-        /// <response code="400">If request contained faulty values</response>
-        [HttpPost()]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<PointOfInterestDto>> Post([FromBody] AddPoiDto poi)
-        {
-            PointOfInterestDto createdPoi = await _poiService.CreateAsync(poi);
-
-            if (createdPoi == null)
-                return BadRequest("The request body was null, or contained faulty values.");
-
-            return Ok(createdPoi);
-        }
-
-        [HttpPost("AddComment")]
-        public async Task<ActionResult<PointOfInterestDto>> AddComment([FromBody] AddCommentDto comment)
-        {
-            var poiCommentAdded = await _poiService.AddCommentAsync(comment);
-
-            if (poiCommentAdded == null)
-                return BadRequest();
-
-            return Ok(poiCommentAdded);
-        }
-
-        [HttpPost("AddGrade")]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<PointOfInterestDto>> AddGrade([FromBody] AddGradeDto addGradeDto)
-        {
-
-            var poi = await _poiService.AddGrade(addGradeDto);
-
-            if (poi == null)
-                return NotFound();
-
-            return Ok(poi);
-        }
-
+        #region Delete
         [HttpDelete()]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<PointOfInterestDto>> Delete([FromQuery] int id)
+        public async Task<ActionResult<PointOfInterestDto>> Delete([FromQuery] int id, [FromHeader]string apiKey)
         {
+            if (!await _userService.IsUserAuthorizedAsync(apiKey))
+                return Unauthorized();
+
             var deletedPoi = await _poiService.DeleteAsync(id);
 
             if (deletedPoi == null)
@@ -143,5 +171,6 @@ namespace API.Controllers
 
             return Ok(deletedPoi);
         }
-    }   
+        #endregion
+    }
 }

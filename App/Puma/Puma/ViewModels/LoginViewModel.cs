@@ -10,8 +10,6 @@ namespace Puma.ViewModels
         private IUserApiService _userApiService;
         private IDialogService _dialogService;
 
-        IUserApiService UserApiService => DependencyService.Get<IUserApiService>();
-        IDialogService DialogService => DependencyService.Get<IDialogService>();
         public LoginViewModel(IUserApiService userApiService,
                               IDialogService dialogService)
         {
@@ -20,7 +18,9 @@ namespace Puma.ViewModels
         }
 
         Command _logInCommand;
+        Command _logOutCommand;
         public Command LoginCommand => _logInCommand ?? (_logInCommand = new Command(LogIn, CanLogIn));
+        public Command LogOutCommand => _logOutCommand ?? (_logOutCommand = new Command(LogOut));
 
         string _loginEmail;
         string _loginPassword;
@@ -61,6 +61,15 @@ namespace Puma.ViewModels
 
             StaticUser.LoggedInUser = loggedInUser;
             await _dialogService.ShowMessageAsync("Login", $"Welcome {loggedInUser.DisplayName}!");
+            MainPage.Instance.MainViewModel.UserLoggedInCommand.Execute(null);
+        }
+
+        public void LogOut()
+        {
+            if (StaticUser.LoggedInUser == null)
+                return;
+
+            StaticUser.LoggedInUser = null;
             MainPage.Instance.MainViewModel.UserLoggedInCommand.Execute(null);
         }
     }

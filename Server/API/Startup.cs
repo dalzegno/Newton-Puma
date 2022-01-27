@@ -39,7 +39,7 @@ namespace API
             // Automapping configuration
             var mapperConfig = new MapperConfiguration(mc =>
             {
-                // TODO: L�gg profiles h�r 
+                // TODO: Lägg profiles här 
                 mc.AddProfile(new UserMapping());
                 mc.AddProfile(new PoiMapping());
             });
@@ -49,6 +49,7 @@ namespace API
             services.AddSingleton(mapper);
 
             services.AddDbContext<PumaDbContext>(options => options.UseSqlite(Configuration.GetConnectionString("puma")));
+
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPoiService, PoiService>();
             services.AddScoped<IWeatherService, WeatherService>();

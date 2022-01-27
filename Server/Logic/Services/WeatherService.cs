@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Collections.Concurrent;
 using System.Threading.Tasks;
-using System.Globalization;
-using System.Collections.Generic;
 
 using Logic.Translators;
 using Logic.Models;
@@ -16,8 +13,7 @@ namespace Logic.Services
 {
     public class WeatherService : IWeatherService
     {
-        readonly HttpClient _httpClient;
-        readonly PumaDbContext _context;
+        private readonly PumaDbContext _context;
 
         public WeatherService(PumaDbContext context)
         {
@@ -52,7 +48,7 @@ namespace Logic.Services
         /// </summary>
         /// <param name="uri"></param>
         /// <returns>ForecastDto object</returns>
-        private async Task<ForecastDto> ReadWebApiAsync(string uri)
+        private async static Task<ForecastDto> ReadWebApiAsync(string uri)
         {
             using (HttpClient _httpClient = new())
             {
