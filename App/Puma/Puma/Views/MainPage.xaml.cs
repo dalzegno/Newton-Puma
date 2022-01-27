@@ -9,8 +9,10 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
+
 namespace Puma.Views
 {
+
     public partial class MainPage : ContentPage
     {
         IUserApiService UserApiService => DependencyService.Get<IUserApiService>();

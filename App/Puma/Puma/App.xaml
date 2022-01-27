@@ -5,11 +5,11 @@
              >
     <Application.Resources>
         <ResourceDictionary>
-            <Color x:Key="WindowBackgroundColor">LightGray</Color>
-            <Color x:Key="WindowBackgroundColorDark">Black</Color>
-            <Color x:Key="PopUpBackgroundColor">LightGray</Color>
-            <Color x:Key="PopUpBackgroundColorDark">Black</Color>
-            <Color x:Key="ButtonBackgroundColor">LightGray</Color>
+            <Color x:Key="WindowBackgroundColor">#DAEFF9</Color>
+            <Color x:Key="WindowBackgroundColorDark">#171C26</Color>
+            <Color x:Key="PopUpBackgroundColor">#DAEFF9</Color>
+            <Color x:Key="PopUpBackgroundColorDark">#171C26</Color>
+            <Color x:Key="ButtonBackgroundColor">#FFF</Color>
             <Color x:Key="ButtonBackgroundColorDark">Black</Color>
             <Color x:Key="TextColor">#000000</Color>
             <Color x:Key="TextColorDark">LightGray</Color>

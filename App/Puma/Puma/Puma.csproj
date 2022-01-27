@@ -20,6 +20,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Lobster-Regular.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Lobster-Regular.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentValidation" Version="10.3.6" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
     <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
