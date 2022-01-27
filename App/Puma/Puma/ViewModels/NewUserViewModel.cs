@@ -2,6 +2,10 @@
 using Puma.Services;
 using System.Windows.Input;
 using Xamarin.Forms;
+using FluentValidation;
+using FluentValidation.Results;
+using System;
+using System.Collections.Generic;
 
 namespace Puma.ViewModels
 {
@@ -27,6 +31,46 @@ namespace Puma.ViewModels
         string _signupFirstName;
         string _signupSurname;
 
+        string _emailErrorMSG;
+        string _passwordErrorMSG;
+        string _displayNameErrorMSG;
+
+        public string EmailErrorMSG
+        {
+            get => _emailErrorMSG;
+            set
+            {
+                _emailErrorMSG = value;
+                OnPropertyChanged();
+                CreateUserCommand.ChangeCanExecute();
+            }
+        }
+
+        public string PaaswordErrorMSG
+        {
+            get => _passwordErrorMSG;
+            set
+            {
+                _passwordErrorMSG = value;
+                OnPropertyChanged();
+                CreateUserCommand.ChangeCanExecute();
+            }
+        }
+
+        public string DisplayNameErrorMSG
+        {
+            get => _displayNameErrorMSG ;
+            set
+            {
+                _displayNameErrorMSG = value;
+                OnPropertyChanged();
+                CreateUserCommand.ChangeCanExecute();
+                
+            }
+        }
+
+
+
         public string SignupEmail
         {
             get => _signupEmail;
@@ -35,6 +79,7 @@ namespace Puma.ViewModels
                 _signupEmail = value;
                 OnPropertyChanged();
                 CreateUserCommand.ChangeCanExecute();
+
             }
         }
         public string SignupPassword
@@ -55,6 +100,7 @@ namespace Puma.ViewModels
                 _signupDisplayName = value;
                 OnPropertyChanged();
                 CreateUserCommand.ChangeCanExecute();
+
             }
         }
         public string SignupFirstName
@@ -73,10 +119,62 @@ namespace Puma.ViewModels
             {
                 _signupSurname = value;
                 OnPropertyChanged();
+                
+
+                
             }
         }
 
         private bool CanCreate() => !string.IsNullOrWhiteSpace(SignupEmail) && !string.IsNullOrWhiteSpace(SignupPassword) && !string.IsNullOrWhiteSpace(SignupDisplayName);
+
+
+
+
+        public bool Uservalidation(UserDto user)
+        {
+            UserValidationService validationRules = new UserValidationService();
+            ValidationResult ans = validationRules.Validate(user);
+
+
+
+
+
+
+            Dictionary<string, string> errorPropertyName = new Dictionary<string, string>();
+
+            if (ans == null || !ans.IsValid)
+            {
+                foreach (var item in ans.Errors)
+                {
+
+                    errorPropertyName.Add(item.PropertyName, item.ErrorMessage);
+
+                }
+
+
+
+                if (errorPropertyName.ContainsKey("Email")) EmailErrorMSG = errorPropertyName["Email"];
+                else EmailErrorMSG = "";
+
+                if (errorPropertyName.ContainsKey("Password")) PaaswordErrorMSG = errorPropertyName["Password"];
+                else PaaswordErrorMSG = "";
+
+                if (errorPropertyName.ContainsKey("DisplayName")) DisplayNameErrorMSG = errorPropertyName["DisplayName"];
+                else DisplayNameErrorMSG = "";
+
+
+                return false;
+
+                
+            }
+
+            EmailErrorMSG = "";
+            PaaswordErrorMSG = "";
+            DisplayNameErrorMSG = "";
+
+            return true;
+
+        }
         private async void CreateUser()
         {
             var user = new User()
@@ -88,13 +186,27 @@ namespace Puma.ViewModels
                 LastName = SignupSurname ?? ""
             };
 
-            var createdUser = await _userApiService.CreateUserAsync(user);
 
-            if (createdUser != null)
+
+
+            if (Uservalidation(user))
             {
-                await _dialogService.ShowMessageAsync("Welcome!", $"Welcome to PUMA \"{createdUser.DisplayName}\".");
-                return;
+                var createdUser = await _userApiService.CreateUserAsync(user);
+
+                if (createdUser != null)
+                {
+                    await _dialogService.ShowMessageAsync("Welcome!", $"Welcome to PUMA \"{createdUser.DisplayName}\".");
+                    return;
+                }
+
             }
+
+
+
+
+
+
+
         }
 
         private async void ReportErrorMessage(object sender, string message) => await _dialogService.ShowMessageAsync("Error", $"{message}");
