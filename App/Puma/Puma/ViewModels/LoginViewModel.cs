@@ -9,17 +9,14 @@ namespace Puma.ViewModels
     {
         private IUserApiService _userApiService;
         private IDialogService _dialogService;
-        private INavigation _navigation;
 
         IUserApiService UserApiService => DependencyService.Get<IUserApiService>();
         IDialogService DialogService => DependencyService.Get<IDialogService>();
         public LoginViewModel(IUserApiService userApiService,
-                              IDialogService dialogService,
-                              INavigation navigation)
+                              IDialogService dialogService)
         {
             _userApiService = userApiService;
             _dialogService = dialogService;
-            _navigation = navigation;
         }
 
         Command _logInCommand;
@@ -27,7 +24,6 @@ namespace Puma.ViewModels
 
         string _loginEmail;
         string _loginPassword;
-        // Kommer inte gå :P
         public string LoginEmail
         {
             get => _loginEmail;
