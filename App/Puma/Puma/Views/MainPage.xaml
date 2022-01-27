@@ -100,22 +100,20 @@
                     TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                     BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
                     Text="Settings"></Button>
-                <Label TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" Text="|" VerticalOptions="Center"></Label>
+                <Label IsVisible="{Binding userLogoutState}"  TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" Text="|" VerticalOptions="Center"/>
+                <Label IsVisible="{Binding userLoginState}" TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" Text="|" VerticalOptions="Center"></Label>
                 <Button x:Name="btn_Login_Popup"
                     Command="{Binding OpenLoginCommand}"
                     IsVisible="{Binding userLoginState}"
                     TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                     BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
-                   
-                    Text="Log in"></Button>
-                <Label IsVisible="{Binding userLoginState}" TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" Text="|" VerticalOptions="Center"></Label>
-                <Button x:Name="btn_Signup_Popup"
-                    Command="{Binding OpenSignupCommand}"
+                    Text="Log in"/>
+                <Button x:Name="btn_Logout"
+                    Command="{Binding LogOutCommand}"
+                    IsVisible="{Binding userLogoutState}"
                     TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                     BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
-                    
-                    Text="Sign up">
-                </Button>
+                    Text="Log out"/>
             </StackLayout>
         </StackLayout>
         

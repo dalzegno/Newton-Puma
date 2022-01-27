@@ -20,7 +20,7 @@ namespace Puma.Services
         readonly string _poiApiUri = "http://localhost:64500/api/Poi";
 
         public EventHandler<string> ErrorMessage;
-        protected virtual void OnErrorMessage(string e) => ErrorMessage?.Invoke(this, e);    
+        protected virtual void OnErrorMessage(string e) => ErrorMessage?.Invoke(this, e);
 
         #region Create
         public async Task<PointOfInterest> CreatePoiAsync(AddPoiDto poi)
@@ -122,8 +122,6 @@ namespace Puma.Services
         }
         public async Task<List<Tag>> GetTags()
         {
-            SetHeader();
-
             try
             {
                 var response = await _httpClient.GetAsync($"{_poiApiUri}/GetTags");
@@ -163,17 +161,18 @@ namespace Puma.Services
             }
 
             return true;
-        }  
+        }
 
         private void SetHeader()
         {
             if (StaticUser.LoggedInUser == null)
                 return;
 
-            var header = _httpClient.DefaultRequestHeaders.FirstOrDefault(a => a.Key == "apiKey");
+            // TODO: Blir alltid null
+            //var header = _httpClient.DefaultRequestHeaders.FirstOrDefault(a => a.Key == "apiKey");
 
-            if (header.Value == null)
-                _httpClient.DefaultRequestHeaders.Add("apiKey", StaticUser.LoggedInUser.ApiKey);
+            //if (header.Value == null)
+            _httpClient.DefaultRequestHeaders.Add("apiKey", StaticUser.LoggedInUser.ApiKey);
         }
 
     }

@@ -14,15 +14,17 @@ namespace Puma.ViewModels
 {
     class MainViewModel : BaseViewModel
     {
-        private IUserApiService _userApiService;
-        public MainViewModel(IUserApiService userApiService)
+        private IDialogService _dialogService;
+        public MainViewModel(IDialogService dialogService)
         {
-            _userApiService = userApiService;
+            _dialogService = dialogService;
+
             ClosePopupCommand = new Command(ClosePopup);
             OpenSignupCommand = new Command(OpenSignup);
             OpenLoginCommand = new Command(OpenLogin);
             OpenSettingsCommand = new Command(OpenSettings);
             UserLoggedInCommand = new Command(UserLoggedIn);
+            LogOutCommand = new Command(LogOut);
 
         }
         #region Popup states for Login and Signup
@@ -31,24 +33,30 @@ namespace Puma.ViewModels
         public ICommand OpenLoginCommand { get; }
         public ICommand OpenSettingsCommand { get; }
         public ICommand UserLoggedInCommand { get; }
+        public ICommand LogOutCommand { get; }
 
         public bool openLoginBool { get; set; } = false;
         public bool openSignupBool { get; set; } = false;
         public bool openSettingsBool { get; set; } = false;
         public bool isUserLoggedOut { get; set; } = true;
+        public bool isUserLoggedIn { get; set; } = false;
         
         public void UserLoggedIn()
         {
             if (StaticUser.LoggedInUser == null)
             {
                 isUserLoggedOut = true;
+                isUserLoggedIn = false;
                 OnPropertyChanged(nameof(userLoginState));
+                OnPropertyChanged(nameof(userLogoutState));
                 return;
             }
 
             isUserLoggedOut = false;
+            isUserLoggedIn = true;
             openLoginBool = false;
             OnPropertyChanged(nameof(userLoginState));
+            OnPropertyChanged(nameof(userLogoutState));
             OnPropertyChanged(nameof(loginPopupState));
         }
         public void ClosePopup()
@@ -92,26 +100,18 @@ namespace Puma.ViewModels
         public bool loginPopupState => openLoginBool;
         public bool settingsPopupState => openSettingsBool;
         public bool userLoginState => isUserLoggedOut;
+        public bool userLogoutState => isUserLoggedIn;
 
         #endregion
-        
-        //void OnMapClicked(object sender, MapClickedEventArgs e)
-        //{
-        //    map.Pins.Clear();
-        //    Pin pin = new Pin
-        //    {
 
-        //        Label = "",
-        //        Address = "",
-        //        Type = PinType.Generic,
-        //        Position = new Position(e.Position.Latitude, e.Position.Longitude)
-        //    };
-        //    map.Pins.Add(pin);
-        //    System.Diagnostics.Debug.WriteLine($"MapClick: {e.Position.Latitude}, {e.Position.Longitude}");
+        public void LogOut()
+        {
+            if (StaticUser.LoggedInUser == null)
+                return;
 
-        //    Latitude = $"latitude: {e.Position.Latitude}";
-        //    Longitude = $"longitude: {e.Position.Longitude}";
-        //}
-
+            StaticUser.LoggedInUser = null;
+            UserLoggedInCommand.Execute(null);
+            _dialogService.ShowMessageAsync("Message", "You're logged out");
+        }
     }
 }
