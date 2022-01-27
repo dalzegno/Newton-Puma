@@ -3,6 +3,7 @@ using Puma.Models;
 using Puma.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ namespace Puma.Services
         readonly string _poiApiUri = "http://localhost:64500/api/Poi";
 
         public EventHandler<string> ErrorMessage;
-        protected virtual void OnErrorMessage(string e) => ErrorMessage?.Invoke(this, e);
+        protected virtual void OnErrorMessage(string e) => ErrorMessage?.Invoke(this, e);    
 
         #region Create
         public async Task<PointOfInterest> CreatePoiAsync(AddPoiDto poi)
@@ -67,6 +68,8 @@ namespace Puma.Services
         #region Read
         public async Task<PointOfInterest> GetAsync(int id)
         {
+            SetHeader();
+
             try
             {
                 var response = await _httpClient.GetAsync($"{_poiApiUri}?id={id}");
@@ -84,6 +87,8 @@ namespace Puma.Services
 
         public async Task<List<PointOfInterest>> GetAsync(Position searchedPosition)
         {
+            SetHeader();
+
             var response = await _httpClient.GetAsync($"{_poiApiUri}/GetPoisFromLatAndLon?lat={searchedPosition.Latitude}&lon={searchedPosition.Longitude}");
 
             if (!await IsResponseSuccess(response))
@@ -131,5 +136,14 @@ namespace Puma.Services
 
             return true;
         }
+
+        private void SetHeader()
+        {
+            var header = _httpClient.DefaultRequestHeaders.FirstOrDefault(a => a.Key == "apiKey");
+
+            if (header.Value == null && StaticUser.LoggedInUser != null)
+                _httpClient.DefaultRequestHeaders.Add("apiKey", StaticUser.LoggedInUser.ApiKey);
+        }
+
     }
 }

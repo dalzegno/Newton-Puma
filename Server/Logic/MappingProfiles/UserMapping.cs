@@ -17,6 +17,8 @@ namespace Logic.MappingProfiles
             CreateMap<UserDto, User>().ForMember(dest => dest.Email, option => option.MapFrom(src => src.Email.ToLower()))
                                       .ForMember(dest => dest.Id, option => option.Ignore())
                                       .ForAllMembers(options => options.DoNotAllowNull());
+
+            CreateMap<AddUserDto, User>().ForMember(dest => dest.Email, option => option.MapFrom(src => src.Email.ToLower()));
         }
     }
 }

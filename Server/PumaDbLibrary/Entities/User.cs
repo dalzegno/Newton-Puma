@@ -36,6 +36,8 @@ namespace PumaDbLibrary.Entities
         [Column(TypeName = "integer")]
         public bool IsSuperAdmin { get; set; }
 
+        public string ApiKey { get; set; }
+
         [InverseProperty(nameof(Comment.User))]
         public virtual ICollection<Comment> Comments { get; set; }
         [InverseProperty(nameof(Grading.User))]

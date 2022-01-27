@@ -18,6 +18,29 @@ namespace API.Controllers
             _userService = userService;
         }
 
+        #region Create
+        /// <summary>
+        /// Creates a new user
+        /// </summary>
+        /// <param name="userToPost"></param>
+        /// <returns></returns>
+        /// <response code="200">Returns the created user</response>
+        /// <response code="400">If the user was null</response>
+        [HttpPost()]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<UserDto>> Post([FromBody] AddUserDto userToPost)
+        {
+            UserDto createdUser = await _userService.CreateAsync(userToPost);
+
+            if (createdUser == null)
+                return BadRequest("The request body was null, or contained faulty values.");
+
+            return Ok(createdUser);
+        }
+        #endregion
+
+        #region Read
         /// <summary>
         /// Log in user
         /// </summary>
@@ -46,14 +69,19 @@ namespace API.Controllers
         /// </summary>
         /// <returns></returns>
         /// <response code="200">Returns all users</response>
+        /// <response code="401">If user is unauthorized to make the call.</response>
         /// <response code="404">If users could not be found</response>
         /// <response code="500">Internal server error</response>
         [HttpGet("GetAllUsers")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<ICollection<UserDto>>> Get()
+        public async Task<ActionResult<ICollection<UserDto>>> Get([FromHeader] string apiKey)
         {
+            if (!await _userService.IsUserAuthorizedAsync(apiKey))
+                return Unauthorized();
+
             ICollection<UserDto> users = await _userService.GetAllAsync();
 
             if (users.Count == 0)
@@ -66,6 +94,7 @@ namespace API.Controllers
         /// Get a user by id
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="apiKey"></param>
         /// <returns>The requested user</returns>
         /// <response code="200">Returns the requested user</response>
         /// <response code="404">If user couldn't be found</response>
@@ -73,8 +102,11 @@ namespace API.Controllers
         [HttpGet("GetUserById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<UserDto>> GetUser([FromQuery] int id)
+        public async Task<ActionResult<UserDto>> GetUser([FromQuery] int id, [FromHeader]string apiKey)
         {
+            if (!await _userService.IsUserAuthorizedAsync(apiKey))
+                return Unauthorized();
+
             if (id == 0)
                 return BadRequest("Request parameter was 0");
 
@@ -90,6 +122,7 @@ namespace API.Controllers
         /// Get a user by email
         /// </summary>
         /// <param name="email"></param>
+        /// <param name="apiKey"></param>
         /// <returns>The requested user</returns>
         /// <response code="200">Returns the requested user</response>
         /// <response code="404">If user couldn't be found</response>
@@ -98,10 +131,10 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<UserDto>> GetUser([FromQuery] string email)
+        public async Task<ActionResult<UserDto>> GetUser([FromQuery] string email, [FromHeader] string apiKey)
         {
-            if (string.IsNullOrWhiteSpace(email))
-                return BadRequest("Request contained null or faulty values");
+            if (!await _userService.IsUserAuthorizedAsync(apiKey))
+                return Unauthorized();
 
             UserDto user = await _userService.GetAsync(email.ToLower());
 
@@ -110,48 +143,38 @@ namespace API.Controllers
 
             return Ok(user);
         }
+        #endregion
 
-        /// <summary>
-        /// Creates a new user
-        /// </summary>
-        /// <param name="userToPost"></param>
-        /// <returns></returns>
-        /// <response code="200">Returns the created user</response>
-        /// <response code="400">If the user was null</response>
-        [HttpPost()]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<UserDto>> Post([FromBody] UserDto userToPost)
-        {
-            UserDto createdUser = await _userService.PostAsync(userToPost);
-
-            if (createdUser == null)
-                return BadRequest("The request body was null, or contained faulty values.");
-
-            return Ok(createdUser);
-        }
+        #region Update
         /// <summary>
         /// Edit a user
         /// </summary>
         /// <param name="user"></param>
+        /// <param name="apiKey"></param>
         /// <returns></returns>
         [HttpPut("EditUser")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<UserDto>> EditUser([FromBody] UserDto user)
+        public async Task<ActionResult<UserDto>> EditUser([FromBody] AddUserDto user, [FromHeader] string apiKey)
         {
-            UserDto updatedUser = await _userService.EditAsync(user);
+            if (!await _userService.IsUserAuthorizedAsync(apiKey))
+                return Unauthorized();
+
+            UserDto updatedUser = await _userService.UpdateAsync(user);
 
             if (updatedUser == null)
                 return NotFound();
 
             return Ok(updatedUser);
         }
+        #endregion
 
+        #region Delete
         /// <summary>
         /// Delete user by id
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="apiKey"></param>
         /// <response code="200">Returns the deleted user</response>
         /// <response code="404">Not found</response>
         /// <response code="500">Server error</response>
@@ -159,8 +182,11 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<UserDto>> DeleteUser([FromQuery]int id)
+        public async Task<ActionResult<UserDto>> DeleteUser([FromQuery] int id, [FromHeader] string apiKey)
         {
+            if (!await _userService.IsUserAuthorizedAsync(apiKey))
+                return Unauthorized();
+
             UserDto deletedUser = await _userService.DeleteAsync(id);
 
             if (deletedUser == null)
@@ -168,6 +194,6 @@ namespace API.Controllers
 
             return Ok(deletedUser);
         }
-        
+        #endregion
     }
 }
