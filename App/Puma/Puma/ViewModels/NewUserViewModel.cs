@@ -130,7 +130,7 @@ namespace Puma.ViewModels
 
 
 
-        public bool Uservalidation(UserDto user)
+        public bool Uservalidation(User user)
         {
             UserValidationService validationRules = new UserValidationService();
             ValidationResult ans = validationRules.Validate(user);

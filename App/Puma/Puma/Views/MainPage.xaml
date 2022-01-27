@@ -187,9 +187,18 @@
                 
                         </Grid.RowDefinitions>
 
+                        <Label
+                          
+                          Grid.Row="1"
+                          Margin="0" 
+                          Padding="0" 
+                          FontSize="13"
+                          HorizontalTextAlignment="Center"
+                          Text="{Binding EmailErrorMSG}"
+                          TextColor="#C3FF0000"
+                          />
 
-
-                    <Frame 
+                        <Frame 
                         Grid.Row="0"                        
                         BorderColor="LightGray"
                         Padding="0"
@@ -206,25 +215,24 @@
                             Placeholder="Email *"
                             Text="{Binding SignupEmail}"></local:RoundedEntry>
                     </Frame>
-                        
-                    <Label
-                          
-                          Grid.Row="1"
+
+
+
+
+
+
+                        <Label 
+                          Grid.Row="3"
                           Margin="0" 
                           Padding="0" 
                           FontSize="13"
                           HorizontalTextAlignment="Center"
-                          Text="{Binding EmailErrorMSG}"
+                          Text="{Binding PaaswordErrorMSG}"
                           TextColor="#C3FF0000"
                           />
 
-                            
-                            
-                            
-               
-                        
-                                       
-                <Frame
+
+                        <Frame
                     Grid.Row="2"
                     BorderColor="LightGray"
                     Padding="0"
@@ -242,17 +250,17 @@
                             Opacity=".8" 
                             Placeholder="Password *"></local:RoundedEntry>
                     </Frame>
-                   <Label 
-                          Grid.Row="3"
+
+                        <Label
+                          Grid.Row="5"
                           Margin="0" 
                           Padding="0" 
                           FontSize="13"
                           HorizontalTextAlignment="Center"
-                          Text="{Binding PaaswordErrorMSG}"
+                          Text="{Binding DisplayNameErrorMSG}"
                           TextColor="#C3FF0000"
                           />
-
-                <Frame
+                        <Frame
                      Grid.Row="4"
                     BorderColor="LightGray"
                     Padding="0"
@@ -268,15 +276,7 @@
                             Opacity=".8" 
                             Placeholder="Display name *"></local:RoundedEntry>
                     </Frame>
-                   <Label
-                          Grid.Row="5"
-                          Margin="0" 
-                          Padding="0" 
-                          FontSize="13"
-                          HorizontalTextAlignment="Center"
-                          Text="{Binding DisplayNameErrorMSG}"
-                          TextColor="#C3FF0000"
-                          />
+                   
                     <Frame 
                           Grid.Row="6"
                     
@@ -295,16 +295,7 @@
                             Placeholder="First name"></local:RoundedEntry>
                     </Frame>
                     
-                   <Label
-                          Grid.Row="7"
-                          Margin="0" 
-                          Padding="0" 
-                          FontSize="13"
-                          x:Name="firstnameErrorMsg"
-                          HorizontalTextAlignment="Center"
-                          Text="Hello"
-                          TextColor="#C3FF0000"
-                          />
+                   
                 
                 <Frame 
                                             Grid.Row="8"
@@ -323,16 +314,7 @@
                             Opacity=".8" 
                             Placeholder="Surname"></local:RoundedEntry>
                     </Frame>
-                   <Label 
-                                                    Grid.Row="9"
-                       Margin="0" 
-                          Padding="0" 
-                          FontSize="13"
-                          x:Name="surnameErrorMsg"
-                          HorizontalTextAlignment="Center"
-                          Text="Hello"
-                          TextColor="#C3FF0000"
-                          />                
+                               
                 <Button 
                                             Grid.Row="10"
                             Command="{Binding CreateUserCommand}"
