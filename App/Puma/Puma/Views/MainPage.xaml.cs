@@ -26,7 +26,7 @@ namespace Puma.Views
         {
             InitializeComponent();
             Instance = this;
-            MainViewModel = new MainViewModel(UserApiService);
+            MainViewModel = new MainViewModel(DialogService);
             // Implementing dependecy injection
             BindingContext = MainViewModel;
 
@@ -189,6 +189,8 @@ namespace Puma.Views
 
         private async void Button_Clicked(object sender, System.EventArgs e)
         {
+            var poiService = new PoiApiService();
+
             if (SearchField.Text == null)
                 return;
 
@@ -203,7 +205,6 @@ namespace Puma.Views
             var position = postionList.FirstOrDefault<Position>();
             var adress = await new Geocoder().GetAddressesForPositionAsync(position);
 
-            var poiService = new PoiApiService();
             var pois = await poiService.GetAsync(position);
 
             if (pois == null || pois.Count == 0)
@@ -288,11 +289,6 @@ namespace Puma.Views
             //var text = TagPicker.SelectedIndex;
             //btn.Text = text;
             //TagsList.Children.Add(btn);
-        }
-
-        private void Button_Clicked_1(object sender, EventArgs e)
-        {
-
         }
     }
 }
