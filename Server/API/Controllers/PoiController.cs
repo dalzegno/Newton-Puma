@@ -137,11 +137,8 @@ namespace API.Controllers
         [HttpGet("GetTags")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<ICollection<TagDto>>> GetTags([FromHeader] string apiKey)
+        public async Task<ActionResult<ICollection<TagDto>>> GetTags()
         {
-            if (!await _userService.IsUserAuthorizedAsync(apiKey))
-                return Unauthorized();
-
             var tags = await _poiService.GetTagsAsync();
 
             if (tags == null)

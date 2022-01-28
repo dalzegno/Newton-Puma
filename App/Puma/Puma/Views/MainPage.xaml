@@ -621,10 +621,11 @@
                     <Button
                         Grid.Column="1"
                         HorizontalOptions="FillAndExpand"
-                        Text="Placeholder"></Button>
+                        Text="Weather Forecast"></Button>
                     <Button
                         Grid.Row="1"
                         Grid.ColumnSpan="2"
+                        
                         HorizontalOptions="Center"
                         Command="{Binding PoiCreationPopupCommand}"
                         Text="Add new Point of Interest"></Button>

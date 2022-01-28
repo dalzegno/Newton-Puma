@@ -20,6 +20,8 @@ namespace Puma.Views
         IPoiService PoiService => DependencyService.Get<IPoiService>();
         IOpenWeatherService WeatherService => DependencyService.Get<IOpenWeatherService>();
 
+        private readonly IPoiService _poiService;
+
         public static MainPage Instance { get; set; }
         internal MainViewModel MainViewModel { get; }
 
@@ -44,6 +46,8 @@ namespace Puma.Views
             slSettings.BindingContext = new SettingsViewModel();
 
             geoCoder = new Geocoder();
+
+            _poiService = PoiService;
 
         }
 
@@ -191,7 +195,7 @@ namespace Puma.Views
 
         private async void Button_Clicked(object sender, System.EventArgs e)
         {
-            var poiService = new PoiApiService();
+            //var poiService = new PoiApiService();
 
             if (SearchField.Text == null)
                 return;
@@ -207,7 +211,7 @@ namespace Puma.Views
             var position = postionList.FirstOrDefault<Position>();
             var adress = await new Geocoder().GetAddressesForPositionAsync(position);
 
-            var pois = await poiService.GetAsync(position);
+            var pois = await _poiService.GetAsync(position);
 
             if (pois == null || pois.Count == 0)
             {
