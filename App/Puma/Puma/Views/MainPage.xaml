@@ -596,25 +596,24 @@
             Grid.RowSpan="10"
             HorizontalOptions="StartAndExpand"
             VerticalOptions="StartAndExpand"
-            HeightRequest="130"
-            MinimumHeightRequest="130"
             Margin="10,0,0,0"
-            WidthRequest="300">
+            WidthRequest="400">
             <Grid
                 RowDefinitions="auto,auto,auto"
                 ColumnDefinitions="1*">
                 <Grid RowDefinitions="auto, auto"
                     Grid.Row="0">
                     <Label
-                        
                         Text="{Binding Area}"
                         VerticalOptions="Start"
+                        HeightRequest="25"
                         x:Name="lbl_Area"
                         FontSize="18"
                         FontAttributes="Bold"
                         Margin="0"
                         Padding="0"></Label>
                     <StackLayout
+                        HeightRequest="20"
                         Grid.Row="1"
                         Orientation="Horizontal">
                         <Label
@@ -632,10 +631,10 @@
                 </Grid>
 
                 <Grid
-                    Margin="5"
+                    Padding="0"
+                    Margin="-10"
                     Grid.Row="2"
-                    ColumnDefinitions="1*,1*"
-                    RowDefinitions="30, 30">
+                    ColumnDefinitions=".7*,.6*,1*">
 
                     <Button
                         BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
@@ -647,13 +646,12 @@
                         BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
                         Grid.Column="1"
                         HorizontalOptions="FillAndExpand"
-                        Text="Weather Forecast"></Button>
+                        Text="Placeholder"></Button>
                     <Button
                         BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
-                        Grid.Row="1"
-                        Grid.ColumnSpan="2"
-                        
-                        HorizontalOptions="Center"
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        HorizontalOptions="FillAndExpand"
                         Command="{Binding PoiCreationPopupCommand}"
                         Text="Add new Point of Interest"></Button>
                 </Grid>
@@ -662,23 +660,21 @@
 
         <!-- POI COLLECTION VIEW  >-->
         <Frame
-            Grid.Row="4"
+            Grid.Row="2"
             Grid.RowSpan="8"
             Grid.ColumnSpan="12"
             HorizontalOptions="StartAndExpand"
             VerticalOptions="StartAndExpand"
             WidthRequest="300"
-            HeightRequest="300"
             Margin="10,10,0,0"
             IsVisible="{Binding poiCollectionPopupState}"
-            AbsoluteLayout.LayoutBounds="10, 290, 400, .4"
-            AbsoluteLayout.LayoutFlags="HeightProportional"
-            Background="White"
+            BackgroundColor="White"
             Opacity=".9"
             x:Name="poiCollectionView">
 
 
             <CollectionView
+                VerticalOptions="StartAndExpand"
                 HorizontalOptions="Center"
                 Margin="0"
                 ItemsSource="{Binding PoiCollection}"
@@ -696,6 +692,8 @@
                             <Label
                                 Grid.Row="0"
                                 Text="{Binding Name}"
+                                FontAttributes="Bold"
+                                CharacterSpacing=".5"
                                 FontSize="12"
                                 HeightRequest="100"></Label>
                             <Label
@@ -706,6 +704,7 @@
                             <Label
                                 Grid.Row="2"
                                 FontSize="12"
+                                FontAttributes="Italic"
                                 HeightRequest="100">
                                 <Label.Text>
                                     <MultiBinding
@@ -717,6 +716,11 @@
                                     </MultiBinding>
                                 </Label.Text>
                             </Label>
+                            <Rectangle Grid.Row="2"
+                                HeightRequest="1"
+                                BackgroundColor="Black"
+                                VerticalOptions="End"
+                                HorizontalOptions="FillAndExpand" />
                         </Grid>
 
 
@@ -728,7 +732,7 @@
         <Frame
             IsVisible="{Binding PoiCreationPopupState}"
             x:Name="poiCreationPopup"
-            Grid.Row="4"
+            Grid.Row="2"
             Grid.RowSpan="8"
             Grid.ColumnSpan="12"
             HorizontalOptions="StartAndExpand"
