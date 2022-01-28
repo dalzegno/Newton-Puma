@@ -19,6 +19,7 @@ namespace NorthwindApplication
 
         static void Main(string[] args)
         {
+            Console.WriteLine(CultureInfo.CurrentCulture.Name);
             // SÅ om vi alltid skickar string från frontendet så blir det ju typ som nedan
             // Du har ju alltid skickat "rätt" från programmet ju, bara att vi tar emot det konstigt.
             string latString = "12.34567";

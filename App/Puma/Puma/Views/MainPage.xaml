@@ -156,8 +156,7 @@
                 HorizontalOptions="End"
                 Orientation="Horizontal"
                 Margin="0,5,20,5"
-                BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
-            Light={StaticResource PopUpBackgroundColor}}">
+                >
 
                 <Button
                     x:Name="btn_Settings_Popup"
@@ -686,6 +685,7 @@
                     <DataTemplate>
 
                         <Grid
+                            
                             Padding="5"
                             HeightRequest="60"
                             RowDefinitions="1*,1*,1*">

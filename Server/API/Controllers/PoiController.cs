@@ -109,9 +109,12 @@ namespace API.Controllers
         [HttpGet("GetPoisFromLatAndLon")]
         public async Task<ActionResult<ICollection<PointOfInterestDto>>> Get([FromQuery] string lat, [FromQuery] string lon)
         {
+            //double bla = double.Parse(lat.Replace('.', ','), new CultureInfo("sv-SE"));
+            //double bli = double.Parse(lon.Replace('.', ','), new CultureInfo("sv-SE"));
             // Felhantering för Victors dator :)
-            if (!double.TryParse(lat.Replace(".", ","), out double latDouble) || 
-                !double.TryParse(lon.Replace(".", ","), out double lonDouble))
+
+            if (!double.TryParse(lat.Replace(".", ","), NumberStyles.Any, new CultureInfo("sv-SE"), out double latDouble) || 
+                !double.TryParse(lon.Replace(".", ","), NumberStyles.Any, new CultureInfo("sv-SE"), out double lonDouble))
                 return BadRequest();
             
             var pois = await _poiService.GetAsync(latDouble, lonDouble);
