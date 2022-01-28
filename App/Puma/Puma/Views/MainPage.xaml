@@ -101,20 +101,20 @@
         </StackLayout>
 
         <!-- NAVBAR -->
-        <StackLayout
+        <Grid
+            ColumnDefinitions="1*,1*,1*"
             Grid.ColumnSpan="12"
             BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
                     Light={StaticResource PopUpBackgroundColor}}"
             AbsoluteLayout.LayoutBounds="0, 0, 1, 60"
             AbsoluteLayout.LayoutFlags="WidthProportional"
             Opacity=".9"
-            Spacing="10"
-            Padding="5"
-            Orientation="Horizontal">
+            Padding="5">
 
             <Grid
-                Grid.Column="0"
+                Grid.Column="1"
                 Grid.Row="0"
+                HorizontalOptions="Center"
                 AbsoluteLayout.LayoutBounds=".1,.1,.1,.1"
                 AbsoluteLayout.LayoutFlags="All">
                 <Path
@@ -135,14 +135,16 @@
 
             <!--<Label TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" Text="Hello World" FontSize="38"/>-->
             <StackLayout
+                Grid.Column="1"
                 Orientation="Vertical"
-                HorizontalOptions="StartAndExpand">
+                HorizontalOptions="Center">
                 <Label
-                    HeightRequest="40"
-                    Text="Puma"
+                    HeightRequest="50"
+                    Text="PumApp"
                     FontSize="40"
                     FontFamily="Lobster-Regular"></Label>
                 <Label
+                    Margin="-10"
                     Text="Travel for the people by the people"
                     FontSize="12"
                     FontFamily="Lobster-Regular"></Label>
@@ -150,7 +152,8 @@
 
             <!--<<<<<<<< Navbar Login/Signup buttons >>>>>>>-->
             <StackLayout
-                HorizontalOptions="EndAndExpand"
+                Grid.Column="2"
+                HorizontalOptions="End"
                 Orientation="Horizontal"
                 Margin="0,5,20,5"
                 BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
@@ -189,7 +192,7 @@
                     BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
                     Text="Log out" />
             </StackLayout>
-        </StackLayout>
+        </Grid>
 
 
         <!-- SEARCH BAR -->
@@ -208,7 +211,7 @@
             Opacity=".8">
             <local:RoundedEntry
                 x:Name="SearchField"
-                Placeholder="Where are you going?"
+                Placeholder="Where to ya scallywag?"
                 FontSize="24"
                 Opacity=".8"></local:RoundedEntry>
 
@@ -440,6 +443,7 @@
             Grid.Column="5"
             Grid.ColumnSpan="2">
             <Button
+                Opacity=".1"
                 Text="Testa maps"
                 Clicked="Button_Clicked">
 
@@ -587,7 +591,7 @@
             x:Name="slPoiPopover"
             Opacity=".8"
             IsVisible="True"
-            Grid.Row="2"
+            Grid.Row="{OnPlatform UWP='0'}"
             Grid.ColumnSpan="7"
             Grid.RowSpan="10"
             HorizontalOptions="StartAndExpand"
@@ -595,25 +599,24 @@
             HeightRequest="130"
             MinimumHeightRequest="130"
             Margin="10,0,0,0"
-            WidthRequest="300"
-            Background="White">
+            WidthRequest="300">
             <Grid
                 RowDefinitions="auto,auto,auto"
                 ColumnDefinitions="1*">
-                <StackLayout
+                <Grid RowDefinitions="auto, auto"
                     Grid.Row="0">
                     <Label
+                        
                         Text="{Binding Area}"
                         VerticalOptions="Start"
-                        HeightRequest="33"
                         x:Name="lbl_Area"
-                        FontSize="24"
+                        FontSize="18"
                         FontAttributes="Bold"
                         Margin="0"
-                        HorizontalOptions="Center"></Label>
+                        Padding="0"></Label>
                     <StackLayout
-                        Orientation="Horizontal"
-                        HorizontalOptions="Center">
+                        Grid.Row="1"
+                        Orientation="Horizontal">
                         <Label
                             Margin="0"
                             x:Name="lbl_StreetName"
@@ -626,7 +629,7 @@
                             FontSize="12"></Label>
 
                     </StackLayout>
-                </StackLayout>
+                </Grid>
 
                 <Grid
                     Margin="5"
@@ -635,15 +638,18 @@
                     RowDefinitions="30, 30">
 
                     <Button
+                        BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
                         Command="{Binding PoiCollectionPopupCommand}"
                         Grid.Column="0"
                         HorizontalOptions="FillAndExpand"
                         Text="Points of Interest"></Button>
                     <Button
+                        BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
                         Grid.Column="1"
                         HorizontalOptions="FillAndExpand"
                         Text="Weather Forecast"></Button>
                     <Button
+                        BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
                         Grid.Row="1"
                         Grid.ColumnSpan="2"
                         
