@@ -583,6 +583,7 @@
         </Frame>
 
         <!-- POI COLLECTION VIEW  >-->
+
         <Frame
             Grid.Row="4"
             Grid.RowSpan="8"
@@ -597,48 +598,79 @@
             AbsoluteLayout.LayoutFlags="HeightProportional"
             Background="White"
             Opacity=".9"
+            
             x:Name="poiCollectionView">
 
+
+
+
+            <StackLayout>
+
+                <!-- POI LIST -->
+                <CollectionView
+                    IsVisible="{Binding PoiCollectionVisibility}"
+                    VerticalOptions="StartAndExpand"
+                    HorizontalOptions="Center"
+                    Margin="0"
+                    ItemsSource="{Binding PoiCollection}"
+                    SelectionMode="Single"
+                    SelectedItem="{Binding SelectedPoi}">
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+
+
+                        <Grid
+                            Padding="5"
+                            HeightRequest="60"
+                            RowDefinitions="1*,1*,1*">
+                                    <Label
+                                        Grid.Row="0"
+                                        Text="{Binding Name}"
+                                        FontAttributes="Bold"
+                                        CharacterSpacing=".5"
+                                        FontSize="12"
+                                        HeightRequest="100"></Label>
+                                    <Label
+                                        Grid.Row="1"
+                                        Text="{Binding Description}"
+                                        FontSize="12"
+                                        HeightRequest="100"></Label>
+                                    <Label
+                                        Grid.Row="2"
+                                        FontSize="12"
+                                        HeightRequest="100">
+                                        <Label.Text>
+                                            <MultiBinding
+                                                StringFormat="{}{0}, {1}">
+                                                <Binding
+                                                    Path="Address.Area" />
+                                                <Binding
+                                                    Path="Address.Country" />
+                                            </MultiBinding>
+                                        </Label.Text>
+                                    </Label>
+
+                                    <Rectangle
+                                        Grid.Row="2"
+                                        HeightRequest="1"
+                                        BackgroundColor="Black"
+                                        VerticalOptions="End"
+                                        HorizontalOptions="FillAndExpand" />
+
+                            </Grid>
+
+
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
             
-            <CollectionView HorizontalOptions="Center" 
-                        Margin="0" 
-                        ItemsSource="{Binding PoiCollection}"
-                        SelectionMode="Single"
-                        >
+            <!-- POI SINGLE -->
 
-
-                <CollectionView.ItemTemplate>
-
-                    <DataTemplate>
-
-                        <Grid Padding="5"  HeightRequest="60" RowDefinitions="1*,1*,1*">
-                            <Label Grid.Row="0"
-                                    Text="{Binding Name}" 
-                                    FontSize="12"
-                                    HeightRequest="100"></Label>
-                            <Label 
-                                Grid.Row="1"
-                                Text="{Binding Description}" 
-                                   FontSize="12"
-                                    HeightRequest="100"></Label>
-                            <Label 
-                                Grid.Row="2"
-                                
-                                   FontSize="12"
-                                    HeightRequest="100">
-                                <Label.Text>
-                                    <MultiBinding StringFormat="{}{0}, {1}">
-                                        <Binding Path="Address.Area" />
-                                        <Binding Path="Address.Country" />
-                                    </MultiBinding>
-                                </Label.Text>
-                            </Label>
-                        </Grid>
-
-
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+            <Label
+                FontSize="24"
+                Text="{Binding SelectedPoi.Name}" />
+            </StackLayout>
         </Frame>
         <!-- POI CREATION POPUP -->
         <Frame
