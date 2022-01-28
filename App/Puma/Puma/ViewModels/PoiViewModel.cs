@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Xamarin.Forms.Xaml;
 using System.Linq;
+using Puma.Views;
 
 namespace Puma.ViewModels
 {
@@ -30,6 +31,9 @@ namespace Puma.ViewModels
         Command _removeTagCommand;
         Command _poiCollectionPopupCommand;
         Command _poiCreationPopupCommand;
+        Command _selectedPoiCommand;
+
+        public Command SelectedPoiCommand => _selectedPoiCommand ?? (_selectedPoiCommand = new Command(SelectPoi));
 
         public Command CreatePoiCommand => _createPoiCommand ?? (_createPoiCommand = new Command(CreatePoi, CanCreate));
         public Command RemoveTagCommand => _removeTagCommand ?? (_removeTagCommand = new Command(RemoveTag));
@@ -44,9 +48,12 @@ namespace Puma.ViewModels
         public string _streetName;
         public string _longitude;
         public string _latitude;
+        public PointOfInterest _selectedSinglePoi;
 
         public bool openPoiCreationBool { get; set; } = false;
         public bool openPoiCollectionBool { get; set; } = false;
+        public bool poiCollectionVisibleBool { get; set; } = false;
+        public bool poiSingleVisibleBool { get; set; } = false;
         public async void GetTagsFromDb()
         {
 
@@ -64,7 +71,16 @@ namespace Puma.ViewModels
                 OnPropertyChanged(nameof(PoiCollection));
             }
         }
-
+        public PointOfInterest SelectedSinglePoi
+        {
+            get => _selectedSinglePoi;
+            set
+            {
+                _selectedSinglePoi = value;
+                OnPropertyChanged(nameof(SelectedSinglePoi));
+            }
+        }
+            
 
         // TAGS
         public List<Tag> _tags;
@@ -212,6 +228,10 @@ namespace Puma.ViewModels
         {
             openPoiCollectionBool = !openPoiCollectionBool;
             openPoiCreationBool = false;
+            poiCollectionVisibleBool = true;
+            poiSingleVisibleBool = false;
+            OnPropertyChanged(nameof(PoiCollectionVisible));
+            OnPropertyChanged(nameof(PoiSingleVisible));
             OnPropertyChanged(nameof(poiCollectionPopupState));
             OnPropertyChanged(nameof(PoiCreationPopupState));
             PoiCollection = await _poiService.GetAllAsync();
@@ -224,7 +244,21 @@ namespace Puma.ViewModels
             OnPropertyChanged(nameof(PoiCreationPopupState));
             OnPropertyChanged(nameof(poiCollectionPopupState));
         }
+
+        private void SelectPoi()
+        {
+            poiCollectionVisibleBool = !poiCollectionVisibleBool;
+            poiSingleVisibleBool = !poiSingleVisibleBool;
+            if (poiSingleVisibleBool == true)
+                MainPage.Instance.GoToLocation(SelectedSinglePoi);
+            OnPropertyChanged(nameof(PoiCollectionVisible));
+            OnPropertyChanged(nameof(PoiSingleVisible));
+
+        }
+
         public bool PoiCreationPopupState => openPoiCreationBool;
         public bool poiCollectionPopupState => openPoiCollectionBool;
+        public bool PoiCollectionVisible => poiCollectionVisibleBool;
+        public bool PoiSingleVisible => poiSingleVisibleBool;
     }
 }

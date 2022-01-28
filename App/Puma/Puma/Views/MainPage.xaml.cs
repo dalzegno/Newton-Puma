@@ -296,5 +296,23 @@ namespace Puma.Views
             //btn.Text = text;
             //TagsList.Children.Add(btn);
         }
+        public void GoToLocation(PointOfInterest poi)
+        {
+            map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(poi.Position.Latitude, poi.Position.Longitude), Distance.FromKilometers(.5)));
+            var pin = new Pin
+            {
+                Address = poi.Description,
+                Type = PinType.Place,
+                Position = new Position(poi.Position.Latitude, poi.Position.Longitude),
+                Label = poi.Name
+            };
+            map.Pins.Add(pin);
+
+            pin.MarkerClicked += (sender2, args) =>
+            {
+
+                DisplayAlert("Tapped!", $"{pin.Label}", "OK");
+            };
+        }
     }
 }

@@ -670,14 +670,19 @@
             BackgroundColor="White"
             Opacity=".9"
             x:Name="poiCollectionView">
-
+            <StackLayout>
+                
+                
 
             <CollectionView
-                VerticalOptions="StartAndExpand"
-                HorizontalOptions="Center"
+                IsVisible="{Binding PoiCollectionVisible}"
+                
                 Margin="0"
                 ItemsSource="{Binding PoiCollection}"
-                SelectionMode="Single">
+                SelectionMode="Single"
+                SelectedItem="{Binding SelectedSinglePoi}"
+                    SelectionChangedCommand="{Binding SelectedPoiCommand}"
+                >
 
 
                 <CollectionView.ItemTemplate>
@@ -727,6 +732,19 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+                <StackLayout
+                    IsVisible="{Binding PoiSingleVisible}">
+                    <Button
+                        Text="Return"
+                        Command="{Binding SelectedPoiCommand}" />
+                    <Label
+                        FontSize="24"
+                        Text="{Binding SelectedSinglePoi.Name}" />
+                    <Label
+                        FontSize="12"
+                        Text="{Binding SelectedSinglePoi.Description}" />
+                </StackLayout>
+            </StackLayout>
         </Frame>
         <!-- POI CREATION POPUP -->
         <Frame
