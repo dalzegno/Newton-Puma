@@ -3,6 +3,7 @@ using Logic.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -33,6 +34,9 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<PointOfInterestDto>> Post([FromBody] AddPoiDto poi, [FromHeader] string apiKey)
         {
+            // Nä men då släpper vi det
+            // Vi har inga roller kopplat till autentiseringen ändå
+            // Sen det jag mailade dig om handlade mer om VäderApiNyckeln. Vi lagrar den i databasen nu
             if (!await _userService.IsUserAuthorizedAsync(apiKey))
                 return Unauthorized();
 
@@ -103,9 +107,17 @@ namespace API.Controllers
         }
 
         [HttpGet("GetPoisFromLatAndLon")]
-        public async Task<ActionResult<ICollection<PointOfInterestDto>>> Get([FromQuery] double lat, [FromQuery] double lon)
+        public async Task<ActionResult<ICollection<PointOfInterestDto>>> Get([FromQuery] string lat, [FromQuery] string lon)
         {
-            var pois = await _poiService.GetAsync(lat, lon);
+            //double bla = double.Parse(lat.Replace('.', ','), new CultureInfo("sv-SE"));
+            //double bli = double.Parse(lon.Replace('.', ','), new CultureInfo("sv-SE"));
+            // Felhantering för Victors dator :)
+
+            if (!double.TryParse(lat.Replace(".", ","), NumberStyles.Any, new CultureInfo("sv-SE"), out double latDouble) || 
+                !double.TryParse(lon.Replace(".", ","), NumberStyles.Any, new CultureInfo("sv-SE"), out double lonDouble))
+                return BadRequest();
+            
+            var pois = await _poiService.GetAsync(latDouble, lonDouble);
 
             if (pois == null || pois.Count < 1)
                 return NotFound();
@@ -137,11 +149,8 @@ namespace API.Controllers
         [HttpGet("GetTags")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<ICollection<TagDto>>> GetTags([FromHeader] string apiKey)
+        public async Task<ActionResult<ICollection<TagDto>>> GetTags()
         {
-            if (!await _userService.IsUserAuthorizedAsync(apiKey))
-                return Unauthorized();
-
             var tags = await _poiService.GetTagsAsync();
 
             if (tags == null)
