@@ -44,12 +44,6 @@ namespace Puma.ViewModels
         public string _streetName;
         public string _longitude;
         public string _latitude;
-        public Tag _tag;
-        public List<Tag> _tags;
-        public ObservableCollection<Tag> _tagButtons;
-        public PointOfInterest _selectedPoi;
-
-        public bool _poiCollectionVisibilityBool { get; set; } = false;
 
         public bool openPoiCreationBool { get; set; } = false;
         public bool openPoiCollectionBool { get; set; } = false;
@@ -71,20 +65,9 @@ namespace Puma.ViewModels
             }
         }
 
-        public PointOfInterest SelectedPoi
-        {
-            get => _selectedPoi;
-            set
-            {
-                _selectedPoi = value;
-                if (_selectedPoi == null || _selectedPoi.Name == "")
-                    _poiCollectionVisibilityBool = false;
-                OnPropertyChanged(nameof(SelectedPoi));
-            }
-        }
-
 
         // TAGS
+        public List<Tag> _tags;
         public List<Tag> Tags
         {
             get => _tags;
@@ -94,6 +77,7 @@ namespace Puma.ViewModels
                 OnPropertyChanged(nameof(Tags));
             }
         }
+        public ObservableCollection<Tag> _tagButtons;
         public ObservableCollection<Tag> TagButtons
         {
             get => _tagButtons;
@@ -103,7 +87,7 @@ namespace Puma.ViewModels
                 OnPropertyChanged(nameof(TagButtons));
             }
         }
-       
+        public Tag _tag;
         public Tag SelectedTagInfo
         {
             get => _tag;
@@ -228,11 +212,8 @@ namespace Puma.ViewModels
         {
             openPoiCollectionBool = !openPoiCollectionBool;
             openPoiCreationBool = false;
-            _poiCollectionVisibilityBool = true;
-            OnPropertyChanged(nameof(PoiCollectionVisibility));
             OnPropertyChanged(nameof(poiCollectionPopupState));
             OnPropertyChanged(nameof(PoiCreationPopupState));
-
             PoiCollection = await _poiService.GetAllAsync();
            
         }
@@ -245,6 +226,5 @@ namespace Puma.ViewModels
         }
         public bool PoiCreationPopupState => openPoiCreationBool;
         public bool poiCollectionPopupState => openPoiCollectionBool;
-        public bool PoiCollectionVisibility => _poiCollectionVisibilityBool;
     }
 }
