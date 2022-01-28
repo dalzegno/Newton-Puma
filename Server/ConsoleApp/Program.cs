@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,26 +19,34 @@ namespace NorthwindApplication
 
         static void Main(string[] args)
         {
-            BuildConfiguration();
+            // SÅ om vi alltid skickar string från frontendet så blir det ju typ som nedan
+            // Du har ju alltid skickat "rätt" från programmet ju, bara att vi tar emot det konstigt.
+            string latString = "12.34567";
+            Double.TryParse(latString.Replace(".", ","), out double lat);   
+            
+            // så nu testar vi :) 
+            Console.WriteLine(lat);
 
-            #region Ensuring appsettings.json is in the right location
-            Console.WriteLine($"Configuration Directory: {DbConnectionsDirectory()}");
+            //BuildConfiguration();
 
-            var connectionString = _configuration.GetConnectionString("puma");
-            if (!string.IsNullOrEmpty(connectionString))
-                Console.WriteLine($"Connection string to Database: {connectionString}");
-            else
-            {
-                Console.WriteLine($"Please copy the 'DbConnections.json' to this location");
-                return;
-            }
-            #endregion
+            //#region Ensuring appsettings.json is in the right location
+            //Console.WriteLine($"Configuration Directory: {DbConnectionsDirectory()}");
 
-            #region Uncomment after scaffolding
-            //BuildOptions();
-            //QueryDatabaseAsync().Wait();
-            //QueryDatabaseWithLinq();
-            #endregion
+            //var connectionString = _configuration.GetConnectionString("puma");
+            //if (!string.IsNullOrEmpty(connectionString))
+            //    Console.WriteLine($"Connection string to Database: {connectionString}");
+            //else
+            //{
+            //    Console.WriteLine($"Please copy the 'DbConnections.json' to this location");
+            //    return;
+            //}
+            //#endregion
+
+            //#region Uncomment after scaffolding
+            ////BuildOptions();
+            ////QueryDatabaseAsync().Wait();
+            ////QueryDatabaseWithLinq();
+            //#endregion
         }
 
         static void BuildConfiguration()
