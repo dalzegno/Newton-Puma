@@ -225,7 +225,7 @@
             Grid.RowSpan="8"
             Grid.ColumnSpan="12"
             HorizontalOptions="CenterAndExpand"
-            VerticalOptions="CenterAndExpand"
+            VerticalOptions="StartAndExpand"
             WidthRequest="320"
             MinimumHeightRequest="370"
             HeightRequest="500"
@@ -261,12 +261,11 @@
                         Grid.ColumnSpan="2">
                         <Button
                             Command="{Binding OpenLoginCommand}"
-                            CornerRadius="15"
+                            CornerRadius="5"
                             Text="Log in"
-                            BackgroundColor="{AppThemeBinding 
-                                  Dark={StaticResource ButtonBackgroundColorDark}, 
-                                  Light={StaticResource ButtonBackgroundColor}}"
-                            BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
+                            FontSize="32"
+                            Background="#55FFFFFF"
+                            BorderColor="Transparent"
                             TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}">
 
                         </Button>
@@ -274,14 +273,19 @@
                             Grid.Column="1"
                             HorizontalOptions="FillAndExpand"
                             Command="{Binding OpenSignupCommand}"
-                            CornerRadius="15"
-                            BackgroundColor="{AppThemeBinding 
-                                  Dark={StaticResource ButtonBackgroundColorDark}, 
-                                  Light={StaticResource ButtonBackgroundColor}}"
-                            BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
+                            CornerRadius="5"
+                            Background="#77FFFFFF"
+                            BorderColor="Transparent"
                             TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                             Text="Sign up"
                             FontSize="32"></Button>
+                        <Rectangle
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            HeightRequest="2"
+                            HorizontalOptions="FillAndExpand"
+                            VerticalOptions="End"
+                            Background="black" />
                     </Grid>
                 </Grid>
 
@@ -458,7 +462,7 @@
             Grid.RowSpan="8"
             Grid.ColumnSpan="12"
             HorizontalOptions="CenterAndExpand"
-            VerticalOptions="CenterAndExpand"
+            VerticalOptions="StartAndExpand"
             WidthRequest="320"
             MinimumHeightRequest="370"
             BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
@@ -491,37 +495,35 @@
                         <Button
                             x:Name="btn_loginBtn"
                             Command="{Binding OpenLoginCommand}"
-                            CornerRadius="15"
+                            CornerRadius="5"
                             Text="Log in"
-                            BackgroundColor="{AppThemeBinding 
-                                  Dark={StaticResource ButtonBackgroundColorDark}, 
-                                  Light={StaticResource ButtonBackgroundColor}}"
-                            BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
+                            FontSize="32"
+                            Background="#77FFFFFF"
+                            BorderColor="Transparent"
                             TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}">
                         </Button>
                         <Button
                             Grid.Column="1"
                             HorizontalOptions="FillAndExpand"
                             Command="{Binding OpenSignupCommand}"
-                            CornerRadius="15"
-                            BackgroundColor="{AppThemeBinding 
-                                  Dark={StaticResource ButtonBackgroundColorDark}, 
-                                  Light={StaticResource ButtonBackgroundColor}}"
-                            BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
+                            CornerRadius="5"
+                            Background="#77FFFFFF"
+                            BorderColor="Transparent"
                             TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                             Text="Sign up"
                             FontSize="32"></Button>
-
+                        <Rectangle
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            HeightRequest="2"
+                            HorizontalOptions="FillAndExpand"
+                            VerticalOptions="End"
+                            Background="black" />
                     </Grid>
+                    
                 </Grid>
 
-                <Rectangle
-                    Grid.Row="0"
-                    HeightRequest="2"
-                    Margin="0,70,0,0"
-                    HorizontalOptions="FillAndExpand"
-                    VerticalOptions="End"
-                    Background="black" />
+                
 
                 <!-- LOGIN INPUTS -->
                 <ScrollView
