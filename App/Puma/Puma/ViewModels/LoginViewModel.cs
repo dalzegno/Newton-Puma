@@ -49,17 +49,18 @@ namespace Puma.ViewModels
 
         public async void LogIn()
         {
-            var loggedInUser = await _userApiService.LogIn(LoginEmail, LoginPassword);
+            System.Diagnostics.Debug.Write(LoginEmail + "\n" + LoginPassword);
+            //var loggedInUser = await _userApiService.LogIn(LoginEmail, LoginPassword);
 
-            if (loggedInUser == null)
-            {
-                await _dialogService.ShowErrorAsync("Login", $"Mail or password was wrong.", "OK");
-                return;
-            }
+            //if (loggedInUser == null)
+            //{
+            //    await _dialogService.ShowErrorAsync("Login", $"Mail or password was wrong.", "OK");
+            //    return;
+            //}
 
-            StaticUser.LoggedInUser = loggedInUser;
-            await _dialogService.ShowMessageAsync("Login", $"Welcome {loggedInUser.DisplayName}!");
-            MainPage.Instance.MainViewModel.UserLoggedInCommand.Execute(null);
+            //StaticUser.LoggedInUser = loggedInUser;
+            //await _dialogService.ShowMessageAsync("Login", $"Welcome {loggedInUser.DisplayName}!");
+            //MainPage.Instance.MainViewModel.UserLoggedInCommand.Execute(null);
         }
     }
 }

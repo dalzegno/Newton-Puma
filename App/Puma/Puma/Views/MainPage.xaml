@@ -6,6 +6,9 @@
     x:Class="Puma.Views.MainPage"
     xmlns:local="clr-namespace:Puma.CustomRenderer;assembly=Puma"
     xmlns:viewmodel="clr-namespace:Puma.ViewModels"
+    xmlns:control="clr-namespace:Puma.ControlTemplates"
+    xmlns:resources="clr-namespace:Puma.Resources"
+    xmlns:ffimageloadingsvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
     BackgroundColor="{AppThemeBinding 
                               Dark={StaticResource WindowBackgroundColorDark}, 
                               Light={StaticResource WindowBackgroundColor}}">
@@ -109,7 +112,53 @@
             AbsoluteLayout.LayoutBounds="0, 0, 1, 60"
             AbsoluteLayout.LayoutFlags="WidthProportional"
             Opacity=".9"
-            Padding="5">
+            Padding="0">
+
+            <!-- POI VIEW POPOVER -->
+
+            <Frame
+                x:Name="slPoiPopover"
+              
+                Grid.Row="0"
+                Grid.Column="0"
+                HorizontalOptions="StartAndExpand"
+                VerticalOptions="StartAndExpand"
+                Margin="0"
+                Padding="0"
+                WidthRequest="400">
+
+                <Grid
+                    Padding="0" Margin="0"
+                    HorizontalOptions="CenterAndExpand"
+                      VerticalOptions="CenterAndExpand"
+                      RowDefinitions="1*,.6*,.6*">
+                        <Label
+                            Grid.Row="0"
+                            VerticalOptions="End"
+                            HorizontalOptions="CenterAndExpand"
+                            FontAttributes="Bold"
+                            Text="{Binding Country}"
+                            FontSize="18"></Label>
+                    <Label
+                        VerticalOptions="StartAndExpand"
+                        HorizontalOptions="CenterAndExpand"
+                        Grid.Row="1"
+                        x:Name="lbl_Country"
+                        Text="{Binding Area}"
+                        FontSize="13"></Label>
+                    <Label
+                        VerticalOptions="Start"
+                        HorizontalOptions="CenterAndExpand"
+                        Grid.Row="2"
+                            Margin="0"
+                            Text="{Binding StreetName}"
+                            FontSize="12"></Label>
+
+                        
+                </Grid>
+
+              
+            </Frame>
 
             <Grid
                 Grid.Column="1"
@@ -139,11 +188,13 @@
                 Orientation="Vertical"
                 HorizontalOptions="Center">
                 <Label
+                    HorizontalOptions="Center"
                     HeightRequest="50"
-                    Text="PumApp"
+                    Text="PuMap"
                     FontSize="40"
                     FontFamily="Lobster-Regular"></Label>
                 <Label
+                    HorizontalOptions="Center"
                     Margin="-10"
                     Text="Travel for the people by the people"
                     FontSize="12"
@@ -197,7 +248,8 @@
         <!-- SEARCH BAR -->
         <Frame
             Grid.Row="1"
-            Grid.ColumnSpan="12"
+            Grid.Column="3"
+            Grid.ColumnSpan="9"
             Margin="5"
             BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
             Padding="0"
@@ -207,13 +259,62 @@
             VerticalOptions="FillAndExpand"
             MinimumWidthRequest="500"
             WidthRequest="500"
-            Opacity=".8">
-            <local:RoundedEntry
-                x:Name="SearchField"
-                Placeholder="Where to ya scallywag?"
-                FontSize="24"
-                Opacity=".8"></local:RoundedEntry>
+            Opacity=".5">
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup
+                    x:Name="opa">
+                    <VisualState
+                        x:Name="Normal">
+                        <VisualState.Setters>
 
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState
+                        x:Name="Focused">
+                        <VisualState.Setters>
+                            <Setter
+                                Property="BackgroundColor"
+                                Value="White"></Setter>
+                            <Setter
+                                Property="Opacity"
+                                Value=".9"></Setter>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+            <Grid
+                HorizontalOptions="CenterAndExpand"
+                WidthRequest="500" 
+                ColumnDefinitions="auto,auto">
+                <local:RoundedEntry
+                    Grid.Column="0"
+                    HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
+                    Grid.ColumnSpan="3"
+                    x:Name="SearchField"
+                    Placeholder="Where to ya scallywag?"
+                    FontSize="24">
+                </local:RoundedEntry>
+           
+                <ffimageloadingsvg:SvgCachedImage
+                    Grid.Column="2"
+                    VerticalOptions="Center"
+                    HorizontalOptions="End"
+                    HeightRequest="50"
+                    WidthRequest="50"
+                    Margin="0,0,20,0"
+                    Source="resource://Puma.Resources.SearchIcon.svg">
+                </ffimageloadingsvg:SvgCachedImage>
+                
+                <!--- TEST-->
+                <local:CustomButton
+                    HorizontalOptions="End"
+                    BackgroundColor="red"
+                    Grid.Column="2"
+                    Opacity=".1"
+                    Text="Testa maps"
+                    Clicked="Button_Clicked">
+                </local:CustomButton>
+            </Grid>
         </Frame>
 
         <!--Signup Popup "-->
@@ -307,24 +408,12 @@
                             HorizontalTextAlignment="Center"
                             Text="{Binding EmailErrorMSG}"
                             TextColor="#C3FF0000" />
-
-                        <Frame
+                        <control:EntryViewControl
                             Grid.Row="1"
-                            BorderColor="LightGray"
-                            Padding="0"
-                            CornerRadius="15"
-                            IsClippedToBounds="False"
-                            HorizontalOptions="CenterAndExpand"
-                            WidthRequest="500"
-                            VerticalOptions="FillAndExpand"
-                            Opacity=".8">
-
-                            <local:RoundedEntry
-                                x:Name="txt_signupEmail"
-                                Opacity=".8"
-                                Placeholder="Email *"
-                                Text="{Binding SignupEmail}"></local:RoundedEntry>
-                        </Frame>
+                            EntryText="{Binding SignupEmail, Mode=TwoWay}"
+                            PlaceholderText="Email"
+                            ControlTemplate="{StaticResource EntryViewControlTemplate}" />
+                        
 
                         <Label
                             Grid.Row="2"
@@ -336,25 +425,13 @@
                             HorizontalTextAlignment="Center"
                             Text="{Binding PaaswordErrorMSG}"
                             TextColor="#C3FF0000" />
-
-
-                        <Frame
+                        <control:EntryViewControl
                             Grid.Row="3"
-                            BorderColor="LightGray"
-                            Padding="0"
-                            CornerRadius="15"
-                            IsClippedToBounds="False"
-                            HorizontalOptions="CenterAndExpand"
-                            WidthRequest="500"
-                            VerticalOptions="FillAndExpand"
-                            Opacity=".8">
-                            <local:RoundedEntry
-                                x:Name="txt_signupPassword"
-                                Text="{Binding SignupPassword}"
-                                IsPassword="True"
-                                Opacity=".8"
-                                Placeholder="Password *"></local:RoundedEntry>
-                        </Frame>
+                            IsPassword="True"
+                            EntryText="{Binding SignupPassword, Mode=TwoWay}"
+                            PlaceholderText="Password"
+                            ControlTemplate="{StaticResource EntryViewControlTemplate}" />
+
 
                         <Label
                             Grid.Row="4"
@@ -364,61 +441,30 @@
                             HorizontalTextAlignment="Center"
                             Text="{Binding DisplayNameErrorMSG}"
                             TextColor="#C3FF0000" />
-                        <Frame
+                        <control:EntryViewControl
                             Grid.Row="5"
-                            BorderColor="LightGray"
-                            Padding="0"
-                            CornerRadius="15"
-                            IsClippedToBounds="False"
-                            HorizontalOptions="CenterAndExpand"
-                            WidthRequest="500"
-                            VerticalOptions="FillAndExpand"
-                            Opacity=".8">
-                            <local:RoundedEntry
-                                x:Name="txt_signupDisplayName"
-                                Text="{Binding SignupDisplayName}"
-                                Opacity=".8"
-                                Placeholder="Display name *"></local:RoundedEntry>
-                        </Frame>
+                            EntryText="{Binding SignupDisplayName, Mode=TwoWay}"
+                            PlaceholderText="Display Name"
+                            ControlTemplate="{StaticResource EntryViewControlTemplate}" />
+                      
 
                         <Label
                             Grid.Row="6"></Label>
-                        <Frame
+                        <control:EntryViewControl
                             Grid.Row="7"
-                            BorderColor="LightGray"
-                            Padding="0"
-                            CornerRadius="15"
-                            IsClippedToBounds="False"
-                            HorizontalOptions="CenterAndExpand"
-                            WidthRequest="500"
-                            VerticalOptions="FillAndExpand"
-                            Opacity=".8">
-                            <local:RoundedEntry
-                                x:Name="txt_signupFirstName"
-                                Text="{Binding SignupFirstName}"
-                                Opacity=".8"
-                                Placeholder="First name"></local:RoundedEntry>
-                        </Frame>
+                            EntryText="{Binding SignupFirstName, Mode=TwoWay}"
+                            PlaceholderText="First name"
+                            ControlTemplate="{StaticResource EntryViewControlTemplate}" />
+                        
 
                         <Label
                             Grid.Row="8"></Label>
-
-                        <Frame
+                        <control:EntryViewControl
                             Grid.Row="9"
-                            BorderColor="LightGray"
-                            Padding="0"
-                            CornerRadius="15"
-                            IsClippedToBounds="False"
-                            HorizontalOptions="CenterAndExpand"
-                            WidthRequest="500"
-                            VerticalOptions="FillAndExpand"
-                            Opacity=".8">
-                            <local:RoundedEntry
-                                x:Name="txt_signupSurname"
-                                Text="{Binding SignupSurname}"
-                                Opacity=".8"
-                                Placeholder="Surname"></local:RoundedEntry>
-                        </Frame>
+                            EntryText="{Binding SignupSurname, Mode=TwoWay}"
+                            PlaceholderText="Surname"
+                            ControlTemplate="{StaticResource EntryViewControlTemplate}" />
+                      
 
                         <local:CustomButton
                             HeightRequest="50"
@@ -440,21 +486,11 @@
 
 
         </Frame>
-        <!--- TEST-->
-        <Frame
-            IsVisible="true"
-            Grid.Column="5"
-            Grid.ColumnSpan="2">
-            <local:CustomButton
-                Opacity=".1"
-                Text="Testa maps"
-                Clicked="Button_Clicked">
-
-            </local:CustomButton>
-        </Frame>
+        
 
 
         <!-- LOG IN POPUP -->
+        
         <Frame
             x:Name="loginPopup"
             IsVisible="{Binding loginPopupState}"
@@ -467,10 +503,11 @@
             MinimumHeightRequest="370"
             BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
             Opacity=".9">
-
+            
             <!-- CLOSE POPUP / LOGIN / SIGNUP BUTTONS -->
             <Grid
                 RowDefinitions="auto,.9*">
+                
                 <Grid
                     Grid.Row="0"
                     ColumnDefinitions="1*,1*,.2*"
@@ -530,44 +567,20 @@
                     Grid.Row="1">
                     <Grid
                         RowDefinitions="auto,auto,auto"
-                        x:Name="slLogIn">
-                        <Frame
+                        x:Name="slLogIn"
+                        >
+                        <control:EntryViewControl
                             Grid.Row="0"
-                            Margin="5"
-                            BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
-                            BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
-                            Padding="0"
-                            CornerRadius="15"
-                            IsClippedToBounds="False"
-                            HorizontalOptions="CenterAndExpand"
-                            WidthRequest="500"
-                            VerticalOptions="FillAndExpand"
-                            Opacity=".8">
-                            <local:RoundedEntry
-                                Text="{Binding LoginEmail}"
-                                x:Name="txt_loginEmail"
-                                Opacity=".8"
-                                Placeholder="Email"></local:RoundedEntry>
-                        </Frame>
-                        <Frame
+                            EntryText="{Binding LoginEmail, Mode=TwoWay}"
+                            PlaceholderText="Email"
+                            ControlTemplate="{StaticResource EntryViewControlTemplate}" />
+                        <control:EntryViewControl
                             Grid.Row="1"
-                            Margin="5"
-                            BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
-                            BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
-                            Padding="0"
-                            CornerRadius="15"
-                            IsClippedToBounds="False"
-                            HorizontalOptions="CenterAndExpand"
-                            WidthRequest="500"
-                            VerticalOptions="FillAndExpand"
-                            Opacity=".8">
-                            <local:RoundedEntry
-                                x:Name="txt_loginPassword"
-                                Text="{Binding LoginPassword}"
-                                IsPassword="True"
-                                Opacity=".8"
-                                Placeholder="Password"></local:RoundedEntry>
-                        </Frame>
+                            IsPassword="True"
+                            EntryText="{Binding LoginPassword, Mode=TwoWay}"
+                            PlaceholderText="Password"
+                            ControlTemplate="{StaticResource EntryViewControlTemplate}" />
+                        
 
                         <local:CustomButton
                             Grid.Row="2"
@@ -586,79 +599,36 @@
         </Frame>
 
 
-        <!-- POI VIEW POPOVER -->
+        <!-- POI MENU BUTTONS -->
 
-        <Frame
-            x:Name="slPoiPopover"
-            Opacity=".8"
-            IsVisible="True"
-            Grid.Row="{OnPlatform UWP='0'}"
-            Grid.ColumnSpan="7"
-            Grid.RowSpan="10"
-            HorizontalOptions="StartAndExpand"
-            VerticalOptions="StartAndExpand"
-            Margin="10,0,0,0"
-            WidthRequest="400">
-            <Grid
-                RowDefinitions="auto,auto,auto"
-                ColumnDefinitions="1*">
-                <Grid RowDefinitions="auto, auto"
-                    Grid.Row="0">
-                    <Label
-                        Text="{Binding Area}"
-                        VerticalOptions="Start"
-                        HeightRequest="25"
-                        x:Name="lbl_Area"
-                        FontSize="18"
-                        FontAttributes="Bold"
-                        Margin="0"
-                        Padding="0"></Label>
-                    <StackLayout
-                        HeightRequest="20"
-                        Grid.Row="1"
-                        Orientation="Horizontal">
-                        <Label
-                            Margin="0"
-                            x:Name="lbl_StreetName"
-                            Text="{Binding StreetName}"
-                            FontSize="12"></Label>
+                        <StackLayout
+                           x:Name="slPoiMenuButtons"
+                        Padding="0"
+                        Grid.Row="2"
+                        Grid.ColumnSpan="2"
+                        WidthRequest="70"
+                        HorizontalOptions="StartAndExpand">
+            
 
-                        <Label
-                            x:Name="lbl_Country"
-                            Text="{Binding Country}"
-                            FontSize="12"></Label>
-
+            <local:CustomButton
+                            BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
+                            Command="{Binding PoiCollectionPopupCommand}"
+                            Grid.Column="0"
+                            HorizontalOptions="FillAndExpand"
+                            Text="Points of Interest"></local:CustomButton>
+                        <local:CustomButton
+                            BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
+                            Grid.Column="1"
+                            HorizontalOptions="FillAndExpand"
+                            Text="Placeholder"></local:CustomButton>
+                        <local:CustomButton
+                            BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            HorizontalOptions="FillAndExpand"
+                            Command="{Binding PoiCreationPopupCommand}"
+                            Text="Add new Point of Interest"></local:CustomButton>
                     </StackLayout>
-                </Grid>
-
-                <Grid
-                    Padding="0"
-                    Margin="-10"
-                    Grid.Row="2"
-                    ColumnDefinitions=".7*,.6*,1*">
-
-                    <local:CustomButton
-                        BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
-                        Command="{Binding PoiCollectionPopupCommand}"
-                        Grid.Column="0"
-                        HorizontalOptions="FillAndExpand"
-                        Text="Points of Interest"></local:CustomButton>
-                    <local:CustomButton
-                        BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
-                        Grid.Column="1"
-                        HorizontalOptions="FillAndExpand"
-                        Text="Placeholder"></local:CustomButton>
-                    <local:CustomButton
-                        BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
-                        Grid.Row="0"
-                        Grid.Column="2"
-                        HorizontalOptions="FillAndExpand"
-                        Command="{Binding PoiCreationPopupCommand}"
-                        Text="Add new Point of Interest"></local:CustomButton>
-                </Grid>
-            </Grid>
-        </Frame>
-
         <!-- POI COLLECTION VIEW  >-->
         <Frame
             Grid.Row="2"

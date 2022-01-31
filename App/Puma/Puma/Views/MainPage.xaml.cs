@@ -24,6 +24,7 @@ namespace Puma.Views
 
         public static MainPage Instance { get; set; }
         internal MainViewModel MainViewModel { get; }
+        internal PoiViewModel poiViewModel { get; }
 
         Geocoder geoCoder;
         public MainPage()
@@ -37,11 +38,12 @@ namespace Puma.Views
             slCreateUserViewModel.BindingContext = new NewUserViewModel(UserApiService, DialogService);
             slLogIn.BindingContext = new LoginViewModel(UserApiService, DialogService);
 
-            var poiViewModel = new PoiViewModel(PoiService, DialogService);
+            poiViewModel = new PoiViewModel(PoiService, DialogService);
             slPoiPopover.BindingContext = poiViewModel;
             slPoiPopup.BindingContext = poiViewModel;
             poiCollectionView.BindingContext = poiViewModel;
             poiCreationPopup.BindingContext = poiViewModel;
+            slPoiMenuButtons.BindingContext = poiViewModel;
 
             slSettings.BindingContext = new SettingsViewModel();
 
@@ -79,8 +81,9 @@ namespace Puma.Views
                 System.Diagnostics.Debug.WriteLine("address:" + address);
                
 
-                ClearPoiEntries();
-                FillAddressBoxes(address);
+                //ClearPoiEntries();
+                //FillAddressBoxes(address);
+                poiViewModel.SetAddress(address);
             }
 
             void FillAddressBoxes(string address)
@@ -88,34 +91,41 @@ namespace Puma.Views
                 var words = address?.Split('\n') ?? Array.Empty<string>();
                 if (words.Length == 2)
                 {
-                    lbl_Area.Text = words[0];
-                    lbl_Country.Text = words[1];
+                    poiViewModel.Area = words[0];
+                    poiViewModel._country = words[1];
+                    OnPropertyChanged(nameof(poiViewModel.Country));
+                    //lbl_Area.Text = words[0];
+                    //lbl_Country.Text = words[1];
 
-                    entry_zip.Text = words[0];
-                    entry_country.Text = words[1];
+                    //entry_zip.Text = words[0];
+                    //entry_country.Text = words[1];
                 }
                 else if (words.Length == 3)
                 {
-                    lbl_StreetName.Text = words[0];
-                    lbl_Area.Text = words[1];
-                    lbl_Country.Text = words[2];
+                    poiViewModel.StreetName = words[0];
+                    poiViewModel.Area = words[1];
+                    poiViewModel._country = words[2];
+                    OnPropertyChanged(nameof(poiViewModel.Country));
+                    //lbl_StreetName.Text = words[0];
+                    //lbl_Area.Text = words[1];
+                    //lbl_Country.Text = words[2];
 
-                    entry_address.Text = words[0];
-                    entry_zip.Text = words[1];
-                    entry_country.Text = words[2];
+                    //entry_address.Text = words[0];
+                    //entry_zip.Text = words[1];
+                    //entry_country.Text = words[2];
                 }
-                lbl_adress.Text = address;
+                //lbl_adress.Text = address;
             }
 
             void ClearPoiEntries()
             {
-                lbl_StreetName.Text = "";
-                lbl_Area.Text = "";
-                lbl_Country.Text = "";
+                //lbl_StreetName.Text = "";
+                //lbl_Area.Text = "";
+                //lbl_Country.Text = "";
 
-                entry_address.Text = "";
-                entry_zip.Text = "";
-                entry_country.Text = "";
+                //entry_address.Text = "";
+                //entry_zip.Text = "";
+                //entry_country.Text = "";
             }
 
             //Circle circle = new Circle
@@ -314,5 +324,7 @@ namespace Puma.Views
                 DisplayAlert("Tapped!", $"{pin.Label}", "OK");
             };
         }
+
+       
     }
 }

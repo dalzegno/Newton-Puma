@@ -43,8 +43,8 @@ namespace Puma.ViewModels
 
         public string _name;
         public string _description;
-        public string _country;
-        public string _area;
+        public string _country { get; set; } = "Click or search the map";
+        public string _area { get; set; } = "to start exploring!";
         public string _streetName;
         public string _longitude;
         public string _latitude;
@@ -149,7 +149,7 @@ namespace Puma.ViewModels
                 OnPropertyChanged(Country);
                 CreatePoiCommand.ChangeCanExecute();
             }
-        }
+        } 
         public string Area
         {
             get => _area;
@@ -254,6 +254,37 @@ namespace Puma.ViewModels
             OnPropertyChanged(nameof(PoiCollectionVisible));
             OnPropertyChanged(nameof(PoiSingleVisible));
 
+        }
+
+        public void SetAddress(string address)
+        {
+            var words = address?.Split('\n') ?? Array.Empty<string>();
+            if (address == null || address == "")
+            {
+                StreetName = "";
+                Area = "No location found";
+                Country = "";
+                OnPropertyChanged(nameof(StreetName));
+                OnPropertyChanged(nameof(Area));
+                OnPropertyChanged(nameof(Country));
+            }
+            else if (words.Length == 2)
+            {
+                Area = words[0];
+                Country = words[1];
+                OnPropertyChanged(nameof(Area));
+                OnPropertyChanged(nameof(Country));
+            }
+            else if (words.Length == 3)
+            {
+                StreetName = words[0];
+                Area = words[1];
+                Country = words[2];
+                OnPropertyChanged(nameof(StreetName));
+                OnPropertyChanged(nameof(Area));
+                OnPropertyChanged(nameof(Country));
+            }
+            
         }
 
         public bool PoiCreationPopupState => openPoiCreationBool;
