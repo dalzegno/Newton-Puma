@@ -34,10 +34,12 @@ namespace Puma.Views
             MainViewModel = new MainViewModel(DialogService);
             PoiViewModel = new PoiViewModel(PoiService, DialogService, WeatherService);
             BindingContext = MainViewModel;
+            
 
             SetBindingContexts();
 
             _geoCoder = new Geocoder();
+                        StartSlidePanel();
         }
 
         #region Events
@@ -141,9 +143,9 @@ namespace Puma.Views
             slSettings.BindingContext = new SettingsViewModel();
 
             slPoiPopover.BindingContext = PoiViewModel;
-            slPoiPopup.BindingContext = PoiViewModel;
+            addPointStack.BindingContext = PoiViewModel;
             poiCollectionView.BindingContext = PoiViewModel;
-            poiCreationPopup.BindingContext = PoiViewModel;
+            addPointStack.BindingContext = PoiViewModel;
             slPoiMenuButtons.BindingContext = PoiViewModel;
             weatherCollectionView.BindingContext = PoiViewModel;
         }
@@ -247,5 +249,113 @@ namespace Puma.Views
             public Position Position { get; set; }
             public IEnumerable<string> Addresses { get; set; }
         }
+
+        async void SliderUpDown(object sender, System.EventArgs e)
+        {
+            var initialPosition = mainStack.Height;
+            var currentPosition = body.Height;
+            switch (Device.RuntimePlatform)
+            {
+                case Device.Android:
+
+                    if (body.TranslationY == 0)
+                    {
+                        await body.TranslateTo(0, 705, 500, Easing.SinInOut);
+                    }
+                    else
+                    {
+                        await body.TranslateTo(0, 0, 500, Easing.SpringIn);
+                    }
+
+                    break;
+                default:
+                    if (body.TranslationY == 0)
+                    {
+                        await body.TranslateTo(0, 435, 500, Easing.SinInOut);
+
+                    }
+                    else
+                    {
+                        await body.TranslateTo(0, 0, 500, Easing.SpringIn);
+                    }
+
+
+                    break;
+            }
+
+        }
+
+        private async void PointerBt_Clicked(object sender, EventArgs e)
+        {
+            var xnameofstack = sender as Button;
+            var displayWith = Application.Current.MainPage.Width;
+
+            switch (xnameofstack.ClassId)
+            {
+                case "addPointBt":
+                    await pointInterestStack.TranslateTo(displayWith, 0, 300, Easing.SpringOut);
+                    pointInterestStack.IsVisible = false;
+                    await placeHolderStack.TranslateTo(displayWith, 0, 300, Easing.SpringOut);
+                    placeHolderStack.IsVisible = false;
+
+
+                    addPointStack.IsVisible = true;
+                    await addPointStack.TranslateTo(0, 0, 300, Easing.SpringIn);
+                    break;
+
+                case "pointInterestBt":
+
+
+                    await addPointStack.TranslateTo(displayWith, 0, 300, Easing.SpringOut);
+                    addPointStack.IsVisible = false;
+
+                    await placeHolderStack.TranslateTo(displayWith, 0, 300, Easing.SpringOut);
+                    placeHolderStack.IsVisible = false;
+
+
+                    pointInterestStack.IsVisible = true;
+                    await pointInterestStack.TranslateTo(0, 0, 300, Easing.SpringIn);
+
+                    break;
+                case "placeHolderBt":
+                    await addPointStack.TranslateTo(displayWith, 0, 300, Easing.SpringOut);
+
+                    await pointInterestStack.TranslateTo(displayWith, 0, 300, Easing.SpringOut);
+                    pointInterestStack.IsVisible = false;
+                    addPointStack.IsVisible = false;
+
+                    placeHolderStack.IsVisible = true;
+                    await placeHolderStack.TranslateTo(0, 0, 300, Easing.SpringIn);
+
+
+
+                    break;
+            }
+        }
+
+         async private void StartSlidePanel()
+        {
+
+
+            switch (Device.RuntimePlatform)
+            {
+                case Device.Android: body.TranslationY = 705; break;
+                default: body.TranslationY = body.TranslationY = 435; break;
+            }
+
+
+            addPointStack.IsVisible = true;
+            placeHolderStack.IsVisible = false;
+            pointInterestStack.IsVisible = false;
+
+            await addPointStack.TranslateTo(0, 0, 300, Easing.SpringIn);
+            await placeHolderStack.TranslateTo(450, 0, 300, Easing.SpringOut);
+            await pointInterestStack.TranslateTo(450, 0, 300, Easing.SpringOut);
+
+
+        }
+
+
+
     }
 }

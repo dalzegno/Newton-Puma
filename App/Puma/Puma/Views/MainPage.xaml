@@ -16,40 +16,18 @@
 
 
 
-    <Grid
-        Margin="0"
-        Padding="0"
-        AbsoluteLayout.LayoutBounds="1,1,1,1"
-        AbsoluteLayout.LayoutFlags="All"
-        ColumnDefinitions="1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*"
-        RowDefinitions="80,100,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*">
+    <AbsoluteLayout VerticalOptions="FillAndExpand" x:Name="mainStack" AbsoluteLayout.LayoutBounds="0.5,0.5,1,1" AbsoluteLayout.LayoutFlags="All">
 
+        <StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All" x:Name="main" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <!-- MAP -->
 
-        <!-- GRID OUTLINES -->
-        <!--<Label Background="blue" Grid.Column="1" Grid.Row="0"  Grid.RowSpan="12"/>
-        <Label Background="blue" Grid.Column="3"  Grid.Row="0"  Grid.RowSpan="12"/>
-        <Label Background="blue" Grid.Column="5" Grid.Row="0" Grid.RowSpan="12"/>
-        <Label Background="blue" Grid.Column="7"  Grid.Row="0"  Grid.RowSpan="12"/>
-        <Label Background="blue" Grid.Column="9" Grid.Row="0"  Grid.RowSpan="12"/>
-        <Label Background="blue" Grid.Column="11"  Grid.Row="0"  Grid.RowSpan="12"/>
-        <Label Background="blue" Grid.Row="0" Text="Hello" FontSize="2" Grid.ColumnSpan="12"/>
-        <Label Background="blue" Grid.Row="2" Text="Hello" FontSize="2" Grid.ColumnSpan="12"/>
-        <Label Background="blue" Grid.Row="4" Text="Hello" FontSize="2" Grid.ColumnSpan="12"/>
-        <Label Background="blue" Grid.Row="6" Text="Hello" FontSize="2" Grid.ColumnSpan="12"/>
-        <Label Background="blue" Grid.Row="8" Text="Hello" FontSize="2" Grid.ColumnSpan="12"/>
-        <Label Background="blue" Grid.Row="10" Text="Hello" FontSize="2" Grid.ColumnSpan="12"/>-->
-
-
-
-
-        <!-- MAP -->
-        <maps:Map
+            <maps:Map
             x:Name="map"
             MapClicked="OnMapClicked"
             Grid.RowSpan="12"
             Grid.ColumnSpan="12"
             MapType="Hybrid"
-            Background="{AppThemeBinding 
+            Background="{AppThemeBinding
                               Dark={StaticResource WindowBackgroundColorDark}, 
                               Light={StaticResource WindowBackgroundColor}}"
             BackgroundColor="{AppThemeBinding 
@@ -58,190 +36,29 @@
             AbsoluteLayout.LayoutFlags="All"
             AbsoluteLayout.LayoutBounds="0,0,1,1">
 
-            <x:Arguments>
-                <maps:MapSpan>
-                    <x:Arguments>
-                        <maps:Position>
-                            <x:Arguments>
-                                <x:Double>36.9628066</x:Double>
-                                <x:Double>-122.0194722</x:Double>
-                            </x:Arguments>
-                        </maps:Position>
-                        <x:Double>111</x:Double>
-                        <x:Double>111</x:Double>
-                    </x:Arguments>
-                </maps:MapSpan>
-            </x:Arguments>
-        </maps:Map>
+                <x:Arguments>
+                    <maps:MapSpan>
+                        <x:Arguments>
+                            <maps:Position>
+                                <x:Arguments>
+                                    <x:Double>36.9628066</x:Double>
+                                    <x:Double>-122.0194722</x:Double>
+                                </x:Arguments>
+                            </maps:Position>
+                            <x:Double>111</x:Double>
+                            <x:Double>111</x:Double>
+                        </x:Arguments>
+                    </maps:MapSpan>
+                </x:Arguments>
+            </maps:Map>
 
-
-        <!-- MAP TYPES -->
-        <StackLayout
-            Grid.Column="10"
-            Grid.ColumnSpan="2"
-            Grid.Row="2"
-            WidthRequest="70"
-            HeightRequest="80"
-            HorizontalOptions="EndAndExpand"
-            VerticalOptions="FillAndExpand"
-            x:Name="slMapTypes">
-            <local:CustomButton
-                Clicked="ViewOptionButton_Clicked"
-                BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
-            Light={StaticResource PopUpBackgroundColor}}"
-                Text="Satellite"></local:CustomButton>
-            <local:CustomButton
-                Clicked="ViewOptionButton_Clicked"
-                BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
-            Light={StaticResource PopUpBackgroundColor}}"
-                Text="Hybrid"></local:CustomButton>
-            <local:CustomButton
-                Clicked="ViewOptionButton_Clicked"
-                BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
-            Light={StaticResource PopUpBackgroundColor}}"
-                Text="Street"></local:CustomButton>
         </StackLayout>
+                                                                        <!--Searchbar start-->
+        <Grid AbsoluteLayout.LayoutBounds="0.5,0.1,.8,0.1" AbsoluteLayout.LayoutFlags="All">
+           
 
-        <!-- NAVBAR -->
-        <Grid
-            ColumnDefinitions="1*,1*,1*"
-            Grid.ColumnSpan="12"
-            BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
-                    Light={StaticResource PopUpBackgroundColor}}"
-            AbsoluteLayout.LayoutBounds="0, 0, 1, 60"
-            AbsoluteLayout.LayoutFlags="WidthProportional"
-            Opacity=".9"
-            Padding="0">
-            
-
-            <!-- POI VIEW POPOVER -->
+            <StackLayout>
             <Frame
-                x:Name="slPoiPopover"
-                Grid.Row="0"
-                Grid.Column="0"
-                HorizontalOptions="StartAndExpand"
-                VerticalOptions="StartAndExpand"
-                Margin="0"
-                Padding="0"
-                WidthRequest="400">
-                <Grid
-                    Padding="0"
-                    Margin="0"
-                    HorizontalOptions="CenterAndExpand"
-                    VerticalOptions="CenterAndExpand"
-                    RowDefinitions="1*,.6*,.6*">
-                    <Label
-                        Grid.Row="0"
-                        VerticalOptions="End"
-                        HorizontalOptions="CenterAndExpand"
-                        FontAttributes="Bold"
-                        Text="{Binding Country}"
-                        FontSize="18"></Label>
-                    <Label
-                        VerticalOptions="StartAndExpand"
-                        HorizontalOptions="CenterAndExpand"
-                        Grid.Row="1"
-                        x:Name="lbl_Country"
-                        Text="{Binding Area}"
-                        FontSize="13"></Label>
-                    <Label
-                        VerticalOptions="Start"
-                        HorizontalOptions="CenterAndExpand"
-                        Grid.Row="2"
-                        Margin="0"
-                        Text="{Binding StreetName}"
-                        FontSize="12"></Label>
-                </Grid>
-            </Frame>
-            
-
-            <!-- GLOBE ICON -->
-            <Grid
-                Grid.Column="1"
-                Grid.Row="0"
-                HorizontalOptions="Center"
-                AbsoluteLayout.LayoutBounds=".1,.1,.1,.1"
-                AbsoluteLayout.LayoutFlags="All">
-                <Path
-                    Fill="#008db3"
-                    Data="M58.4,22.7L60,42.7C55.8,54,44.8,62,32,62C15.4,62,2,48.6,2,32S15.4,2,32,2c6,0,11.6,1.8,16.3,4.8L58.4,22.7z" />
-                <Path
-                    Fill="#ffc942"
-                    Data="m48.3 6.8c.3 1 .6 2.1-.4 1.6-1.7-.9-3.9-1.9-3.2-1.2s1 1.5-.1 1.4c-1.1-.1-3.1-.4-4 .9-.9 1.3-2.1 1-2.4 1.5-.3.5-.8 2.6-1.7 1.9-.9-.6-2.7-2.9-1.2-2.3 1.5.6 3.2-.1 1.8-1.7-1.4-1.6-2.8-1-3.4-1.9-.6-.9-2.6-2-4.1.2-1.4 2.2-2.7 5.1-3.5 5.7-.8.6-2.5 1.7-2.2 2.6.2.9.3 3 1.2 2.4s1.4-.9 1.8-.3c.3.6.2 1.8.9 1.8 0 0 1.4-1 1.5-1.9.1-.9-1-1.4-.2-2.7s2.6-3.8 2.2-2.5c-.4 1.2-1.3 3-.6 3.8.6.8 4.1-.2 2.5.6-1.6.8-2.4 1.4-2.7 2.4-.3 1-.6 1.8-1.4 1.4s-1.8-.2-2.2-.2-.6-1.8-1.3-1.4c-.6.4.2 1.7-.5 1.8-.7.1-.8.9-1.6 1.5-.8.6-1.9 1.8-2.6 1.9s1.1 1 .8 1.8c-.3.9-1.9.8-2.5.9s-.1 1.3-.4 2c-.3.7.3 1.4 1.3 1.4 1 0 2-.2 2.1-1.1.1-.9 1-2.4 1.7-2.1.6.3 2.1-.6 2.4-.1.3.5 2.2 2.2 2 2.4s-1.3.7-.9.9c0 0 .3.5.5.4s.7-1.4 1-1.6.3-.9-.1-1.2c-.5-.3-2.2-1.5-1.8-2.1s1.3.7 1.7 1.1c.4.4 1 .9 1 1.8s.6.9.6 1.3c.1.5.3.6.8.6.5-.1.7-1.2.5-1.5-.3-.3-.3-.9.3-.9.6 0 1.3-.5 1.3-.8 0-.3.6-2.1 1-2.1s.7.7.8 1.1c.2.4 1.2-.3 1-.7-.2-.4.1-.5.4-.5.3 0 .1.8.3 1 .3.2 1.7 1.1 1.2 1.6s-1.2.2-1.7-.2c-.5-.4-1.8-.2-2.2.2-.3.4-.6.6-1.2.6-.6 0-.5 1.1 0 1.5.5.5 1.2.1 1.7.4.5.3 1.3-.4 1.4.1.1.5-.1 2-.6 2.1-.5.1-2.1.4-3.2-.1-1.2-.5-2.3-.7-2.4-.2-.1.6-.1 1-.9.5s-1.5-.8-2-.8c-.5 0-.5-.9-.4-1.6.1-.7-1.2-.5-2-.3s-2.4.7-3.4.7-1.4.2-1.6.6-1.1.4-1.1 1.2c0 .8.1 1-.7 1.4-.9.3-1.1 1.9-1.5 2.3-.4.4.4 1.4 0 2-.4.5-.8 1.9-.1 2.2.7.3 1.4 1.7 1.7 2.2.3.5 1.4 1 2.5.8 1.1-.2 3.1-.8 4.2-.3s2.2.4 1.7 1.4c-.6 1 .3 2.3 1 3 .7.7.5 2.5.1 3-.4.6-.3 1.6.1 2.1.4.5.6 1.7.6 2.1 0 .5.8 1.4.9 2.3.1 1-.6 2.1.3 2.1.9 0 3.2.1 3.4-.3s2-2 2.5-2.7 1.5-1.9 1.2-2.6c-.6-.5-.2-1 .8-1.4 1-.4 1-3.2.5-3.9-.5-.7.4-2.4 1.5-2.9 1.1-.5 3.7-5.1 2.9-4.7-.9.4-2.6.7-3.2.3-.6-.4-4.1-6.4-3.6-6.8s3.3 5.5 3.8 6.2c.5.8 5.2-2.1 5.8-2.8.5-.7-.3-1.4-.6-1.4s-1.4-.7-1.7-.3-2.3-2.9-1.6-2.6c.7.3 2.2 1.3 3.6 2.1s3-.5 3.9 1c1 1.5 1.6.5 1.5 1.2s1.2 3.6 1.7 4.5c.4.9 1.3-.4 1.4-1.4.1-1.1 2.2-2.8 3-3.4.7-.6 2.1.3 2.3 1.5.2 1.2 1.2-.2 1.2.7 0 1-.2 2.3.5 3.5 1.4-3.5 2.1-7 2.1-10.8 0-10.6-5.5-19.9-13.7-25.2" />
-                <Path
-                    Data="m16.4 10.6c-.6.2-1.2.9-2 .5-.8-.4-2.5.2-1.4 1.1 1 1 .6 1.6 1.6 1.7s1.6-1.3 2.3-1.2.2-2.3-.5-2.1" />
-                <Path
-                    Data="m40.7 49.7c-.7.1-.5 1.5-1.3 1.7-.7.2-.1.8-.5 1.3-.3.5-.5 1.7 0 2.3.5.7.7.7 1.3-.4.6-1 2-5 .5-4.9" />
-                <Path
-                    Data="m20.6 17.3c-.3 0-.6.2-.9.2-.3.1-.5.5-.5.9 0 .5.8.6.5.9-.3.3-1.9.6-1.7 1.1s.5.9.2 1.4c-.3.5.3.6.9.4s1-.9.9-1.3c-.1-.5.9-.6.6-.2s-.8 1.4-.5 1.7c.3.3-.8.8-.4 1 .4.2 1.5-.8 2.1-.6s.8-.2.9-.7c.1-.6-.8-1.3-1.1-2-.3-.8-.1-2.8-1-2.8" />
-
-            </Grid>
-            
-
-            <!--<Label TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" Text="Hello World" FontSize="38"/>-->
-            <StackLayout
-                Grid.Column="1"
-                Orientation="Vertical"
-                HorizontalOptions="Center">
-                <Label
-                    HorizontalOptions="Center"
-                    HeightRequest="50"
-                    Text="PuMap"
-                    FontSize="40"
-                    FontFamily="Lobster-Regular"></Label>
-                <Label
-                    HorizontalOptions="Center"
-                    Margin="-10"
-                    Text="Travel for the people by the people"
-                    FontSize="12"
-                    FontFamily="Lobster-Regular"></Label>
-            </StackLayout>
-
-            <!--<<<<<<<< Navbar Login/Signup buttons >>>>>>>-->
-            <StackLayout
-                Grid.Column="2"
-                HorizontalOptions="End"
-                Orientation="Horizontal"
-                Margin="0,5,20,5">
-
-                <local:CustomButton
-                    x:Name="btn_Settings_Popup"
-                    CornerRadius="15"
-                    Command="{Binding OpenSettingsCommand}"
-                    TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                    BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
-                    Text="Settings"></local:CustomButton>
-                <Label
-                    IsVisible="{Binding userLogoutState}"
-                    TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                    Text="|"
-                    VerticalOptions="Center" />
-                <Label
-                    IsVisible="{Binding userLoginState}"
-                    TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                    Text="|"
-                    VerticalOptions="Center"></Label>
-                <local:CustomButton
-                    x:Name="btn_Login_Popup"
-                    CornerRadius="15"
-                    Command="{Binding OpenLoginCommand}"
-                    IsVisible="{Binding userLoginState}"
-                    TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                    BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
-                    Text="Log in" />
-                <local:CustomButton
-                    x:Name="btn_Logout"
-                    Command="{Binding LogOutCommand}"
-                    IsVisible="{Binding userLogoutState}"
-                    TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                    BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
-                    Text="Log out" />
-            </StackLayout>
-        </Grid>
-
-
-        <!-- SEARCH BAR -->
-        <Frame
             Grid.Row="1"
             Grid.Column="0"
             Grid.ColumnSpan="12"
@@ -282,16 +99,15 @@
                 WidthRequest="500"
                 ColumnDefinitions="auto,auto">
                 <local:RoundedEntry
-                    Completed="SearchButton_Clicked"
+                    Completed="PointerBt_Clicked"
                     Grid.Column="0"
                     HorizontalOptions="FillAndExpand"
                     VerticalOptions="FillAndExpand"
                     Grid.ColumnSpan="3"
                     x:Name="SearchField"
                     Placeholder="Where to ya scallywag?"
-                    FontSize="24">
+                    FontSize="20">
                 </local:RoundedEntry>
-
                 <ffimageloadingsvg:SvgCachedImage
                     Grid.Column="2"
                     VerticalOptions="Center"
@@ -302,6 +118,8 @@
                     Source="resource://Puma.Resources.SearchIcon.svg">
                 </ffimageloadingsvg:SvgCachedImage>
 
+   
+
                 <!--- TEST-->
                 <local:CustomButton
                     HorizontalOptions="End"
@@ -309,14 +127,15 @@
                     Grid.Column="2"
                     Opacity=".1"
                     Text="Testa maps"
-                    Clicked="SearchButton_Clicked">
+                    Clicked="PointerBt_Clicked">
                 </local:CustomButton>
             </Grid>
         </Frame>
-
-
-        <!--Signup Popup "-->
-
+            </StackLayout>
+        </Grid>
+                                                             <!--Search Bar End-->
+        
+        <!--Signup-->
         <Frame
             IsVisible="{Binding signupPopupState}"
             x:Name="signupPopup"
@@ -484,9 +303,10 @@
 
 
         </Frame>
-
-
-        <!-- LOG IN POPUP -->
+        
+        
+        
+         <!-- LOG IN POPUP -->
 
         <Frame
             x:Name="loginPopup"
@@ -592,41 +412,333 @@
 
         </Frame>
 
-
-        <!-- POI MENU BUTTONS -->
-        <StackLayout
-            x:Name="slPoiMenuButtons"
-            Padding="0"
-            Grid.Row="2"
-            Grid.ColumnSpan="2"
-            WidthRequest="70"
-            HorizontalOptions="StartAndExpand">
-
-            <local:CustomButton
-                BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
-                Command="{Binding PoiCollectionPopupCommand}"
-                Grid.Column="0"
-                HorizontalOptions="FillAndExpand"
-                Text="Points of Interest">
-            </local:CustomButton>
-            <local:CustomButton
-                BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
-                Grid.Column="1"
-                HorizontalOptions="FillAndExpand"
-                Command="{Binding WeatherPopupCommand}"
-                Text="Weather"></local:CustomButton>
-            <local:CustomButton
-                BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
-                Grid.Row="0"
-                Grid.Column="2"
-                HorizontalOptions="FillAndExpand"
-                Command="{Binding PoiCreationPopupCommand}"
-                Text="Add new Point of Interest"></local:CustomButton>
-        </StackLayout>
-
-
-        <!-- POI COLLECTION VIEW  >-->
+        
+        
+        
+        
         <Frame
+            x:Name="settingsPopup"
+            IsVisible="{Binding settingsPopupState}"
+            Grid.Row="2"
+            Grid.RowSpan="8"
+            Grid.ColumnSpan="12"
+            HorizontalOptions="CenterAndExpand"
+            VerticalOptions="CenterAndExpand"
+            WidthRequest="320"
+            MinimumHeightRequest="370"
+            HeightRequest="500"
+            BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
+            Opacity=".9">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="1*" />
+                    <RowDefinition
+                        Height="1*" />
+                    <RowDefinition
+                        Height="1*" />
+                    <RowDefinition
+                        Height="1*" />
+                </Grid.RowDefinitions>
+                <StackLayout
+                    Spacing="15">
+                    <local:CustomButton
+                        Command="{Binding ClosePopupCommand}"
+                        CornerRadius="15"
+                        BackgroundColor="{AppThemeBinding 
+                              Dark={StaticResource ButtonBackgroundColorDark}, 
+                              Light={StaticResource ButtonBackgroundColor}}"
+                        BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
+                        TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+                        Margin="0,-10,-10,-15"
+                        Text="X"
+                        HorizontalOptions="EndAndExpand"></local:CustomButton>
+                    <Label
+                        TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+                        Text="Settings"
+                        FontSize="32"
+                        HorizontalOptions="Center" />
+                    <Rectangle
+                        HeightRequest="2"
+                        HorizontalOptions="FillAndExpand"
+                        Background="black" />
+                    <Label
+                        Text="LightMode"
+                        TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"></Label>
+                    <RadioButton
+                        x:Name="themeRadioButtonLight"
+                        HorizontalOptions="Center">
+                    </RadioButton>
+                    <Label
+                        Text="DarkMode"
+                        TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"></Label>
+                    <RadioButton
+                        x:Name="themeRadioButtonDark"
+                        HorizontalOptions="Center">
+                    </RadioButton>
+
+                    <StackLayout
+                        x:Name="slSettings">
+                        <Rectangle
+                            HeightRequest="2"
+                            HorizontalOptions="FillAndExpand"
+                            Background="black" />
+                    </StackLayout>
+                </StackLayout>
+            </Grid>
+        </Frame>
+        
+                                                                <!--Maps Type-->
+        
+        <Grid AbsoluteLayout.LayoutBounds="0,0.5,0.3,0.1" AbsoluteLayout.LayoutFlags="All">
+
+            <StackLayout x:Name="slMapTypes">
+                <local:CustomButton
+                Clicked="ViewOptionButton_Clicked"
+                BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
+            Light={StaticResource PopUpBackgroundColor}}"
+                Text="Satellite"></local:CustomButton>
+            <local:CustomButton
+                Clicked="ViewOptionButton_Clicked"
+                BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
+            Light={StaticResource PopUpBackgroundColor}}"
+                Text="Hybrid"></local:CustomButton>
+            <local:CustomButton
+                Clicked="ViewOptionButton_Clicked"
+                BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
+            Light={StaticResource PopUpBackgroundColor}}"
+                Text="Street"></local:CustomButton>
+        </StackLayout>
+        </Grid>
+
+
+
+
+                                                        <!--visable side for slide panel-->
+         <StackLayout x:Name="body" AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All"
+            Orientation="Vertical" VerticalOptions="FillAndExpand" Spacing="0">
+                   
+
+            <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                <ContentView BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
+                    Light={StaticResource PopUpBackgroundColor}}" Opacity="0.8" VerticalOptions="FillAndExpand" />
+                <StackLayout>
+                    <Grid>
+                        <Grid.ColumnDefinitions 
+                            BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
+                                                              Light={StaticResource PopUpBackgroundColor}}">
+                            <ColumnDefinition Width="*"/>  
+                            <ColumnDefinition Width="2*"/>  
+                            <ColumnDefinition Width="*"/>                            
+                        </Grid.ColumnDefinitions>
+
+                        
+                        <!--Item left side navbar                Navbar Start-->
+                        <StackLayout x:Name="slPoiPopover">
+                            <Label
+                        Grid.Row="0"
+                        VerticalOptions="End"
+                        HorizontalOptions="CenterAndExpand"
+                        FontAttributes="Bold"
+                        Text="{Binding Country}"
+                        FontSize="18"></Label>
+                        
+                            <Label
+                        VerticalOptions="StartAndExpand"
+                        HorizontalOptions="CenterAndExpand"
+                        Grid.Row="1"
+                        x:Name="lbl_Country"
+                        Text="{Binding Area}"
+                        FontSize="13"></Label>
+                        <Label
+                        VerticalOptions="Start"
+                        HorizontalOptions="CenterAndExpand"
+                        Grid.Row="2"
+                        Margin="0"
+                        Text="{Binding StreetName}"
+                        FontSize="12"></Label>
+                            
+                        </StackLayout>            
+                        
+                        
+                        <!-- navbar logo-->
+                        
+                        <Grid
+                            Grid.Column="1"
+                            Grid.Row="0"
+                            HorizontalOptions="Center"
+                            AbsoluteLayout.LayoutBounds=".1,.1,.1,.1"
+                            AbsoluteLayout.LayoutFlags="All">
+                            <Path
+                                Fill="#008db3"
+                                Data="M58.4,22.7L60,42.7C55.8,54,44.8,62,32,62C15.4,62,2,48.6,2,32S15.4,2,32,2c6,0,11.6,1.8,16.3,4.8L58.4,22.7z" />
+                            <Path
+                                Fill="#ffc942"
+                                Data="m48.3 6.8c.3 1 .6 2.1-.4 1.6-1.7-.9-3.9-1.9-3.2-1.2s1 1.5-.1 1.4c-1.1-.1-3.1-.4-4 .9-.9 1.3-2.1 1-2.4 1.5-.3.5-.8 2.6-1.7 1.9-.9-.6-2.7-2.9-1.2-2.3 1.5.6 3.2-.1 1.8-1.7-1.4-1.6-2.8-1-3.4-1.9-.6-.9-2.6-2-4.1.2-1.4 2.2-2.7 5.1-3.5 5.7-.8.6-2.5 1.7-2.2 2.6.2.9.3 3 1.2 2.4s1.4-.9 1.8-.3c.3.6.2 1.8.9 1.8 0 0 1.4-1 1.5-1.9.1-.9-1-1.4-.2-2.7s2.6-3.8 2.2-2.5c-.4 1.2-1.3 3-.6 3.8.6.8 4.1-.2 2.5.6-1.6.8-2.4 1.4-2.7 2.4-.3 1-.6 1.8-1.4 1.4s-1.8-.2-2.2-.2-.6-1.8-1.3-1.4c-.6.4.2 1.7-.5 1.8-.7.1-.8.9-1.6 1.5-.8.6-1.9 1.8-2.6 1.9s1.1 1 .8 1.8c-.3.9-1.9.8-2.5.9s-.1 1.3-.4 2c-.3.7.3 1.4 1.3 1.4 1 0 2-.2 2.1-1.1.1-.9 1-2.4 1.7-2.1.6.3 2.1-.6 2.4-.1.3.5 2.2 2.2 2 2.4s-1.3.7-.9.9c0 0 .3.5.5.4s.7-1.4 1-1.6.3-.9-.1-1.2c-.5-.3-2.2-1.5-1.8-2.1s1.3.7 1.7 1.1c.4.4 1 .9 1 1.8s.6.9.6 1.3c.1.5.3.6.8.6.5-.1.7-1.2.5-1.5-.3-.3-.3-.9.3-.9.6 0 1.3-.5 1.3-.8 0-.3.6-2.1 1-2.1s.7.7.8 1.1c.2.4 1.2-.3 1-.7-.2-.4.1-.5.4-.5.3 0 .1.8.3 1 .3.2 1.7 1.1 1.2 1.6s-1.2.2-1.7-.2c-.5-.4-1.8-.2-2.2.2-.3.4-.6.6-1.2.6-.6 0-.5 1.1 0 1.5.5.5 1.2.1 1.7.4.5.3 1.3-.4 1.4.1.1.5-.1 2-.6 2.1-.5.1-2.1.4-3.2-.1-1.2-.5-2.3-.7-2.4-.2-.1.6-.1 1-.9.5s-1.5-.8-2-.8c-.5 0-.5-.9-.4-1.6.1-.7-1.2-.5-2-.3s-2.4.7-3.4.7-1.4.2-1.6.6-1.1.4-1.1 1.2c0 .8.1 1-.7 1.4-.9.3-1.1 1.9-1.5 2.3-.4.4.4 1.4 0 2-.4.5-.8 1.9-.1 2.2.7.3 1.4 1.7 1.7 2.2.3.5 1.4 1 2.5.8 1.1-.2 3.1-.8 4.2-.3s2.2.4 1.7 1.4c-.6 1 .3 2.3 1 3 .7.7.5 2.5.1 3-.4.6-.3 1.6.1 2.1.4.5.6 1.7.6 2.1 0 .5.8 1.4.9 2.3.1 1-.6 2.1.3 2.1.9 0 3.2.1 3.4-.3s2-2 2.5-2.7 1.5-1.9 1.2-2.6c-.6-.5-.2-1 .8-1.4 1-.4 1-3.2.5-3.9-.5-.7.4-2.4 1.5-2.9 1.1-.5 3.7-5.1 2.9-4.7-.9.4-2.6.7-3.2.3-.6-.4-4.1-6.4-3.6-6.8s3.3 5.5 3.8 6.2c.5.8 5.2-2.1 5.8-2.8.5-.7-.3-1.4-.6-1.4s-1.4-.7-1.7-.3-2.3-2.9-1.6-2.6c.7.3 2.2 1.3 3.6 2.1s3-.5 3.9 1c1 1.5 1.6.5 1.5 1.2s1.2 3.6 1.7 4.5c.4.9 1.3-.4 1.4-1.4.1-1.1 2.2-2.8 3-3.4.7-.6 2.1.3 2.3 1.5.2 1.2 1.2-.2 1.2.7 0 1-.2 2.3.5 3.5 1.4-3.5 2.1-7 2.1-10.8 0-10.6-5.5-19.9-13.7-25.2" />
+                            <Path
+                                Data="m16.4 10.6c-.6.2-1.2.9-2 .5-.8-.4-2.5.2-1.4 1.1 1 1 .6 1.6 1.6 1.7s1.6-1.3 2.3-1.2.2-2.3-.5-2.1" />
+                            <Path
+                                Data="m40.7 49.7c-.7.1-.5 1.5-1.3 1.7-.7.2-.1.8-.5 1.3-.3.5-.5 1.7 0 2.3.5.7.7.7 1.3-.4.6-1 2-5 .5-4.9" />
+                            <Path
+                                Data="m20.6 17.3c-.3 0-.6.2-.9.2-.3.1-.5.5-.5.9 0 .5.8.6.5.9-.3.3-1.9.6-1.7 1.1s.5.9.2 1.4c-.3.5.3.6.9.4s1-.9.9-1.3c-.1-.5.9-.6.6-.2s-.8 1.4-.5 1.7c.3.3-.8.8-.4 1 .4.2 1.5-.8 2.1-.6s.8-.2.9-.7c.1-.6-.8-1.3-1.1-2-.3-.8-.1-2.8-1-2.8" />
+
+                        </Grid>
+                        
+                        
+                        <!--Puma title-->
+                        <StackLayout
+                Grid.Column="1"
+                Orientation="Vertical"
+                HorizontalOptions="Center">
+                <Label
+                    HorizontalOptions="Center"
+                    HeightRequest="50"
+                    Text="PuMap"
+                    FontSize="40"
+                    FontFamily="Lobster-Regular"></Label>
+                     <Label
+                    HorizontalOptions="Center"
+                    Margin="-10"
+                    Text="Travel for the people by the people"
+                    FontSize="12"
+                    FontFamily="Lobster-Regular"></Label>
+                    </StackLayout>
+                        
+                        
+                     <!--Login and Setting right side navbar-->
+                        <StackLayout Grid.Column="2" VerticalOptions="CenterAndExpand" >
+                            <Button Text="login" 
+                                    x:Name="btn_Login_Popup"
+                                    Command="{Binding OpenLoginCommand}"
+                                    IsVisible="{Binding userLoginState}"
+                                    BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
+                                                        Light={StaticResource PopUpBackgroundColor}}"
+                                    TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+                                    BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"/>
+                            
+                            <Button  x:Name="btn_Logout"
+                                        Command="{Binding LogOutCommand}"
+                                        IsVisible="{Binding userLogoutState}"
+                                        TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+                                        BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
+                                        Text="Log out" />
+                                         <StackLayout>
+                                            <!--Setting button-->
+                    <Button x:Name="btn_Settings_Popup"
+                    CornerRadius="15"
+                    Command="{Binding OpenSettingsCommand}"
+                    TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+                    BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
+                    Text="Settings"/>
+                    </StackLayout>
+                        </StackLayout>
+                    </Grid>              
+                    
+                                                                <!--End Of Navbar-->
+                    
+                    
+                                                                <!--Under Navbar Panel-->
+        
+
+                    <!--Button for point-->
+                    <StackLayout Orientation="Horizontal"  HorizontalOptions="Center" x:Name="slPoiMenuButtons">
+                        <Button Text="Add Point" ClassId="addPointBt" Clicked="PointerBt_Clicked"/>
+                        <Button Text="Point of interest"  ClassId="pointInterestBt" Clicked="PointerBt_Clicked"/>
+                        <Button Text="" ClassId="placeHolderBt" Clicked="PointerBt_Clicked"/>
+                    </StackLayout>
+       
+                    
+
+                    <!--stack for point all entry-->
+
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+
+                        </Grid.RowDefinitions>
+
+                        <StackLayout Orientation="{OnPlatform UWP=Horizontal}" x:Name="addPointStack" Grid.Row="0">
+                            <StackLayout HorizontalOptions="FillAndExpand" >
+                                <local:RoundedEntry
+                            TextColor="White"
+                            PlaceholderColor="White"
+                            BackgroundColor="Transparent"
+                            x:Name="entry_Name"
+                            Text="{Binding Name}"
+                            FontSize="24"
+                            Margin="0,0,0,10"
+                            Placeholder="Name of Location.."
+                            />
+
+                                <local:CustomEditor
+                            x:Name="entry_Description"
+                            TextColor="White"
+                            Text="{Binding Description}"
+                            HeightRequest="250"
+                            VerticalOptions="Center"
+                            FontSize="24"
+                            Placeholder="Description.."
+                            PlaceholderColor="White"
+                            BackgroundColor="Transparent"/>
+                            </StackLayout>
+
+
+                            <StackLayout HorizontalOptions="FillAndExpand">
+
+                                <Picker
+                        x:Name="TagPicker"
+                        WidthRequest="10"
+                        SelectedItem="{Binding SelectedTagInfo}"
+                        ItemsSource="{Binding Tags}"
+                        ItemDisplayBinding="{Binding Name}" />
+                                <local:RoundedEntry
+                        x:Name="entry_address"
+                        Text="{Binding StreetName}"></local:RoundedEntry>
+                                <local:RoundedEntry
+                        TextColor="White"
+ 
+                        x:Name="entry_zip"
+                        Text="{Binding Area}"></local:RoundedEntry>
+                                <local:RoundedEntry
+                        TextColor="White"
+
+                        x:Name="entry_country"
+                        Text="{Binding Country}"></local:RoundedEntry>
+                                <Button
+                        x:Name="btn_SearchLocation"
+                        Text="Search"
+                        ></Button>
+                                <Button
+                        Text="Add Point of Interest"
+                        Command="{Binding CreatePoiCommand}" />
+                                <local:RoundedEntry
+                        IsVisible="false"
+                        x:Name="lbl_latitude"
+                        Text="{Binding Latitude}"
+                        FontSize="12"></local:RoundedEntry>
+                                <local:RoundedEntry
+                        IsVisible="false"
+                        x:Name="lbl_longitude"
+                        Text="{Binding Longitude}"
+                        FontSize="12"></local:RoundedEntry>
+                                <Label
+                        x:Name="lbl_adress"
+                        FontSize="8"></Label>
+
+
+                            </StackLayout>
+
+
+
+                        </StackLayout>
+
+                        <!--pointInterestBt-->
+                        <StackLayout x:Name="pointInterestStack" Grid.Row="1">
+<Frame
             Grid.Row="2"
             Grid.RowSpan="8"
             Grid.ColumnSpan="12"
@@ -706,105 +818,13 @@
             </StackLayout>
         </Frame>
         
-        
-        <!-- POI CREATION POPUP -->
-        <Frame
-            IsVisible="{Binding PoiCreationPopupState}"
-            x:Name="poiCreationPopup"
-            Grid.Row="2"
-            Grid.RowSpan="8"
-            Grid.ColumnSpan="12"
-            HorizontalOptions="StartAndExpand"
-            VerticalOptions="StartAndExpand"
-            WidthRequest="300"
-            HeightRequest="500"
-            Margin="10,10,0,0"
-            Background="White"
-            Opacity=".9">
-            <ScrollView>
-                <StackLayout
-                    x:Name="slPoiPopup">
-                    <local:RoundedEntry
-                        x:Name="entry_Name"
-                        Text="{Binding Name}"
-                        FontSize="24"
-                        Margin="0,0,0,10"
-                        Placeholder="Name of Location.."></local:RoundedEntry>
-                    <local:CustomEditor
-                        x:Name="entry_Description"
-                        Text="{Binding Description}"
-                        HeightRequest="250"
-                        VerticalOptions="Center"
-                        FontSize="24"
-                        Placeholder="Description.."></local:CustomEditor>
 
+                        </StackLayout>
 
-                    <StackLayout
-                        HeightRequest="50">
-                        <CollectionView
-                            x:Name="cwTags"
-                            HorizontalOptions="Center"
-                            Margin="0"
-                            ItemsLayout="HorizontalList"
-                            SelectionMode="Single"
-                            ItemsSource="{Binding TagButtons}">
+                        <!--placeHolderBt-->
 
-                            <CollectionView.ItemTemplate>
-
-                                <DataTemplate>
-
-                                    <local:CustomButton
-                                        Command="{Binding Path=BindingContext.RemoveTagCommand, Source={x:Reference Name=cwTags}}"
-                                        CommandParameter="{Binding}"
-                                        Margin="10"
-                                        WidthRequest="100"
-                                        HorizontalOptions="FillAndExpand"
-                                        VerticalOptions="FillAndExpand"
-                                        Text="{Binding Name, StringFormat='X    {0:F0}'}"
-                                        FontSize="12">
-
-                                    </local:CustomButton>
-
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-                    </StackLayout>
-                    <!--<local:CustomButton Text="{Binding SelectedTagInfo.Name}" FontSize="12"/>-->
-                    <Picker
-                        x:Name="TagPicker"
-                        SelectedItem="{Binding SelectedTagInfo}"
-                        ItemsSource="{Binding Tags}"
-                        ItemDisplayBinding="{Binding Name}" />
-                    <local:RoundedEntry
-                        x:Name="entry_address"
-                        Text="{Binding StreetName}"></local:RoundedEntry>
-                    <local:RoundedEntry
-                        x:Name="entry_zip"
-                        Text="{Binding Area}"></local:RoundedEntry>
-                    <local:RoundedEntry
-                        x:Name="entry_country"
-                        Text="{Binding Country}"></local:RoundedEntry>
-                    <local:CustomButton
-                        Text="Add Point of Interest"
-                        Command="{Binding CreatePoiCommand}" />
-                    <local:RoundedEntry
-                        IsVisible="false"
-                        x:Name="lbl_latitude"
-                        Text="{Binding Latitude}"
-                        FontSize="12"></local:RoundedEntry>
-                    <local:RoundedEntry
-                        IsVisible="false"
-                        x:Name="lbl_longitude"
-                        Text="{Binding Longitude}"
-                        FontSize="12"></local:RoundedEntry>
-                    <Label
-                        x:Name="lbl_adress"
-                        FontSize="8"></Label>
-                </StackLayout>
-            </ScrollView>
-        </Frame>
-        <!-- WEATHER POPUP -->
-        <Frame  
+                        <StackLayout x:Name="placeHolderStack" Grid.Row="2">
+<Frame  
             Grid.Row="2"
             Grid.RowSpan="8"
             Grid.ColumnSpan="12"
@@ -849,7 +869,7 @@
                                 FontSize="16"
                                 HeightRequest="100"
                                 Text="{Binding Temperature, StringFormat='{0}°C'}"
-                                BindingContextChanged="LblTemperature_BindingContextChanged"/>
+                                />
                             <Image
                                 Grid.Row="1"
                                 Source="{Binding IconUrl}"
@@ -874,78 +894,34 @@
             </CollectionView>
         </Frame>
 
-        
-        <!-- SETTINGS POPUP -->
-        <Frame
-            x:Name="settingsPopup"
-            IsVisible="{Binding settingsPopupState}"
-            Grid.Row="2"
-            Grid.RowSpan="8"
-            Grid.ColumnSpan="12"
-            HorizontalOptions="CenterAndExpand"
-            VerticalOptions="CenterAndExpand"
-            WidthRequest="320"
-            MinimumHeightRequest="370"
-            HeightRequest="500"
-            BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
-            Opacity=".9">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition
-                        Height="1*" />
-                    <RowDefinition
-                        Height="1*" />
-                    <RowDefinition
-                        Height="1*" />
-                    <RowDefinition
-                        Height="1*" />
-                </Grid.RowDefinitions>
-                <StackLayout
-                    Spacing="15">
-                    <local:CustomButton
-                        Command="{Binding ClosePopupCommand}"
-                        CornerRadius="15"
-                        BackgroundColor="{AppThemeBinding 
-                              Dark={StaticResource ButtonBackgroundColorDark}, 
-                              Light={StaticResource ButtonBackgroundColor}}"
-                        BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
-                        TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                        Margin="0,-10,-10,-15"
-                        Text="X"
-                        HorizontalOptions="EndAndExpand"></local:CustomButton>
-                    <Label
-                        TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                        Text="Settings"
-                        FontSize="32"
-                        HorizontalOptions="Center" />
-                    <Rectangle
-                        HeightRequest="2"
-                        HorizontalOptions="FillAndExpand"
-                        Background="black" />
-                    <Label
-                        Text="LightMode"
-                        TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"></Label>
-                    <RadioButton
-                        x:Name="themeRadioButtonLight"
-                        HorizontalOptions="Center">
-                    </RadioButton>
-                    <Label
-                        Text="DarkMode"
-                        TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"></Label>
-                    <RadioButton
-                        x:Name="themeRadioButtonDark"
-                        HorizontalOptions="Center">
-                    </RadioButton>
-
-                    <StackLayout
-                        x:Name="slSettings">
-                        <Rectangle
-                            HeightRequest="2"
-                            HorizontalOptions="FillAndExpand"
-                            Background="black" />
-                    </StackLayout>
+                        </StackLayout>
+                    </Grid>
+                    
+                                                                    <!--End of Under NavbarPanel--> 
+                    
+                                                               
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                 </StackLayout>
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="SliderUpDown">
+                    </TapGestureRecognizer>
+                </Grid.GestureRecognizers>
+
             </Grid>
-        </Frame>
-    </Grid>
+            <!--End SlidePanel-->
+
+        </StackLayout>
+    </AbsoluteLayout>
 </ContentPage>
