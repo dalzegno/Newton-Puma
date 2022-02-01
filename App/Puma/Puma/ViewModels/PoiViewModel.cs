@@ -327,7 +327,7 @@ namespace Puma.ViewModels
             poiCollectionVisibleBool = !poiCollectionVisibleBool;
             poiSingleVisibleBool = !poiSingleVisibleBool;
             if (poiSingleVisibleBool == true)
-                MainPage.Instance.GoToLocation(SelectedSinglePoi);
+                MainPage.Instance.GoToLocation(SelectedSinglePoi, .5);
             OnPropertyChanged(nameof(PoiCollectionVisible));
             OnPropertyChanged(nameof(PoiSingleVisible));
 
