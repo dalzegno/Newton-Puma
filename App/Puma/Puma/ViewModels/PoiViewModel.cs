@@ -65,13 +65,7 @@ namespace Puma.ViewModels
         public bool openPoiCollectionBool { get; set; } = false;
         public bool poiCollectionVisibleBool { get; set; } = false;
         public bool poiSingleVisibleBool { get; set; } = false;
-        public bool openWeatherPopupBool { get; set; } = false;
-        public async void GetTagsFromDb()
-        {
-
-            Tags = await _poiService.GetTags();
-        }
-      
+        public bool openWeatherPopupBool { get; set; } = false;      
 
 
         // Poi Collection
