@@ -45,7 +45,7 @@ namespace Puma.ViewModels
         }
 
         private bool CanLogIn() => !string.IsNullOrWhiteSpace(LoginEmail) && !string.IsNullOrWhiteSpace(LoginPassword);
-        public bool IsNotLoggedIn => StaticUser.LoggedInUser == null;
+        public bool IsNotLoggedIn => App.LoggedInUser == null;
 
         public async void LogIn()
         {
@@ -57,7 +57,7 @@ namespace Puma.ViewModels
                 return;
             }
 
-            StaticUser.LoggedInUser = loggedInUser;
+            App.LoggedInUser = loggedInUser;
             await _dialogService.ShowMessageAsync("Login", $"Welcome {loggedInUser.DisplayName}!");
             MainPage.Instance.MainViewModel.UserLoggedInCommand.Execute(null);
         }

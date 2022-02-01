@@ -37,11 +37,12 @@ namespace Puma.Views
             slCreateUserViewModel.BindingContext = new NewUserViewModel(UserApiService, DialogService);
             slLogIn.BindingContext = new LoginViewModel(UserApiService, DialogService);
 
-            var poiViewModel = new PoiViewModel(PoiService, DialogService);
+            var poiViewModel = new PoiViewModel(PoiService, DialogService, WeatherService);
             slPoiPopover.BindingContext = poiViewModel;
             slPoiPopup.BindingContext = poiViewModel;
             poiCollectionView.BindingContext = poiViewModel;
             poiCreationPopup.BindingContext = poiViewModel;
+            weatherCollectionView.BindingContext = poiViewModel;
 
             slSettings.BindingContext = new SettingsViewModel();
 
@@ -254,30 +255,6 @@ namespace Puma.Views
             });
 
             map.MoveToRegion(MapSpan.FromCenterAndRadius(position, Distance.FromKilometers(1)));
-
-            // Om ni vill testa poiService :) 
-            //    var poiService = new PoiApiService();
-
-
-            //var response = await poiService.CreatePoiAsync(new AddPoiDto
-            //{
-            //    Name = "Test test",
-            //    Description = "Yo description",
-            //    Position = new PositionPoi
-            //    {
-            //        Latitude = 59.37787,
-            //        Longitude = 17.02502
-            //    },
-            //    Address = new Address
-            //    {
-            //        Country = "Sverige",
-            //        City = "Test",
-            //        StreetName = "Cool gata",
-            //        ZipCode = "Zipcode"
-            //    },
-            //    TagIds = new List<int> { 1, 2 }
-            //});
-
         }
 
 
@@ -295,6 +272,28 @@ namespace Puma.Views
             //var text = TagPicker.SelectedIndex;
             //btn.Text = text;
             //TagsList.Children.Add(btn);
+        }
+
+        private void LblTemperature_BindingContextChanged(object sender, EventArgs e)
+        {
+            var lbl = (Label)sender;
+
+            if (lbl.BindingContext == null)
+                return;
+
+            var temp = ((ForecastItem)lbl.BindingContext).Temperature;
+
+            if (temp < 5)
+                lbl.TextColor = Color.LightBlue;
+
+            else if (temp > 5 && temp <= 15)
+                lbl.TextColor = Color.LightGreen;
+
+            else if (temp > 15 && temp <= 20)
+                lbl.TextColor = Color.Orange;
+
+            else if (temp > 20)
+                lbl.TextColor = Color.Red;
         }
     }
 }

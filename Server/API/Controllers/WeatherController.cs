@@ -25,7 +25,5 @@ namespace API.Controllers
 
             return Ok(forecast);
         }
-
-
     }
 }
