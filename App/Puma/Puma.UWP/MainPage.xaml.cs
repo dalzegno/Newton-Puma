@@ -1,7 +1,9 @@
-﻿using System;
+﻿using FFImageLoading.Forms.Platform;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
@@ -23,7 +25,9 @@ namespace Puma.UWP
         {
             this.InitializeComponent();
             Xamarin.FormsMaps.Init(MapServiceToken);
+            CachedImageRenderer.Init();
             LoadApplication(new Puma.App());
+           
         }
     }
 }

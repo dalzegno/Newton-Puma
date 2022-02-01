@@ -2,9 +2,12 @@
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Puma.App"
-             >
+             xmlns:cr="clr-namespace:Puma.CustomRenderer;assembly=Puma"
+             xmlns:control="clr-namespace:Puma.ControlTemplates"
+             xmlns:vm="clr-namespace:Puma.ViewModels">
     <Application.Resources>
         <ResourceDictionary>
+            <!-- COLOURS -->
             <Color x:Key="WindowBackgroundColor">#DAEFF9</Color>
             <Color x:Key="WindowBackgroundColorDark">#171C26</Color>
             <Color x:Key="PopUpBackgroundColor">#DAEFF9</Color>
@@ -15,6 +18,31 @@
             <Color x:Key="TextColorDark">LightGray</Color>
             <Color x:Key="BorderColor">#000000</Color>
             <Color x:Key="BorderColorDark">LightGray</Color>
+            <Color x:Key="TextBoxBackgroundColor">White</Color>
+            
+            <!-- CONTROL TEMPLATES-->
+            <ControlTemplate x:Key="EntryViewControlTemplate">
+                <Frame
+                    Margin="5"
+                    BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
+                    BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
+                    Padding="0"
+                    CornerRadius="15"
+                    IsClippedToBounds="False"
+                    HorizontalOptions="CenterAndExpand"
+                    WidthRequest="500"
+                    VerticalOptions="FillAndExpand"
+                    Opacity=".8">
+                    <cr:RoundedEntry
+                            BackgroundColor="{StaticResource TextBoxBackgroundColor}"
+                            IsPassword="{TemplateBinding IsPassword}"
+                            Text="{TemplateBinding EntryText}"
+                            Opacity=".8"
+                            Placeholder="{TemplateBinding PlaceholderText}">
+                                
+                        </cr:RoundedEntry>
+                </Frame>
+            </ControlTemplate>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

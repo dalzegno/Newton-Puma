@@ -11,12 +11,14 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.UWP;
 using SolidColorBrush = Windows.UI.Xaml.Media.SolidColorBrush;
 using CornerRadius = Windows.UI.Xaml.CornerRadius;
+using Windows.UI.Xaml;
 
 [assembly: ExportRenderer(typeof(RoundedEntry), typeof(RoundedEntryRenderer))]
 namespace Puma.UWP
 {
     class RoundedEntryRenderer : EntryRenderer
     {
+        private readonly Windows.UI.Core.CoreCursor OrigHandCursor = Window.Current.CoreWindow.PointerCursor;
         protected override void OnElementChanged(ElementChangedEventArgs<Entry> e)
         {
             base.OnElementChanged(e);

@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Xamarin.Forms.Xaml;
 using System.Linq;
+using Puma.Views;
 using System.Threading.Tasks;
 
 namespace Puma.ViewModels
@@ -33,7 +34,12 @@ namespace Puma.ViewModels
         Command _removeTagCommand;
         Command _poiCollectionPopupCommand;
         Command _poiCreationPopupCommand;
+        Command _selectedPoiCommand;
+
+        public Command SelectedPoiCommand => _selectedPoiCommand ?? (_selectedPoiCommand = new Command(SelectPoi));
+
         Command _weatherPopupCommand;
+
 
         public Command CreatePoiCommand => _createPoiCommand ?? (_createPoiCommand = new Command(CreatePoi, CanCreate));
         public Command RemoveTagCommand => _removeTagCommand ?? (_removeTagCommand = new Command(RemoveTag));
@@ -44,8 +50,8 @@ namespace Puma.ViewModels
 
         public string _name;
         public string _description;
-        public string _country;
-        public string _area;
+        public string _country { get; set; } = "Click or search the map";
+        public string _area { get; set; } = "to start exploring!";
         public string _streetName;
         public string _longitude;
         public string _latitude;
@@ -53,10 +59,20 @@ namespace Puma.ViewModels
         public string _avgIconUriToday;
         public double _avgTempTomorrow;
         public string _avgIconUriTomorrow;
+        public PointOfInterest _selectedSinglePoi;
 
         public bool openPoiCreationBool { get; set; } = false;
         public bool openPoiCollectionBool { get; set; } = false;
+        public bool poiCollectionVisibleBool { get; set; } = false;
+        public bool poiSingleVisibleBool { get; set; } = false;
         public bool openWeatherPopupBool { get; set; } = false;
+        public async void GetTagsFromDb()
+        {
+
+            Tags = await _poiService.GetTags();
+        }
+      
+
 
         // Poi Collection
         public ObservableCollection<PointOfInterest> _poiCollection;
@@ -69,6 +85,17 @@ namespace Puma.ViewModels
                 OnPropertyChanged(nameof(PoiCollection));
             }
         }
+
+        public PointOfInterest SelectedSinglePoi
+        {
+            get => _selectedSinglePoi;
+            set
+            {
+                _selectedSinglePoi = value;
+                OnPropertyChanged(nameof(SelectedSinglePoi));
+            }
+        }
+            
 
         public ObservableCollection<IGrouping<DateTime, ForecastItem>> _forecastCollection;
         // Weather Collection
@@ -147,7 +174,7 @@ namespace Puma.ViewModels
                 OnPropertyChanged(Country);
                 CreatePoiCommand.ChangeCanExecute();
             }
-        }
+        } 
         public string Area
         {
             get => _area;
@@ -267,11 +294,16 @@ namespace Puma.ViewModels
         {
             openPoiCollectionBool = !openPoiCollectionBool;
             openPoiCreationBool = false;
+            poiCollectionVisibleBool = true;
+            poiSingleVisibleBool = false;
             openWeatherPopupBool = false;
+            PoiCollection = await _poiService.GetAllAsync();
+            OnPropertyChanged(nameof(PoiCollection));
+            OnPropertyChanged(nameof(PoiCollectionVisible));
+            OnPropertyChanged(nameof(PoiSingleVisible));
             OnPropertyChanged(nameof(poiCollectionPopupState));
             OnPropertyChanged(nameof(PoiCreationPopupState));
             OnPropertyChanged(nameof(WeatherPopupState));
-            PoiCollection = await _poiService.GetAllAsync();
 
         }
         private void PoiCreationPopup()
@@ -295,8 +327,56 @@ namespace Puma.ViewModels
             if (openWeatherPopupBool)
                 ForecastCollection = await GetWeatherFromDb();
         }
+
+        private void SelectPoi()
+        {
+            poiCollectionVisibleBool = !poiCollectionVisibleBool;
+            poiSingleVisibleBool = !poiSingleVisibleBool;
+            if (poiSingleVisibleBool == true)
+                MainPage.Instance.GoToLocation(SelectedSinglePoi);
+            OnPropertyChanged(nameof(PoiCollectionVisible));
+            OnPropertyChanged(nameof(PoiSingleVisible));
+
+        }
+
+        public void SetAddress(string address)
+        {
+            var words = address?.Split('\n') ?? Array.Empty<string>();
+            if (address == null || address == "")
+            {
+                StreetName = "";
+                Area = "No location found";
+                Country = "";
+                OnPropertyChanged(nameof(StreetName));
+                OnPropertyChanged(nameof(Area));
+                OnPropertyChanged(nameof(Country));
+            }
+            else if (words.Length == 2)
+            {
+                StreetName = "";
+                Area = words[0];
+                Country = words[1];
+                OnPropertyChanged(nameof(StreetName));
+                OnPropertyChanged(nameof(Area));
+                OnPropertyChanged(nameof(Country));
+            }
+            else if (words.Length == 3)
+            {
+                StreetName = words[0];
+                Area = words[1];
+                Country = words[2];
+                OnPropertyChanged(nameof(StreetName));
+                OnPropertyChanged(nameof(Area));
+                OnPropertyChanged(nameof(Country));
+            }
+            
+        }
+
         public bool PoiCreationPopupState => openPoiCreationBool;
         public bool poiCollectionPopupState => openPoiCollectionBool;
+        public bool PoiCollectionVisible => poiCollectionVisibleBool;
+        public bool PoiSingleVisible => poiSingleVisibleBool;
+
         public bool WeatherPopupState => openWeatherPopupBool;
 
         public async void GetTagsFromDb()

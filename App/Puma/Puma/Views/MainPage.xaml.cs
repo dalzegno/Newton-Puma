@@ -24,6 +24,7 @@ namespace Puma.Views
 
         public static MainPage Instance { get; set; }
         internal MainViewModel MainViewModel { get; }
+        internal PoiViewModel poiViewModel { get; }
 
         Geocoder geoCoder;
         public MainPage()
@@ -37,13 +38,13 @@ namespace Puma.Views
             slCreateUserViewModel.BindingContext = new NewUserViewModel(UserApiService, DialogService);
             slLogIn.BindingContext = new LoginViewModel(UserApiService, DialogService);
 
-            var poiViewModel = new PoiViewModel(PoiService, DialogService, WeatherService);
+            poiViewModel = new PoiViewModel(PoiService, DialogService);
             slPoiPopover.BindingContext = poiViewModel;
             slPoiPopup.BindingContext = poiViewModel;
             poiCollectionView.BindingContext = poiViewModel;
             poiCreationPopup.BindingContext = poiViewModel;
+            slPoiMenuButtons.BindingContext = poiViewModel;
             weatherCollectionView.BindingContext = poiViewModel;
-
             slSettings.BindingContext = new SettingsViewModel();
 
             geoCoder = new Geocoder();
@@ -80,8 +81,9 @@ namespace Puma.Views
                 System.Diagnostics.Debug.WriteLine("address:" + address);
                
 
-                ClearPoiEntries();
-                FillAddressBoxes(address);
+                //ClearPoiEntries();
+                //FillAddressBoxes(address);
+                poiViewModel.SetAddress(address);
             }
 
             void FillAddressBoxes(string address)
@@ -89,34 +91,41 @@ namespace Puma.Views
                 var words = address?.Split('\n') ?? Array.Empty<string>();
                 if (words.Length == 2)
                 {
-                    lbl_Area.Text = words[0];
-                    lbl_Country.Text = words[1];
+                    poiViewModel.Area = words[0];
+                    poiViewModel._country = words[1];
+                    OnPropertyChanged(nameof(poiViewModel.Country));
+                    //lbl_Area.Text = words[0];
+                    //lbl_Country.Text = words[1];
 
-                    entry_zip.Text = words[0];
-                    entry_country.Text = words[1];
+                    //entry_zip.Text = words[0];
+                    //entry_country.Text = words[1];
                 }
                 else if (words.Length == 3)
                 {
-                    lbl_StreetName.Text = words[0];
-                    lbl_Area.Text = words[1];
-                    lbl_Country.Text = words[2];
+                    poiViewModel.StreetName = words[0];
+                    poiViewModel.Area = words[1];
+                    poiViewModel._country = words[2];
+                    OnPropertyChanged(nameof(poiViewModel.Country));
+                    //lbl_StreetName.Text = words[0];
+                    //lbl_Area.Text = words[1];
+                    //lbl_Country.Text = words[2];
 
-                    entry_address.Text = words[0];
-                    entry_zip.Text = words[1];
-                    entry_country.Text = words[2];
+                    //entry_address.Text = words[0];
+                    //entry_zip.Text = words[1];
+                    //entry_country.Text = words[2];
                 }
-                lbl_adress.Text = address;
+                //lbl_adress.Text = address;
             }
 
             void ClearPoiEntries()
             {
-                lbl_StreetName.Text = "";
-                lbl_Area.Text = "";
-                lbl_Country.Text = "";
+                //lbl_StreetName.Text = "";
+                //lbl_Area.Text = "";
+                //lbl_Country.Text = "";
 
-                entry_address.Text = "";
-                entry_zip.Text = "";
-                entry_country.Text = "";
+                //entry_address.Text = "";
+                //entry_zip.Text = "";
+                //entry_country.Text = "";
             }
 
             //Circle circle = new Circle
@@ -196,6 +205,8 @@ namespace Puma.Views
 
         private async void Button_Clicked(object sender, System.EventArgs e)
         {
+
+            
             //var poiService = new PoiApiService();
 
             if (SearchField.Text == null)
@@ -210,16 +221,21 @@ namespace Puma.Views
                 return;
 
             var position = postionList.FirstOrDefault<Position>();
-            var adress = await new Geocoder().GetAddressesForPositionAsync(position);
-
-            var pois = await _poiService.GetAsync(position);
+            var address = await new Geocoder().GetAddressesForPositionAsync(position);
+            poiViewModel.SetAddress(address.First());
+            var pois = new List<PointOfInterest>() { };
+            try
+            {
+                pois = await _poiService.GetAsync(position);
+            }
+            catch (Exception ex) { }
 
             if (pois == null || pois.Count == 0)
             {
                 map.Pins.Add(new Pin
                 {
-                    Address = adress.First(),
-                    Label = adress.First(),
+                    Address = address.First(),
+                    Label = address.First(),
                     Type = PinType.SearchResult,
                     Position = position
                 });
@@ -248,30 +264,34 @@ namespace Puma.Views
             // Sökta positionen
             map.Pins.Add(new Pin
             {
-                Address = adress.First(),
-                Label = adress.First(),
+                Address = address.First(),
+                Label = address.First(),
                 Type = PinType.SearchResult,
                 Position = position
             });
 
             map.MoveToRegion(MapSpan.FromCenterAndRadius(position, Distance.FromKilometers(1)));
+
         }
 
 
-
-        private void TagPicker_SelectedIndexChanged(object sender, EventArgs e)
+        public void GoToLocation(PointOfInterest poi)
         {
-            //var btn = new Button();
-            //btn.Text = TagPicker.SelectedItem.ToString();
-            //TagsList.Children.Add(btn);
-        }
+            map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(poi.Position.Latitude, poi.Position.Longitude), Distance.FromKilometers(.5)));
+            var pin = new Pin
+            {
+                Address = poi.Description,
+                Type = PinType.Place,
+                Position = new Position(poi.Position.Latitude, poi.Position.Longitude),
+                Label = poi.Name
+            };
+            map.Pins.Add(pin);
 
-        private void TagPicker_SelectedIndexChanged_1(object sender, EventArgs e)
-        {
-            //var btn = new Button();
-            //var text = TagPicker.SelectedIndex;
-            //btn.Text = text;
-            //TagsList.Children.Add(btn);
+            pin.MarkerClicked += (sender2, args) =>
+            {
+
+                DisplayAlert("Tapped!", $"{pin.Label}", "OK");
+            };
         }
 
         private void LblTemperature_BindingContextChanged(object sender, EventArgs e)

@@ -6,6 +6,8 @@
     x:Class="Puma.Views.MainPage"
     xmlns:local="clr-namespace:Puma.CustomRenderer;assembly=Puma"
     xmlns:viewmodel="clr-namespace:Puma.ViewModels"
+    xmlns:control="clr-namespace:Puma.ControlTemplates"
+    xmlns:ffimageloadingsvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
     BackgroundColor="{AppThemeBinding 
                               Dark={StaticResource WindowBackgroundColorDark}, 
                               Light={StaticResource WindowBackgroundColor}}">
@@ -23,6 +25,7 @@
         RowDefinitions="80,100,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*">
 
 
+        <!-- GRID OUTLINES -->
         <!--<Label Background="blue" Grid.Column="1" Grid.Row="0"  Grid.RowSpan="12"/>
         <Label Background="blue" Grid.Column="3"  Grid.Row="0"  Grid.RowSpan="12"/>
         <Label Background="blue" Grid.Column="5" Grid.Row="0" Grid.RowSpan="12"/>
@@ -72,7 +75,6 @@
         </maps:Map>
 
 
-
         <!-- MAP TYPES -->
         <StackLayout
             Grid.Column="10"
@@ -83,21 +85,21 @@
             HorizontalOptions="EndAndExpand"
             VerticalOptions="FillAndExpand"
             x:Name="slMapTypes">
-            <Button
+            <local:CustomButton
                 Clicked="OnButtonClicked"
                 BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
             Light={StaticResource PopUpBackgroundColor}}"
-                Text="Satellite"></Button>
-            <Button
+                Text="Satellite"></local:CustomButton>
+            <local:CustomButton
                 Clicked="OnButtonClicked"
                 BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
             Light={StaticResource PopUpBackgroundColor}}"
-                Text="Hybrid"></Button>
-            <Button
+                Text="Hybrid"></local:CustomButton>
+            <local:CustomButton
                 Clicked="OnButtonClicked"
                 BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
             Light={StaticResource PopUpBackgroundColor}}"
-                Text="Street"></Button>
+                Text="Street"></local:CustomButton>
         </StackLayout>
 
         <!-- NAVBAR -->
@@ -109,8 +111,51 @@
             AbsoluteLayout.LayoutBounds="0, 0, 1, 60"
             AbsoluteLayout.LayoutFlags="WidthProportional"
             Opacity=".9"
-            Padding="5">
+            Padding="0">
+            
 
+            <!-- POI VIEW POPOVER -->
+            <Frame
+                x:Name="slPoiPopover"
+                Grid.Row="0"
+                Grid.Column="0"
+                HorizontalOptions="StartAndExpand"
+                VerticalOptions="StartAndExpand"
+                Margin="0"
+                Padding="0"
+                WidthRequest="400">
+                <Grid
+                    Padding="0"
+                    Margin="0"
+                    HorizontalOptions="CenterAndExpand"
+                    VerticalOptions="CenterAndExpand"
+                    RowDefinitions="1*,.6*,.6*">
+                    <Label
+                        Grid.Row="0"
+                        VerticalOptions="End"
+                        HorizontalOptions="CenterAndExpand"
+                        FontAttributes="Bold"
+                        Text="{Binding Country}"
+                        FontSize="18"></Label>
+                    <Label
+                        VerticalOptions="StartAndExpand"
+                        HorizontalOptions="CenterAndExpand"
+                        Grid.Row="1"
+                        x:Name="lbl_Country"
+                        Text="{Binding Area}"
+                        FontSize="13"></Label>
+                    <Label
+                        VerticalOptions="Start"
+                        HorizontalOptions="CenterAndExpand"
+                        Grid.Row="2"
+                        Margin="0"
+                        Text="{Binding StreetName}"
+                        FontSize="12"></Label>
+                </Grid>
+            </Frame>
+            
+
+            <!-- GLOBE ICON -->
             <Grid
                 Grid.Column="1"
                 Grid.Row="0"
@@ -120,7 +165,6 @@
                 <Path
                     Fill="#008db3"
                     Data="M58.4,22.7L60,42.7C55.8,54,44.8,62,32,62C15.4,62,2,48.6,2,32S15.4,2,32,2c6,0,11.6,1.8,16.3,4.8L58.4,22.7z" />
-
                 <Path
                     Fill="#ffc942"
                     Data="m48.3 6.8c.3 1 .6 2.1-.4 1.6-1.7-.9-3.9-1.9-3.2-1.2s1 1.5-.1 1.4c-1.1-.1-3.1-.4-4 .9-.9 1.3-2.1 1-2.4 1.5-.3.5-.8 2.6-1.7 1.9-.9-.6-2.7-2.9-1.2-2.3 1.5.6 3.2-.1 1.8-1.7-1.4-1.6-2.8-1-3.4-1.9-.6-.9-2.6-2-4.1.2-1.4 2.2-2.7 5.1-3.5 5.7-.8.6-2.5 1.7-2.2 2.6.2.9.3 3 1.2 2.4s1.4-.9 1.8-.3c.3.6.2 1.8.9 1.8 0 0 1.4-1 1.5-1.9.1-.9-1-1.4-.2-2.7s2.6-3.8 2.2-2.5c-.4 1.2-1.3 3-.6 3.8.6.8 4.1-.2 2.5.6-1.6.8-2.4 1.4-2.7 2.4-.3 1-.6 1.8-1.4 1.4s-1.8-.2-2.2-.2-.6-1.8-1.3-1.4c-.6.4.2 1.7-.5 1.8-.7.1-.8.9-1.6 1.5-.8.6-1.9 1.8-2.6 1.9s1.1 1 .8 1.8c-.3.9-1.9.8-2.5.9s-.1 1.3-.4 2c-.3.7.3 1.4 1.3 1.4 1 0 2-.2 2.1-1.1.1-.9 1-2.4 1.7-2.1.6.3 2.1-.6 2.4-.1.3.5 2.2 2.2 2 2.4s-1.3.7-.9.9c0 0 .3.5.5.4s.7-1.4 1-1.6.3-.9-.1-1.2c-.5-.3-2.2-1.5-1.8-2.1s1.3.7 1.7 1.1c.4.4 1 .9 1 1.8s.6.9.6 1.3c.1.5.3.6.8.6.5-.1.7-1.2.5-1.5-.3-.3-.3-.9.3-.9.6 0 1.3-.5 1.3-.8 0-.3.6-2.1 1-2.1s.7.7.8 1.1c.2.4 1.2-.3 1-.7-.2-.4.1-.5.4-.5.3 0 .1.8.3 1 .3.2 1.7 1.1 1.2 1.6s-1.2.2-1.7-.2c-.5-.4-1.8-.2-2.2.2-.3.4-.6.6-1.2.6-.6 0-.5 1.1 0 1.5.5.5 1.2.1 1.7.4.5.3 1.3-.4 1.4.1.1.5-.1 2-.6 2.1-.5.1-2.1.4-3.2-.1-1.2-.5-2.3-.7-2.4-.2-.1.6-.1 1-.9.5s-1.5-.8-2-.8c-.5 0-.5-.9-.4-1.6.1-.7-1.2-.5-2-.3s-2.4.7-3.4.7-1.4.2-1.6.6-1.1.4-1.1 1.2c0 .8.1 1-.7 1.4-.9.3-1.1 1.9-1.5 2.3-.4.4.4 1.4 0 2-.4.5-.8 1.9-.1 2.2.7.3 1.4 1.7 1.7 2.2.3.5 1.4 1 2.5.8 1.1-.2 3.1-.8 4.2-.3s2.2.4 1.7 1.4c-.6 1 .3 2.3 1 3 .7.7.5 2.5.1 3-.4.6-.3 1.6.1 2.1.4.5.6 1.7.6 2.1 0 .5.8 1.4.9 2.3.1 1-.6 2.1.3 2.1.9 0 3.2.1 3.4-.3s2-2 2.5-2.7 1.5-1.9 1.2-2.6c-.6-.5-.2-1 .8-1.4 1-.4 1-3.2.5-3.9-.5-.7.4-2.4 1.5-2.9 1.1-.5 3.7-5.1 2.9-4.7-.9.4-2.6.7-3.2.3-.6-.4-4.1-6.4-3.6-6.8s3.3 5.5 3.8 6.2c.5.8 5.2-2.1 5.8-2.8.5-.7-.3-1.4-.6-1.4s-1.4-.7-1.7-.3-2.3-2.9-1.6-2.6c.7.3 2.2 1.3 3.6 2.1s3-.5 3.9 1c1 1.5 1.6.5 1.5 1.2s1.2 3.6 1.7 4.5c.4.9 1.3-.4 1.4-1.4.1-1.1 2.2-2.8 3-3.4.7-.6 2.1.3 2.3 1.5.2 1.2 1.2-.2 1.2.7 0 1-.2 2.3.5 3.5 1.4-3.5 2.1-7 2.1-10.8 0-10.6-5.5-19.9-13.7-25.2" />
@@ -132,6 +176,7 @@
                     Data="m20.6 17.3c-.3 0-.6.2-.9.2-.3.1-.5.5-.5.9 0 .5.8.6.5.9-.3.3-1.9.6-1.7 1.1s.5.9.2 1.4c-.3.5.3.6.9.4s1-.9.9-1.3c-.1-.5.9-.6.6-.2s-.8 1.4-.5 1.7c.3.3-.8.8-.4 1 .4.2 1.5-.8 2.1-.6s.8-.2.9-.7c.1-.6-.8-1.3-1.1-2-.3-.8-.1-2.8-1-2.8" />
 
             </Grid>
+            
 
             <!--<Label TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}" Text="Hello World" FontSize="38"/>-->
             <StackLayout
@@ -139,11 +184,13 @@
                 Orientation="Vertical"
                 HorizontalOptions="Center">
                 <Label
+                    HorizontalOptions="Center"
                     HeightRequest="50"
-                    Text="PumApp"
+                    Text="PuMap"
                     FontSize="40"
                     FontFamily="Lobster-Regular"></Label>
                 <Label
+                    HorizontalOptions="Center"
                     Margin="-10"
                     Text="Travel for the people by the people"
                     FontSize="12"
@@ -155,16 +202,15 @@
                 Grid.Column="2"
                 HorizontalOptions="End"
                 Orientation="Horizontal"
-                Margin="0,5,20,5"
-                >
+                Margin="0,5,20,5">
 
-                <Button
+                <local:CustomButton
                     x:Name="btn_Settings_Popup"
                     CornerRadius="15"
                     Command="{Binding OpenSettingsCommand}"
                     TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                     BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
-                    Text="Settings"></Button>
+                    Text="Settings"></local:CustomButton>
                 <Label
                     IsVisible="{Binding userLogoutState}"
                     TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
@@ -175,7 +221,7 @@
                     TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                     Text="|"
                     VerticalOptions="Center"></Label>
-                <Button
+                <local:CustomButton
                     x:Name="btn_Login_Popup"
                     CornerRadius="15"
                     Command="{Binding OpenLoginCommand}"
@@ -183,7 +229,7 @@
                     TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                     BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
                     Text="Log in" />
-                <Button
+                <local:CustomButton
                     x:Name="btn_Logout"
                     Command="{Binding LogOutCommand}"
                     IsVisible="{Binding userLogoutState}"
@@ -197,6 +243,7 @@
         <!-- SEARCH BAR -->
         <Frame
             Grid.Row="1"
+            Grid.Column="0"
             Grid.ColumnSpan="12"
             Margin="5"
             BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
@@ -207,14 +254,66 @@
             VerticalOptions="FillAndExpand"
             MinimumWidthRequest="500"
             WidthRequest="500"
-            Opacity=".8">
-            <local:RoundedEntry
-                x:Name="SearchField"
-                Placeholder="Where to ya scallywag?"
-                FontSize="24"
-                Opacity=".8"></local:RoundedEntry>
+            Opacity=".5">
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup
+                    x:Name="opa">
+                    <VisualState
+                        x:Name="Normal">
+                        <VisualState.Setters>
 
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState
+                        x:Name="Focused">
+                        <VisualState.Setters>
+                            <Setter
+                                Property="BackgroundColor"
+                                Value="White"></Setter>
+                            <Setter
+                                Property="Opacity"
+                                Value=".9"></Setter>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+            <Grid
+                HorizontalOptions="CenterAndExpand"
+                WidthRequest="500"
+                ColumnDefinitions="auto,auto">
+                <local:RoundedEntry
+                    Completed="Button_Clicked"
+                    Grid.Column="0"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="FillAndExpand"
+                    Grid.ColumnSpan="3"
+                    x:Name="SearchField"
+                    Placeholder="Where to ya scallywag?"
+                    FontSize="24">
+                </local:RoundedEntry>
+
+                <ffimageloadingsvg:SvgCachedImage
+                    Grid.Column="2"
+                    VerticalOptions="Center"
+                    HorizontalOptions="End"
+                    HeightRequest="50"
+                    WidthRequest="50"
+                    Margin="0,0,20,0"
+                    Source="resource://Puma.Resources.SearchIcon.svg">
+                </ffimageloadingsvg:SvgCachedImage>
+
+                <!--- TEST-->
+                <local:CustomButton
+                    HorizontalOptions="End"
+                    BackgroundColor="red"
+                    Grid.Column="2"
+                    Opacity=".1"
+                    Text="Testa maps"
+                    Clicked="Button_Clicked">
+                </local:CustomButton>
+            </Grid>
         </Frame>
+
 
         <!--Signup Popup "-->
 
@@ -225,7 +324,7 @@
             Grid.RowSpan="8"
             Grid.ColumnSpan="12"
             HorizontalOptions="CenterAndExpand"
-            VerticalOptions="CenterAndExpand"
+            VerticalOptions="StartAndExpand"
             WidthRequest="320"
             MinimumHeightRequest="370"
             HeightRequest="500"
@@ -242,7 +341,7 @@
                     Grid.Row="0"
                     ColumnDefinitions="1*,1*,.2*"
                     RowDefinitions="auto,auto">
-                    <Button
+                    <local:CustomButton
                         Grid.Column="2"
                         Grid.Row="0"
                         VerticalOptions="StartAndExpand"
@@ -259,29 +358,33 @@
                     <Grid
                         Grid.Row="0"
                         Grid.ColumnSpan="2">
-                        <Button
+                        <local:CustomButton
                             Command="{Binding OpenLoginCommand}"
-                            CornerRadius="15"
+                            CornerRadius="5"
                             Text="Log in"
-                            BackgroundColor="{AppThemeBinding 
-                                  Dark={StaticResource ButtonBackgroundColorDark}, 
-                                  Light={StaticResource ButtonBackgroundColor}}"
-                            BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
+                            FontSize="32"
+                            Background="#55FFFFFF"
+                            BorderColor="Transparent"
                             TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}">
 
-                        </Button>
-                        <Button
+                        </local:CustomButton>
+                        <local:CustomButton
                             Grid.Column="1"
                             HorizontalOptions="FillAndExpand"
                             Command="{Binding OpenSignupCommand}"
-                            CornerRadius="15"
-                            BackgroundColor="{AppThemeBinding 
-                                  Dark={StaticResource ButtonBackgroundColorDark}, 
-                                  Light={StaticResource ButtonBackgroundColor}}"
-                            BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
+                            CornerRadius="5"
+                            Background="#77FFFFFF"
+                            BorderColor="Transparent"
                             TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                             Text="Sign up"
-                            FontSize="32"></Button>
+                            FontSize="32"></local:CustomButton>
+                        <Rectangle
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            HeightRequest="2"
+                            HorizontalOptions="FillAndExpand"
+                            VerticalOptions="End"
+                            Background="black" />
                     </Grid>
                 </Grid>
 
@@ -303,24 +406,12 @@
                             HorizontalTextAlignment="Center"
                             Text="{Binding EmailErrorMSG}"
                             TextColor="#C3FF0000" />
-
-                        <Frame
+                        <control:EntryViewControl
                             Grid.Row="1"
-                            BorderColor="LightGray"
-                            Padding="0"
-                            CornerRadius="15"
-                            IsClippedToBounds="False"
-                            HorizontalOptions="CenterAndExpand"
-                            WidthRequest="500"
-                            VerticalOptions="FillAndExpand"
-                            Opacity=".8">
+                            EntryText="{Binding SignupEmail, Mode=TwoWay}"
+                            PlaceholderText="Email"
+                            ControlTemplate="{StaticResource EntryViewControlTemplate}" />
 
-                            <local:RoundedEntry
-                                x:Name="txt_signupEmail"
-                                Opacity=".8"
-                                Placeholder="Email *"
-                                Text="{Binding SignupEmail}"></local:RoundedEntry>
-                        </Frame>
 
                         <Label
                             Grid.Row="2"
@@ -332,25 +423,13 @@
                             HorizontalTextAlignment="Center"
                             Text="{Binding PaaswordErrorMSG}"
                             TextColor="#C3FF0000" />
-
-
-                        <Frame
+                        <control:EntryViewControl
                             Grid.Row="3"
-                            BorderColor="LightGray"
-                            Padding="0"
-                            CornerRadius="15"
-                            IsClippedToBounds="False"
-                            HorizontalOptions="CenterAndExpand"
-                            WidthRequest="500"
-                            VerticalOptions="FillAndExpand"
-                            Opacity=".8">
-                            <local:RoundedEntry
-                                x:Name="txt_signupPassword"
-                                Text="{Binding SignupPassword}"
-                                IsPassword="True"
-                                Opacity=".8"
-                                Placeholder="Password *"></local:RoundedEntry>
-                        </Frame>
+                            IsPassword="True"
+                            EntryText="{Binding SignupPassword, Mode=TwoWay}"
+                            PlaceholderText="Password"
+                            ControlTemplate="{StaticResource EntryViewControlTemplate}" />
+
 
                         <Label
                             Grid.Row="4"
@@ -360,63 +439,32 @@
                             HorizontalTextAlignment="Center"
                             Text="{Binding DisplayNameErrorMSG}"
                             TextColor="#C3FF0000" />
-                        <Frame
+                        <control:EntryViewControl
                             Grid.Row="5"
-                            BorderColor="LightGray"
-                            Padding="0"
-                            CornerRadius="15"
-                            IsClippedToBounds="False"
-                            HorizontalOptions="CenterAndExpand"
-                            WidthRequest="500"
-                            VerticalOptions="FillAndExpand"
-                            Opacity=".8">
-                            <local:RoundedEntry
-                                x:Name="txt_signupDisplayName"
-                                Text="{Binding SignupDisplayName}"
-                                Opacity=".8"
-                                Placeholder="Display name *"></local:RoundedEntry>
-                        </Frame>
+                            EntryText="{Binding SignupDisplayName, Mode=TwoWay}"
+                            PlaceholderText="Display Name"
+                            ControlTemplate="{StaticResource EntryViewControlTemplate}" />
+
 
                         <Label
                             Grid.Row="6"></Label>
-                        <Frame
+                        <control:EntryViewControl
                             Grid.Row="7"
-                            BorderColor="LightGray"
-                            Padding="0"
-                            CornerRadius="15"
-                            IsClippedToBounds="False"
-                            HorizontalOptions="CenterAndExpand"
-                            WidthRequest="500"
-                            VerticalOptions="FillAndExpand"
-                            Opacity=".8">
-                            <local:RoundedEntry
-                                x:Name="txt_signupFirstName"
-                                Text="{Binding SignupFirstName}"
-                                Opacity=".8"
-                                Placeholder="First name"></local:RoundedEntry>
-                        </Frame>
+                            EntryText="{Binding SignupFirstName, Mode=TwoWay}"
+                            PlaceholderText="First name"
+                            ControlTemplate="{StaticResource EntryViewControlTemplate}" />
+
 
                         <Label
                             Grid.Row="8"></Label>
-
-                        <Frame
+                        <control:EntryViewControl
                             Grid.Row="9"
-                            BorderColor="LightGray"
-                            Padding="0"
-                            CornerRadius="15"
-                            IsClippedToBounds="False"
-                            HorizontalOptions="CenterAndExpand"
-                            WidthRequest="500"
-                            VerticalOptions="FillAndExpand"
-                            Opacity=".8">
-                            <local:RoundedEntry
-                                x:Name="txt_signupSurname"
-                                Text="{Binding SignupSurname}"
-                                Opacity=".8"
-                                Placeholder="Surname"></local:RoundedEntry>
-                        </Frame>
+                            EntryText="{Binding SignupSurname, Mode=TwoWay}"
+                            PlaceholderText="Surname"
+                            ControlTemplate="{StaticResource EntryViewControlTemplate}" />
 
-                        <Button
+
+                        <local:CustomButton
                             HeightRequest="50"
                             WidthRequest="150"
                             VerticalOptions="Center"
@@ -429,28 +477,17 @@
                             TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                             Text="Sign up"
                             FontSize="20">
-                        </Button>
+                        </local:CustomButton>
                     </Grid>
                 </ScrollView>
             </Grid>
 
 
         </Frame>
-        <!--- TEST-->
-        <Frame
-            IsVisible="true"
-            Grid.Column="5"
-            Grid.ColumnSpan="2">
-            <Button
-                Opacity=".1"
-                Text="Testa maps"
-                Clicked="Button_Clicked">
-
-            </Button>
-        </Frame>
 
 
         <!-- LOG IN POPUP -->
+
         <Frame
             x:Name="loginPopup"
             IsVisible="{Binding loginPopupState}"
@@ -458,7 +495,7 @@
             Grid.RowSpan="8"
             Grid.ColumnSpan="12"
             HorizontalOptions="CenterAndExpand"
-            VerticalOptions="CenterAndExpand"
+            VerticalOptions="StartAndExpand"
             WidthRequest="320"
             MinimumHeightRequest="370"
             BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
@@ -467,11 +504,12 @@
             <!-- CLOSE POPUP / LOGIN / SIGNUP BUTTONS -->
             <Grid
                 RowDefinitions="auto,.9*">
+
                 <Grid
                     Grid.Row="0"
                     ColumnDefinitions="1*,1*,.2*"
                     RowDefinitions="auto,auto">
-                    <Button
+                    <local:CustomButton
                         Grid.Column="2"
                         Grid.Row="0"
                         VerticalOptions="StartAndExpand"
@@ -488,40 +526,38 @@
                     <Grid
                         Grid.Row="0"
                         Grid.ColumnSpan="2">
-                        <Button
+                        <local:CustomButton
                             x:Name="btn_loginBtn"
                             Command="{Binding OpenLoginCommand}"
-                            CornerRadius="15"
+                            CornerRadius="5"
                             Text="Log in"
-                            BackgroundColor="{AppThemeBinding 
-                                  Dark={StaticResource ButtonBackgroundColorDark}, 
-                                  Light={StaticResource ButtonBackgroundColor}}"
-                            BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
+                            FontSize="32"
+                            Background="#77FFFFFF"
+                            BorderColor="Transparent"
                             TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}">
-                        </Button>
-                        <Button
+                        </local:CustomButton>
+                        <local:CustomButton
                             Grid.Column="1"
                             HorizontalOptions="FillAndExpand"
                             Command="{Binding OpenSignupCommand}"
-                            CornerRadius="15"
-                            BackgroundColor="{AppThemeBinding 
-                                  Dark={StaticResource ButtonBackgroundColorDark}, 
-                                  Light={StaticResource ButtonBackgroundColor}}"
-                            BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
+                            CornerRadius="5"
+                            Background="#77FFFFFF"
+                            BorderColor="Transparent"
                             TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                             Text="Sign up"
-                            FontSize="32"></Button>
-
+                            FontSize="32"></local:CustomButton>
+                        <Rectangle
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            HeightRequest="2"
+                            HorizontalOptions="FillAndExpand"
+                            VerticalOptions="End"
+                            Background="black" />
                     </Grid>
+
                 </Grid>
 
-                <Rectangle
-                    Grid.Row="0"
-                    HeightRequest="2"
-                    Margin="0,70,0,0"
-                    HorizontalOptions="FillAndExpand"
-                    VerticalOptions="End"
-                    Background="black" />
+
 
                 <!-- LOGIN INPUTS -->
                 <ScrollView
@@ -529,45 +565,18 @@
                     <Grid
                         RowDefinitions="auto,auto,auto"
                         x:Name="slLogIn">
-                        <Frame
+                        <control:EntryViewControl
                             Grid.Row="0"
-                            Margin="5"
-                            BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
-                            BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
-                            Padding="0"
-                            CornerRadius="15"
-                            IsClippedToBounds="False"
-                            HorizontalOptions="CenterAndExpand"
-                            WidthRequest="500"
-                            VerticalOptions="FillAndExpand"
-                            Opacity=".8">
-                            <local:RoundedEntry
-                                Text="{Binding LoginEmail}"
-                                x:Name="txt_loginEmail"
-                                Opacity=".8"
-                                Placeholder="Email"></local:RoundedEntry>
-                        </Frame>
-                        <Frame
+                            EntryText="{Binding LoginEmail, Mode=TwoWay}"
+                            PlaceholderText="Email"
+                            ControlTemplate="{StaticResource EntryViewControlTemplate}" />
+                        <control:EntryViewControl
                             Grid.Row="1"
-                            Margin="5"
-                            BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
-                            BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
-                            Padding="0"
-                            CornerRadius="15"
-                            IsClippedToBounds="False"
-                            HorizontalOptions="CenterAndExpand"
-                            WidthRequest="500"
-                            VerticalOptions="FillAndExpand"
-                            Opacity=".8">
-                            <local:RoundedEntry
-                                x:Name="txt_loginPassword"
-                                Text="{Binding LoginPassword}"
-                                IsPassword="True"
-                                Opacity=".8"
-                                Placeholder="Password"></local:RoundedEntry>
-                        </Frame>
-
-                        <Button
+                            IsPassword="True"
+                            EntryText="{Binding LoginPassword, Mode=TwoWay}"
+                            PlaceholderText="Password"
+                            ControlTemplate="{StaticResource EntryViewControlTemplate}" />
+                        <local:CustomButton
                             Grid.Row="2"
                             Command="{Binding LoginCommand}"
                             x:Name="btn_login"
@@ -576,7 +585,7 @@
                             BackgroundColor="{AppThemeBinding Dark={StaticResource ButtonBackgroundColorDark}, Light={StaticResource ButtonBackgroundColor}}"
                             TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                             Text="Log in"
-                            FontSize="20"></Button>
+                            FontSize="20"></local:CustomButton>
                     </Grid>
                 </ScrollView>
             </Grid>
@@ -584,83 +593,37 @@
         </Frame>
 
 
-        <!-- POI VIEW POPOVER -->
+        <!-- POI MENU BUTTONS -->
+        <StackLayout
+            x:Name="slPoiMenuButtons"
+            Padding="0"
+            Grid.Row="2"
+            Grid.ColumnSpan="2"
+            WidthRequest="70"
+            HorizontalOptions="StartAndExpand">
 
-        <Frame
-            x:Name="slPoiPopover"
-            Opacity=".8"
-            IsVisible="True"
-            Grid.Row="{OnPlatform UWP='0'}"
-            Grid.ColumnSpan="7"
-            Grid.RowSpan="10"
-            HorizontalOptions="StartAndExpand"
-            VerticalOptions="StartAndExpand"
-            Margin="10,0,0,0"
-            WidthRequest="400">
-            <Grid
-                RowDefinitions="auto,auto,auto"
-                ColumnDefinitions="1*">
-                <Grid RowDefinitions="auto, auto"
-                    Grid.Row="0">
-                    <Label
-                        Text="{Binding Area}"
-                        VerticalOptions="Start"
-                        HeightRequest="25"
-                        x:Name="lbl_Area"
-                        FontSize="18"
-                        FontAttributes="Bold"
-                        Margin="0"
-                        Padding="0"></Label>
-                    <StackLayout
-                        HeightRequest="20"
-                        Grid.Row="1"
-                        Orientation="Horizontal">
-                        <Label
-                            Margin="0"
-                            x:Name="lbl_StreetName"
-                            Text="{Binding StreetName}"
-                            FontSize="12"></Label>
+            <local:CustomButton
+                BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
+                Command="{Binding PoiCollectionPopupCommand}"
+                Grid.Column="0"
+                HorizontalOptions="FillAndExpand"
+                Text="Points of Interest">
+            </local:CustomButton>
+            <local:CustomButton
+                BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
+                Grid.Column="1"
+                HorizontalOptions="FillAndExpand"
+                Command="{Binding WeatherPopupCommand}"
+                Text="Weather"></local:CustomButton>
+            <local:CustomButton
+                BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
+                Grid.Row="0"
+                Grid.Column="2"
+                HorizontalOptions="FillAndExpand"
+                Command="{Binding PoiCreationPopupCommand}"
+                Text="Add new Point of Interest"></local:CustomButton>
+        </StackLayout>
 
-                        <Label
-                            x:Name="lbl_Country"
-                            Text="{Binding Country}"
-                            FontSize="12"></Label>
-
-                        <Label
-                            Text="{Binding AvgTempToday, StringFormat='{0}°C'}"
-                            FontSize="12"></Label>
-
-                    </StackLayout>
-                </Grid>
-
-                <Grid
-                    Padding="0"
-                    Margin="-10"
-                    Grid.Row="2"
-                    ColumnDefinitions=".7*,.6*,1*">
-
-                    <Button
-                        BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
-                        Command="{Binding PoiCollectionPopupCommand}"
-                        Grid.Column="0"
-                        HorizontalOptions="FillAndExpand"
-                        Text="Points of Interest"></Button>
-                    <Button
-                        BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
-                        Command="{Binding WeatherPopupCommand}"
-                        Grid.Column="1"
-                        HorizontalOptions="FillAndExpand"
-                        Text="Weather"></Button>
-                    <Button
-                        BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
-                        Grid.Row="0"
-                        Grid.Column="2"
-                        HorizontalOptions="FillAndExpand"
-                        Command="{Binding PoiCreationPopupCommand}"
-                        Text="Add new Point of Interest"></Button>
-                </Grid>
-            </Grid>
-        </Frame>
 
         <!-- POI COLLECTION VIEW  >-->
         <Frame
@@ -675,64 +638,75 @@
             BackgroundColor="White"
             Opacity=".9"
             x:Name="poiCollectionView">
-
-
-            <CollectionView
-                VerticalOptions="StartAndExpand"
-                HorizontalOptions="Center"
-                Margin="0"
-                ItemsSource="{Binding PoiCollection}"
-                SelectionMode="Single">
-
-
-                <CollectionView.ItemTemplate>
-
-                    <DataTemplate>
-
-                        <Grid
-                            
-                            Padding="5"
-                            HeightRequest="60"
-                            RowDefinitions="1*,1*,1*">
-                            <Label
-                                Grid.Row="0"
-                                Text="{Binding Name}"
-                                FontAttributes="Bold"
-                                CharacterSpacing=".5"
-                                FontSize="12"
-                                HeightRequest="100"></Label>
-                            <Label
-                                Grid.Row="1"
-                                Text="{Binding Description}"
-                                FontSize="12"
-                                HeightRequest="100"></Label>
-                            <Label
-                                Grid.Row="2"
-                                FontSize="12"
-                                FontAttributes="Italic"
-                                HeightRequest="100">
-                                <Label.Text>
-                                    <MultiBinding
-                                        StringFormat="{}{0}, {1}">
-                                        <Binding
-                                            Path="Address.Area" />
-                                        <Binding
-                                            Path="Address.Country" />
-                                    </MultiBinding>
-                                </Label.Text>
-                            </Label>
-                            <Rectangle Grid.Row="2"
-                                HeightRequest="1"
-                                BackgroundColor="Black"
-                                VerticalOptions="End"
-                                HorizontalOptions="FillAndExpand" />
-                        </Grid>
-
-
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+            
+            <StackLayout>
+                <CollectionView
+                    IsVisible="{Binding PoiCollectionVisible}"
+                    Margin="0"
+                    ItemsSource="{Binding PoiCollection}"
+                    SelectionMode="Single"
+                    SelectedItem="{Binding SelectedSinglePoi}"
+                    SelectionChangedCommand="{Binding SelectedPoiCommand}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid
+                                Padding="5"
+                                HeightRequest="60"
+                                RowDefinitions="1*,1*,1*">
+                                <Label
+                                    Grid.Row="0"
+                                    Text="{Binding Name}"
+                                    FontAttributes="Bold"
+                                    CharacterSpacing=".5"
+                                    FontSize="12"
+                                    HeightRequest="100"></Label>
+                                <Label
+                                    Grid.Row="1"
+                                    Text="{Binding Description}"
+                                    FontSize="12"
+                                    HeightRequest="100"></Label>
+                                <Label
+                                    Grid.Row="2"
+                                    FontSize="12"
+                                    FontAttributes="Italic"
+                                    HeightRequest="100">
+                                    <Label.Text>
+                                        <MultiBinding
+                                            StringFormat="{}{0}, {1}">
+                                            <Binding
+                                                Path="Address.Area" />
+                                            <Binding
+                                                Path="Address.Country" />
+                                        </MultiBinding>
+                                    </Label.Text>
+                                </Label>
+                                <Rectangle
+                                    Grid.Row="2"
+                                    HeightRequest="1"
+                                    BackgroundColor="Black"
+                                    VerticalOptions="End"
+                                    HorizontalOptions="FillAndExpand" />
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                
+                <StackLayout
+                    IsVisible="{Binding PoiSingleVisible}">
+                    <local:CustomButton
+                        Text="Return"
+                        Command="{Binding SelectedPoiCommand}" />
+                    <Label
+                        FontSize="24"
+                        Text="{Binding SelectedSinglePoi.Name}" />
+                    <Label
+                        FontSize="12"
+                        Text="{Binding SelectedSinglePoi.Description}" />
+                </StackLayout>
+            </StackLayout>
         </Frame>
+        
+        
         <!-- POI CREATION POPUP -->
         <Frame
             IsVisible="{Binding PoiCreationPopupState}"
@@ -779,7 +753,7 @@
 
                                 <DataTemplate>
 
-                                    <Button
+                                    <local:CustomButton
                                         Command="{Binding Path=BindingContext.RemoveTagCommand, Source={x:Reference Name=cwTags}}"
                                         CommandParameter="{Binding}"
                                         Margin="10"
@@ -789,16 +763,15 @@
                                         Text="{Binding Name, StringFormat='X    {0:F0}'}"
                                         FontSize="12">
 
-                                    </Button>
+                                    </local:CustomButton>
 
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>
                     </StackLayout>
-                    <!--<Button Text="{Binding SelectedTagInfo.Name}" FontSize="12"/>-->
+                    <!--<local:CustomButton Text="{Binding SelectedTagInfo.Name}" FontSize="12"/>-->
                     <Picker
                         x:Name="TagPicker"
-                        SelectedIndexChanged="TagPicker_SelectedIndexChanged_1"
                         SelectedItem="{Binding SelectedTagInfo}"
                         ItemsSource="{Binding Tags}"
                         ItemDisplayBinding="{Binding Name}" />
@@ -811,11 +784,11 @@
                     <local:RoundedEntry
                         x:Name="entry_country"
                         Text="{Binding Country}"></local:RoundedEntry>
-                    <Button
+                    <local:CustomButton
                         x:Name="btn_SearchLocation"
                         Text="Search"
-                        Clicked="btn_SearchLocation_Clicked"></Button>
-                    <Button
+                        Clicked="btn_SearchLocation_Clicked"></local:CustomButton>
+                    <local:CustomButton
                         Text="Add Point of Interest"
                         Command="{Binding CreatePoiCommand}" />
                     <local:RoundedEntry
@@ -905,6 +878,7 @@
             </CollectionView>
         </Frame>
 
+        
         <!-- SETTINGS POPUP -->
         <Frame
             x:Name="settingsPopup"
@@ -932,7 +906,7 @@
                 </Grid.RowDefinitions>
                 <StackLayout
                     Spacing="15">
-                    <Button
+                    <local:CustomButton
                         Command="{Binding ClosePopupCommand}"
                         CornerRadius="15"
                         BackgroundColor="{AppThemeBinding 
@@ -942,7 +916,7 @@
                         TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                         Margin="0,-10,-10,-15"
                         Text="X"
-                        HorizontalOptions="EndAndExpand"></Button>
+                        HorizontalOptions="EndAndExpand"></local:CustomButton>
                     <Label
                         TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                         Text="Settings"
