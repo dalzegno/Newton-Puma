@@ -38,7 +38,7 @@ namespace Puma.Views
             slCreateUserViewModel.BindingContext = new NewUserViewModel(UserApiService, DialogService);
             slLogIn.BindingContext = new LoginViewModel(UserApiService, DialogService);
 
-            poiViewModel = new PoiViewModel(PoiService, DialogService);
+            poiViewModel = new PoiViewModel(PoiService, DialogService, WeatherService);
             slPoiPopover.BindingContext = poiViewModel;
             slPoiPopup.BindingContext = poiViewModel;
             poiCollectionView.BindingContext = poiViewModel;
