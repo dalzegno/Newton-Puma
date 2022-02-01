@@ -53,7 +53,7 @@ namespace Puma.Views
 
         }
 
-        async Task OnMapClicked(object sender, MapClickedEventArgs e)
+        async void OnMapClicked(object sender, MapClickedEventArgs e)
         {
             map.Pins.Clear();
             Pin pin = new Pin
@@ -134,10 +134,6 @@ namespace Puma.Views
 
         private async void Button_Clicked(object sender, System.EventArgs e)
         {
-
-            
-            //var poiService = new PoiApiService();
-
             if (SearchField.Text == null)
                 return;
 
@@ -157,7 +153,10 @@ namespace Puma.Views
             {
                 pois = await _poiService.GetAsync(position);
             }
-            catch (Exception ex) { }
+            catch (Exception ex) 
+            {
+                await DialogService.ShowErrorAsync("Error", ex.Message, "OK");
+            }
 
             if (pois == null || pois.Count == 0)
             {
@@ -185,7 +184,6 @@ namespace Puma.Views
 
                 pin.MarkerClicked += (sender2, args) =>
                 {
-
                     DisplayAlert("Tapped!", $"{pin.Label}", "OK");
                 };
             }
@@ -200,7 +198,6 @@ namespace Puma.Views
             });
 
             map.MoveToRegion(MapSpan.FromCenterAndRadius(position, Distance.FromKilometers(1)));
-
         }
 
 
