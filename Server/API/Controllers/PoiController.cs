@@ -34,9 +34,6 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<PointOfInterestDto>> Post([FromBody] AddPoiDto poi, [FromHeader] string apiKey)
         {
-            // Nä men då släpper vi det
-            // Vi har inga roller kopplat till autentiseringen ändå
-            // Sen det jag mailade dig om handlade mer om VäderApiNyckeln. Vi lagrar den i databasen nu
             if (!await _userService.IsUserAuthorizedAsync(apiKey))
                 return Unauthorized();
 
@@ -108,7 +105,6 @@ namespace API.Controllers
 
         [HttpGet("GetPoisFromLatAndLon")]
         public async Task<ActionResult<ICollection<PointOfInterestDto>>> Get([FromQuery] string lat, [FromQuery] string lon)
-        {         
             if (!double.TryParse(lat.Replace(".", ","), NumberStyles.Any, new CultureInfo("sv-SE"), out double latDouble) || 
                 !double.TryParse(lon.Replace(".", ","), NumberStyles.Any, new CultureInfo("sv-SE"), out double lonDouble))
                 return BadRequest();
