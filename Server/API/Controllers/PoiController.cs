@@ -105,6 +105,7 @@ namespace API.Controllers
 
         [HttpGet("GetPoisFromLatAndLon")]
         public async Task<ActionResult<ICollection<PointOfInterestDto>>> Get([FromQuery] string lat, [FromQuery] string lon)
+        { 
             if (!double.TryParse(lat.Replace(".", ","), NumberStyles.Any, new CultureInfo("sv-SE"), out double latDouble) || 
                 !double.TryParse(lon.Replace(".", ","), NumberStyles.Any, new CultureInfo("sv-SE"), out double lonDouble))
                 return BadRequest();

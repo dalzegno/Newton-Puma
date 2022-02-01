@@ -208,6 +208,7 @@
                     x:Name="btn_Settings_Popup"
                     CornerRadius="15"
                     Command="{Binding OpenSettingsCommand}"
+                    Clicked="btn_OpenSettings"
                     TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                     BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
                     Text="Settings"></local:CustomButton>
@@ -880,8 +881,7 @@
 
         
         <!-- SETTINGS POPUP -->
-        <Frame
-            x:Name="settingsPopup"
+        <Frame x:Name="settingsPopup"
             IsVisible="{Binding settingsPopupState}"
             Grid.Row="2"
             Grid.RowSpan="8"
@@ -893,20 +893,12 @@
             HeightRequest="500"
             BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
             Opacity=".9">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition
-                        Height="1*" />
-                    <RowDefinition
-                        Height="1*" />
-                    <RowDefinition
-                        Height="1*" />
-                    <RowDefinition
-                        Height="1*" />
-                </Grid.RowDefinitions>
-                <StackLayout
-                    Spacing="15">
-                    <local:CustomButton
+
+            <Grid
+                        RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto"
+                        ColumnSpacing="0"
+                        >
+                <Button
                         Command="{Binding ClosePopupCommand}"
                         CornerRadius="15"
                         BackgroundColor="{AppThemeBinding 
@@ -914,42 +906,119 @@
                               Light={StaticResource ButtonBackgroundColor}}"
                         BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
                         TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                        Margin="0,-10,-10,-15"
+                        Margin="0,-10,-10, 435"
                         Text="X"
-                        HorizontalOptions="EndAndExpand"></local:CustomButton>
-                    <Label
-                        TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                        Text="Settings"
-                        FontSize="32"
-                        HorizontalOptions="Center" />
-                    <Rectangle
-                        HeightRequest="2"
-                        HorizontalOptions="FillAndExpand"
-                        Background="black" />
-                    <Label
-                        Text="LightMode"
-                        TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"></Label>
-                    <RadioButton
-                        x:Name="themeRadioButtonLight"
-                        HorizontalOptions="Center">
-                    </RadioButton>
-                    <Label
-                        Text="DarkMode"
-                        TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"></Label>
-                    <RadioButton
-                        x:Name="themeRadioButtonDark"
-                        HorizontalOptions="Center">
-                    </RadioButton>
+                        HorizontalOptions="EndAndExpand"></Button>
 
-                    <StackLayout
-                        x:Name="slSettings">
-                        <Rectangle
-                            HeightRequest="2"
-                            HorizontalOptions="FillAndExpand"
-                            Background="black" />
-                    </StackLayout>
-                </StackLayout>
+                <Label Text="Settings"></Label>
+                <Grid x:Name="settingsInputs" IsVisible="{Binding settingsLoggedInState}">
+                    <Frame
+                            Grid.Row="1"
+                            BorderColor="LightGray"
+                            Padding="0"
+                            CornerRadius="15"
+                            IsClippedToBounds="False"
+                            HorizontalOptions="CenterAndExpand"
+                            WidthRequest="500"
+                            VerticalOptions="FillAndExpand"
+                            Opacity=".8">
+
+                    <local:RoundedEntry
+                                x:Name="_editEmail"
+                                Opacity=".8"
+                                Placeholder="{Binding CurrentUserEmail}"
+                                Text="{Binding EditEmail}"></local:RoundedEntry>
+                </Frame>
+                <Frame
+                            Grid.Row="3"
+                            BorderColor="LightGray"
+                            Padding="0"
+                            CornerRadius="15"
+                            IsClippedToBounds="False"
+                            HorizontalOptions="CenterAndExpand"
+                            WidthRequest="500"
+                            VerticalOptions="FillAndExpand"
+                            Opacity=".8">
+                    <local:RoundedEntry
+                                x:Name="_editPassword"
+                                Text="{Binding EditPassword}"
+                                IsPassword="True"
+                                Opacity=".8"
+                                Placeholder="Password"></local:RoundedEntry>
+                </Frame>
+                <Frame
+                            Grid.Row="5"
+                            BorderColor="LightGray"
+                            Padding="0"
+                            CornerRadius="15"
+                            IsClippedToBounds="False"
+                            HorizontalOptions="CenterAndExpand"
+                            WidthRequest="500"
+                            VerticalOptions="FillAndExpand"
+                            Opacity=".8">
+                    <local:RoundedEntry
+                                x:Name="_editDisplayName"
+                                Text="{Binding EditDisplayName}"
+                                Opacity=".8"
+                                Placeholder="{Binding CurrentUserDisplayName}"></local:RoundedEntry>
+                </Frame>
+
+                <Label
+                            Grid.Row="6"></Label>
+                <Frame
+                            Grid.Row="7"
+                            BorderColor="LightGray"
+                            Padding="0"
+                            CornerRadius="15"
+                            IsClippedToBounds="False"
+                            HorizontalOptions="CenterAndExpand"
+                            WidthRequest="500"
+                            VerticalOptions="FillAndExpand"
+                            Opacity=".8">
+                    <local:RoundedEntry
+                                x:Name="_editFirstName"
+                                Text="{Binding EditFirstName}"
+                                Opacity=".8"
+                                Placeholder="{Binding CurrentUserFirstName}"></local:RoundedEntry>
+                </Frame>
+
+                <Label
+                            Grid.Row="8"></Label>
+
+                <Frame
+                            Grid.Row="9"
+                            BorderColor="LightGray"
+                            Padding="0"
+                            CornerRadius="15"
+                            IsClippedToBounds="False"
+                            HorizontalOptions="CenterAndExpand"
+                            WidthRequest="500"
+                            VerticalOptions="FillAndExpand"
+                            Opacity=".8">
+                    <local:RoundedEntry
+                                x:Name="_editSurname"
+                                Text="{Binding EditSurname}"
+                                Opacity=".8"
+                                Placeholder="{Binding CurrentUserLastName}"></local:RoundedEntry>
+                </Frame>
+
+                <Button
+                            HeightRequest="50"
+                            WidthRequest="150"
+                            VerticalOptions="Center"
+                            Grid.Row="10"
+                            Command="{Binding EditUserCommand}"
+                            CornerRadius="10"
+                            BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
+                            HorizontalOptions="Center"
+                            BackgroundColor="{AppThemeBinding Dark={StaticResource ButtonBackgroundColorDark}, Light={StaticResource ButtonBackgroundColor}}"
+                            TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+                            Text="Edit User"
+                            FontSize="20">
+                </Button>
+                </Grid>
             </Grid>
+
         </Frame>
     </Grid>
 </ContentPage>

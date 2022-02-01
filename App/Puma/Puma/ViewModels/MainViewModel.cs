@@ -86,6 +86,7 @@ namespace Puma.ViewModels
             openSignupBool = false;
             openLoginBool = false;
             openSettingsBool = true;
+            
             OnPropertyChanged(nameof(signupPopupState));
             OnPropertyChanged(nameof(loginPopupState));
             OnPropertyChanged(nameof(settingsPopupState));
@@ -102,6 +103,7 @@ namespace Puma.ViewModels
         public void LogOut()
         {
             if (App.LoggedInUser == null)
+                
                 return;
 
             App.LoggedInUser = null;

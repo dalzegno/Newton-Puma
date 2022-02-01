@@ -25,6 +25,7 @@ namespace Puma.Views
         public static MainPage Instance { get; set; }
         internal MainViewModel MainViewModel { get; }
         internal PoiViewModel poiViewModel { get; }
+        internal SettingsViewModel settingsViewModel { get; }
 
         Geocoder geoCoder;
         public MainPage()
@@ -35,6 +36,7 @@ namespace Puma.Views
             // Implementing dependecy injection
             BindingContext = MainViewModel;
 
+            settingsViewModel = new SettingsViewModel(UserApiService, DialogService);
             slCreateUserViewModel.BindingContext = new NewUserViewModel(UserApiService, DialogService);
             slLogIn.BindingContext = new LoginViewModel(UserApiService, DialogService);
 
@@ -45,7 +47,7 @@ namespace Puma.Views
             poiCreationPopup.BindingContext = poiViewModel;
             slPoiMenuButtons.BindingContext = poiViewModel;
             weatherCollectionView.BindingContext = poiViewModel;
-            slSettings.BindingContext = new SettingsViewModel();
+            settingsInputs.BindingContext = settingsViewModel;
 
             geoCoder = new Geocoder();  
 
@@ -240,6 +242,17 @@ namespace Puma.Views
 
             else if (temp > 20)
                 lbl.TextColor = Color.Red;
+        }
+
+        private void btn_OpenSettings(object sender, EventArgs e)
+        {
+            var user = App.LoggedInUser;
+            if (user == null)
+                return;
+            settingsViewModel.SetUserToEdit(user.DisplayName, user.Email, user.FirstName, user.LastName);
+            
+
+            //settingsViewModel.SetUserToEdit(user.DisplayName, user.Email, user.FirstName, user.LastName);
         }
     }
 }
