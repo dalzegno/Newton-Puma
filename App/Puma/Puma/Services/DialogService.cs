@@ -11,7 +11,7 @@ namespace Puma.Services
 
         public async Task ShowErrorAsync(string title, string message, string buttonText)
         {
-            await Application.Current.MainPage.DisplayAlert(message, title, buttonText);
+            await Application.Current.MainPage.DisplayAlert(title, message, buttonText);
         }
 
         public async Task ShowErrorAsync(string title, Exception error, string buttonText)

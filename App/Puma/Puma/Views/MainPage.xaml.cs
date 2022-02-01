@@ -155,7 +155,7 @@ namespace Puma.Views
             }
             catch (Exception ex) 
             {
-                await DialogService.ShowErrorAsync("Error", ex.Message, "OK");
+                await DialogService.ShowErrorAsync("Error", ex, "OK");
             }
 
             if (pois == null || pois.Count == 0)
