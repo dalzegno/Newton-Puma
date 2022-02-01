@@ -43,9 +43,10 @@ namespace Puma.Views
         #region Events
         async void OnMapClicked(object sender, MapClickedEventArgs e)
         {
-            var position = e.Position;
             map.Pins.Clear();
-            AddPin(position);
+            var position = e.Position;
+            var pin = CreatePin(position);
+            map.Pins.Add(pin);
 
             Debug.WriteLine($"MapClick: {position.Latitude}, {position.Longitude}");
 
@@ -90,7 +91,8 @@ namespace Puma.Views
 
             Location searchedLocation = await GetLocation(positionList);
             PoiViewModel.SetAddress(searchedLocation.Addresses.FirstOrDefault());
-            AddPin(searchedLocation);
+            var pin = CreatePin(searchedLocation);
+            map.Pins.Add(pin);
 
             List<PointOfInterest> pois = await GetPoisFromDb(searchedLocation);
 
@@ -101,7 +103,10 @@ namespace Puma.Views
             }
 
             foreach (var poi in pois)
-                AddPin(poi);
+            {
+                CreatePin(poi);
+                map.Pins.Add(pin);
+            }
 
             MoveToRegion(searchedLocation, 1);
         }
@@ -177,7 +182,7 @@ namespace Puma.Views
         {
             return new List<Position>(await _geoCoder.GetPositionsForAddressAsync(search));
         }
-        private void AddPin(Location location)
+        private Pin CreatePin(Location location)
         {
             var pin = new Pin
             {
@@ -187,14 +192,14 @@ namespace Puma.Views
                 Position = location.Position
             };
 
-            map.Pins.Add(pin);
-
             pin.MarkerClicked += (sender2, args) =>
             {
                 DialogService.ShowMessageAsync("Tapped!", $"{pin.Label}");
             };
+
+            return pin;
         }
-        private void AddPin(PointOfInterest poi)
+        private Pin CreatePin(PointOfInterest poi)
         {
             var pin = new Pin
             {
@@ -203,14 +208,14 @@ namespace Puma.Views
                 Position = new Position(poi.Position.Latitude, poi.Position.Longitude),
                 Label = poi.Name
             };
-            map.Pins.Add(pin);
 
             pin.MarkerClicked += (sender2, args) =>
             {
                 DialogService.ShowMessageAsync("Tapped!", $"{pin.Label}");
             };
+            return pin;
         }
-        private void AddPin(Position position)
+        private Pin CreatePin(Position position)
         {
             Pin pin = new Pin
             {
@@ -220,15 +225,23 @@ namespace Puma.Views
                 Type = PinType.Generic,
                 Position = new Position(position.Latitude, position.Longitude)
             };
-            map.Pins.Add(pin);
+
+            pin.MarkerClicked += (sender2, args) =>
+            {
+                DialogService.ShowMessageAsync("Tapped!", $"{pin.Label}");
+            };
+
+            return pin;
+
         }
         public void GoToLocation(PointOfInterest poi, double distanceKm)
         {
             MoveToRegion(poi, distanceKm);
-            AddPin(poi);
+            var pin = CreatePin(poi);
+            map.Pins.Add(pin);
         }
         #endregion
-        // Maybe move this outside, but it's only interesting here.
+        // Maybe move this class outside, but it's only interesting here.
         private class Location
         {
             public Position Position { get; set; }
