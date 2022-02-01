@@ -12,6 +12,7 @@ namespace Puma
 {
     public partial class App : Application
     {
+        public static User LoggedInUser { get; set; }
         public App()
         {
 

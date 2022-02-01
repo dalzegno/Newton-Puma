@@ -1,5 +1,6 @@
 ﻿using Logic.Helpers;
 using Logic.Models;
+using System;
 using System.Linq;
 
 namespace Logic.Translators
@@ -37,10 +38,10 @@ namespace Logic.Translators
 
             return new ForecastItemDto
             {
-                Temperature = item.main?.temp ?? 0, // if main is null, set temperature to 0
+                Temperature = Math.Round(item.main?.temp ?? 0, 1), // if main is null, set temperature to 0
                 DateTime = Utils.UnixTimeStampToDateTime(item.dt),
-                WindSpeed = item.wind?.speed ?? 0, // if wind is null, set WindSpeed to 0
-                Description = item.weather?.FirstOrDefault()?.description ?? "", // if weather is null, set Description to ""
+                WindSpeed = Math.Round(item.wind?.speed ?? 0, 1), // if wind is null, set WindSpeed to 0
+                Description = item.weather?.FirstOrDefault()?.description.FirstCharToUpper() ?? "", // if weather is null, set Description to ""
                 Icon = item.weather?.FirstOrDefault()?.icon ?? "" // if icon is null, set icon to ""
             };
         }

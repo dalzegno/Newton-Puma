@@ -613,7 +613,8 @@
                 BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
                 Grid.Column="1"
                 HorizontalOptions="FillAndExpand"
-                Text="Placeholder"></local:CustomButton>
+                Command="{Binding WeatherPopupCommand}"
+                Text="Weather"></local:CustomButton>
             <local:CustomButton
                 BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
                 Grid.Row="0"
@@ -771,7 +772,6 @@
                     <!--<local:CustomButton Text="{Binding SelectedTagInfo.Name}" FontSize="12"/>-->
                     <Picker
                         x:Name="TagPicker"
-                        SelectedIndexChanged="TagPicker_SelectedIndexChanged_1"
                         SelectedItem="{Binding SelectedTagInfo}"
                         ItemsSource="{Binding Tags}"
                         ItemDisplayBinding="{Binding Name}" />
@@ -806,6 +806,76 @@
                         FontSize="8"></Label>
                 </StackLayout>
             </ScrollView>
+        </Frame>
+        <!-- WEATHER POPUP -->
+        <Frame  
+            Grid.Row="2"
+            Grid.RowSpan="8"
+            Grid.ColumnSpan="12"
+            HorizontalOptions="StartAndExpand"
+            VerticalOptions="StartAndExpand"
+            WidthRequest="300"
+            Margin="10,10,0,0"
+            IsVisible="{Binding WeatherPopupState}"
+            BackgroundColor="White"
+            Opacity=".9"
+            x:Name="weatherCollectionView">
+
+
+            <CollectionView
+                VerticalOptions="StartAndExpand"
+                HorizontalOptions="Center"
+                Margin="0"
+                ItemsSource="{Binding ForecastCollection}"
+                SelectionMode="Single"
+                IsGrouped="True">
+                <CollectionView.GroupHeaderTemplate>
+                    <DataTemplate>
+                        <Label Padding="2" 
+                               Text="{Binding Key, StringFormat='{0:dddd, MMMM dd, yyyy}'}" 
+                               FontSize="20"/>
+                    </DataTemplate>
+                </CollectionView.GroupHeaderTemplate>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid
+                            Padding="5"
+                            HeightRequest="100"
+                            RowDefinitions="1*,1*,1*">
+                            <Label
+                                Grid.Row="0"
+                                Text="{Binding DateTime, StringFormat='{0:HH:mm}'}"
+                                FontSize="16"
+                                HeightRequest="100"></Label>
+                            <Label
+                                Grid.Row="1"
+                                FontAttributes="Bold"
+                                FontSize="16"
+                                HeightRequest="100"
+                                Text="{Binding Temperature, StringFormat='{0}°C'}"
+                                BindingContextChanged="LblTemperature_BindingContextChanged"/>
+                            <Image
+                                Grid.Row="1"
+                                Source="{Binding IconUrl}"
+                                HeightRequest="100"></Image>
+
+                            <Label Grid.Row="2"
+                                   FontSize="12"
+                                   HeightRequest="100"
+                                   Text="{Binding DescrAndWind}"/>
+
+
+                            <!--<Rectangle Grid.Row="2"
+                                HeightRequest="1"
+                                BackgroundColor="Black"
+                                VerticalOptions="End"
+                                HorizontalOptions="FillAndExpand" />-->
+                        </Grid>
+
+
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </Frame>
 
         
