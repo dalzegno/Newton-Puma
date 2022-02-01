@@ -7,5 +7,9 @@ namespace Puma.CustomRenderer
 {
     public class CustomButton : Button
     {
+
+        public CustomButton()
+        {
+        }
     }
 }

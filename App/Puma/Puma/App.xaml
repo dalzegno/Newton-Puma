@@ -39,7 +39,7 @@
                             Text="{TemplateBinding EntryText}"
                             Opacity=".8"
                             Placeholder="{TemplateBinding PlaceholderText}">
-
+                                
                         </cr:RoundedEntry>
                 </Frame>
             </ControlTemplate>

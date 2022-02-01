@@ -21,7 +21,7 @@ namespace Puma.UWP.CustomRenderer
         {
             base.OnElementChanged(e);
 
-            if (e.OldElement == null)
+                if (e.OldElement == null)
             {
                 Control.PointerExited += Control_PointerExited;
                 Control.PointerMoved += Control_PointerMoved;

@@ -230,11 +230,13 @@ namespace Puma.ViewModels
             openPoiCreationBool = false;
             poiCollectionVisibleBool = true;
             poiSingleVisibleBool = false;
+            PoiCollection = await _poiService.GetAllAsync();
+            OnPropertyChanged(nameof(PoiCollection));
             OnPropertyChanged(nameof(PoiCollectionVisible));
             OnPropertyChanged(nameof(PoiSingleVisible));
             OnPropertyChanged(nameof(poiCollectionPopupState));
             OnPropertyChanged(nameof(PoiCreationPopupState));
-            PoiCollection = await _poiService.GetAllAsync();
+            
            
         }
         private void PoiCreationPopup()
@@ -270,8 +272,10 @@ namespace Puma.ViewModels
             }
             else if (words.Length == 2)
             {
+                StreetName = "";
                 Area = words[0];
                 Country = words[1];
+                OnPropertyChanged(nameof(StreetName));
                 OnPropertyChanged(nameof(Area));
                 OnPropertyChanged(nameof(Country));
             }

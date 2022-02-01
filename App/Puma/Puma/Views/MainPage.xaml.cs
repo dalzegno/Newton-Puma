@@ -205,6 +205,8 @@ namespace Puma.Views
 
         private async void Button_Clicked(object sender, System.EventArgs e)
         {
+
+            
             //var poiService = new PoiApiService();
 
             if (SearchField.Text == null)
@@ -219,16 +221,21 @@ namespace Puma.Views
                 return;
 
             var position = postionList.FirstOrDefault<Position>();
-            var adress = await new Geocoder().GetAddressesForPositionAsync(position);
-
-            var pois = await _poiService.GetAsync(position);
+            var address = await new Geocoder().GetAddressesForPositionAsync(position);
+            poiViewModel.SetAddress(address.First());
+            var pois = new List<PointOfInterest>() { };
+            try
+            {
+                pois = await _poiService.GetAsync(position);
+            }
+            catch (Exception ex) { }
 
             if (pois == null || pois.Count == 0)
             {
                 map.Pins.Add(new Pin
                 {
-                    Address = adress.First(),
-                    Label = adress.First(),
+                    Address = address.First(),
+                    Label = address.First(),
                     Type = PinType.SearchResult,
                     Position = position
                 });
@@ -257,8 +264,8 @@ namespace Puma.Views
             // Sökta positionen
             map.Pins.Add(new Pin
             {
-                Address = adress.First(),
-                Label = adress.First(),
+                Address = address.First(),
+                Label = address.First(),
                 Type = PinType.SearchResult,
                 Position = position
             });
@@ -266,7 +273,7 @@ namespace Puma.Views
             map.MoveToRegion(MapSpan.FromCenterAndRadius(position, Distance.FromKilometers(1)));
 
             // Om ni vill testa poiService :) 
-            //    var poiService = new PoiApiService();
+            //var poiService = new PoiApiService();
 
 
             //var response = await poiService.CreatePoiAsync(new AddPoiDto
@@ -281,9 +288,8 @@ namespace Puma.Views
             //    Address = new Address
             //    {
             //        Country = "Sverige",
-            //        City = "Test",
-            //        StreetName = "Cool gata",
-            //        ZipCode = "Zipcode"
+            //        Area = "Test",
+            //        StreetName = "Cool gata"
             //    },
             //    TagIds = new List<int> { 1, 2 }
             //});
