@@ -105,10 +105,11 @@ namespace API.Controllers
 
         [HttpGet("GetPoisFromLatAndLon")]
         public async Task<ActionResult<ICollection<PointOfInterestDto>>> Get([FromQuery] string lat, [FromQuery] string lon)
-            if (!double.TryParse(lat.Replace(".", ","), NumberStyles.Any, new CultureInfo("sv-SE"), out double latDouble) || 
+        {
+            if (!double.TryParse(lat.Replace(".", ","), NumberStyles.Any, new CultureInfo("sv-SE"), out double latDouble) ||
                 !double.TryParse(lon.Replace(".", ","), NumberStyles.Any, new CultureInfo("sv-SE"), out double lonDouble))
                 return BadRequest();
-            
+
             var pois = await _poiService.GetAsync(latDouble, lonDouble);
 
             if (pois == null || pois.Count < 1)
@@ -160,7 +161,7 @@ namespace API.Controllers
         [HttpDelete()]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<PointOfInterestDto>> Delete([FromQuery] int id, [FromHeader]string apiKey)
+        public async Task<ActionResult<PointOfInterestDto>> Delete([FromQuery] int id, [FromHeader] string apiKey)
         {
             if (!await _userService.IsUserAuthorizedAsync(apiKey))
                 return Unauthorized();
