@@ -38,7 +38,7 @@ namespace Puma.Views
             slCreateUserViewModel.BindingContext = new NewUserViewModel(UserApiService, DialogService);
             slLogIn.BindingContext = new LoginViewModel(UserApiService, DialogService);
 
-            poiViewModel = new PoiViewModel(PoiService, DialogService);
+            poiViewModel = new PoiViewModel(PoiService, DialogService, WeatherService);
             slPoiPopover.BindingContext = poiViewModel;
             slPoiPopup.BindingContext = poiViewModel;
             poiCollectionView.BindingContext = poiViewModel;
@@ -47,13 +47,13 @@ namespace Puma.Views
             weatherCollectionView.BindingContext = poiViewModel;
             slSettings.BindingContext = new SettingsViewModel();
 
-            geoCoder = new Geocoder();
+            geoCoder = new Geocoder();  
 
             _poiService = PoiService;
 
         }
 
-        async void OnMapClicked(object sender, MapClickedEventArgs e)
+        async Task OnMapClicked(object sender, MapClickedEventArgs e)
         {
             map.Pins.Clear();
             Pin pin = new Pin
@@ -79,80 +79,9 @@ namespace Puma.Views
 
 
                 System.Diagnostics.Debug.WriteLine("address:" + address);
-               
 
-                //ClearPoiEntries();
-                //FillAddressBoxes(address);
                 poiViewModel.SetAddress(address);
             }
-
-            void FillAddressBoxes(string address)
-            {
-                var words = address?.Split('\n') ?? Array.Empty<string>();
-                if (words.Length == 2)
-                {
-                    poiViewModel.Area = words[0];
-                    poiViewModel._country = words[1];
-                    OnPropertyChanged(nameof(poiViewModel.Country));
-                    //lbl_Area.Text = words[0];
-                    //lbl_Country.Text = words[1];
-
-                    //entry_zip.Text = words[0];
-                    //entry_country.Text = words[1];
-                }
-                else if (words.Length == 3)
-                {
-                    poiViewModel.StreetName = words[0];
-                    poiViewModel.Area = words[1];
-                    poiViewModel._country = words[2];
-                    OnPropertyChanged(nameof(poiViewModel.Country));
-                    //lbl_StreetName.Text = words[0];
-                    //lbl_Area.Text = words[1];
-                    //lbl_Country.Text = words[2];
-
-                    //entry_address.Text = words[0];
-                    //entry_zip.Text = words[1];
-                    //entry_country.Text = words[2];
-                }
-                //lbl_adress.Text = address;
-            }
-
-            void ClearPoiEntries()
-            {
-                //lbl_StreetName.Text = "";
-                //lbl_Area.Text = "";
-                //lbl_Country.Text = "";
-
-                //entry_address.Text = "";
-                //entry_zip.Text = "";
-                //entry_country.Text = "";
-            }
-
-            //Circle circle = new Circle
-            //{
-            //    Center = e.Position,
-            //    Radius = new Distance(250),
-            //    StrokeColor = Color.FromHex("#88FF0000"),
-            //    StrokeWidth = 8,
-            //    FillColor = Color.FromHex("#88FFC0CB")
-            //};
-            //map.MapElements.Add(circle);
-
-
-            //Tag Button Generator
-            //var myList = new List<string>(); //Replace string with tags event
-            //TagsList.Children.Clear(); //just in case so you can call this code several times np..
-            //foreach (var item in myList)
-            //{
-            //    var btn = new Button()
-            //    {
-            //        Text = item.id, //Whatever prop you wonna put as title;
-            //        StyleId = item.name //use a property from event as id to be passed to handler
-            //        };
-            //    btn.Clicked += OnDynamicBtnClicked;
-            //    TagsList.Children.Add(btn);
-            //}
-
         }
 
         async void btn_SearchLocation_Clicked(object sender, EventArgs e)
