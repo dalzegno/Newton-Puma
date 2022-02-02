@@ -15,6 +15,7 @@ namespace Puma.Services
 {
     public class UserApiService : IUserApiService
     {
+        IDialogService DialogService => DependencyService.Get<IDialogService>();
         readonly HttpClient _httpClient = new HttpClient();
         readonly string _userApiUri = "http://localhost:64500/api/User";
         //readonly string _userApiUri = "http://localhost:44329/api/User";
@@ -73,7 +74,7 @@ namespace Puma.Services
             return await response.Content.ReadFromJsonAsync<User>();
         }
 
-        public async Task<User> UpdateUserAsync(AddUserDto userToUpdate)
+        public async Task<User> UpdateUserAsync(UpdateUserDto userToUpdate)
         {
             SetHeader();
 
@@ -102,7 +103,7 @@ namespace Puma.Services
             if (!response.IsSuccessStatusCode)
             {
                 string responseBody = await response.Content.ReadAsStringAsync();
-                OnErrorMessage(responseBody);
+                await DialogService.ShowErrorAsync("Error!", $"{response.StatusCode}: {responseBody}", "OK");
                 return false;
             }
 

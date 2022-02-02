@@ -140,13 +140,14 @@ namespace Puma.Views
         {
             slCreateUserViewModel.BindingContext = new NewUserViewModel(UserApiService, DialogService);
             slLogIn.BindingContext = new LoginViewModel(UserApiService, DialogService);
-            settingsPopup.BindingContext = SettingsViewModel;
+            //settingsPopup.BindingContext = SettingsViewModel;
             slPoiPopover.BindingContext = PoiViewModel;
             slPoiPopup.BindingContext = PoiViewModel;
             poiCollectionView.BindingContext = PoiViewModel;
             poiCreationPopup.BindingContext = PoiViewModel;
             slPoiMenuButtons.BindingContext = PoiViewModel;
             weatherCollectionView.BindingContext = PoiViewModel;
+            settingsInputs.BindingContext = SettingsViewModel;
         }
         private async Task<List<PointOfInterest>> GetPoisFromDb(Location searchedLocation)
         {

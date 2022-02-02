@@ -12,7 +12,7 @@ namespace Logic.Services
         Task<ICollection<UserDto>> GetAllAsync();
         Task<bool> IsUserAuthorizedAsync(string apiKey);
         Task<UserDto> CreateAsync(AddUserDto newUser);
-        Task<UserDto> UpdateAsync(AddUserDto user);
+        Task<UserDto> UpdateAsync(UpdateUserDto user);
         Task<UserDto> DeleteAsync(int id);
 
     }

@@ -11,16 +11,15 @@ using Puma.Models;
 
 namespace Puma.ViewModels
 {
-    class SettingsViewModel: BaseViewModel
+    class SettingsViewModel : BaseViewModel
     {
         readonly IUserApiService _userApiService;
         readonly IDialogService _dialogService;
-        public static User currentUser = App.LoggedInUser;
         public SettingsViewModel(IUserApiService userApiService, IDialogService dialogService)
         {
             _userApiService = userApiService;
             _dialogService = dialogService;
-          
+
         }
 
         Command _editUserCommand;
@@ -38,10 +37,10 @@ namespace Puma.ViewModels
         string _currentUserLastName;
         string _currentUserEmail;
 
-        
+
         public void SetUserToEdit(string displayName, string email, string firstName, string lastName)
         {
-            if (currentUser == null)
+            if (App.LoggedInUser == null)
                 return;
             CurrentUserDisplayName = displayName;
             CurrentUserFirstName = firstName;
@@ -55,7 +54,7 @@ namespace Puma.ViewModels
             {
                 _currentUserDisplayName = value;
                 OnPropertyChanged();
-            } 
+            }
         }
         public string CurrentUserFirstName
         {
@@ -136,33 +135,20 @@ namespace Puma.ViewModels
         private bool CanEdit() => !string.IsNullOrWhiteSpace(EditEmail) && !string.IsNullOrWhiteSpace(EditPassword) && !string.IsNullOrWhiteSpace(EditDisplayName);
         private async void EditUser()
         {
-
-            
-            var updateUser = new AddUserDto();
+            var user = new UpdateUserDto()
             {
-                
-                updateUser.Email = EditEmail;
-                updateUser.Password = EditPassword;
-                updateUser.DisplayName = EditDisplayName;
-                updateUser.FirstName = EditFirstName ?? "";
-                updateUser.LastName = EditSurname ?? "";
-                //updateUser.ApiKey = currentUser.ApiKey;
+                Id = App.LoggedInUser.Id,
+                Email = EditEmail,
+                Password = EditPassword,
+                DisplayName = EditDisplayName,
+                FirstName = EditFirstName ?? "",
+                LastName = EditSurname ?? ""
             };
-            
-            if (updateUser != null)
-            {
-                //DETTA ÄR FEL TBD WIP 
-                
-                
-                var updatedUser = await _userApiService.UpdateUserAsync(updateUser);
-                await _dialogService.ShowMessageAsync("Saved!!", $"Settings applied! \"{updateUser.DisplayName}\".");
-                //updateUser = await _userApiService.UpdateUserAsync();
 
-                if (updateUser == null)
-                {
-                    await _dialogService.ShowMessageAsync("Error!", $"Sumting went wong \"{updatedUser.DisplayName}\".");
-                    return;
-                }
+            var updatedUser = await _userApiService.UpdateUserAsync(user);
+            if (updatedUser != null)
+            {
+                await _dialogService.ShowMessageAsync("Saved!!", $"Settings applied! \"{user.DisplayName}\".");
             }
         }
     }
