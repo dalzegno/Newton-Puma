@@ -93,22 +93,18 @@ namespace Puma.Views
             PoiViewModel.SetAddress(searchedLocation.Addresses.FirstOrDefault());
             var pin = CreatePin(searchedLocation);
             map.Pins.Add(pin);
+            MoveToRegion(searchedLocation, 1);
 
             List<PointOfInterest> pois = await GetPoisFromDb(searchedLocation);
 
             if (pois == null || pois.Count == 0)
-            {
-                MoveToRegion(searchedLocation, 1);
                 return;
-            }
 
             foreach (var poi in pois)
             {
                 CreatePin(poi);
                 map.Pins.Add(pin);
             }
-
-            MoveToRegion(searchedLocation, 1);
         }
         private void LblTemperature_BindingContextChanged(object sender, EventArgs e)
         {
@@ -156,7 +152,7 @@ namespace Puma.Views
             }
             catch (Exception ex)
             {
-                await DialogService.ShowErrorAsync("Error", ex, "OK");
+                await DialogService.ShowErrorAsync("Error", ex);
             }
 
             return pois;

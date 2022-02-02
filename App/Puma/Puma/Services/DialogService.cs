@@ -9,14 +9,14 @@ namespace Puma.Services
     public class DialogService : IDialogService
     {
 
-        public async Task ShowErrorAsync(string title, string message, string buttonText)
+        public async Task ShowErrorAsync(string message)
         {
-            await Application.Current.MainPage.DisplayAlert(title, message, buttonText);
+            await Application.Current.MainPage.DisplayAlert("Error", message, "Ok");
         }
 
-        public async Task ShowErrorAsync(string title, Exception error, string buttonText)
+        public async Task ShowErrorAsync(Exception error)
         {
-            await Application.Current.MainPage.DisplayAlert(title, error.Message, buttonText);
+            await Application.Current.MainPage.DisplayAlert("Error", error.Message, "Ok");
         }
 
         public async Task ShowMessageAsync(string title, string message)

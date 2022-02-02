@@ -10,113 +10,155 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
+using Puma.Helpers;
 
 [assembly: Dependency(typeof(PoiApiService))]
 namespace Puma.Services
 {
     public class PoiApiService : IPoiService
     {
+        readonly IDialogService _dialogService = DependencyService.Get<IDialogService>();
+        readonly HttpResponseHelper _httpResponseHelper = DependencyService.Get<HttpResponseHelper>();
         readonly HttpClient _httpClient = new HttpClient();
         readonly string _poiApiUri = "http://localhost:64500/api/Poi";
-
-        public EventHandler<string> ErrorMessage;
-        protected virtual void OnErrorMessage(string e) => ErrorMessage?.Invoke(this, e);
 
         #region Create
         public async Task<PointOfInterest> CreatePoiAsync(AddPoiDto poi)
         {
-            SetHeader();
+            _httpResponseHelper.SetHeader(_httpClient);
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync(_poiApiUri, poi);
 
-            var response = await _httpClient.PostAsJsonAsync(_poiApiUri, poi);
+                if (!await _httpResponseHelper.IsResponseSuccess(response))
+                    return null;
 
-            if (!await IsResponseSuccess(response))
+                return await response.Content.ReadFromJsonAsync<PointOfInterest>();
+            }
+            catch (Exception e)
+            {
+                await _dialogService.ShowErrorAsync(e);
                 return null;
+            }
 
-            return await response.Content.ReadFromJsonAsync<PointOfInterest>();
         }
         public async Task<Tag> CreateTagAsync(string name)
         {
-            SetHeader();
+            _httpResponseHelper.SetHeader(_httpClient);
 
-            StringContent query = new StringContent(name);
+            try
+            {
+                StringContent query = new StringContent(name);
 
-            var response = await _httpClient.PostAsync($"{_poiApiUri}/AddTag", query);
+                var response = await _httpClient.PostAsync($"{_poiApiUri}/AddTag", query);
 
-            if (!await IsResponseSuccess(response))
+                if (!await _httpResponseHelper.IsResponseSuccess(response))
+                    return null;
+
+                return await response.Content.ReadFromJsonAsync<Tag>();
+            }
+            catch (Exception e)
+            {
+                await _dialogService.ShowErrorAsync(e);
                 return null;
-
-            return await response.Content.ReadFromJsonAsync<Tag>();
+            }
         }
 
         public async Task<PointOfInterest> AddCommentAsync(AddCommentDto addCommentDto)
         {
-            SetHeader();
+            _httpResponseHelper.SetHeader(_httpClient);
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync($"{_poiApiUri}/AddComment", addCommentDto);
 
-            var response = await _httpClient.PostAsJsonAsync($"{_poiApiUri}/AddComment", addCommentDto);
+                if (!await _httpResponseHelper.IsResponseSuccess(response))
+                    return null;
 
-            if (!await IsResponseSuccess(response))
+                return await response.Content.ReadFromJsonAsync<PointOfInterest>();
+            }
+            catch (Exception e)
+            {
+                await _dialogService.ShowErrorAsync(e);
                 return null;
-
-            return await response.Content.ReadFromJsonAsync<PointOfInterest>();
+            }
         }
 
         public async Task<PointOfInterest> AddGradeAsync(AddGradeDto addGradeDto)
         {
-            SetHeader();
+            _httpResponseHelper.SetHeader(_httpClient);
 
-            var response = await _httpClient.PostAsJsonAsync($"{_poiApiUri}/AddGrade", addGradeDto);
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync($"{_poiApiUri}/AddGrade", addGradeDto);
 
-            if (!await IsResponseSuccess(response))
+                if (!await _httpResponseHelper.IsResponseSuccess(response))
+                    return null;
+
+                return await response.Content.ReadFromJsonAsync<PointOfInterest>();
+            }
+            catch (Exception e)
+            {
+                await _dialogService.ShowErrorAsync(e);
                 return null;
-
-            return await response.Content.ReadFromJsonAsync<PointOfInterest>();
+            }
         }
         #endregion
 
         #region Read
         public async Task<PointOfInterest> GetAsync(int id)
         {
-            SetHeader();
+            _httpResponseHelper.SetHeader(_httpClient);
 
             try
             {
                 var response = await _httpClient.GetAsync($"{_poiApiUri}?id={id}");
 
-                if (!await IsResponseSuccess(response))
+                if (!await _httpResponseHelper.IsResponseSuccess(response))
                     return null;
 
                 return await response.Content.ReadFromJsonAsync<PointOfInterest>();
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                await _dialogService.ShowErrorAsync(e);
                 return null;
             }
         }
         public async Task<List<PointOfInterest>> GetAsync(Position searchedPosition)
         {
-            SetHeader();
+            _httpResponseHelper.SetHeader(_httpClient);
 
-            var response = await _httpClient.GetAsync($"{_poiApiUri}/GetPoisFromLatAndLon?lat={searchedPosition.Latitude}&lon={searchedPosition.Longitude}");
+            try
+            {
+                var response = await _httpClient.GetAsync($"{_poiApiUri}/GetPoisFromLatAndLon?lat={searchedPosition.Latitude}&lon={searchedPosition.Longitude}");
 
-            if (!await IsResponseSuccess(response))
+                if (!await _httpResponseHelper.IsResponseSuccess(response))
+                    return null;
+
+                return await response.Content.ReadFromJsonAsync<List<PointOfInterest>>();
+            }
+            catch (Exception e)
+            {
+                await _dialogService.ShowErrorAsync(e);
                 return null;
+            }
 
-            return await response.Content.ReadFromJsonAsync<List<PointOfInterest>>();
         }
         public async Task<ObservableCollection<PointOfInterest>> GetAllAsync()
         {
-            SetHeader();
+            _httpResponseHelper.SetHeader(_httpClient);
             try
             {
                 var response = await _httpClient.GetAsync($"{_poiApiUri}/GetAllPoi");
 
-                if (!await IsResponseSuccess(response))
+                if (!await _httpResponseHelper.IsResponseSuccess(response))
                     return null;
 
                 return await response.Content.ReadFromJsonAsync<ObservableCollection<PointOfInterest>>();
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                await _dialogService.ShowErrorAsync(e);
                 return null;
             }
         }
@@ -126,13 +168,14 @@ namespace Puma.Services
             {
                 var response = await _httpClient.GetAsync($"{_poiApiUri}/GetTags");
 
-                if (!await IsResponseSuccess(response))
+                if (!await _httpResponseHelper.IsResponseSuccess(response))
                     return null;
 
                 return await response.Content.ReadFromJsonAsync<List<Tag>>();
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                await _dialogService.ShowErrorAsync(e);
                 return null;
             }
         }
@@ -141,39 +184,24 @@ namespace Puma.Services
         #region Delete
         public async Task<PointOfInterest> Delete(int poiId)
         {
-            SetHeader();
+            _httpResponseHelper.SetHeader(_httpClient);
+            try
+            {
+                var response = await _httpClient.DeleteAsync($"{_poiApiUri}/?id={poiId}");
 
-            var response = await _httpClient.DeleteAsync($"{_poiApiUri}/?id={poiId}");
+                if (!await _httpResponseHelper.IsResponseSuccess(response))
+                    return null;
 
-            if (!await IsResponseSuccess(response))
+                return await response.Content.ReadFromJsonAsync<PointOfInterest>();
+            }
+            catch (Exception e)
+            {
+                await _dialogService.ShowErrorAsync(e);
                 return null;
-
-            return await response.Content.ReadFromJsonAsync<PointOfInterest>();
+            }
+            
         }
         #endregion
-        private async Task<bool> IsResponseSuccess(HttpResponseMessage response)
-        {
-            if (!response.IsSuccessStatusCode)
-            {
-                string responseBody = await response.Content.ReadAsStringAsync();
-                OnErrorMessage(responseBody);
-                return false;
-            }
-
-            return true;
-        }
-
-        private void SetHeader()
-        {
-            if (App.LoggedInUser == null)
-                return;
-
-            // TODO: Blir alltid null
-            //var header = _httpClient.DefaultRequestHeaders.FirstOrDefault(a => a.Key == "apiKey");
-
-            //if (header.Value == null)
-            _httpClient.DefaultRequestHeaders.Add("apiKey", App.LoggedInUser.ApiKey);
-        }
 
     }
 }

@@ -67,7 +67,7 @@ namespace API.Controllers
             var poiCommentAdded = await _poiService.AddCommentAsync(comment);
 
             if (poiCommentAdded == null)
-                return BadRequest();
+                return NotFound($"Could not find a Point of interest with id: {comment.PointOfInterestId}");
 
             return Ok(poiCommentAdded);
         }
@@ -104,7 +104,7 @@ namespace API.Controllers
         }
 
         [HttpGet("GetPoisFromLatAndLon")]
-        public async Task<ActionResult<ICollection<PointOfInterestDto>>> Get([FromQuery] string lat, [FromQuery] string lon)
+        public async Task<ActionResult<IEnumerable<PointOfInterestDto>>> Get([FromQuery] string lat, [FromQuery] string lon)
         {
             if (!double.TryParse(lat.Replace(".", ","), NumberStyles.Any, new CultureInfo("sv-SE"), out double latDouble) ||
                 !double.TryParse(lon.Replace(".", ","), NumberStyles.Any, new CultureInfo("sv-SE"), out double lonDouble))
@@ -129,9 +129,9 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<ICollection<PointOfInterestDto>>> Get()
+        public async Task<ActionResult<IEnumerable<PointOfInterestDto>>> Get()
         {
-            ICollection<PointOfInterestDto> pois = await _poiService.GetAllAsync();
+            IEnumerable<PointOfInterestDto> pois = await _poiService.GetAllAsync();
 
             if (pois.Count == 0)
                 return NotFound();

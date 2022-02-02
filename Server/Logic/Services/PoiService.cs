@@ -92,7 +92,6 @@ namespace Logic.Services
                                                                  .FirstOrDefaultAsync(p => p.Id == comment.PointOfInterestId);
 
             if (pointOfInterest == null)
-                //TODO: Throw exception?
                 return null;
 
             pointOfInterest.Comments.Add(_mapper.Map<Comment>(comment));
@@ -131,7 +130,7 @@ namespace Logic.Services
             return _mapper.Map<PointOfInterestDto>(foundPoi);
         }
 
-        public async Task<ICollection<PointOfInterestDto>> GetAsync(double lat, double lon)
+        public async Task<IEnumerable<PointOfInterestDto>> GetAsync(double lat, double lon)
         {
             var pois = await _context.PointOfInterests.Include(poi => poi.Address)
                                                  .Include(poi => poi.Position)
@@ -145,12 +144,12 @@ namespace Logic.Services
             if (pois == null || pois.Count == 0)
                 return null;
 
-            return _mapper.Map<ICollection<PointOfInterestDto>>(pois);
+            return _mapper.Map<IEnumerable<PointOfInterestDto>>(pois);
         }                                             
 
-        public async Task<ICollection<PointOfInterestDto>> GetAllAsync()
+        public async Task<IEnumerable<PointOfInterestDto>> GetAllAsync()
         {
-            return _mapper.Map<ICollection<PointOfInterestDto>>(await GetPoiFromDbAsync());
+            return _mapper.Map<IEnumerable<PointOfInterestDto>>(await GetPoiFromDbAsync());
         }
 
         public async Task<ICollection<TagDto>> GetTagsAsync()
