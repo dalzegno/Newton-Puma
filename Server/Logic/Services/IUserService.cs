@@ -9,7 +9,7 @@ namespace Logic.Services
         Task<UserDto> GetAsync(int id);
         Task<UserDto> GetAsync(string email);
         Task<UserDto> LogInAsync(string email, string password);
-        Task<ICollection<UserDto>> GetAllAsync();
+        Task<IEnumerable<UserDto>> GetAllAsync();
         Task<bool> IsUserAuthorizedAsync(string apiKey);
         Task<UserDto> CreateAsync(AddUserDto newUser);
         Task<UserDto> UpdateAsync(UpdateUserDto user);

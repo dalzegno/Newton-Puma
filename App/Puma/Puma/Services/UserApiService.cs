@@ -9,36 +9,33 @@ using System.Threading.Tasks;
 using Puma.Services;
 using Xamarin.Forms;
 using System.Linq;
+using Puma.Helpers;
 
 [assembly: Dependency(typeof(UserApiService))]
 namespace Puma.Services
 {
     public class UserApiService : IUserApiService
     {
-        IDialogService DialogService => DependencyService.Get<IDialogService>();
+        readonly IDialogService _dialogService = DependencyService.Get<IDialogService>();
+        readonly HttpResponseHelper _httpResponseHelper = DependencyService.Get<HttpResponseHelper>();
         readonly HttpClient _httpClient = new HttpClient();
         readonly string _userApiUri = "http://localhost:64500/api/User";
-        //readonly string _userApiUri = "http://localhost:44329/api/User";
-        public EventHandler<string> ErrorMessage;
         public User CurrentUser;
-        protected virtual void OnErrorMessage(string e) => ErrorMessage?.Invoke(this, e);
 
         public async Task<User> LogIn(string email, string password)
         {
             try
             {
                 var response = await _httpClient.GetAsync($"{_userApiUri}/LogIn?email={email}&password={password}");
-   
-                if (!await IsResponseSuccess(response))
+
+                if (!await _httpResponseHelper.IsResponseSuccess(response))
                     return null;
 
                 return await response.Content.ReadFromJsonAsync<User>();
             }
             catch (Exception e)
             {
-                // TODO: Error handling
-                // TODO: Borde injecta DialogService på något sätt här istället
-                await  App.Current.MainPage.DisplayAlert("Error",  e.Message,"Ok");
+                await _dialogService.ShowErrorAsync(e);
                 return null;
             }
 
@@ -46,19 +43,20 @@ namespace Puma.Services
 
         public async Task<User> GetUserAsync(string email)
         {
-            SetHeader();
+            _httpResponseHelper.SetHeader(_httpClient);
 
             try
             {
                 var response = await _httpClient.GetAsync($"{_userApiUri}/GetUserByEmail?email={email}");
-                if (!await IsResponseSuccess(response))
+                if (!await _httpResponseHelper.IsResponseSuccess(response))
                     return null;
 
                 return await response.Content.ReadFromJsonAsync<User>();
 
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                await _dialogService.ShowErrorAsync(e);
                 return null;
             }
 
@@ -66,36 +64,60 @@ namespace Puma.Services
 
         public async Task<User> CreateUserAsync(AddUserDto userToCreate)
         {
-            var response = await _httpClient.PostAsJsonAsync(_userApiUri, userToCreate);
+            try
+            {
+                var response = await _httpClient.PostAsJsonAsync(_userApiUri, userToCreate);
 
-            if (!await IsResponseSuccess(response))
+                if (!await _httpResponseHelper.IsResponseSuccess(response))
+                    return null;
+
+                return await response.Content.ReadFromJsonAsync<User>();
+            }
+            catch (Exception e)
+            {
+                await _dialogService.ShowErrorAsync(e);
                 return null;
+            }
 
-            return await response.Content.ReadFromJsonAsync<User>();
         }
 
         public async Task<User> UpdateUserAsync(UpdateUserDto userToUpdate)
         {
-            SetHeader();
+            _httpResponseHelper.SetHeader(_httpClient);
+            try
+            {
+                var response = await _httpClient.PutAsJsonAsync(_userApiUri, userToUpdate);
 
-            var response = await _httpClient.PutAsJsonAsync(_userApiUri, userToUpdate);
+                if (!await _httpResponseHelper.IsResponseSuccess(response))
+                    return null;
 
-            if (!await IsResponseSuccess(response))
+                return await response.Content.ReadFromJsonAsync<User>();
+            }
+            catch (Exception e)
+            {
+                await _dialogService.ShowErrorAsync(e);
                 return null;
+            }
 
-            return await response.Content.ReadFromJsonAsync<User>();
         }
 
         public async Task<User> DeleteUserAsync(int id)
         {
-            SetHeader();
+          _httpResponseHelper.SetHeader(_httpClient);
+          try 
+          {
+              var response = await _httpClient.DeleteAsync($"{_userApiUri}?id={id}");
 
-            var response = await _httpClient.DeleteAsync($"{_userApiUri}?id={id}");
+              if (!await _httpResponseHelper.IsResponseSuccess(response))
+                  return null;
 
-            if (!await IsResponseSuccess(response))
-                return null;
-
-            return await response.Content.ReadFromJsonAsync<User>();
+              return await response.Content.ReadFromJsonAsync<User>();
+          }
+          catch (Exception e)
+          {
+              await _dialogService.ShowErrorAsync(e);
+              return null;
+          }
         }
 
         private async Task<bool> IsResponseSuccess(HttpResponseMessage response)
@@ -113,31 +135,20 @@ namespace Puma.Services
         {
             try
             {
-                var response = await _httpClient.GetAsync($"{_userApiUri}/GetUserByEmail?email={email}");
-                currentUser = await response.Content.ReadFromJsonAsync<User>();
-                CurrentUser = currentUser;
-                if (!await IsResponseSuccess(response))
+                var response = await _httpClient.DeleteAsync($"{_userApiUri}?id={id}");
+
+                if (!await _httpResponseHelper.IsResponseSuccess(response))
                     return null;
 
                 return await response.Content.ReadFromJsonAsync<User>();
-
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                await _dialogService.ShowErrorAsync(e);
                 return null;
             }
-
         }
 
-        private void SetHeader()
-        {
-            if (App.LoggedInUser == null)
-                return;
-
-            var header = _httpClient.DefaultRequestHeaders.FirstOrDefault(a => a.Key == "apiKey");
-
-            if (header.Value == null)
-                _httpClient.DefaultRequestHeaders.Add("apiKey", App.LoggedInUser.ApiKey);
-        }
+     
     }
 }

@@ -77,15 +77,12 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<ICollection<UserDto>>> Get([FromHeader] string apiKey)
+        public async Task<ActionResult<IEnumerable<UserDto>>> Get([FromHeader] string apiKey)
         {
             //if (!await _userService.IsUserAuthorizedAsync(apiKey))
             //    return Unauthorized();
 
-            ICollection<UserDto> users = await _userService.GetAllAsync();
-
-            if (users.Count == 0)
-                return NotFound();
+            IEnumerable<UserDto> users = await _userService.GetAllAsync();
 
             return Ok(users);
         }

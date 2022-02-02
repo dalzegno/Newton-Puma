@@ -52,10 +52,7 @@ namespace Puma.ViewModels
             var loggedInUser = await _userApiService.LogIn(LoginEmail, LoginPassword);
 
             if (loggedInUser == null)
-            {
-                await _dialogService.ShowErrorAsync("Login", $"Mail or password was wrong.", "OK");
                 return;
-            }
 
             App.LoggedInUser = loggedInUser;
             await _dialogService.ShowMessageAsync("Login", $"Welcome {loggedInUser.DisplayName}!");

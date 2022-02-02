@@ -57,10 +57,10 @@ namespace Logic.Services
 
             return _mapper.Map<UserDto>(foundUser);
         }
-        public async Task<ICollection<UserDto>> GetAllAsync()
+        public async Task<IEnumerable<UserDto>> GetAllAsync()
         {
             var dbUsers = await _context.Users.ToListAsync();
-            return _mapper.Map<ICollection<UserDto>>(dbUsers);
+            return _mapper.Map<IEnumerable<UserDto>>(dbUsers);
         }
         public async Task<UserDto> GetAsync(int id)
         {
