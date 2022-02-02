@@ -226,6 +226,7 @@
                         CornerRadius="15"
                         ClassId="settingsPopup"
                         Command="{Binding OpenSettingsCommand}"
+                        Clicked="btn_OpenSettings"
                         TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                         BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
                         Text="Settings"></local:CustomButton>
