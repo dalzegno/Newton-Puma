@@ -4,6 +4,7 @@ using Puma.Services;
 using Puma.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -15,178 +16,51 @@ namespace Puma.Views
 
     public partial class MainPage : ContentPage
     {
+        private readonly Geocoder _geoCoder;
+
+        public static MainPage Instance { get; set; }
+        internal MainViewModel MainViewModel { get; }
+        internal PoiViewModel PoiViewModel { get; }
         IUserApiService UserApiService => DependencyService.Get<IUserApiService>();
         IDialogService DialogService => DependencyService.Get<IDialogService>();
         IPoiService PoiService => DependencyService.Get<IPoiService>();
         IOpenWeatherService WeatherService => DependencyService.Get<IOpenWeatherService>();
 
-        private readonly IPoiService _poiService;
-
-        public static MainPage Instance { get; set; }
-        internal MainViewModel MainViewModel { get; }
-        internal PoiViewModel poiViewModel { get; }
-
-        Geocoder geoCoder;
         public MainPage()
         {
             InitializeComponent();
             Instance = this;
+            // Internal viewmodels that can be reached globally
             MainViewModel = new MainViewModel(DialogService);
-            // Implementing dependecy injection
+            PoiViewModel = new PoiViewModel(PoiService, DialogService, WeatherService);
             BindingContext = MainViewModel;
 
-            slCreateUserViewModel.BindingContext = new NewUserViewModel(UserApiService, DialogService);
-            slLogIn.BindingContext = new LoginViewModel(UserApiService, DialogService);
+            SetBindingContexts();
 
-            poiViewModel = new PoiViewModel(PoiService, DialogService);
-            slPoiPopover.BindingContext = poiViewModel;
-            slPoiPopup.BindingContext = poiViewModel;
-            poiCollectionView.BindingContext = poiViewModel;
-            poiCreationPopup.BindingContext = poiViewModel;
-            slPoiMenuButtons.BindingContext = poiViewModel;
-
-            slSettings.BindingContext = new SettingsViewModel();
-
-            geoCoder = new Geocoder();
-
-            _poiService = PoiService;
-
+            _geoCoder = new Geocoder();
         }
 
+        #region Events
         async void OnMapClicked(object sender, MapClickedEventArgs e)
         {
             map.Pins.Clear();
-            Pin pin = new Pin
-            {
-
-                Label = "",
-                Address = "",
-                Type = PinType.Generic,
-                Position = new Position(e.Position.Latitude, e.Position.Longitude)
-            };
+            var position = e.Position;
+            var pin = CreatePin(position);
             map.Pins.Add(pin);
-            System.Diagnostics.Debug.WriteLine($"MapClick: {e.Position.Latitude}, {e.Position.Longitude}");
+
+            Debug.WriteLine($"MapClick: {position.Latitude}, {position.Longitude}");
+
+            lbl_longitude.Text = $"{position.Longitude}";
+            lbl_latitude.Text = $"{position.Latitude}";
+
+            IEnumerable<string> possibleAddresses = await _geoCoder.GetAddressesForPositionAsync(position);
+            string address = possibleAddresses.FirstOrDefault();
+            PoiViewModel.SetAddress(address);
 
 
-            lbl_longitude.Text = $"{e.Position.Longitude}";
-            lbl_latitude.Text = $"{e.Position.Latitude}";
-
-            if (e.Position.Latitude != 0 && e.Position.Longitude != 0)
-            {
-                Position position = new Position(e.Position.Latitude, e.Position.Longitude);
-                IEnumerable<string> possibleAddresses = await geoCoder.GetAddressesForPositionAsync(position);
-                string address = possibleAddresses.FirstOrDefault();
-
-
-                System.Diagnostics.Debug.WriteLine("address:" + address);
-
-
-                //ClearPoiEntries();
-                //FillAddressBoxes(address);
-                poiViewModel.SetAddress(address);
-            }
-
-            void FillAddressBoxes(string address)
-            {
-                var words = address?.Split('\n') ?? Array.Empty<string>();
-                if (words.Length == 2)
-                {
-                    poiViewModel.Area = words[0];
-                    poiViewModel._country = words[1];
-                    OnPropertyChanged(nameof(poiViewModel.Country));
-                    //lbl_Area.Text = words[0];
-                    //lbl_Country.Text = words[1];
-
-                    //entry_zip.Text = words[0];
-                    //entry_country.Text = words[1];
-                }
-                else if (words.Length == 3)
-                {
-                    poiViewModel.StreetName = words[0];
-                    poiViewModel.Area = words[1];
-                    poiViewModel._country = words[2];
-                    OnPropertyChanged(nameof(poiViewModel.Country));
-                    //lbl_StreetName.Text = words[0];
-                    //lbl_Area.Text = words[1];
-                    //lbl_Country.Text = words[2];
-
-                    //entry_address.Text = words[0];
-                    //entry_zip.Text = words[1];
-                    //entry_country.Text = words[2];
-                }
-                //lbl_adress.Text = address;
-            }
-
-            void ClearPoiEntries()
-            {
-                //lbl_StreetName.Text = "";
-                //lbl_Area.Text = "";
-                //lbl_Country.Text = "";
-
-                //entry_address.Text = "";
-                //entry_zip.Text = "";
-                //entry_country.Text = "";
-            }
-
-            //Circle circle = new Circle
-            //{
-            //    Center = e.Position,
-            //    Radius = new Distance(250),
-            //    StrokeColor = Color.FromHex("#88FF0000"),
-            //    StrokeWidth = 8,
-            //    FillColor = Color.FromHex("#88FFC0CB")
-            //};
-            //map.MapElements.Add(circle);
-
-
-            //Tag Button Generator
-            //var myList = new List<string>(); //Replace string with tags event
-            //TagsList.Children.Clear(); //just in case so you can call this code several times np..
-            //foreach (var item in myList)
-            //{
-            //    var btn = new Button()
-            //    {
-            //        Text = item.id, //Whatever prop you wonna put as title;
-            //        StyleId = item.name //use a property from event as id to be passed to handler
-            //        };
-            //    btn.Clicked += OnDynamicBtnClicked;
-            //    TagsList.Children.Add(btn);
-            //}
-
+            Debug.WriteLine("address: " + address);
         }
-
-        async void btn_SearchLocation_Clicked(object sender, EventArgs e)
-        {
-
-            var search = entry_address.Text + entry_zip.Text + entry_country.Text;
-
-            List<Position> postionList = new List<Position>(await new Geocoder().GetPositionsForAddressAsync(search));
-
-            map.Pins.Clear();
-            if (postionList.Count != 0)
-            {
-                var position = postionList.FirstOrDefault<Position>();
-                var adress = await new Geocoder().GetAddressesForPositionAsync(position);
-
-                map.Pins.Add(new Pin
-                {
-                    Address = adress.First(),
-                    Label = adress.First(),
-                    Type = PinType.SearchResult,
-                    Position = position
-                });
-
-                map.MoveToRegion(MapSpan.FromCenterAndRadius(position, Distance.FromKilometers(1)));
-
-            }
-        }
-
-        //async void TestMap(object sender, MapClickedEventArgs e)
-        //{
-        //}
-
-
-        void OnButtonClicked(object sender, EventArgs e)
+        private void ViewOptionButton_Clicked(object sender, EventArgs e)
         {
             Button button = sender as Button;
             switch (button.Text)
@@ -202,119 +76,133 @@ namespace Puma.Views
                     break;
             }
         }
-
-        private async void Button_Clicked(object sender, System.EventArgs e)
+        private async void SearchButton_Clicked(object sender, EventArgs e)
         {
-
-
-            //var poiService = new PoiApiService();
 
             if (SearchField.Text == null)
                 return;
 
-
-            List<Position> postionList = new List<Position>(await new Geocoder().GetPositionsForAddressAsync(SearchField.Text));
-
             map.Pins.Clear();
+            List<Position> positionList = await GetPositionsFromSearch(SearchField.Text);
 
-            if (postionList.Count == 0)
-                return;
-
-            var position = postionList.FirstOrDefault<Position>();
-            var address = await new Geocoder().GetAddressesForPositionAsync(position);
-            poiViewModel.SetAddress(address.First());
-            var pois = new List<PointOfInterest>() { };
-            try
+            if (positionList.Count == 0)
             {
-                pois = await _poiService.GetAsync(position);
+                await DialogService.ShowMessageAsync("Error", $"Could not find any location named \"{SearchField.Text}\"");
+                return;
             }
-            catch (Exception ex) { }
+
+            Location searchedLocation = await GetLocation(positionList);
+            PoiViewModel.SetAddress(searchedLocation.Addresses.FirstOrDefault());
+            var pin = CreatePin(searchedLocation);
+            map.Pins.Add(pin);
+
+            List<PointOfInterest> pois = await GetPoisFromDb(searchedLocation);
 
             if (pois == null || pois.Count == 0)
             {
-                map.Pins.Add(new Pin
-                {
-                    Address = address.First(),
-                    Label = address.First(),
-                    Type = PinType.SearchResult,
-                    Position = position
-                });
-                map.MoveToRegion(MapSpan.FromCenterAndRadius(position, Distance.FromKilometers(1)));
+                MoveToRegion(searchedLocation, 1);
                 return;
             }
 
             foreach (var poi in pois)
             {
-                var pin = new Pin
-                {
-                    Address = poi.Description,
-                    Type = PinType.Place,
-                    Position = new Position(poi.Position.Latitude, poi.Position.Longitude),
-                    Label = poi.Name
-                };
+                CreatePin(poi);
                 map.Pins.Add(pin);
-
-                pin.MarkerClicked += (sender2, args) =>
-                {
-
-                    DisplayAlert("Tapped!", $"{pin.Label}", "OK");
-                };
             }
 
-            // Sökta positionen
-            map.Pins.Add(new Pin
+            MoveToRegion(searchedLocation, 1);
+        }
+        private void LblTemperature_BindingContextChanged(object sender, EventArgs e)
+        {
+            var lbl = (Label)sender;
+
+            if (lbl.BindingContext == null)
+                return;
+
+            var temp = ((ForecastItem)lbl.BindingContext).Temperature;
+
+            if (temp < 5)
+                lbl.TextColor = Color.LightBlue;
+
+            else if (temp > 5 && temp <= 15)
+                lbl.TextColor = Color.LightGreen;
+
+            else if (temp > 15 && temp <= 20)
+                lbl.TextColor = Color.Orange;
+
+            else if (temp > 20)
+                lbl.TextColor = Color.Red;
+        }
+        #endregion
+
+        #region Local methods
+        private void SetBindingContexts()
+        {
+            slCreateUserViewModel.BindingContext = new NewUserViewModel(UserApiService, DialogService);
+            slLogIn.BindingContext = new LoginViewModel(UserApiService, DialogService);
+            slSettings.BindingContext = new SettingsViewModel();
+
+            slPoiPopover.BindingContext = PoiViewModel;
+            slPoiPopup.BindingContext = PoiViewModel;
+            poiCollectionView.BindingContext = PoiViewModel;
+            poiCreationPopup.BindingContext = PoiViewModel;
+            slPoiMenuButtons.BindingContext = PoiViewModel;
+            weatherCollectionView.BindingContext = PoiViewModel;
+        }
+        private async Task<List<PointOfInterest>> GetPoisFromDb(Location searchedLocation)
+        {
+            var pois = new List<PointOfInterest>();
+            try
             {
-                Address = address.First(),
-                Label = address.First(),
+                pois = await PoiService.GetAsync(searchedLocation.Position);
+            }
+            catch (Exception ex)
+            {
+                await DialogService.ShowErrorAsync("Error", ex, "OK");
+            }
+
+            return pois;
+        }
+        private async Task<Location> GetLocation(List<Position> positions)
+        {
+            return new Location()
+            {
+                Position = positions.FirstOrDefault(),
+                Addresses = await _geoCoder.GetAddressesForPositionAsync(positions.FirstOrDefault())
+            };
+        }
+        private void MoveToRegion(Location searchedLocation, double distanceKm)
+        {
+            map.MoveToRegion(MapSpan.FromCenterAndRadius(searchedLocation.Position, Distance.FromKilometers(distanceKm)));
+        }
+        private void MoveToRegion(PointOfInterest poi, double distanceKm)
+        {
+            var position = new Position(poi.Position.Latitude, poi.Position.Longitude);
+            map.MoveToRegion(MapSpan.FromCenterAndRadius(position, Distance.FromKilometers(distanceKm)));
+        }
+        private async Task<List<Position>> GetPositionsFromSearch(string search)
+        {
+            return new List<Position>(await _geoCoder.GetPositionsForAddressAsync(search));
+        }
+        private Pin CreatePin(Location location)
+        {
+            var pin = new Pin
+            {
+                Address = location.Addresses.First(),
+                Label = location.Addresses.First(),
                 Type = PinType.SearchResult,
-                Position = position
-            });
+                Position = location.Position
+            };
 
-            map.MoveToRegion(MapSpan.FromCenterAndRadius(position, Distance.FromKilometers(1)));
+            pin.MarkerClicked += (sender2, args) =>
+            {
+                DialogService.ShowMessageAsync("Tapped!", $"{pin.Label}");
+            };
 
-            // Om ni vill testa poiService :) 
-            //var poiService = new PoiApiService();
-
-
-            //var response = await poiService.CreatePoiAsync(new AddPoiDto
-            //{
-            //    Name = "Test test",
-            //    Description = "Yo description",
-            //    Position = new PositionPoi
-            //    {
-            //        Latitude = 59.37787,
-            //        Longitude = 17.02502
-            //    },
-            //    Address = new Address
-            //    {
-            //        Country = "Sverige",
-            //        Area = "Test",
-            //        StreetName = "Cool gata"
-            //    },
-            //    TagIds = new List<int> { 1, 2 }
-            //});
-
+            return pin;
         }
-
-
-
-        private void TagPicker_SelectedIndexChanged(object sender, EventArgs e)
+        private Pin CreatePin(PointOfInterest poi)
         {
-            //var btn = new Button();
-            //btn.Text = TagPicker.SelectedItem.ToString();
-            //TagsList.Children.Add(btn);
-        }
-
-        private void TagPicker_SelectedIndexChanged_1(object sender, EventArgs e)
-        {
-            //var btn = new Button();
-            //var text = TagPicker.SelectedIndex;
-            //btn.Text = text;
-            //TagsList.Children.Add(btn);
-        }
-        public void GoToLocation(PointOfInterest poi)
-        {
-            map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(poi.Position.Latitude, poi.Position.Longitude), Distance.FromKilometers(.5)));
             var pin = new Pin
             {
                 Address = poi.Description,
@@ -322,17 +210,28 @@ namespace Puma.Views
                 Position = new Position(poi.Position.Latitude, poi.Position.Longitude),
                 Label = poi.Name
             };
-            map.Pins.Add(pin);
 
             pin.MarkerClicked += (sender2, args) =>
             {
-
-                DisplayAlert("Tapped!", $"{pin.Label}", "OK");
+                DialogService.ShowMessageAsync("Tapped!", $"{pin.Label}");
             };
+            return pin;
         }
+        private Pin CreatePin(Position position)
+        {
+            Pin pin = new Pin
+            {
 
+                Label = "",
+                Address = "",
+                Type = PinType.Generic,
+                Position = new Position(position.Latitude, position.Longitude)
+            };
 
-
+            pin.MarkerClicked += (sender2, args) =>
+            {
+                DialogService.ShowMessageAsync("Tapped!", $"{pin.Label}");
+            };
         // SLIDERS
 
         async private void StartSlidePanel()
@@ -378,6 +277,19 @@ namespace Puma.Views
                     break;
             }
 
+        }
+        public void GoToLocation(PointOfInterest poi, double distanceKm)
+        {
+            MoveToRegion(poi, distanceKm);
+            var pin = CreatePin(poi);
+            map.Pins.Add(pin);
+        }
+        #endregion
+        // Maybe move this class outside, but it's only interesting here.
+        private class Location
+        {
+            public Position Position { get; set; }
+            public IEnumerable<string> Addresses { get; set; }
         }
     }
 }

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Text;
+﻿
 using System.Windows.Input;
 using Xamarin.Forms;
-using Xamarin.Forms.Maps;
-using Puma.Views;
+
 using Puma.Services;
 using Puma.Models;
 
@@ -43,7 +38,7 @@ namespace Puma.ViewModels
         
         public void UserLoggedIn()
         {
-            if (StaticUser.LoggedInUser == null)
+            if (App.LoggedInUser == null)
             {
                 isUserLoggedOut = true;
                 isUserLoggedIn = false;
@@ -106,10 +101,10 @@ namespace Puma.ViewModels
 
         public void LogOut()
         {
-            if (StaticUser.LoggedInUser == null)
+            if (App.LoggedInUser == null)
                 return;
 
-            StaticUser.LoggedInUser = null;
+            App.LoggedInUser = null;
             UserLoggedInCommand.Execute(null);
             _dialogService.ShowMessageAsync("Message", "You're logged out");
         }

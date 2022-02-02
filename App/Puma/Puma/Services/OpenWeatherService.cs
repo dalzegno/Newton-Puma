@@ -13,7 +13,7 @@ using Xamarin.Forms;
 [assembly: Dependency(typeof(OpenWeatherService))]
 namespace Puma.Services
 {
-    public class OpenWeatherService
+    public class OpenWeatherService : IOpenWeatherService
     {
         readonly HttpClient _httpClient = new HttpClient();
         readonly string _weatherApiUri = "http://localhost:64500/api/Weather";
@@ -32,8 +32,21 @@ namespace Puma.Services
         /// <param name="latitude"></param>
         /// <param name="longitude"></param>
         /// <returns></returns>
-        public async Task<Forecast> GetForecastAsync(double latitude, double longitude)
+        public async Task<Forecast> GetForecastAsync(string latitude, string longitude)
         {
+            string latAndLongKey = $"{latitude}, {longitude}";
+            // Cache expiration time, expires after 1 hour
+            string expirationTime = GetExpirationTime();
+
+            // TODO: Detta behöver vi inte, men kan vara schysst!
+            // If a request is made on the same location within one minute – get cached Forecast
+            if (_forecastDictionary.TryGetValue((latAndLongKey, expirationTime), out Forecast f))
+            {
+                //OnNewForecastAvailable($"Cached forecast for lat: {latitude} long: {longitude} available");
+                return f;
+            }
+            RemoveExpiredCaches();
+
             var language = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
             var response = await _httpClient.GetAsync($"{_weatherApiUri}?lat={latitude}&lon={longitude}&lang={language}");
             
@@ -42,10 +55,8 @@ namespace Puma.Services
 
             Forecast forecast = await response.Content.ReadFromJsonAsync<Forecast>();
 
-            Forecast foundForecast = HandleCacheAndEvents(latitude, longitude, forecast);
-            
-            if (foundForecast != null)
-                return foundForecast;
+            _forecastDictionary.TryAdd((latAndLongKey, expirationTime), forecast);
+            //OnNewForecastAvailable($"New weather forecast for (lat: {latitude} long: {longitude}) available");
 
             return forecast;
         }
@@ -66,7 +77,7 @@ namespace Puma.Services
             foreach (var item in _forecastDictionary)
             {
                 // These conversions needed to make the if-statement work
-                string strNow = DateTime.Now.ToString("yyyy/MM/dd HH");
+                string strNow = DateTime.Now.ToString("yyyy/MM/dd HH:mm");
                 DateTime dtNow = DateTime.Parse(strNow);
 
                 DateTime expirationTime = DateTime.Parse(item.Key.expirationTime);
@@ -78,7 +89,7 @@ namespace Puma.Services
             if (outDatedRequestKeys.Count > 0)
                 outDatedRequestKeys.ForEach(k => _forecastDictionary.TryRemove(k, out _));
         }
-        private static string GetExpirationTime() => DateTime.Now.AddHours(1).ToString("yyyy/MM/dd HH");
+        private static string GetExpirationTime() => DateTime.Now.AddMinutes(60).ToString("yyyy/MM/dd HH:mm");
         private async Task<bool> IsResponseSuccess(HttpResponseMessage response)
         {
             if (!response.IsSuccessStatusCode)
@@ -90,25 +101,11 @@ namespace Puma.Services
 
             return true;
         }
-        private Forecast HandleCacheAndEvents(double lat, double lon, Forecast forecast)
+        private Forecast HandleCacheAndEvents(string lat, string lon, Forecast forecast)
         {
-            string latAndLongKey = $"{lat}, {lon}";
-            // Cache expiration time, expires after 1 minute
-            string expirationTime = GetExpirationTime();
-
-            // TODO: Detta behöver vi inte, men kan vara schysst!
-            // If a request is made on the same location within one minute – get cached Forecast
-            if (_forecastDictionary.TryGetValue((latAndLongKey, expirationTime), out Forecast f))
-            {
-                OnNewForecastAvailable($"Cached forecast for lat: {lat} long: {lon} available");
-                return f;
-            }
-
-            RemoveExpiredCaches();
+           
 
 
-            _forecastDictionary.TryAdd((latAndLongKey, expirationTime), forecast);
-            OnNewForecastAvailable($"New weather forecast for (lat: {lat} long: {lon}) available");
             return null;
         }
     }

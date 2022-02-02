@@ -130,13 +130,13 @@ namespace Puma.Services
 
         private void SetHeader()
         {
-            if (StaticUser.LoggedInUser == null)
+            if (App.LoggedInUser == null)
                 return;
 
             var header = _httpClient.DefaultRequestHeaders.FirstOrDefault(a => a.Key == "apiKey");
 
             if (header.Value == null)
-                _httpClient.DefaultRequestHeaders.Add("apiKey", StaticUser.LoggedInUser.ApiKey);
+                _httpClient.DefaultRequestHeaders.Add("apiKey", App.LoggedInUser.ApiKey);
         }
     }
 }
