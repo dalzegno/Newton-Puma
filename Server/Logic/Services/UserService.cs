@@ -119,7 +119,6 @@ namespace Logic.Services
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
         }
-
         private async Task<User> GetDbUserAsync(string email)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email.ToLower());
@@ -136,6 +135,7 @@ namespace Logic.Services
             return await _context.Users.AnyAsync(u => u.ApiKey == apiKey);
         }
         private static bool TryEditUser(UpdateUserDto user, User userToEdit)
+
         {
             var isEdited = false;
             if (userToEdit.Email != user.Email)
@@ -167,6 +167,5 @@ namespace Logic.Services
             return isEdited;
         }
         #endregion
-
     }
 }

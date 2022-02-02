@@ -27,6 +27,8 @@ namespace Puma.Views
         IPoiService PoiService => DependencyService.Get<IPoiService>();
         IOpenWeatherService WeatherService => DependencyService.Get<IOpenWeatherService>();
 
+        
+
         public MainPage()
         {
             InitializeComponent();
@@ -40,8 +42,10 @@ namespace Puma.Views
             SetBindingContexts();
 
             _geoCoder = new Geocoder();
-        }
 
+            }
+
+      
         #region Events
         async void OnMapClicked(object sender, MapClickedEventArgs e)
         {
@@ -58,6 +62,7 @@ namespace Puma.Views
             IEnumerable<string> possibleAddresses = await _geoCoder.GetAddressesForPositionAsync(position);
             string address = possibleAddresses.FirstOrDefault();
             PoiViewModel.SetAddress(address);
+
 
             Debug.WriteLine("address: " + address);
         }
@@ -79,6 +84,7 @@ namespace Puma.Views
         }
         private async void SearchButton_Clicked(object sender, EventArgs e)
         {
+
             if (SearchField.Text == null)
                 return;
 
@@ -144,7 +150,7 @@ namespace Puma.Views
             slPoiPopover.BindingContext = PoiViewModel;
             slPoiPopup.BindingContext = PoiViewModel;
             poiCollectionView.BindingContext = PoiViewModel;
-            poiCreationPopup.BindingContext = PoiViewModel;
+            //poiCreationPopup.BindingContext = PoiViewModel;
             slPoiMenuButtons.BindingContext = PoiViewModel;
             weatherCollectionView.BindingContext = PoiViewModel;
             settingsInputs.BindingContext = SettingsViewModel;
@@ -232,9 +238,7 @@ namespace Puma.Views
             {
                 DialogService.ShowMessageAsync("Tapped!", $"{pin.Label}");
             };
-
             return pin;
-
         }
         public void GoToLocation(PointOfInterest poi, double distanceKm)
         {
@@ -242,6 +246,104 @@ namespace Puma.Views
             var pin = CreatePin(poi);
             map.Pins.Add(pin);
         }
+
+        #endregion
+
+        #region Slider methods
+        public List<Frame> GetMenuPanels()
+        {
+            return new List<Frame>()
+            {
+                signupPopup,
+                loginPopup,
+                poiCollectionView,
+                poiCreationView,
+                weatherCollectionView,
+                settingsPopup
+            };
+        }
+        private void slider_MenuButtonClicked(object sender, EventArgs e)
+        {
+            var xnameofstack = sender as Button;
+            List<Frame> MenuItems = GetMenuPanels();
+            Frame frame = MenuItems.FirstOrDefault(x => x.ClassId == xnameofstack.ClassId);
+            SlideInMenuPanel(frame);
+        }
+        private async void SlideInMenuPanel(Frame selectedMenuPanel)
+        {
+            double ScreenWidth = Application.Current.MainPage.Width;
+
+            List<Frame> MenuItemFrames = GetMenuPanels();
+
+            // Slidear ut den synliga menydelen
+            foreach(var menuFrame in MenuItemFrames)
+            {
+                if(menuFrame.ClassId != selectedMenuPanel.ToString() && menuFrame.IsVisible == true)
+                {
+                    await menuFrame.TranslateTo(ScreenWidth * -1, 0, 300, Easing.SpringOut);
+                    menuFrame.IsVisible = false;
+                }
+            }
+            //Slidear in den valda menyn
+            selectedMenuPanel.IsVisible = true;
+            selectedMenuPanel.TranslationX = ScreenWidth;
+            await selectedMenuPanel.TranslateTo(0, 0, 300, Easing.SpringIn);
+            
+        }
+        
+        async private void StartSlidePanel()
+        {
+            
+            //switch (Device.RuntimePlatform)
+            //{
+            //    default: slider_navbar.TranslationY = slider_navbar.TranslationY = 435;
+            //        //poiCreationPopup.TranslationY = poiCreationPopup.TranslationY = ScreenHeight;
+            //        break;
+            //}
+        }
+        
+        async void SliderUpDown(object sender, System.EventArgs e)
+            {
+
+            double ScreenHeight = Application.Current.MainPage.Height;
+            double ScreenWidth = Application.Current.MainPage.Width;
+            //var initialPosition = mainStack.Height;
+            //var currentPosition = body.Height;
+            switch (Device.RuntimePlatform)
+                {
+                    case Device.Android:
+
+                        if (slider_navbar.TranslationY == 0)
+                        {
+                            await slider_navbar.TranslateTo(0, ScreenHeight * -0.6, 500, Easing.SinInOut);
+                            slider_menu.Margin = new Thickness(0, slider_navbar.Height);
+                            slider_menu.IsVisible = true;
+                            slider_menu.HeightRequest = ScreenHeight * 0.6;
+                            slider_menu.WidthRequest = ScreenWidth;
+                    }
+                        else
+                        {
+                            await slider_navbar.TranslateTo(0, 0, 500, Easing.SpringIn);
+                        }
+
+                        break;
+                    default:
+                        if (slider_navbar.TranslationY == 0)
+                        {
+                        slider_menu.Margin = new Thickness(0, slider_navbar.Height);
+                        slider_menu.IsVisible = true;
+                        slider_menu.HeightRequest = ScreenHeight * 0.4;
+                        slider_menu.WidthRequest = ScreenWidth;
+                        await slider_navbar.TranslateTo(0, ScreenHeight * -0.4, 500, Easing.SinInOut);
+                        }
+                        else
+                        {
+                        await slider_navbar.TranslateTo(0, 0, 500, Easing.SpringIn);
+                        }
+                        break;
+                }
+            }
+        
         #endregion
         // Maybe move this class outside, but it's only interesting here.
         private class Location
@@ -250,15 +352,15 @@ namespace Puma.Views
             public IEnumerable<string> Addresses { get; set; }
         }
 
+
         private void btn_OpenSettings(object sender, EventArgs e)
         {
             var user = App.LoggedInUser;
             if (user == null)
                 return;
             SettingsViewModel.SetUserToEdit(user.DisplayName, user.Email, user.FirstName, user.LastName);
-            
-
-            //settingsViewModel.SetUserToEdit(user.DisplayName, user.Email, user.FirstName, user.LastName);
+ 
         }
+
     }
 }
