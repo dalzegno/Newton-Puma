@@ -313,8 +313,12 @@ namespace Puma.Views
 
                         if (slider_navbar.TranslationY == 0)
                         {
-                            await slider_navbar.TranslateTo(0, ScreenHeight * -1, 500, Easing.SinInOut);
-                        }
+                            await slider_navbar.TranslateTo(0, ScreenHeight * -0.6, 500, Easing.SinInOut);
+                            slider_menu.Margin = new Thickness(0, slider_navbar.Height);
+                            slider_menu.IsVisible = true;
+                            slider_menu.HeightRequest = ScreenHeight * 0.6;
+                            slider_menu.WidthRequest = ScreenWidth;
+                    }
                         else
                         {
                             await slider_navbar.TranslateTo(0, 0, 500, Easing.SpringIn);
