@@ -225,7 +225,7 @@
                         x:Name="btn_Settings_Popup"
                         CornerRadius="15"
                         ClassId="settingsPopup"
-                        Clicked="slider_MenuButtonClicked"
+                        Command="{Binding OpenSettingsCommand}"
                         TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                         BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
                         Text="Settings"></local:CustomButton>
@@ -282,7 +282,7 @@
 
                     <local:CustomButton
                         BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
-                       
+                        
                         Clicked="slider_MenuButtonClicked"
                         ClassId="poiCollectionView"
                         Grid.Column="0"
@@ -559,79 +559,8 @@
                 </Frame>
 
 
-                <!-- SETTINGS POPUP -->
-                <Frame
-                    x:Name="settingsPopup"
-                    ClassId="settingsPopup"
-                    IsVisible="{Binding settingsPopupState}"
-                    Grid.Row="2"
-                    Grid.RowSpan="8"
-                    Grid.ColumnSpan="12"
-                    HorizontalOptions="CenterAndExpand"
-                    VerticalOptions="CenterAndExpand"
-                    WidthRequest="320"
-                    MinimumHeightRequest="370"
-                    HeightRequest="500"
-                    BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
-                    Opacity=".9">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition
-                                Height="1*" />
-                            <RowDefinition
-                                Height="1*" />
-                            <RowDefinition
-                                Height="1*" />
-                            <RowDefinition
-                                Height="1*" />
-                        </Grid.RowDefinitions>
-                        <StackLayout
-                            Spacing="15">
-                            <local:CustomButton
-                                Command="{Binding ClosePopupCommand}"
-                                CornerRadius="15"
-                                BackgroundColor="{AppThemeBinding 
-                              Dark={StaticResource ButtonBackgroundColorDark}, 
-                              Light={StaticResource ButtonBackgroundColor}}"
-                                BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
-                                TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                                Margin="0,-10,-10,-15"
-                                Text="X"
-                                HorizontalOptions="EndAndExpand"></local:CustomButton>
-                            <Label
-                                TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                                Text="Settings"
-                                FontSize="32"
-                                HorizontalOptions="Center" />
-                            <Rectangle
-                                HeightRequest="2"
-                                HorizontalOptions="FillAndExpand"
-                                Background="black" />
-                            <Label
-                                Text="LightMode"
-                                TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"></Label>
-                            <RadioButton
-                                x:Name="themeRadioButtonLight"
-                                HorizontalOptions="Center">
-                            </RadioButton>
-                            <Label
-                                Text="DarkMode"
-                                TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"></Label>
-                            <RadioButton
-                                x:Name="themeRadioButtonDark"
-                                HorizontalOptions="Center">
-                            </RadioButton>
-
-                            <StackLayout
-                                x:Name="slSettings">
-                                <Rectangle
-                                    HeightRequest="2"
-                                    HorizontalOptions="FillAndExpand"
-                                    Background="black" />
-                            </StackLayout>
-                        </StackLayout>
-                    </Grid>
-                </Frame>
+                
+               
 
             </StackLayout>
         </AbsoluteLayout>
@@ -999,8 +928,80 @@
             </Grid>
         </Frame>
 
+        
+        <!-- SETTINGS POPUP -->
+        <Frame
+            x:Name="settingsPopup"
+            ClassId="settingsPopup"
+            IsVisible="{Binding settingsPopupState}"
+            Grid.Row="2"
+            Grid.RowSpan="8"
+            Grid.ColumnSpan="12"
+            HorizontalOptions="CenterAndExpand"
+            VerticalOptions="CenterAndExpand"
+            WidthRequest="320"
+            MinimumHeightRequest="370"
+            HeightRequest="500"
+            BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
+            Opacity=".9">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition
+                        Height="1*" />
+                    <RowDefinition
+                        Height="1*" />
+                    <RowDefinition
+                        Height="1*" />
+                    <RowDefinition
+                        Height="1*" />
+                </Grid.RowDefinitions>
+                <StackLayout
+                    Spacing="15">
+                    <local:CustomButton
+                        Command="{Binding ClosePopupCommand}"
+                        CornerRadius="15"
+                        BackgroundColor="{AppThemeBinding 
+                              Dark={StaticResource ButtonBackgroundColorDark}, 
+                              Light={StaticResource ButtonBackgroundColor}}"
+                        BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
+                        TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+                        Margin="0,-10,-10,-15"
+                        Text="X"
+                        HorizontalOptions="EndAndExpand"></local:CustomButton>
+                    <Label
+                        TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+                        Text="Settings"
+                        FontSize="32"
+                        HorizontalOptions="Center" />
+                    <Rectangle
+                        HeightRequest="2"
+                        HorizontalOptions="FillAndExpand"
+                        Background="black" />
+                    <Label
+                        Text="LightMode"
+                        TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"></Label>
+                    <RadioButton
+                        x:Name="themeRadioButtonLight"
+                        HorizontalOptions="Center">
+                    </RadioButton>
+                    <Label
+                        Text="DarkMode"
+                        TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"></Label>
+                    <RadioButton
+                        x:Name="themeRadioButtonDark"
+                        HorizontalOptions="Center">
+                    </RadioButton>
 
-       
+                    <StackLayout
+                        x:Name="slSettings">
+                        <Rectangle
+                            HeightRequest="2"
+                            HorizontalOptions="FillAndExpand"
+                            Background="black" />
+                    </StackLayout>
+                </StackLayout>
+            </Grid>
+        </Frame>
 
     </Grid>
 </ContentPage>
