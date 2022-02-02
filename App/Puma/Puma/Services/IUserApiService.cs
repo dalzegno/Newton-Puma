@@ -9,7 +9,7 @@ namespace Puma.Services
         Task<User> LogIn(string email, string password);
         Task<User> GetUserAsync(string email);
         Task<User> CreateUserAsync(AddUserDto userToCreate);
-        Task<User> UpdateUserAsync(AddUserDto userToUpdate);
+        Task<User> UpdateUserAsync(UpdateUserDto userToUpdate);
         Task<User> DeleteUserAsync(int id);
         Task<User> GetCurrentUserAsync(string email, User currentUser);
 

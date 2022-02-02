@@ -21,6 +21,7 @@ namespace Puma.Views
         public static MainPage Instance { get; set; }
         internal MainViewModel MainViewModel { get; }
         internal PoiViewModel PoiViewModel { get; }
+        internal SettingsViewModel SettingsViewModel { get; }
         IUserApiService UserApiService => DependencyService.Get<IUserApiService>();
         IDialogService DialogService => DependencyService.Get<IDialogService>();
         IPoiService PoiService => DependencyService.Get<IPoiService>();
@@ -35,6 +36,7 @@ namespace Puma.Views
             // Internal viewmodels that can be reached globally
             MainViewModel = new MainViewModel(DialogService);
             PoiViewModel = new PoiViewModel(PoiService, DialogService, WeatherService);
+            SettingsViewModel = new SettingsViewModel(UserApiService, DialogService);
             BindingContext = MainViewModel;
 
             SetBindingContexts();
@@ -144,14 +146,14 @@ namespace Puma.Views
         {
             slCreateUserViewModel.BindingContext = new NewUserViewModel(UserApiService, DialogService);
             slLogIn.BindingContext = new LoginViewModel(UserApiService, DialogService);
-            slSettings.BindingContext = new SettingsViewModel();
-
+            //settingsPopup.BindingContext = SettingsViewModel;
             slPoiPopover.BindingContext = PoiViewModel;
             slPoiPopup.BindingContext = PoiViewModel;
             poiCollectionView.BindingContext = PoiViewModel;
             //poiCreationPopup.BindingContext = PoiViewModel;
             slPoiMenuButtons.BindingContext = PoiViewModel;
             weatherCollectionView.BindingContext = PoiViewModel;
+            settingsInputs.BindingContext = SettingsViewModel;
         }
         private async Task<List<PointOfInterest>> GetPoisFromDb(Location searchedLocation)
         {
@@ -350,6 +352,15 @@ namespace Puma.Views
             public IEnumerable<string> Addresses { get; set; }
         }
 
-        
+
+        private void btn_OpenSettings(object sender, EventArgs e)
+        {
+            var user = App.LoggedInUser;
+            if (user == null)
+                return;
+            SettingsViewModel.SetUserToEdit(user.DisplayName, user.Email, user.FirstName, user.LastName);
+ 
+        }
+
     }
 }
