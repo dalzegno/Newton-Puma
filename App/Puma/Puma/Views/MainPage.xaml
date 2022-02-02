@@ -22,7 +22,7 @@
         AbsoluteLayout.LayoutBounds="1,1,1,1"
         AbsoluteLayout.LayoutFlags="All"
         ColumnDefinitions="1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*"
-        RowDefinitions="80,100,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*">
+        RowDefinitions="80,100,1*,1*,1*,1*,1*,1*,1*,1*,1*,80">
 
 
         <!-- GRID OUTLINES -->
@@ -104,15 +104,20 @@
 
         <!-- NAVBAR -->
         <Grid
+            x:Name="slider_navbar"
+            Grid.Row="11"
             ColumnDefinitions="1*,1*,1*"
             Grid.ColumnSpan="12"
             BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
                     Light={StaticResource PopUpBackgroundColor}}"
-            AbsoluteLayout.LayoutBounds="0, 0, 1, 60"
-            AbsoluteLayout.LayoutFlags="WidthProportional"
+            
             Opacity=".9"
             Padding="0">
-            
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer
+                    Tapped="SliderUpDown">
+                </TapGestureRecognizer>
+            </Grid.GestureRecognizers>
 
             <!-- POI VIEW POPOVER -->
             <Frame

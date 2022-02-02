@@ -79,7 +79,7 @@ namespace Puma.Views
 
 
                 System.Diagnostics.Debug.WriteLine("address:" + address);
-               
+
 
                 //ClearPoiEntries();
                 //FillAddressBoxes(address);
@@ -206,7 +206,7 @@ namespace Puma.Views
         private async void Button_Clicked(object sender, System.EventArgs e)
         {
 
-            
+
             //var poiService = new PoiApiService();
 
             if (SearchField.Text == null)
@@ -331,6 +331,53 @@ namespace Puma.Views
             };
         }
 
-       
+
+
+        // SLIDERS
+
+        async private void StartSlidePanel()
+        {
+            switch (Device.RuntimePlatform)
+            {
+                default: slider_navbar.TranslationY = slider_navbar.TranslationY = 435; break;
+            }
+        }
+        async void SliderUpDown(object sender, System.EventArgs e)
+        {
+            var ScreenHeight = Application.Current.MainPage.Height;
+            var ScreenWidtht = Application.Current.MainPage.Width;
+
+            //var initialPosition = mainStack.Height;
+            //var currentPosition = body.Height;
+            switch (Device.RuntimePlatform)
+            {
+                case Device.Android:
+
+                    if (slider_navbar.TranslationY == 0)
+                    {
+                        await slider_navbar.TranslateTo(0, 705, 500, Easing.SinInOut);
+                    }
+                    else
+                    {
+                        await slider_navbar.TranslateTo(0, 0, 500, Easing.SpringIn);
+                    }
+
+                    break;
+                default:
+                    if (slider_navbar.TranslationY == 0)
+                    {
+                        await slider_navbar.TranslateTo(0, ScreenHeight * -0.4, 500, Easing.SinInOut);
+
+                    }
+                    else
+                    {
+                        await slider_navbar.TranslateTo(0, 0, 500, Easing.SpringIn);
+                    }
+
+
+                    break;
+            }
+
+        }
     }
 }
