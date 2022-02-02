@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace API.Controllers
@@ -112,7 +113,7 @@ namespace API.Controllers
 
             var pois = await _poiService.GetAsync(latDouble, lonDouble);
 
-            if (pois == null || pois.Count < 1)
+            if (pois == null || !pois.Any())
                 return NotFound();
 
             return Ok(pois);
@@ -133,7 +134,7 @@ namespace API.Controllers
         {
             IEnumerable<PointOfInterestDto> pois = await _poiService.GetAllAsync();
 
-            if (pois.Count == 0)
+            if (!pois.Any())
                 return NotFound();
 
             return Ok(pois);

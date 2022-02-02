@@ -14,13 +14,16 @@ namespace Puma.Helpers
     {
         readonly IDialogService _dialogService = DependencyService.Get<IDialogService>();
 
-        public async Task<bool> IsResponseSuccess(HttpResponseMessage response)
+        public async Task<bool> IsResponseSuccess(HttpResponseMessage response, bool shouldDisplayMessage = true)
         {
             if (response.IsSuccessStatusCode)
                 return true;
 
             string responseBody = await response.Content.ReadAsStringAsync();
-            await _dialogService.ShowErrorAsync($"{(int)response.StatusCode} - {response.StatusCode}: {responseBody}");
+            
+            if (shouldDisplayMessage)
+                await _dialogService.ShowErrorAsync($"{(int)response.StatusCode} - {response.StatusCode}: {responseBody}");
+            
             return false;
         }
 

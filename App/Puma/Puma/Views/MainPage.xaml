@@ -957,7 +957,7 @@
                               Light={StaticResource ButtonBackgroundColor}}"
                         BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
                         TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                        Margin="0,-10,-10, 435"
+                        Margin="0,-10,-10,470"
                         Text="X"
                         HorizontalOptions="EndAndExpand"></Button>
 

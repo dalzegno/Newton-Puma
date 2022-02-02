@@ -132,7 +132,7 @@ namespace Puma.Services
             {
                 var response = await _httpClient.GetAsync($"{_poiApiUri}/GetPoisFromLatAndLon?lat={searchedPosition.Latitude}&lon={searchedPosition.Longitude}");
 
-                if (!await _httpResponseHelper.IsResponseSuccess(response))
+                if (!await _httpResponseHelper.IsResponseSuccess(response, false))
                     return null;
 
                 return await response.Content.ReadFromJsonAsync<List<PointOfInterest>>();
@@ -151,7 +151,7 @@ namespace Puma.Services
             {
                 var response = await _httpClient.GetAsync($"{_poiApiUri}/GetAllPoi");
 
-                if (!await _httpResponseHelper.IsResponseSuccess(response))
+                if (!await _httpResponseHelper.IsResponseSuccess(response, false))
                     return null;
 
                 return await response.Content.ReadFromJsonAsync<ObservableCollection<PointOfInterest>>();
@@ -168,7 +168,7 @@ namespace Puma.Services
             {
                 var response = await _httpClient.GetAsync($"{_poiApiUri}/GetTags");
 
-                if (!await _httpResponseHelper.IsResponseSuccess(response))
+                if (!await _httpResponseHelper.IsResponseSuccess(response, false))
                     return null;
 
                 return await response.Content.ReadFromJsonAsync<List<Tag>>();

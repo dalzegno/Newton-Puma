@@ -38,9 +38,7 @@ namespace Puma.Services
                 await _dialogService.ShowErrorAsync(e);
                 return null;
             }
-
         }
-
         public async Task<User> GetUserAsync(string email)
         {
             _httpResponseHelper.SetHeader(_httpClient);
@@ -59,9 +57,7 @@ namespace Puma.Services
                 await _dialogService.ShowErrorAsync(e);
                 return null;
             }
-
         }
-
         public async Task<User> CreateUserAsync(AddUserDto userToCreate)
         {
             try
@@ -78,12 +74,11 @@ namespace Puma.Services
                 await _dialogService.ShowErrorAsync(e);
                 return null;
             }
-
         }
-
         public async Task<User> UpdateUserAsync(UpdateUserDto userToUpdate)
         {
             _httpResponseHelper.SetHeader(_httpClient);
+
             try
             {
                 var response = await _httpClient.PutAsJsonAsync(_userApiUri, userToUpdate);
@@ -100,39 +95,10 @@ namespace Puma.Services
             }
 
         }
-
         public async Task<User> DeleteUserAsync(int id)
         {
-          _httpResponseHelper.SetHeader(_httpClient);
-          try 
-          {
-              var response = await _httpClient.DeleteAsync($"{_userApiUri}?id={id}");
+            _httpResponseHelper.SetHeader(_httpClient);
 
-              if (!await _httpResponseHelper.IsResponseSuccess(response))
-                  return null;
-
-              return await response.Content.ReadFromJsonAsync<User>();
-          }
-          catch (Exception e)
-          {
-              await _dialogService.ShowErrorAsync(e);
-              return null;
-          }
-        }
-
-        private async Task<bool> IsResponseSuccess(HttpResponseMessage response)
-        {
-            if (!response.IsSuccessStatusCode)
-            {
-                string responseBody = await response.Content.ReadAsStringAsync();
-                await DialogService.ShowErrorAsync("Error!", $"{response.StatusCode}: {responseBody}", "OK");
-                return false;
-            }
-
-            return true;
-        }
-        public async Task<User> GetCurrentUserAsync(string email, User currentUser)
-        {
             try
             {
                 var response = await _httpClient.DeleteAsync($"{_userApiUri}?id={id}");
@@ -148,7 +114,5 @@ namespace Puma.Services
                 return null;
             }
         }
-
-     
     }
 }
