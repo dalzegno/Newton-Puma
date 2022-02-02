@@ -83,9 +83,9 @@ namespace Logic.Services
         #endregion
 
         #region Update
-        public async Task<UserDto> UpdateAsync(AddUserDto user)
+        public async Task<UserDto> UpdateAsync(UpdateUserDto user)
         {
-            var userToEdit = await GetDbUserAsync(user.Email);
+            var userToEdit = await GetDbUserAsync(user.Id);
 
             if (userToEdit == null)
                 return null;
@@ -134,7 +134,8 @@ namespace Logic.Services
         {
             return await _context.Users.AnyAsync(u => u.ApiKey == apiKey);
         }
-        private static bool TryEditUser(AddUserDto user, User userToEdit)
+        private static bool TryEditUser(UpdateUserDto user, User userToEdit)
+
         {
             var isEdited = false;
             if (userToEdit.Email != user.Email)

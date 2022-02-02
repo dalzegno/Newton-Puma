@@ -149,18 +149,19 @@ namespace API.Controllers
         /// <param name="user"></param>
         /// <param name="apiKey"></param>
         /// <returns></returns>
-        [HttpPut("EditUser")]
+        [HttpPut()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<UserDto>> EditUser([FromBody] AddUserDto user, [FromHeader] string apiKey)
+        public async Task<ActionResult<UserDto>> EditUser([FromBody] UpdateUserDto user, [FromHeader] string apiKey)
         {
-            //if (!await _userService.IsUserAuthorizedAsync(apiKey))
-            //    return Unauthorized();
+
+            if (!await _userService.IsUserAuthorizedAsync(apiKey))
+                return Unauthorized();
 
             UserDto updatedUser = await _userService.UpdateAsync(user);
 
             if (updatedUser == null)
-                return NotFound();
+                return NotFound($"Could not find a user with ID: {user.Id}");
 
             return Ok(updatedUser);
         }
