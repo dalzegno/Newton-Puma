@@ -86,17 +86,17 @@
             VerticalOptions="FillAndExpand"
             x:Name="slMapTypes">
             <local:CustomButton
-                Clicked="OnButtonClicked"
+                Clicked="ViewOptionButton_Clicked"
                 BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
             Light={StaticResource PopUpBackgroundColor}}"
                 Text="Satellite"></local:CustomButton>
             <local:CustomButton
-                Clicked="OnButtonClicked"
+                Clicked="ViewOptionButton_Clicked"
                 BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
             Light={StaticResource PopUpBackgroundColor}}"
                 Text="Hybrid"></local:CustomButton>
             <local:CustomButton
-                Clicked="OnButtonClicked"
+                Clicked="ViewOptionButton_Clicked"
                 BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
             Light={StaticResource PopUpBackgroundColor}}"
                 Text="Street"></local:CustomButton>
@@ -283,7 +283,7 @@
                 WidthRequest="500"
                 ColumnDefinitions="auto,auto">
                 <local:RoundedEntry
-                    Completed="Button_Clicked"
+                    Completed="SearchButton_Clicked"
                     Grid.Column="0"
                     HorizontalOptions="FillAndExpand"
                     VerticalOptions="FillAndExpand"
@@ -310,7 +310,7 @@
                     Grid.Column="2"
                     Opacity=".1"
                     Text="Testa maps"
-                    Clicked="Button_Clicked">
+                    Clicked="SearchButton_Clicked">
                 </local:CustomButton>
             </Grid>
         </Frame>
@@ -785,10 +785,6 @@
                     <local:RoundedEntry
                         x:Name="entry_country"
                         Text="{Binding Country}"></local:RoundedEntry>
-                    <local:CustomButton
-                        x:Name="btn_SearchLocation"
-                        Text="Search"
-                        Clicked="btn_SearchLocation_Clicked"></local:CustomButton>
                     <local:CustomButton
                         Text="Add Point of Interest"
                         Command="{Binding CreatePoiCommand}" />
