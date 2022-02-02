@@ -90,10 +90,10 @@ namespace Logic.Services
             if (userToEdit == null)
                 return null;
 
-            User editedUser = _mapper.Map<User>(user);
+            if (TryEditUser(user, userToEdit))
+                await _context.SaveChangesAsync();
 
-            await _context.SaveChangesAsync();
-            return _mapper.Map<UserDto>(editedUser);
+            return _mapper.Map<UserDto>(userToEdit);
         }
         #endregion
 
@@ -119,7 +119,6 @@ namespace Logic.Services
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
         }
-
         private async Task<User> GetDbUserAsync(string email)
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email.ToLower());
@@ -135,7 +134,37 @@ namespace Logic.Services
         {
             return await _context.Users.AnyAsync(u => u.ApiKey == apiKey);
         }
-        #endregion
+        private static bool TryEditUser(AddUserDto user, User userToEdit)
+        {
+            var isEdited = false;
+            if (userToEdit.Email != user.Email)
+            {
+                userToEdit.Email = user.Email;
+                isEdited = true;
+            }
+            if (userToEdit.Password != EncryptionHelper.Encrypt(user.Password))
+            {
+                userToEdit.Password = EncryptionHelper.Encrypt(user.Password);
+                isEdited = true;
+            }
+            if (userToEdit.DisplayName != user.DisplayName)
+            {
+                userToEdit.DisplayName = user.DisplayName;
+                isEdited = true;
+            }
+            if (userToEdit.FirstName != user.FirstName)
+            {
+                userToEdit.FirstName = user.FirstName;
+                isEdited = true;
+            }
+            if (userToEdit.LastName != user.LastName)
+            {
+                userToEdit.LastName = user.LastName;
+                isEdited = true;
+            }
 
+            return isEdited;
+        }
+        #endregion
     }
 }
