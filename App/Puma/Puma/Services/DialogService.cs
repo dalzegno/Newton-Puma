@@ -8,7 +8,6 @@ namespace Puma.Services
 {
     public class DialogService : IDialogService
     {
-
         public async Task ShowErrorAsync(string message)
         {
             await Application.Current.MainPage.DisplayAlert("Error", message, "Ok");

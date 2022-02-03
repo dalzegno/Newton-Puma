@@ -33,13 +33,14 @@ namespace API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
 
+                // For xml summaries 
                 var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
             });
             // Automapping configuration
             var mapperConfig = new MapperConfiguration(mc =>
             {
-                // TODO: Lägg profiles här 
+                // Lägg mapping profiles här 
                 mc.AddProfile(new UserMapping());
                 mc.AddProfile(new PoiMapping());
             });
@@ -67,7 +68,7 @@ namespace API
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1"));
             }
 
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
 
             app.UseRouting();
 
