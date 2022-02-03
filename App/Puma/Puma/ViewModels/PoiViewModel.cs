@@ -195,7 +195,7 @@ namespace Puma.ViewModels
                 CreatePoiCommand.ChangeCanExecute();
             }
         }
-
+        #endregion
 
         #region commented
         //public double AvgTempToday
@@ -284,12 +284,7 @@ namespace Puma.ViewModels
             PoiCollection = await _poiService.GetAllAsync();
             OnPropertyChanged(nameof(PoiCollection));
         }
-      
-        private async void WeatherPopup()
-        {
-            ForecastCollection = await GetWeatherFromDb();
-            OnPropertyChanged(nameof(ForecastCollection));
-        }
+  
 
         private void PoisPopup()
         {

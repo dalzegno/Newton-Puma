@@ -81,6 +81,7 @@ namespace Puma.ViewModels
         public async void SetWeather(double lat, double lon)
         {
             var forecast = await GetWeatherFromDb(lat, lon);
+            
             AvgIconUriToday = forecast.AverageIconTodayUrl;
             AvgIconUriTomorrow = forecast.AverageIconTomorrowUrl;
             AvgTempToday = forecast.AverageTemperatureToday;

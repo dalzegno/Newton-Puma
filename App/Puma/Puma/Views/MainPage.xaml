@@ -132,7 +132,6 @@
 
                 <!-- POI VIEW POPOVER -->
                 <Frame
-                    
                     x:Name="slPoiPopover"
                     HorizontalOptions="Fill"
                     VerticalOptions="StartAndExpand"
@@ -145,7 +144,7 @@
                         VerticalOptions="CenterAndExpand"
                         RowDefinitions="1*,.6*,.6*">
                         <!--ColumnDefinitions="auto, auto"-->
-                        
+
                         <Label
                             Grid.Row="0"
                             VerticalOptions="End"
@@ -174,17 +173,17 @@
                             <Label
                                 VerticalOptions="End"
                                 HorizontalOptions="CenterAndExpand"
-                                Text="Today"  
+                                Text="Today"
                                 FontSize="13"
-                                FontAttributes="Bold"/>
+                                FontAttributes="Bold" />
                             <Label
                                 VerticalOptions="End"
                                 HorizontalOptions="CenterAndExpand"
-                                Text="Tomorrow"  
+                                Text="Tomorrow"
                                 FontSize="13"
-                                FontAttributes="Bold"/>
+                                FontAttributes="Bold" />
                         </StackLayout>
-                        
+
                         <!--WEATHER-->
                         <StackLayout
                             x:Name="sl_Weather"
@@ -194,17 +193,17 @@
                             <Label
                                 VerticalOptions="End"
                                 HorizontalOptions="CenterAndExpand"
-                                Text="{Binding AvgTempToday, StringFormat='{0}°C'}"  
-                                FontSize="13"/>
+                                Text="{Binding AvgTempToday, StringFormat='{0}°C'}"
+                                FontSize="13" />
                             <Image
-                                Source="{Binding AvgIconUriToday}"/>
+                                Source="{Binding AvgIconUriToday}" />
                             <Label
-                                 VerticalOptions="End"
+                                VerticalOptions="End"
                                 HorizontalOptions="CenterAndExpand"
-                                Text="{Binding AvgTempTomorrow, StringFormat='{0}°C'}"  
-                                FontSize="13"/>
+                                Text="{Binding AvgTempTomorrow, StringFormat='{0}°C'}"
+                                FontSize="13" />
                             <Image
-                                Source="{Binding AvgIconUriTomorrow}"/>
+                                Source="{Binding AvgIconUriTomorrow}" />
                         </StackLayout>
 
                     </Grid>
@@ -213,9 +212,9 @@
 
                 <!-- GLOBE ICON -->
                 <Grid
-                    Grid.Column="2"
+                    Grid.Column="1"
                     Grid.Row="0"
-                    HorizontalOptions="Center">
+                    HorizontalOptions="CenterAndExpand">
                     <Path
                         Fill="#008db3"
                         Data="M58.4,22.7L60,42.7C55.8,54,44.8,62,32,62C15.4,62,2,48.6,2,32S15.4,2,32,2c6,0,11.6,1.8,16.3,4.8L58.4,22.7z" />
@@ -230,13 +229,11 @@
                         Data="m20.6 17.3c-.3 0-.6.2-.9.2-.3.1-.5.5-.5.9 0 .5.8.6.5.9-.3.3-1.9.6-1.7 1.1s.5.9.2 1.4c-.3.5.3.6.9.4s1-.9.9-1.3c-.1-.5.9-.6.6-.2s-.8 1.4-.5 1.7c.3.3-.8.8-.4 1 .4.2 1.5-.8 2.1-.6s.8-.2.9-.7c.1-.6-.8-1.3-1.1-2-.3-.8-.1-2.8-1-2.8" />
 
                 </Grid>
-
-
                 <!-- ICON TEXT -->
                 <StackLayout
-                    Grid.Column="2"
+                    Grid.Column="1"
                     Orientation="Vertical"
-                    HorizontalOptions="FillAndExpand">
+                    HorizontalOptions="CenterAndExpand">
                     <Label
                         HorizontalOptions="Center"
                         HeightRequest="50"
@@ -298,7 +295,6 @@
 
 
             <!--  MENU -->
-
             <StackLayout
                 x:Name="slider_menu"
                 IsVisible="false"
@@ -436,7 +432,6 @@
                 </Frame>
 
 
-
                 <!-- POI COLLECTION VIEW  >-->
                 <Frame
                     HorizontalOptions="FillAndExpand"
@@ -475,61 +470,57 @@
                         </StackLayout>
                         <StackLayout
                             IsVisible="{Binding PoiCollectionVisible}">
-                        <CollectionView
-                            x:Name="poiCollectionView"
-                            
-                            Margin="0"
-                            ItemsSource="{Binding PoiCollection}"
-                            SelectionMode="Single"
-                            SelectedItem="{Binding SelectedSinglePoi}"
-                            SelectionChangedCommand="{Binding PoiSingleViewCommand}">
+                            <CollectionView
+                                x:Name="poiCollectionView"
+                                Margin="0"
+                                ItemsSource="{Binding PoiCollection}"
+                                SelectionMode="Single"
+                                SelectedItem="{Binding SelectedSinglePoi}"
+                                SelectionChangedCommand="{Binding PoiSingleViewCommand}">
 
-                            <CollectionView.ItemTemplate
-                                >
-                                <DataTemplate>
-                                    <Grid
-                                        
-                                        Padding="5"
-                                        HeightRequest="60"
-                                        RowDefinitions="1*,1*,1*">
-                                        <Label
-                                            Grid.Row="0"
-                                            Text="{Binding Name}"
-                                            FontAttributes="Bold"
-                                            CharacterSpacing=".5"
-                                            FontSize="12"
-                                            HeightRequest="100"></Label>
-                                        <Label
-                                            Grid.Row="1"
-                                            Text="{Binding Description}"
-                                            FontSize="12"
-                                            HeightRequest="100"></Label>
-                                        <Label
-                                            Grid.Row="2"
-                                            FontSize="12"
-                                            FontAttributes="Italic"
-                                            HeightRequest="100">
-                                            <Label.Text>
-                                                <MultiBinding
-                                                    StringFormat="{}{0}, {1}">
-                                                    <Binding
-                                                        Path="Address.Area" />
-                                                    <Binding
-                                                        Path="Address.Country" />
-                                                </MultiBinding>
-                                            </Label.Text>
-                                        </Label>
-                                        <Rectangle
-                                            Grid.Row="2"
-                                            HeightRequest="1"
-                                            BackgroundColor="Black"
-                                            VerticalOptions="End"
-                                            HorizontalOptions="FillAndExpand" />
-                                    </Grid>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid
+                                            Padding="5"
+                                            HeightRequest="60"
+                                            RowDefinitions="1*,1*,1*">
+                                            <Label
+                                                Grid.Row="0"
+                                                Text="{Binding Name}"
+                                                FontAttributes="Bold"
+                                                CharacterSpacing=".5"
+                                                FontSize="12"
+                                                HeightRequest="100"></Label>
+                                            <Label
+                                                Grid.Row="1"
+                                                Text="{Binding Description}"
+                                                FontSize="12"
+                                                HeightRequest="100"></Label>
+                                            <Label
+                                                Grid.Row="2"
+                                                FontSize="12"
+                                                FontAttributes="Italic"
+                                                HeightRequest="100">
+                                                <Label.Text>
+                                                    <MultiBinding
+                                                        StringFormat="{}{0}, {1}">
+                                                        <Binding
+                                                            Path="Address.Area" />
+                                                        <Binding
+                                                            Path="Address.Country" />
+                                                    </MultiBinding>
+                                                </Label.Text>
+                                            </Label>
+                                            <Rectangle
+                                                Grid.Row="2"
+                                                HeightRequest="1"
+                                                BackgroundColor="Black"
+                                                VerticalOptions="End"
+                                                HorizontalOptions="FillAndExpand" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
                         </StackLayout>
                     </StackLayout>
                 </Frame>
@@ -612,10 +603,9 @@
 
 
             </StackLayout>
-            
         </AbsoluteLayout>
 
-        
+
         <!--Signup Popup "-->
 
         <Frame
@@ -965,8 +955,8 @@
 
 
         <!-- SETTINGS POPUP -->
-        
-        
+
+
         <!-- Har bytt om lite så att det blev mer likt Login/signup,
         flyttat bindingcontext så Close-knappen funkar.
         Testade EntryViewControl på Första Email-entryt. -->
@@ -1007,7 +997,7 @@
                         Text="X"
                         HorizontalOptions="EndAndExpand" />
                 </Grid>
-                
+
                 <!-- INPUTS -->
                 <Grid
                     Grid.Row="1"
@@ -1015,131 +1005,121 @@
                     RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto"
                     ColumnSpacing="0">
                     <ScrollView>
-                    <Grid
-                        x:Name="settingsInputs"
-                        IsVisible="{Binding settingsLoggedInState}">
+                        <Grid
+                            x:Name="settingsInputs"
+                            IsVisible="{Binding settingsLoggedInState}">
                             <control:EntryViewControl
                                 Grid.Row="1"
                                 EntryText="{Binding EditEmail, Mode=TwoWay}"
                                 PlaceholderText="{Binding CurrentUserEmail}"
                                 ControlTemplate="{StaticResource EntryViewControlTemplate}" />
                             <Frame
-                            Grid.Row="1"
-                            BorderColor="LightGray"
-                            Padding="0"
-                            CornerRadius="15"
-                            IsClippedToBounds="False"
-                            HorizontalOptions="CenterAndExpand"
-                            WidthRequest="500"
-                            VerticalOptions="FillAndExpand"
-                            Opacity=".8">
+                                Grid.Row="1"
+                                BorderColor="LightGray"
+                                Padding="0"
+                                CornerRadius="15"
+                                IsClippedToBounds="False"
+                                HorizontalOptions="CenterAndExpand"
+                                WidthRequest="500"
+                                VerticalOptions="FillAndExpand"
+                                Opacity=".8">
 
-                            <local:RoundedEntry
+                                <local:RoundedEntry
+                                    x:Name="_editEmail"
+                                    Opacity=".8"
+                                    Placeholder="{Binding CurrentUserEmail}"
+                                    Text="{Binding EditEmail}"></local:RoundedEntry>
 
-                                x:Name="_editEmail"
-                                Opacity=".8"
-                                Placeholder="{Binding CurrentUserEmail}"
-                                Text="{Binding EditEmail}"></local:RoundedEntry>
+                            </Frame>
+                            <Frame
+                                Grid.Row="3"
+                                BorderColor="LightGray"
+                                Padding="0"
+                                CornerRadius="15"
+                                IsClippedToBounds="False"
+                                HorizontalOptions="CenterAndExpand"
+                                WidthRequest="500"
+                                VerticalOptions="FillAndExpand"
+                                Opacity=".8">
+                                <local:RoundedEntry
+                                    x:Name="_editPassword"
+                                    Text="{Binding EditPassword}"
+                                    IsPassword="True"
+                                    Opacity=".8"
+                                    Placeholder="Password"></local:RoundedEntry>
+                            </Frame>
+                            <Frame
+                                Grid.Row="5"
+                                BorderColor="LightGray"
+                                Padding="0"
+                                CornerRadius="15"
+                                IsClippedToBounds="False"
+                                HorizontalOptions="CenterAndExpand"
+                                WidthRequest="500"
+                                VerticalOptions="FillAndExpand"
+                                Opacity=".8">
+                                <local:RoundedEntry
+                                    x:Name="_editDisplayName"
+                                    Text="{Binding EditDisplayName}"
+                                    Opacity=".8"
+                                    Placeholder="{Binding CurrentUserDisplayName}"></local:RoundedEntry>
+                            </Frame>
 
-                        </Frame>
-                        <Frame
+                            <Label
+                                Grid.Row="6"></Label>
+                            <Frame
+                                Grid.Row="7"
+                                BorderColor="LightGray"
+                                Padding="0"
+                                CornerRadius="15"
+                                IsClippedToBounds="False"
+                                HorizontalOptions="CenterAndExpand"
+                                WidthRequest="500"
+                                VerticalOptions="FillAndExpand"
+                                Opacity=".8">
+                                <local:RoundedEntry
+                                    x:Name="_editFirstName"
+                                    Text="{Binding EditFirstName}"
+                                    Opacity=".8"
+                                    Placeholder="{Binding CurrentUserFirstName}"></local:RoundedEntry>
+                            </Frame>
 
-                            Grid.Row="3"
-                            BorderColor="LightGray"
-                            Padding="0"
-                            CornerRadius="15"
-                            IsClippedToBounds="False"
-                            HorizontalOptions="CenterAndExpand"
-                            WidthRequest="500"
-                            VerticalOptions="FillAndExpand"
-                            Opacity=".8">
-                            <local:RoundedEntry
+                            <Label
+                                Grid.Row="8"></Label>
 
-                                x:Name="_editPassword"
-                                Text="{Binding EditPassword}"
-                                IsPassword="True"
-                                Opacity=".8"
-                                Placeholder="Password"></local:RoundedEntry>
-                        </Frame>
-                        <Frame
+                            <Frame
+                                Grid.Row="9"
+                                BorderColor="LightGray"
+                                Padding="0"
+                                CornerRadius="15"
+                                IsClippedToBounds="False"
+                                HorizontalOptions="CenterAndExpand"
+                                WidthRequest="500"
+                                VerticalOptions="FillAndExpand"
+                                Opacity=".8">
+                                <local:RoundedEntry
+                                    x:Name="_editSurname"
+                                    Text="{Binding EditSurname}"
+                                    Opacity=".8"
+                                    Placeholder="{Binding CurrentUserLastName}"></local:RoundedEntry>
+                            </Frame>
 
-                            Grid.Row="5"
-                            BorderColor="LightGray"
-                            Padding="0"
-                            CornerRadius="15"
-                            IsClippedToBounds="False"
-                            HorizontalOptions="CenterAndExpand"
-                            WidthRequest="500"
-                            VerticalOptions="FillAndExpand"
-                            Opacity=".8">
-                            <local:RoundedEntry
-
-                                x:Name="_editDisplayName"
-                                Text="{Binding EditDisplayName}"
-                                Opacity=".8"
-                                Placeholder="{Binding CurrentUserDisplayName}"></local:RoundedEntry>
-                        </Frame>
-
-                        <Label
-                            Grid.Row="6"></Label>
-                        <Frame
-
-                            Grid.Row="7"
-                            BorderColor="LightGray"
-                            Padding="0"
-                            CornerRadius="15"
-                            IsClippedToBounds="False"
-                            HorizontalOptions="CenterAndExpand"
-                            WidthRequest="500"
-                            VerticalOptions="FillAndExpand"
-                            Opacity=".8">
-                            <local:RoundedEntry
-
-                                x:Name="_editFirstName"
-                                Text="{Binding EditFirstName}"
-                                Opacity=".8"
-                                Placeholder="{Binding CurrentUserFirstName}"></local:RoundedEntry>
-                        </Frame>
-
-                        <Label
-                            Grid.Row="8"></Label>
-
-                        <Frame
-
-                            Grid.Row="9"
-                            BorderColor="LightGray"
-                            Padding="0"
-                            CornerRadius="15"
-                            IsClippedToBounds="False"
-                            HorizontalOptions="CenterAndExpand"
-                            WidthRequest="500"
-                            VerticalOptions="FillAndExpand"
-                            Opacity=".8">
-                            <local:RoundedEntry
-
-                                x:Name="_editSurname"
-                                Text="{Binding EditSurname}"
-                                Opacity=".8"
-                                Placeholder="{Binding CurrentUserLastName}"></local:RoundedEntry>
-                        </Frame>
-
-                        <Button
-
-                            HeightRequest="50"
-                            WidthRequest="150"
-                            VerticalOptions="Center"
-                            Grid.Row="10"
-                            Command="{Binding EditUserCommand}"
-                            CornerRadius="10"
-                            BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
-                            HorizontalOptions="Center"
-                            BackgroundColor="{AppThemeBinding Dark={StaticResource ButtonBackgroundColorDark}, Light={StaticResource ButtonBackgroundColor}}"
-                            TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                            Text="Edit User"
-                            FontSize="20">
-                        </Button>
-                    </Grid>
-                </ScrollView>
+                            <Button
+                                HeightRequest="50"
+                                WidthRequest="150"
+                                VerticalOptions="Center"
+                                Grid.Row="10"
+                                Command="{Binding EditUserCommand}"
+                                CornerRadius="10"
+                                BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
+                                HorizontalOptions="Center"
+                                BackgroundColor="{AppThemeBinding Dark={StaticResource ButtonBackgroundColorDark}, Light={StaticResource ButtonBackgroundColor}}"
+                                TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+                                Text="Edit User"
+                                FontSize="20">
+                            </Button>
+                        </Grid>
+                    </ScrollView>
 
                 </Grid>
             </Grid>
