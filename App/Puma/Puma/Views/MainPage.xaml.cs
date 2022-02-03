@@ -152,12 +152,9 @@ namespace Puma.Views
         {
             return new List<Frame>()
             {
-                signupPopup,
-                loginPopup,
-                poiCollectionView,
+                poiCollectionFrame,
                 poiCreationView,
-                weatherCollectionView,
-                settingsPopup
+                weatherCollectionView
             };
         }
         private async void SlideInMenuPanel(Frame selectedMenuPanel)
@@ -166,30 +163,23 @@ namespace Puma.Views
 
             List<Frame> MenuItemFrames = GetMenuPanels();
 
-            // Slidear ut den synliga menydelen
-            foreach(var menuFrame in MenuItemFrames)
+            if (selectedMenuPanel != null)
             {
-                if(menuFrame.ClassId != selectedMenuPanel.ToString() && menuFrame.IsVisible == true)
+                // Slidear ut den synliga menydelen
+                foreach (var menuFrame in MenuItemFrames)
                 {
-                    await menuFrame.TranslateTo(ScreenWidth * -1, 0, 300, Easing.SpringOut);
-                    menuFrame.IsVisible = false;
+                    if (menuFrame.ClassId != selectedMenuPanel.ToString() && menuFrame.IsVisible == true)
+                    {
+                        await menuFrame.TranslateTo(ScreenWidth * -1, 0, 300, Easing.SpringOut);
+                        menuFrame.IsVisible = false;
+                    }
                 }
+                //Slidear in den valda menyn
+                selectedMenuPanel.IsVisible = true;
+                selectedMenuPanel.TranslationX = ScreenWidth;
+
+                await selectedMenuPanel.TranslateTo(0, 0, 300, Easing.SpringIn);
             }
-            //Slidear in den valda menyn
-            selectedMenuPanel.IsVisible = true;
-            selectedMenuPanel.TranslationX = ScreenWidth;
-            await selectedMenuPanel.TranslateTo(0, 0, 300, Easing.SpringIn);
-            
-        }
-        async private void StartSlidePanel()
-        {
-            
-            //switch (Device.RuntimePlatform)
-            //{
-            //    default: slider_navbar.TranslationY = slider_navbar.TranslationY = 435;
-            //        //poiCreationPopup.TranslationY = poiCreationPopup.TranslationY = ScreenHeight;
-            //        break;
-            //}
         }
         private void slider_MenuButtonClicked(object sender, EventArgs e)
         {
@@ -203,8 +193,6 @@ namespace Puma.Views
 
             double ScreenHeight = Application.Current.MainPage.Height;
             double ScreenWidth = Application.Current.MainPage.Width;
-            //var initialPosition = mainStack.Height;
-            //var currentPosition = body.Height;
             switch (Device.RuntimePlatform)
                 {
                     case Device.Android:
@@ -216,7 +204,7 @@ namespace Puma.Views
                             slider_menu.IsVisible = true;
                             slider_menu.HeightRequest = ScreenHeight * 0.6;
                             slider_menu.WidthRequest = ScreenWidth;
-                    }
+                        }
                         else
                         {
                             await slider_navbar.TranslateTo(0, 0, 500, Easing.SpringIn);
@@ -247,11 +235,11 @@ namespace Puma.Views
         {
             slCreateUserViewModel.BindingContext = new NewUserViewModel(UserApiService, DialogService);
             slLogIn.BindingContext = new LoginViewModel(UserApiService, DialogService);
-            //settingsPopup.BindingContext = SettingsViewModel;
+            settingsPopup.BindingContext = SettingsViewModel;
             slPoiPopover.BindingContext = PoiViewModel;
             slPoiPopup.BindingContext = PoiViewModel;
-            poiCollectionView.BindingContext = PoiViewModel;
-            //poiCreationPopup.BindingContext = PoiViewModel;
+            poiCollectionFrame.BindingContext = PoiViewModel;
+            poiCreationView.BindingContext = PoiViewModel;
             slPoiMenuButtons.BindingContext = PoiViewModel;
             weatherCollectionView.BindingContext = WeatherViewModel1;
             settingsInputs.BindingContext = SettingsViewModel;
@@ -357,5 +345,7 @@ namespace Puma.Views
             public Position Position { get; set; }
             public IEnumerable<string> Addresses { get; set; }
         }
+
+       
     }
 }

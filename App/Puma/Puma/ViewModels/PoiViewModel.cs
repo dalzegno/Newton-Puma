@@ -26,26 +26,23 @@ namespace Puma.ViewModels
             _tags = new List<Tag>();
             _tagButtons = new ObservableCollection<Tag>();
             GetTagsFromDb();
-            //RemoveTagCommand = new Command<Tag>(RemoveTag);
         }
 
         Command _createPoiCommand;
         Command _removeTagCommand;
-        Command _poiCollectionPopupCommand;
-        Command _poiCreationPopupCommand;
-        Command _selectedPoiCommand;
-        Command _weatherPopupCommand;
-
-        public Command SelectedPoiCommand => _selectedPoiCommand ?? (_selectedPoiCommand = new Command(SelectPoi));
+        Command _poiGetCollectionCommand;
+        Command _poiSingleViewCommand;
+        Command _poiCollectionViewCommand;
 
 
 
         public Command CreatePoiCommand => _createPoiCommand ?? (_createPoiCommand = new Command(CreatePoi, CanCreate));
         public Command RemoveTagCommand => _removeTagCommand ?? (_removeTagCommand = new Command(RemoveTag));
 
-        public Command PoiCollectionPopupCommand => _poiCollectionPopupCommand ?? (_poiCollectionPopupCommand = new Command(PoiCollectionPopup));
-        public Command PoiCreationPopupCommand => _poiCreationPopupCommand ?? (_poiCreationPopupCommand = new Command(PoiCreationPopup));
-        public Command WeatherPopupCommand => _weatherPopupCommand ?? (_weatherPopupCommand = new Command(WeatherPopup));
+        public Command PoiGetCollectionCommand => _poiGetCollectionCommand ?? (_poiGetCollectionCommand = new Command(PoiGetCollection));
+        public Command PoiSingleViewCommand => _poiSingleViewCommand ?? (_poiSingleViewCommand = new Command(PoiSinglePopup));
+        public Command PoiCollectionViewCommand => _poiCollectionViewCommand ?? (_poiCollectionViewCommand = new Command(PoisPopup));
+
 
         public string _name;
         public string _description;
@@ -62,11 +59,12 @@ namespace Puma.ViewModels
 
         public bool openPoiCreationBool { get; set; } = false;
         public bool openPoiCollectionBool { get; set; } = false;
-        public bool poiCollectionVisibleBool { get; set; } = false;
+        public bool poiCollectionVisibleBool { get; set; } = true;
         public bool poiSingleVisibleBool { get; set; } = false;
-        public bool openWeatherPopupBool { get; set; } = false;      
+        public bool openWeatherPopupBool { get; set; } = false;
 
 
+        #region Fields
         // Poi Collection
         public ObservableCollection<PointOfInterest> _poiCollection;
         public ObservableCollection<PointOfInterest> PoiCollection
@@ -198,6 +196,7 @@ namespace Puma.ViewModels
             }
         }
 
+
         #region commented
         //public double AvgTempToday
         //{
@@ -274,54 +273,52 @@ namespace Puma.ViewModels
         {
             TagButtons.Remove((Tag)tag);
         }
-        private async void PoiCollectionPopup()
+    
+        private async void PoiGetCollection()
         {
-            openPoiCollectionBool = !openPoiCollectionBool;
-            openPoiCreationBool = false;
             poiCollectionVisibleBool = true;
             poiSingleVisibleBool = false;
-            openWeatherPopupBool = false;
+            OnPropertyChanged(nameof(PoiCollectionVisible));
+            OnPropertyChanged(nameof(PoiSingleVisible));
+
             PoiCollection = await _poiService.GetAllAsync();
             OnPropertyChanged(nameof(PoiCollection));
-            OnPropertyChanged(nameof(PoiCollectionVisible));
-            OnPropertyChanged(nameof(PoiSingleVisible));
-            OnPropertyChanged(nameof(poiCollectionPopupState));
-            OnPropertyChanged(nameof(PoiCreationPopupState));
-            OnPropertyChanged(nameof(WeatherPopupState));
-
         }
-        private void PoiCreationPopup()
-        {
-            openPoiCreationBool = !openPoiCreationBool;
-            openPoiCollectionBool = false;
-            openWeatherPopupBool = false;
-            OnPropertyChanged(nameof(PoiCreationPopupState));
-            OnPropertyChanged(nameof(poiCollectionPopupState));
-            OnPropertyChanged(nameof(WeatherPopupState));
-        }
-
+      
         private async void WeatherPopup()
         {
-            openWeatherPopupBool = !openWeatherPopupBool;
-            openPoiCreationBool = false;
-            openPoiCollectionBool = false;
-            OnPropertyChanged(nameof(PoiCreationPopupState));
-            OnPropertyChanged(nameof(poiCollectionPopupState));
-            OnPropertyChanged(nameof(WeatherPopupState));
-            //if (openWeatherPopupBool)
-            //    ForecastCollection = await GetWeatherFromDb();
+            ForecastCollection = await GetWeatherFromDb();
+            OnPropertyChanged(nameof(ForecastCollection));
         }
 
-        private void SelectPoi()
+        private void PoisPopup()
         {
-            poiCollectionVisibleBool = !poiCollectionVisibleBool;
-            poiSingleVisibleBool = !poiSingleVisibleBool;
-            if (poiSingleVisibleBool == true)
-                MainPage.Instance.GoToLocation(SelectedSinglePoi, .5);
+            SelectedSinglePoi = null;
+            OnPropertyChanged(nameof(SelectedSinglePoi));
+            poiCollectionVisibleBool = true;
+            poiSingleVisibleBool = false;
             OnPropertyChanged(nameof(PoiCollectionVisible));
             OnPropertyChanged(nameof(PoiSingleVisible));
 
         }
+        private void PoiSinglePopup()
+        {
+            if (SelectedSinglePoi != null) MainPage.Instance.GoToLocation(SelectedSinglePoi, 1);
+            poiCollectionVisibleBool = false;
+            OnPropertyChanged(nameof(PoiCollectionVisible));
+            poiSingleVisibleBool = true;
+            OnPropertyChanged(nameof(PoiSingleVisible));
+
+            if (SelectedSinglePoi == null) return;
+            var a = SelectedSinglePoi.Address;
+            StreetName = a.StreetName;
+            Area = a.Area;
+            Country = a.Country;
+            OnPropertyChanged(nameof(StreetName));
+            OnPropertyChanged(nameof(Area));
+            OnPropertyChanged(nameof(Country));
+        }
+       
 
         public void SetAddress(string address)
         {
