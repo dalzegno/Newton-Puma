@@ -145,12 +145,9 @@ namespace Puma.Views
         {
             return new List<Frame>()
             {
-                signupPopup,
-                loginPopup,
                 poiCollectionFrame,
                 poiCreationView,
-                weatherCollectionView,
-                settingsPopup
+                weatherCollectionView
             };
         }
         private async void SlideInMenuPanel(Frame selectedMenuPanel)
@@ -176,17 +173,6 @@ namespace Puma.Views
 
                 await selectedMenuPanel.TranslateTo(0, 0, 300, Easing.SpringIn);
             }
-            
-        }
-        async private void StartSlidePanel()
-        {
-            
-            //switch (Device.RuntimePlatform)
-            //{
-            //    default: slider_navbar.TranslationY = slider_navbar.TranslationY = 435;
-            //        //poiCreationPopup.TranslationY = poiCreationPopup.TranslationY = ScreenHeight;
-            //        break;
-            //}
         }
         private void slider_MenuButtonClicked(object sender, EventArgs e)
         {
@@ -200,8 +186,6 @@ namespace Puma.Views
 
             double ScreenHeight = Application.Current.MainPage.Height;
             double ScreenWidth = Application.Current.MainPage.Width;
-            //var initialPosition = mainStack.Height;
-            //var currentPosition = body.Height;
             switch (Device.RuntimePlatform)
                 {
                     case Device.Android:
@@ -213,7 +197,7 @@ namespace Puma.Views
                             slider_menu.IsVisible = true;
                             slider_menu.HeightRequest = ScreenHeight * 0.6;
                             slider_menu.WidthRequest = ScreenWidth;
-                    }
+                        }
                         else
                         {
                             await slider_navbar.TranslateTo(0, 0, 500, Easing.SpringIn);
