@@ -281,9 +281,9 @@
 
                     <local:CustomButton
                         BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
-                        
+                        Command="{Binding PoiCollectionPopupCommand}"
                         Clicked="slider_MenuButtonClicked"
-                        ClassId="poiCollectionView"
+                        ClassId="poiCollectionFrame"
                         Grid.Column="0"
                         HorizontalOptions="FillAndExpand"
                         Text="Points of Interest">
@@ -292,6 +292,7 @@
                         BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
                         Grid.Column="1"
                         HorizontalOptions="FillAndExpand"
+                        Command="{Binding WeatherPopupCommand}"
                         ClassId="weatherCollectionView"
                         Clicked="slider_MenuButtonClicked"
                         Text="Weather"></local:CustomButton>
@@ -398,7 +399,7 @@
                 </Frame>
 
 
-               
+
 
 
 
@@ -412,17 +413,19 @@
                     Margin="10,10"
                     BackgroundColor="White"
                     Opacity=".9"
-                    ClassId="poiCollectionView"
-                    x:Name="poiCollectionView">
+                    ClassId="poiCollectionFrame"
+                    x:Name="poiCollectionFrame">
 
                     <StackLayout>
                         <CollectionView
+                            x:Name="poiCollectionView"
                             IsVisible="{Binding PoiCollectionVisible}"
                             Margin="0"
                             ItemsSource="{Binding PoiCollection}"
                             SelectionMode="Single"
-                            SelectedItem="{Binding SelectedSinglePoi}"
-                            SelectionChangedCommand="{Binding SelectedPoiCommand}">
+                            SelectionChangedCommandParameter="{Binding Source={x:Reference Name=poiCollectionView}, Path=SelectedItem}"
+                            SelectionChangedCommand="{Binding PoiSingleViewCommand}">
+                            
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
                                     <Grid
@@ -468,13 +471,17 @@
                         </CollectionView>
 
                         <StackLayout
-                            IsVisible="{Binding PoiSingleVisible}">
+                            x:Name="poiSingleView"
+                            
+                            IsVisible="{Binding PoiSingleVisible}"
+>
                             <local:CustomButton
                                 Text="Return"
-                                Command="{Binding SelectedPoiCommand}" />
+                                Command="{Binding PoiSingleViewCommand}" />
                             <Label
                                 FontSize="24"
                                 Text="{Binding SelectedSinglePoi.Name}" />
+                           
                             <Label
                                 FontSize="12"
                                 Text="{Binding SelectedSinglePoi.Description}" />
@@ -492,7 +499,7 @@
                     HorizontalOptions="StartAndExpand"
                     VerticalOptions="StartAndExpand"
                     Margin="10,10"
-                    IsVisible="false"
+                    IsVisible="true"
                     ClassId="weatherCollectionView"
                     BackgroundColor="White"
                     Opacity=".9"
@@ -500,6 +507,7 @@
 
 
                     <CollectionView
+                        IsVisible="true"
                         VerticalOptions="StartAndExpand"
                         HorizontalOptions="Center"
                         Margin="0"
@@ -933,7 +941,7 @@
         <Frame
             x:Name="settingsPopup"
             ClassId="settingsPopup"
-            IsVisible="{Binding settingsPopupState}"
+            IsVisible="false"
             Grid.Row="2"
             Grid.RowSpan="8"
             Grid.ColumnSpan="12"

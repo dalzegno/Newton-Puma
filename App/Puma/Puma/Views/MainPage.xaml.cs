@@ -147,7 +147,7 @@ namespace Puma.Views
             {
                 signupPopup,
                 loginPopup,
-                poiCollectionView,
+                poiCollectionFrame,
                 poiCreationView,
                 weatherCollectionView,
                 settingsPopup
@@ -159,19 +159,23 @@ namespace Puma.Views
 
             List<Frame> MenuItemFrames = GetMenuPanels();
 
-            // Slidear ut den synliga menydelen
-            foreach(var menuFrame in MenuItemFrames)
+            if (selectedMenuPanel != null)
             {
-                if(menuFrame.ClassId != selectedMenuPanel.ToString() && menuFrame.IsVisible == true)
+                // Slidear ut den synliga menydelen
+                foreach (var menuFrame in MenuItemFrames)
                 {
-                    await menuFrame.TranslateTo(ScreenWidth * -1, 0, 300, Easing.SpringOut);
-                    menuFrame.IsVisible = false;
+                    if (menuFrame.ClassId != selectedMenuPanel.ToString() && menuFrame.IsVisible == true)
+                    {
+                        await menuFrame.TranslateTo(ScreenWidth * -1, 0, 300, Easing.SpringOut);
+                        menuFrame.IsVisible = false;
+                    }
                 }
+                //Slidear in den valda menyn
+                selectedMenuPanel.IsVisible = true;
+                selectedMenuPanel.TranslationX = ScreenWidth;
+
+                await selectedMenuPanel.TranslateTo(0, 0, 300, Easing.SpringIn);
             }
-            //Slidear in den valda menyn
-            selectedMenuPanel.IsVisible = true;
-            selectedMenuPanel.TranslationX = ScreenWidth;
-            await selectedMenuPanel.TranslateTo(0, 0, 300, Easing.SpringIn);
             
         }
         async private void StartSlidePanel()
@@ -240,11 +244,11 @@ namespace Puma.Views
         {
             slCreateUserViewModel.BindingContext = new NewUserViewModel(UserApiService, DialogService);
             slLogIn.BindingContext = new LoginViewModel(UserApiService, DialogService);
-            //settingsPopup.BindingContext = SettingsViewModel;
+            settingsPopup.BindingContext = SettingsViewModel;
             slPoiPopover.BindingContext = PoiViewModel;
             slPoiPopup.BindingContext = PoiViewModel;
-            poiCollectionView.BindingContext = PoiViewModel;
-            //poiCreationPopup.BindingContext = PoiViewModel;
+            poiCollectionFrame.BindingContext = PoiViewModel;
+            poiCreationView.BindingContext = PoiViewModel;
             slPoiMenuButtons.BindingContext = PoiViewModel;
             weatherCollectionView.BindingContext = PoiViewModel;
             settingsInputs.BindingContext = SettingsViewModel;
@@ -348,5 +352,7 @@ namespace Puma.Views
             public Position Position { get; set; }
             public IEnumerable<string> Addresses { get; set; }
         }
+
+       
     }
 }
