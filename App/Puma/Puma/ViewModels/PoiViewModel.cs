@@ -18,12 +18,11 @@ namespace Puma.ViewModels
     {
         readonly IPoiService _poiService;
         readonly IDialogService _dialogService;
-        readonly IOpenWeatherService _weatherService;
-        public PoiViewModel(IPoiService poiService, IDialogService dialogService, IOpenWeatherService weatherService)
+
+        public PoiViewModel(IPoiService poiService, IDialogService dialogService)
         {
             _poiService = poiService;
             _dialogService = dialogService;
-            _weatherService = weatherService;
             _tags = new List<Tag>();
             _tagButtons = new ObservableCollection<Tag>();
             GetTagsFromDb();
@@ -35,10 +34,10 @@ namespace Puma.ViewModels
         Command _poiCollectionPopupCommand;
         Command _poiCreationPopupCommand;
         Command _selectedPoiCommand;
+        Command _weatherPopupCommand;
 
         public Command SelectedPoiCommand => _selectedPoiCommand ?? (_selectedPoiCommand = new Command(SelectPoi));
 
-        Command _weatherPopupCommand;
 
 
         public Command CreatePoiCommand => _createPoiCommand ?? (_createPoiCommand = new Command(CreatePoi, CanCreate));
@@ -55,10 +54,10 @@ namespace Puma.ViewModels
         public string _streetName;
         public string _longitude;
         public string _latitude;
-        public double _avgTempToday;
-        public string _avgIconUriToday;
-        public double _avgTempTomorrow;
-        public string _avgIconUriTomorrow;
+        //public double _avgTempToday;
+        //public string _avgIconUriToday;
+        //public double _avgTempTomorrow;
+        //public string _avgIconUriTomorrow;
         public PointOfInterest _selectedSinglePoi;
 
         public bool openPoiCreationBool { get; set; } = false;
@@ -90,18 +89,6 @@ namespace Puma.ViewModels
             }
         }
             
-
-        public ObservableCollection<IGrouping<DateTime, ForecastItem>> _forecastCollection;
-        // Weather Collection
-        public ObservableCollection<IGrouping<DateTime, ForecastItem>> ForecastCollection
-        {
-            get => _forecastCollection;
-            set
-            {
-                _forecastCollection = value;
-                OnPropertyChanged(nameof(ForecastCollection));
-            }
-        }
 
         // TAGS
         public List<Tag> _tags;
@@ -210,46 +197,49 @@ namespace Puma.ViewModels
                 CreatePoiCommand.ChangeCanExecute();
             }
         }
-        public double AvgTempToday
-        {
-            get => _avgTempToday;
-            set
-            {
-                _avgTempToday = value;
-                OnPropertyChanged(nameof(AvgTempToday));
-            }
-        }
-        public string AvgIconUriToday
-        {
-            get => _avgIconUriToday;
-            set
-            {
-                _avgIconUriToday = value;
-                OnPropertyChanged(nameof(AvgIconUriToday));
-            }
-        }
-        public double AvgTempTomorrow
-        {
-            get => _avgTempTomorrow;
-            set
-            {
-                _avgTempTomorrow = value;
-                OnPropertyChanged(nameof(AvgTempTomorrow));
-            }
-        }
-        public string AvgIconUriTomorrow
-        {
-            get => _avgIconUriTomorrow;
-            set
-            {
-                if (value != null)
-                {
-                    _avgIconUriTomorrow = value;
-                    OnPropertyChanged(nameof(AvgIconUriToday));
 
-                }
-            }
-        }
+        #region commented
+        //public double AvgTempToday
+        //{
+        //    get => _avgTempToday;
+        //    set
+        //    {
+        //        _avgTempToday = value;
+        //        OnPropertyChanged(nameof(AvgTempToday));
+        //    }
+        //}
+        //public string AvgIconUriToday
+        //{
+        //    get => _avgIconUriToday;
+        //    set
+        //    {
+        //        _avgIconUriToday = value;
+        //        OnPropertyChanged(nameof(AvgIconUriToday));
+        //    }
+        //}
+        //public double AvgTempTomorrow
+        //{
+        //    get => _avgTempTomorrow;
+        //    set
+        //    {
+        //        _avgTempTomorrow = value;
+        //        OnPropertyChanged(nameof(AvgTempTomorrow));
+        //    }
+        //}
+        //public string AvgIconUriTomorrow
+        //{
+        //    get => _avgIconUriTomorrow;
+        //    set
+        //    {
+        //        if (value != null)
+        //        {
+        //            _avgIconUriTomorrow = value;
+        //            OnPropertyChanged(nameof(AvgIconUriToday));
+
+        //        }
+        //    }
+        //}
+        #endregion
 
         private bool CanCreate() => !string.IsNullOrWhiteSpace(Description) && !string.IsNullOrWhiteSpace(Name) && App.LoggedInUser != null;
         private async void CreatePoi()
@@ -318,8 +308,8 @@ namespace Puma.ViewModels
             OnPropertyChanged(nameof(PoiCreationPopupState));
             OnPropertyChanged(nameof(poiCollectionPopupState));
             OnPropertyChanged(nameof(WeatherPopupState));
-            if (openWeatherPopupBool)
-                ForecastCollection = await GetWeatherFromDb();
+            //if (openWeatherPopupBool)
+            //    ForecastCollection = await GetWeatherFromDb();
         }
 
         private void SelectPoi()
@@ -376,38 +366,6 @@ namespace Puma.ViewModels
         public async void GetTagsFromDb()
         {
             Tags = await _poiService.GetTags();
-        }
-
-        public async Task<ObservableCollection<IGrouping<DateTime, ForecastItem>>> GetWeatherFromDb()
-        {
-            if (Latitude == null || Longitude == null)
-                return null;
-
-            Forecast forecast = null;
-            try
-            {
-                forecast = await _weatherService.GetForecastAsync(Latitude, Longitude);
-            }
-            catch (Exception e)
-            {
-                await _dialogService.ShowMessageAsync("Error", e.Message);
-            }
-
-            if (forecast == null)
-                return null;
-
-            GroupedForecast groupedForecast = new GroupedForecast
-            {
-                Items = forecast?.Items.GroupBy(f => f.DateTime.Date)
-            };
-
-            AvgIconUriToday = forecast.AverageIconTodayUrl;
-            AvgIconUriTomorrow = forecast.AverageIconTomorrowUrl;
-            AvgTempToday = forecast.AverageTemperatureToday;
-            AvgTempTomorrow = forecast.AverageTemperatureTomorrow;
-
-
-            return new ObservableCollection<IGrouping<DateTime, ForecastItem>>(groupedForecast.Items);
         }
     }
 }

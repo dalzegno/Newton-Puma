@@ -22,6 +22,7 @@ namespace Puma.Views
         internal MainViewModel MainViewModel { get; }
         internal PoiViewModel PoiViewModel { get; }
         internal SettingsViewModel SettingsViewModel { get; }
+        internal WeatherViewModel WeatherViewModel1 { get; }
         IUserApiService UserApiService => DependencyService.Get<IUserApiService>();
         IDialogService DialogService => DependencyService.Get<IDialogService>();
         IPoiService PoiService => DependencyService.Get<IPoiService>();
@@ -33,7 +34,9 @@ namespace Puma.Views
             Instance = this;
             // Internal viewmodels that can be reached globally
             MainViewModel = new MainViewModel(DialogService);
-            PoiViewModel = new PoiViewModel(PoiService, DialogService, WeatherService);
+            PoiViewModel = new PoiViewModel(PoiService, DialogService);
+            WeatherViewModel1 = new WeatherViewModel(WeatherService, DialogService);
+            //PoiViewModel = new PoiViewModel(PoiService, DialogService, WeatherService);
             SettingsViewModel = new SettingsViewModel(UserApiService, DialogService);
             BindingContext = MainViewModel;
 
@@ -57,8 +60,9 @@ namespace Puma.Views
 
             IEnumerable<string> possibleAddresses = await _geoCoder.GetAddressesForPositionAsync(position);
             string address = possibleAddresses.FirstOrDefault();
-            PoiViewModel.SetAddress(address);
 
+            PoiViewModel.SetAddress(address);
+            WeatherViewModel1.SetWeather(position.Latitude, position.Longitude);
 
             Debug.WriteLine("address: " + address);
         }
@@ -97,6 +101,9 @@ namespace Puma.Views
             var pin = CreatePin(searchedLocation);
             map.Pins.Add(pin);
             MoveToRegion(searchedLocation, 1);
+
+            PoiViewModel.SetAddress(searchedLocation.Addresses.FirstOrDefault());
+            WeatherViewModel1.SetWeather(searchedLocation.Position.Latitude, searchedLocation.Position.Longitude);
 
             List<PointOfInterest> pois = await GetPoisFromDb(searchedLocation);
 
@@ -246,8 +253,10 @@ namespace Puma.Views
             poiCollectionView.BindingContext = PoiViewModel;
             //poiCreationPopup.BindingContext = PoiViewModel;
             slPoiMenuButtons.BindingContext = PoiViewModel;
-            weatherCollectionView.BindingContext = PoiViewModel;
+            weatherCollectionView.BindingContext = WeatherViewModel1;
             settingsInputs.BindingContext = SettingsViewModel;
+
+            sl_Weather.BindingContext = WeatherViewModel1;
         }
         private async Task<List<PointOfInterest>> GetPoisFromDb(Location searchedLocation)
         {
