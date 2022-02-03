@@ -1,5 +1,4 @@
-﻿
-using Puma.Models;
+﻿using Puma.Models;
 using Puma.Services;
 using System;
 using System.Collections.Generic;
@@ -10,7 +9,7 @@ using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
-using Puma.Helpers;
+using Puma.Extensions;
 
 [assembly: Dependency(typeof(PoiApiService))]
 namespace Puma.Services
@@ -18,19 +17,18 @@ namespace Puma.Services
     public class PoiApiService : IPoiService
     {
         readonly IDialogService _dialogService = DependencyService.Get<IDialogService>();
-        readonly HttpResponseHelper _httpResponseHelper = DependencyService.Get<HttpResponseHelper>();
         readonly HttpClient _httpClient = new HttpClient();
         readonly string _poiApiUri = "http://localhost:64500/api/Poi";
 
         #region Create
         public async Task<PointOfInterest> CreatePoiAsync(AddPoiDto poi)
         {
-            _httpResponseHelper.SetHeader(_httpClient);
+            _httpClient.SetHeader();
             try
             {
                 var response = await _httpClient.PostAsJsonAsync(_poiApiUri, poi);
 
-                if (!await _httpResponseHelper.IsResponseSuccess(response))
+                if (!await response.IsResponseSuccessAsync(_dialogService))
                     return null;
 
                 return await response.Content.ReadFromJsonAsync<PointOfInterest>();
@@ -44,7 +42,7 @@ namespace Puma.Services
         }
         public async Task<Tag> CreateTagAsync(string name)
         {
-            _httpResponseHelper.SetHeader(_httpClient);
+            _httpClient.SetHeader();
 
             try
             {
@@ -52,7 +50,7 @@ namespace Puma.Services
 
                 var response = await _httpClient.PostAsync($"{_poiApiUri}/AddTag", query);
 
-                if (!await _httpResponseHelper.IsResponseSuccess(response))
+                if (!await response.IsResponseSuccessAsync(_dialogService))
                     return null;
 
                 return await response.Content.ReadFromJsonAsync<Tag>();
@@ -66,12 +64,12 @@ namespace Puma.Services
 
         public async Task<PointOfInterest> AddCommentAsync(AddCommentDto addCommentDto)
         {
-            _httpResponseHelper.SetHeader(_httpClient);
+            _httpClient.SetHeader();
             try
             {
                 var response = await _httpClient.PostAsJsonAsync($"{_poiApiUri}/AddComment", addCommentDto);
 
-                if (!await _httpResponseHelper.IsResponseSuccess(response))
+                if (!await response.IsResponseSuccessAsync(_dialogService))
                     return null;
 
                 return await response.Content.ReadFromJsonAsync<PointOfInterest>();
@@ -85,13 +83,13 @@ namespace Puma.Services
 
         public async Task<PointOfInterest> AddGradeAsync(AddGradeDto addGradeDto)
         {
-            _httpResponseHelper.SetHeader(_httpClient);
+            _httpClient.SetHeader();
 
             try
             {
                 var response = await _httpClient.PostAsJsonAsync($"{_poiApiUri}/AddGrade", addGradeDto);
 
-                if (!await _httpResponseHelper.IsResponseSuccess(response))
+                if (!await response.IsResponseSuccessAsync(_dialogService))
                     return null;
 
                 return await response.Content.ReadFromJsonAsync<PointOfInterest>();
@@ -107,13 +105,13 @@ namespace Puma.Services
         #region Read
         public async Task<PointOfInterest> GetAsync(int id)
         {
-            _httpResponseHelper.SetHeader(_httpClient);
+            _httpClient.SetHeader();
 
             try
             {
                 var response = await _httpClient.GetAsync($"{_poiApiUri}?id={id}");
 
-                if (!await _httpResponseHelper.IsResponseSuccess(response))
+                if (!await response.IsResponseSuccessAsync())
                     return null;
 
                 return await response.Content.ReadFromJsonAsync<PointOfInterest>();
@@ -126,13 +124,13 @@ namespace Puma.Services
         }
         public async Task<List<PointOfInterest>> GetAsync(Position searchedPosition)
         {
-            _httpResponseHelper.SetHeader(_httpClient);
+            _httpClient.SetHeader();
 
             try
             {
                 var response = await _httpClient.GetAsync($"{_poiApiUri}/GetPoisFromLatAndLon?lat={searchedPosition.Latitude}&lon={searchedPosition.Longitude}");
 
-                if (!await _httpResponseHelper.IsResponseSuccess(response, false))
+                if (!await response.IsResponseSuccessAsync())
                     return null;
 
                 return await response.Content.ReadFromJsonAsync<List<PointOfInterest>>();
@@ -146,12 +144,12 @@ namespace Puma.Services
         }
         public async Task<ObservableCollection<PointOfInterest>> GetAllAsync()
         {
-            _httpResponseHelper.SetHeader(_httpClient);
+            _httpClient.SetHeader();
             try
             {
                 var response = await _httpClient.GetAsync($"{_poiApiUri}/GetAllPoi");
 
-                if (!await _httpResponseHelper.IsResponseSuccess(response, false))
+                if (!await response.IsResponseSuccessAsync())
                     return null;
 
                 return await response.Content.ReadFromJsonAsync<ObservableCollection<PointOfInterest>>();
@@ -168,7 +166,7 @@ namespace Puma.Services
             {
                 var response = await _httpClient.GetAsync($"{_poiApiUri}/GetTags");
 
-                if (!await _httpResponseHelper.IsResponseSuccess(response, false))
+                if (!await response.IsResponseSuccessAsync())
                     return null;
 
                 return await response.Content.ReadFromJsonAsync<List<Tag>>();
@@ -184,12 +182,12 @@ namespace Puma.Services
         #region Delete
         public async Task<PointOfInterest> Delete(int poiId)
         {
-            _httpResponseHelper.SetHeader(_httpClient);
+            _httpClient.SetHeader();
             try
             {
                 var response = await _httpClient.DeleteAsync($"{_poiApiUri}/?id={poiId}");
 
-                if (!await _httpResponseHelper.IsResponseSuccess(response))
+                if (!await response.IsResponseSuccessAsync(_dialogService))
                     return null;
 
                 return await response.Content.ReadFromJsonAsync<PointOfInterest>();
@@ -202,6 +200,5 @@ namespace Puma.Services
             
         }
         #endregion
-
     }
 }
