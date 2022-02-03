@@ -19,7 +19,8 @@ namespace Puma.Extensions
 
             string responseBody = await response.Content.ReadAsStringAsync();
 
-            await _dialogService?.ShowErrorAsync($"{(int)response.StatusCode} - {response.StatusCode}: {responseBody}");
+            if (_dialogService != null)
+                await _dialogService?.ShowErrorAsync($"{(int)response.StatusCode} - {response.StatusCode}: {responseBody}");
 
             return false;
         }
