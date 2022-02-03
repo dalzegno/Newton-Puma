@@ -1,33 +1,30 @@
 ﻿
-using Puma.Helpers;
-using Puma.Services;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
-[assembly: Dependency(typeof(HttpResponseHelper))]
-namespace Puma.Helpers
-{
-    internal class HttpResponseHelper
-    {
-        readonly IDialogService _dialogService = DependencyService.Get<IDialogService>();
+using Puma.Extensions;
+using Puma.Services;
 
-        public async Task<bool> IsResponseSuccess(HttpResponseMessage response, bool shouldDisplayMessage = true)
+[assembly: Dependency(typeof(HttpExtension))]
+namespace Puma.Extensions
+{
+    internal static class HttpExtension
+    {
+        public static async Task<bool> IsResponseSuccessAsync(this HttpResponseMessage response, IDialogService _dialogService = null)
         {
             if (response.IsSuccessStatusCode)
                 return true;
 
             string responseBody = await response.Content.ReadAsStringAsync();
-            
-            if (shouldDisplayMessage)
-                await _dialogService.ShowErrorAsync($"{(int)response.StatusCode} - {response.StatusCode}: {responseBody}");
-            
+
+            await _dialogService?.ShowErrorAsync($"{(int)response.StatusCode} - {response.StatusCode}: {responseBody}");
+
             return false;
         }
 
-        public void SetHeader(HttpClient httpClient)
+        public static void SetHeader(this HttpClient httpClient)
         {
             if (App.LoggedInUser == null)
                 return;

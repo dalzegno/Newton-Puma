@@ -9,14 +9,14 @@ using System.Collections.Generic;
 using Puma.Models;
 using Puma.Services;
 using Xamarin.Forms;
-using Puma.Helpers;
+using Puma.Extensions;
 
 [assembly: Dependency(typeof(OpenWeatherService))]
 namespace Puma.Services
 {
     public class OpenWeatherService : IOpenWeatherService
     {
-        readonly HttpResponseHelper httpResponseHelper = DependencyService.Get<HttpResponseHelper>();
+        readonly IDialogService _dialogService = DependencyService.Get<IDialogService>();
         readonly HttpClient _httpClient = new HttpClient();
         readonly string _weatherApiUri = "http://localhost:64500/api/Weather";
 
@@ -52,7 +52,7 @@ namespace Puma.Services
             var language = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
             var response = await _httpClient.GetAsync($"{_weatherApiUri}?lat={latitude}&lon={longitude}&lang={language}");
             
-            if (!await httpResponseHelper.IsResponseSuccess(response))
+            if (!await response.IsResponseSuccessAsync())
                 return null;
 
             Forecast forecast = await response.Content.ReadFromJsonAsync<Forecast>();
