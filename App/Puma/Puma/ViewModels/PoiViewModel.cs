@@ -10,6 +10,7 @@ using Xamarin.Forms.Xaml;
 using System.Linq;
 using Puma.Views;
 using System.Threading.Tasks;
+using Xamarin.Forms.Maps;
 
 namespace Puma.ViewModels
 {
@@ -34,8 +35,6 @@ namespace Puma.ViewModels
         Command _poiSingleViewCommand;
         Command _poiCollectionViewCommand;
 
-
-
         public Command CreatePoiCommand => _createPoiCommand ?? (_createPoiCommand = new Command(CreatePoi, CanCreate));
         public Command RemoveTagCommand => _removeTagCommand ?? (_removeTagCommand = new Command(RemoveTag));
 
@@ -51,17 +50,13 @@ namespace Puma.ViewModels
         public string _streetName;
         public string _longitude;
         public string _latitude;
-        //public double _avgTempToday;
-        //public string _avgIconUriToday;
-        //public double _avgTempTomorrow;
-        //public string _avgIconUriTomorrow;
+
         public PointOfInterest _selectedSinglePoi;
 
         public bool openPoiCreationBool { get; set; } = false;
         public bool openPoiCollectionBool { get; set; } = false;
         public bool poiCollectionVisibleBool { get; set; } = true;
         public bool poiSingleVisibleBool { get; set; } = false;
-        public bool openWeatherPopupBool { get; set; } = false;
 
 
         #region Fields
@@ -86,7 +81,7 @@ namespace Puma.ViewModels
                 OnPropertyChanged(nameof(SelectedSinglePoi));
             }
         }
-            
+
 
         // TAGS
         public List<Tag> _tags;
@@ -153,7 +148,7 @@ namespace Puma.ViewModels
                 OnPropertyChanged(Country);
                 CreatePoiCommand.ChangeCanExecute();
             }
-        } 
+        }
         public string Area
         {
             get => _area;
@@ -197,96 +192,18 @@ namespace Puma.ViewModels
         }
         #endregion
 
-        #region commented
-        //public double AvgTempToday
-        //{
-        //    get => _avgTempToday;
-        //    set
-        //    {
-        //        _avgTempToday = value;
-        //        OnPropertyChanged(nameof(AvgTempToday));
-        //    }
-        //}
-        //public string AvgIconUriToday
-        //{
-        //    get => _avgIconUriToday;
-        //    set
-        //    {
-        //        _avgIconUriToday = value;
-        //        OnPropertyChanged(nameof(AvgIconUriToday));
-        //    }
-        //}
-        //public double AvgTempTomorrow
-        //{
-        //    get => _avgTempTomorrow;
-        //    set
-        //    {
-        //        _avgTempTomorrow = value;
-        //        OnPropertyChanged(nameof(AvgTempTomorrow));
-        //    }
-        //}
-        //public string AvgIconUriTomorrow
-        //{
-        //    get => _avgIconUriTomorrow;
-        //    set
-        //    {
-        //        if (value != null)
-        //        {
-        //            _avgIconUriTomorrow = value;
-        //            OnPropertyChanged(nameof(AvgIconUriToday));
-
-        //        }
-        //    }
-        //}
-        #endregion
-
         private bool CanCreate() => !string.IsNullOrWhiteSpace(Description) && !string.IsNullOrWhiteSpace(Name) && App.LoggedInUser != null;
-        private async void CreatePoi()
-        {
-            var poi = new AddPoiDto()
-            {
-                Name = Name,
-                Description = Description,
-                Position = new PositionPoi
-                {
-                    Latitude = Convert.ToDouble(Latitude),
-                    Longitude = Convert.ToDouble(Longitude)
-                },
-                Address = new Address
-                {
-                    StreetName = StreetName,
-                    Area = Area,
-                    Country = Country
-                },
-                TagIds = TagButtons.Count > 0 ? TagButtons.Select(x => x.Id).ToList() : new List<int>()
-            };
 
-            var createdPoi = await _poiService.CreatePoiAsync(poi);
-            if (createdPoi != null)
-            {
-                await _dialogService.ShowMessageAsync("Welcome!", $"Welcome to PUMA \"{createdPoi.Name}\".");
-                return;
-            }
-        }
-
-        private void RemoveTag(object tag)
-        {
-            TagButtons.Remove((Tag)tag);
-        }
-    
-        private async void PoiGetCollection()
+        private void PoiGetCollection()
         {
             poiCollectionVisibleBool = true;
             poiSingleVisibleBool = false;
             OnPropertyChanged(nameof(PoiCollectionVisible));
             OnPropertyChanged(nameof(PoiSingleVisible));
-
-            PoiCollection = await _poiService.GetAllAsync();
             OnPropertyChanged(nameof(PoiCollection));
         }
-  
 
-        private void PoisPopup()
+        public void PoisPopup()
         {
             SelectedSinglePoi = null;
             OnPropertyChanged(nameof(SelectedSinglePoi));
@@ -294,17 +211,20 @@ namespace Puma.ViewModels
             poiSingleVisibleBool = false;
             OnPropertyChanged(nameof(PoiCollectionVisible));
             OnPropertyChanged(nameof(PoiSingleVisible));
-
         }
-        private void PoiSinglePopup()
+        public void PoiSinglePopup()
         {
-            if (SelectedSinglePoi != null) MainPage.Instance.GoToLocation(SelectedSinglePoi, 1);
+            if (SelectedSinglePoi != null) 
+                MainPage.Instance.GoToLocation(SelectedSinglePoi, 1);
+
             poiCollectionVisibleBool = false;
             OnPropertyChanged(nameof(PoiCollectionVisible));
             poiSingleVisibleBool = true;
             OnPropertyChanged(nameof(PoiSingleVisible));
 
-            if (SelectedSinglePoi == null) return;
+            if (SelectedSinglePoi == null) 
+                return;
+
             var a = SelectedSinglePoi.Address;
             StreetName = a.StreetName;
             Area = a.Area;
@@ -314,8 +234,22 @@ namespace Puma.ViewModels
             OnPropertyChanged(nameof(Area));
             OnPropertyChanged(nameof(Country));
         }
-       
 
+        public bool PoiCreationPopupState => openPoiCreationBool;
+        public bool poiCollectionPopupState => openPoiCollectionBool;
+        public bool PoiCollectionVisible => poiCollectionVisibleBool;
+        public bool PoiSingleVisible => poiSingleVisibleBool;
+
+        private async void GetTagsFromDb()
+        {
+            Tags = await _poiService.GetTags();
+        }
+        private async Task<ObservableCollection<PointOfInterest>> GetPoisFromDb(string lat, string lon)
+        {
+            var pois = await _poiService.GetAsync(lat, lon);
+
+            return pois != null ? new ObservableCollection<PointOfInterest>(pois) : null;
+        }
         public void SetAddress(string address)
         {
             var words = address?.Split('\n') ?? Array.Empty<string>();
@@ -346,19 +280,60 @@ namespace Puma.ViewModels
                 OnPropertyChanged(nameof(Area));
                 OnPropertyChanged(nameof(Country));
             }
-            
+
         }
-
-        public bool PoiCreationPopupState => openPoiCreationBool;
-        public bool poiCollectionPopupState => openPoiCollectionBool;
-        public bool PoiCollectionVisible => poiCollectionVisibleBool;
-        public bool PoiSingleVisible => poiSingleVisibleBool;
-
-        public bool WeatherPopupState => openWeatherPopupBool;
-
-        public async void GetTagsFromDb()
+        public async Task SetLatAndLon(double lat, double lon)
         {
-            Tags = await _poiService.GetTags();
+            if (lat == 0 || lon == 0)
+            {
+                return;
+            }
+
+            Latitude = lat.ToString();
+            Longitude = lon.ToString();
+
+            PoiCollection = await GetPoisFromDb(Latitude, Longitude);
+
+            if (PoiCollection == null || PoiCollection.Count < 1)
+                return;
+
+            foreach (var poi in PoiCollection)
+            {
+                var pin = MainPage.Instance.CreatePin(poi);
+                MainPage.Instance.AddPin(pin);
+            }
+        }
+        private async void CreatePoi()
+        {
+            var poi = new AddPoiDto()
+            {
+                Name = Name,
+                Description = Description,
+                Position = new PositionPoi
+                {
+                    Latitude = Convert.ToDouble(Latitude),
+                    Longitude = Convert.ToDouble(Longitude)
+                },
+                Address = new Address
+                {
+                    StreetName = StreetName,
+                    Area = Area,
+                    Country = Country
+                },
+                TagIds = TagButtons.Count > 0 ? TagButtons.Select(x => x.Id).ToList() : new List<int>()
+            };
+
+            var createdPoi = await _poiService.CreatePoiAsync(poi);
+            if (createdPoi != null)
+            {
+                await _dialogService.ShowMessageAsync("Created", $"Added a new POI");
+                return;
+            }
+        }
+        private void RemoveTag(object tag)
+        {
+            if (tag != null)
+                TagButtons.Remove((Tag)tag);
         }
     }
 }

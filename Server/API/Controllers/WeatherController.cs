@@ -1,5 +1,6 @@
 ﻿using Logic.Models;
 using Logic.Services;
+using Logic.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -16,9 +17,12 @@ namespace API.Controllers
         }
 
         [HttpGet()]
-        public async Task<ActionResult<ForecastDto>> Get([FromQuery]double lat, [FromQuery]double lon, [FromQuery] string lang)
+        public async Task<ActionResult<ForecastDto>> Get([FromQuery]string lat, [FromQuery]string lon, [FromQuery] string lang)
         {
-            var forecast = await _weatherService.Get(lat, lon, lang);
+            if (!lat.TryParseToDouble(out double latDouble) || !lon.TryParseToDouble(out double lonDouble))
+                return BadRequest();
+
+            var forecast = await _weatherService.Get(latDouble, lonDouble, lang);
 
             if (forecast == null)
                 return NotFound();

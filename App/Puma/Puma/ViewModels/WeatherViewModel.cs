@@ -24,6 +24,7 @@ namespace Puma.ViewModels
         public string _avgIconUriToday;
         public double _avgTempTomorrow;
         public string _avgIconUriTomorrow;
+        public bool WeatherPopUpBool { get; set; }
 
         public double AvgTempToday
         {
@@ -66,8 +67,15 @@ namespace Puma.ViewModels
             }
         }
 
+        private void WeatherPopup(object obj)
+        {
+            WeatherPopUpBool = !WeatherPopUpBool;
+            OnPropertyChanged(nameof(WeatherPopUpBool));
+        }
+
         // Weather Collection
         public ObservableCollection<IGrouping<DateTime, ForecastItem>> _forecastCollection;
+
         public ObservableCollection<IGrouping<DateTime, ForecastItem>> ForecastCollection
         {
             get => _forecastCollection;
@@ -81,7 +89,10 @@ namespace Puma.ViewModels
         public async void SetWeather(double lat, double lon)
         {
             var forecast = await GetWeatherFromDb(lat, lon);
-            
+
+            if (forecast == null)
+                return;
+
             AvgIconUriToday = forecast.AverageIconTodayUrl;
             AvgIconUriTomorrow = forecast.AverageIconTomorrowUrl;
             AvgTempToday = forecast.AverageTemperatureToday;

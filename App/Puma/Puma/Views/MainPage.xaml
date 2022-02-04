@@ -438,7 +438,7 @@
                 <Frame
                     HorizontalOptions="FillAndExpand"
                     VerticalOptions="FillAndExpand"
-                    IsVisible="false"
+                    IsVisible="true"
                     Margin="10,10"
                     BackgroundColor="White"
                     Opacity=".9"
@@ -537,7 +537,7 @@
                     HorizontalOptions="StartAndExpand"
                     VerticalOptions="StartAndExpand"
                     Margin="10,10"
-                    IsVisible="true"
+                    IsVisible="false"
                     ClassId="weatherCollectionView"
                     BackgroundColor="White"
                     Opacity=".9"
@@ -545,7 +545,7 @@
 
 
                     <CollectionView
-                        IsVisible="true"
+                        IsVisible="{Binding WeatherPopup}"
                         VerticalOptions="StartAndExpand"
                         HorizontalOptions="Center"
                         Margin="0"
