@@ -44,9 +44,7 @@ namespace Puma.Models
                 return forecast;
             }
         }
-        /// <summary>
-        /// Removes all cached news
-        /// </summary>
+
         public static void RemoveExpiredCaches()
         {
             var documentPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
