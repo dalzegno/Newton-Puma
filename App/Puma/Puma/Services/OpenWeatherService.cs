@@ -11,6 +11,8 @@ using Puma.Services;
 using Xamarin.Forms;
 using Puma.Extensions;
 
+
+
 [assembly: Dependency(typeof(OpenWeatherService))]
 namespace Puma.Services
 {
@@ -18,7 +20,7 @@ namespace Puma.Services
     {
         readonly IDialogService _dialogService = DependencyService.Get<IDialogService>();
         readonly HttpClient _httpClient = new HttpClient();
-        readonly string _weatherApiUri = "http://localhost:64500/api/Weather";
+        readonly string _weatherApiUri = "https://localhost:44314/api/Weather";
 
         /// <summary>
         /// Gets a forecast for a location with <b>latitude</b> and <b>longitude</b>
@@ -38,7 +40,7 @@ namespace Puma.Services
 
             var language = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
             var response = await _httpClient.GetAsync($"{_weatherApiUri}?lat={latitude}&lon={longitude}&lang={language}");
-            
+
             if (!await response.IsResponseSuccessAsync(_dialogService))
                 return null;
 

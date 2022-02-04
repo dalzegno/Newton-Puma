@@ -18,7 +18,7 @@ namespace Puma.Services
     {
         readonly IDialogService _dialogService = DependencyService.Get<IDialogService>();
         readonly HttpClient _httpClient = new HttpClient();
-        readonly string _poiApiUri = "http://localhost:64500/api/Poi";
+        readonly string _poiApiUri = "https://localhost:44314/api/Poi";
 
         #region Create
         public async Task<PointOfInterest> CreatePoiAsync(AddPoiDto poi)
@@ -150,7 +150,7 @@ namespace Puma.Services
             {
                 var response = await _httpClient.GetAsync($"{_poiApiUri}/GetPoisFromLatAndLon?lat={lat}&lon={lon}");
 
-                if (!await response.IsResponseSuccessAsync(_dialogService))
+                if (!await response.IsResponseSuccessAsync())
                     return null;
 
                 return await response.Content.ReadFromJsonAsync<List<PointOfInterest>>();
