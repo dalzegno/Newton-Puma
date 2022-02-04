@@ -51,7 +51,7 @@ namespace Puma.Views
             map.Pins.Clear();
             var position = e.Position;
             var pin = CreatePin(position);
-            map.Pins.Add(pin);
+            AddPin(pin);
 
             Debug.WriteLine($"MapClick: {position.Latitude}, {position.Longitude}");
 
@@ -62,10 +62,17 @@ namespace Puma.Views
             string address = possibleAddresses.FirstOrDefault();
 
             PoiViewModel.SetAddress(address);
+            await PoiViewModel.SetLatAndLon(position.Latitude, position.Longitude);
             WeatherViewModel1.SetWeather(position.Latitude, position.Longitude);
 
             Debug.WriteLine("address: " + address);
         }
+
+        public void AddPin(Pin pin)
+        {
+            map.Pins.Add(pin);
+        }
+
         private void ViewOptionButton_Clicked(object sender, EventArgs e)
         {
             Button button = sender as Button;
@@ -103,6 +110,7 @@ namespace Puma.Views
             MoveToRegion(searchedLocation, 1);
 
             PoiViewModel.SetAddress(searchedLocation.Addresses.FirstOrDefault());
+            await PoiViewModel.SetLatAndLon(searchedLocation.Position.Latitude, searchedLocation.Position.Longitude);
             WeatherViewModel1.SetWeather(searchedLocation.Position.Latitude, searchedLocation.Position.Longitude);
 
             List<PointOfInterest> pois = await GetPoisFromDb(searchedLocation);
@@ -188,7 +196,7 @@ namespace Puma.Views
             Frame frame = MenuItems.FirstOrDefault(x => x.ClassId == xnameofstack.ClassId);
             SlideInMenuPanel(frame);
         }
-        async void SliderUpDown(object sender, System.EventArgs e)
+        async void SliderUpDown(object sender, EventArgs e)
         {
 
             double ScreenHeight = Application.Current.MainPage.Height;
@@ -298,7 +306,7 @@ namespace Puma.Views
 
             return pin;
         }
-        private Pin CreatePin(PointOfInterest poi)
+        public Pin CreatePin(PointOfInterest poi)
         {
             var pin = new Pin
             {
@@ -310,7 +318,10 @@ namespace Puma.Views
 
             pin.MarkerClicked += (sender2, args) =>
             {
-                DialogService.ShowMessageAsync("Tapped!", $"{pin.Label}");
+                //DialogService.ShowMessageAsync("Tapped!", $"{pin.Label}");
+                SliderUpDown(null, null);
+                PoiViewModel.SelectedSinglePoi = poi;
+                PoiViewModel.PoiSinglePopup();
             };
             return pin;
         }
@@ -329,6 +340,7 @@ namespace Puma.Views
             {
                 DialogService.ShowMessageAsync("Tapped!", $"{pin.Label}");
             };
+
             return pin;
         }
         public void GoToLocation(PointOfInterest poi, double distanceKm)

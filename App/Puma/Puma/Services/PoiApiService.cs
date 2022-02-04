@@ -142,6 +142,26 @@ namespace Puma.Services
             }
 
         }
+        public async Task<List<PointOfInterest>> GetAsync(string lat, string lon)
+        {
+            _httpClient.SetHeader();
+
+            try
+            {
+                var response = await _httpClient.GetAsync($"{_poiApiUri}/GetPoisFromLatAndLon?lat={lat}&lon={lon}");
+
+                if (!await response.IsResponseSuccessAsync(_dialogService))
+                    return null;
+
+                return await response.Content.ReadFromJsonAsync<List<PointOfInterest>>();
+            }
+            catch (Exception e)
+            {
+                await _dialogService.ShowErrorAsync(e);
+                return null;
+            }
+
+        }
         public async Task<ObservableCollection<PointOfInterest>> GetAllAsync()
         {
             _httpClient.SetHeader();
