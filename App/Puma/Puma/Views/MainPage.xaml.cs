@@ -43,7 +43,7 @@ namespace Puma.Views
             SetBindingContexts();
 
             _geoCoder = new Geocoder();
-            }
+        }
 
         #region Events
         async void OnMapClicked(object sender, MapClickedEventArgs e)
@@ -189,44 +189,44 @@ namespace Puma.Views
             SlideInMenuPanel(frame);
         }
         async void SliderUpDown(object sender, System.EventArgs e)
-            {
+        {
 
             double ScreenHeight = Application.Current.MainPage.Height;
             double ScreenWidth = Application.Current.MainPage.Width;
             switch (Device.RuntimePlatform)
-                {
-                    case Device.Android:
+            {
+                case Device.Android:
 
-                        if (slider_navbar.TranslationY == 0)
-                        {
-                            await slider_navbar.TranslateTo(0, ScreenHeight * -0.6, 500, Easing.SinInOut);
-                            slider_menu.Margin = new Thickness(0, slider_navbar.Height);
-                            slider_menu.IsVisible = true;
-                            slider_menu.HeightRequest = ScreenHeight * 0.6;
-                            slider_menu.WidthRequest = ScreenWidth;
-                        }
-                        else
-                        {
-                            await slider_navbar.TranslateTo(0, 0, 500, Easing.SpringIn);
-                        }
+                    if (slider_navbar.TranslationY == 0)
+                    {
+                        await slider_navbar.TranslateTo(0, ScreenHeight * -0.6, 500, Easing.SinInOut);
+                        slider_menu.Margin = new Thickness(0, slider_navbar.Height);
+                        slider_menu.IsVisible = true;
+                        slider_menu.HeightRequest = ScreenHeight * 0.6;
+                        slider_menu.WidthRequest = ScreenWidth;
+                    }
+                    else
+                    {
+                        await slider_navbar.TranslateTo(0, 0, 500, Easing.SpringIn);
+                    }
 
-                        break;
-                    default:
-                        if (slider_navbar.TranslationY == 0)
-                        {
+                    break;
+                default:
+                    if (slider_navbar.TranslationY == 0)
+                    {
                         slider_menu.Margin = new Thickness(0, slider_navbar.Height);
                         slider_menu.IsVisible = true;
                         slider_menu.HeightRequest = ScreenHeight * 0.4;
                         slider_menu.WidthRequest = ScreenWidth;
                         await slider_navbar.TranslateTo(0, ScreenHeight * -0.4, 500, Easing.SinInOut);
-                        }
-                        else
-                        {
+                    }
+                    else
+                    {
                         await slider_navbar.TranslateTo(0, 0, 500, Easing.SpringIn);
-                        }
-                        break;
-                }
+                    }
+                    break;
             }
+        }
 
         #endregion
 
@@ -346,6 +346,6 @@ namespace Puma.Views
             public IEnumerable<string> Addresses { get; set; }
         }
 
-       
+
     }
 }
