@@ -309,6 +309,7 @@ namespace Puma.ViewModels
             StreetName = a.StreetName;
             Area = a.Area;
             Country = a.Country;
+            MainPage.Instance.WeatherViewModel1.SetWeather(SelectedSinglePoi.Position.Latitude, SelectedSinglePoi.Position.Longitude);
             OnPropertyChanged(nameof(StreetName));
             OnPropertyChanged(nameof(Area));
             OnPropertyChanged(nameof(Country));
