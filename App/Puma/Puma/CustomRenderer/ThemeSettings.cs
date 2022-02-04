@@ -11,7 +11,7 @@ namespace Puma.CustomRenderer
         public static int Theme
         {
             get => Preferences.Get(nameof(Theme), theme);
-            set => Preferences.Set(nameof(Theme), theme);
+            set => Preferences.Set(nameof(Theme), value);
 
         }
     }
