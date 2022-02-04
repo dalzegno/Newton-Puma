@@ -255,15 +255,58 @@
                     Orientation="Horizontal"
                     Margin="0">
 
-                    <local:CustomButton
+                    <Grid
+                HorizontalOptions="CenterAndExpand"
+                WidthRequest="500"
+                ColumnDefinitions="auto,auto">
+                        <ffimageloadingsvg:SvgCachedImage
+                    Grid.Column="2"
+                    VerticalOptions="Center"
+                    HorizontalOptions="End"
+                    HeightRequest="50"
+                    WidthRequest="50"
+                    Margin="0,0,0,0"
+                    Source="resource://Puma.Resources.SettingsIcon.svg">
+                        </ffimageloadingsvg:SvgCachedImage>
+
+                        <!--- SETTINGS IMAGE BUTTON-->
+                        <local:CustomButton
+                    HorizontalOptions="End"
+                    x:Name="btn_Settings_Popup"
+                    ClassId="settingsPopup"
+                    BackgroundColor="LightBlue"
+                    Grid.Column="2"
+                    
+                    Opacity="0"
+                    Text="Settings"
+                    Command="{Binding OpenSettingsCommand}"
+                    Clicked="btn_OpenSettings">
+                        </local:CustomButton>
+                    </Grid>
+<!--
+                    <Button
                         x:Name="btn_Settings_Popup"
+                        ImageSource="resource://Puma.Resources.SettingsIcon.svg"
+                        HeightRequest="50"
+                        WidthRequest="50"
                         CornerRadius="15"
+                        Margin="0,0,20,0"
                         ClassId="settingsPopup"
                         Command="{Binding OpenSettingsCommand}"
                         Clicked="btn_OpenSettings"
                         TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                         BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
-                        Text="Settings"></local:CustomButton>
+                        Text="Settings">
+                    </Button>
+                        <ffimageloadingsvg:SvgCachedImage
+                    Grid.Column="2"
+                    VerticalOptions="Center"
+                    HorizontalOptions="End"
+                    HeightRequest="50"
+                    WidthRequest="50"
+                    Margin="0,0,0,0"
+                    Source="resource://Puma.Resources.SettingsIcon.svg">
+                    </ffimageloadingsvg:SvgCachedImage> -->
                     <Label
                         IsVisible="{Binding userLogoutState}"
                         TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
@@ -996,10 +1039,7 @@
                                   Dark={StaticResource ButtonBackgroundColorDark}, 
                                   Light={StaticResource ButtonBackgroundColor}}"
                         BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
-
                         TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                        Margin="0,-10,-10,425"
-
                         Text="X"
                         HorizontalOptions="EndAndExpand" />
                 </Grid>
@@ -1019,102 +1059,32 @@
                                 EntryText="{Binding EditEmail, Mode=TwoWay}"
                                 PlaceholderText="{Binding CurrentUserEmail}"
                                 ControlTemplate="{StaticResource EntryViewControlTemplate}" />
-                            <Frame
-                                Grid.Row="1"
-                                BorderColor="LightGray"
-                                Padding="0"
-                                CornerRadius="15"
-                                IsClippedToBounds="False"
-                                HorizontalOptions="CenterAndExpand"
-                                WidthRequest="500"
-                                VerticalOptions="FillAndExpand"
-                                Opacity=".8">
-
-                                <local:RoundedEntry
-                                    x:Name="_editEmail"
-                                    Opacity=".8"
-                                    Placeholder="{Binding CurrentUserEmail}"
-                                    Text="{Binding EditEmail}"></local:RoundedEntry>
-
-                            </Frame>
-                            <Frame
+                            <control:EntryViewControl
+                                Grid.Row="2"
+                                EntryText="{Binding EditPassword, Mode=TwoWay}"
+                                PlaceholderText="{Binding CurrentUserPassword}"
+                                ControlTemplate="{StaticResource EntryViewControlTemplate}" />
+                            <control:EntryViewControl
                                 Grid.Row="3"
-                                BorderColor="LightGray"
-                                Padding="0"
-                                CornerRadius="15"
-                                IsClippedToBounds="False"
-                                HorizontalOptions="CenterAndExpand"
-                                WidthRequest="500"
-                                VerticalOptions="FillAndExpand"
-                                Opacity=".8">
-                                <local:RoundedEntry
-                                    x:Name="_editPassword"
-                                    Text="{Binding EditPassword}"
-                                    IsPassword="True"
-                                    Opacity=".8"
-                                    Placeholder="Password"></local:RoundedEntry>
-                            </Frame>
-                            <Frame
+                                EntryText="{Binding EditDisplayName, Mode=TwoWay}"
+                                PlaceholderText="{Binding CurrentUserDisplayName}"
+                                ControlTemplate="{StaticResource EntryViewControlTemplate}" />
+                            <control:EntryViewControl
+                                Grid.Row="4"
+                                EntryText="{Binding EditFirstName, Mode=TwoWay}"
+                                PlaceholderText="{Binding CurrentUserFirstName}"
+                                ControlTemplate="{StaticResource EntryViewControlTemplate}" />
+                            <control:EntryViewControl
                                 Grid.Row="5"
-                                BorderColor="LightGray"
-                                Padding="0"
-                                CornerRadius="15"
-                                IsClippedToBounds="False"
-                                HorizontalOptions="CenterAndExpand"
-                                WidthRequest="500"
-                                VerticalOptions="FillAndExpand"
-                                Opacity=".8">
-                                <local:RoundedEntry
-                                    x:Name="_editDisplayName"
-                                    Text="{Binding EditDisplayName}"
-                                    Opacity=".8"
-                                    Placeholder="{Binding CurrentUserDisplayName}"></local:RoundedEntry>
-                            </Frame>
-
-                            <Label
-                                Grid.Row="6"></Label>
-                            <Frame
-                                Grid.Row="7"
-                                BorderColor="LightGray"
-                                Padding="0"
-                                CornerRadius="15"
-                                IsClippedToBounds="False"
-                                HorizontalOptions="CenterAndExpand"
-                                WidthRequest="500"
-                                VerticalOptions="FillAndExpand"
-                                Opacity=".8">
-                                <local:RoundedEntry
-                                    x:Name="_editFirstName"
-                                    Text="{Binding EditFirstName}"
-                                    Opacity=".8"
-                                    Placeholder="{Binding CurrentUserFirstName}"></local:RoundedEntry>
-                            </Frame>
-
-                            <Label
-                                Grid.Row="8"></Label>
-
-                            <Frame
-                                Grid.Row="9"
-                                BorderColor="LightGray"
-                                Padding="0"
-                                CornerRadius="15"
-                                IsClippedToBounds="False"
-                                HorizontalOptions="CenterAndExpand"
-                                WidthRequest="500"
-                                VerticalOptions="FillAndExpand"
-                                Opacity=".8">
-                                <local:RoundedEntry
-                                    x:Name="_editSurname"
-                                    Text="{Binding EditSurname}"
-                                    Opacity=".8"
-                                    Placeholder="{Binding CurrentUserLastName}"></local:RoundedEntry>
-                            </Frame>
+                                EntryText="{Binding EditSurname, Mode=TwoWay}"
+                                PlaceholderText="{Binding CurrentUserLastName}"
+                                ControlTemplate="{StaticResource EntryViewControlTemplate}" />
 
                             <Button
                                 HeightRequest="50"
                                 WidthRequest="150"
                                 VerticalOptions="Center"
-                                Grid.Row="10"
+                                Grid.Row="7"
                                 Command="{Binding EditUserCommand}"
                                 CornerRadius="10"
                                 BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
@@ -1122,6 +1092,20 @@
                                 BackgroundColor="{AppThemeBinding Dark={StaticResource ButtonBackgroundColorDark}, Light={StaticResource ButtonBackgroundColor}}"
                                 TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                                 Text="Edit User"
+                                FontSize="20">
+                            </Button>
+                            <Button
+                                HeightRequest="50"
+                                WidthRequest="150"
+                                VerticalOptions="Center"
+                                Grid.Row="8"    
+                                Command="{Binding DeleteUserCommand}"
+                                CornerRadius="10"
+                                BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
+                                HorizontalOptions="Center"
+                                BackgroundColor="{AppThemeBinding Dark=IndianRed, Light=IndianRed}"
+                                TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+                                Text="Delete User"
                                 FontSize="20">
                             </Button>
                         </Grid>

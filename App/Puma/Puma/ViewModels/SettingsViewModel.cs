@@ -23,8 +23,10 @@ namespace Puma.ViewModels
         }
 
         Command _editUserCommand;
+        Command _deleteUserCommand;
 
         public Command EditUserCommand => _editUserCommand ?? (_editUserCommand = new Command(EditUser));
+        public Command DeleteUserCommand => _deleteUserCommand ?? (_deleteUserCommand = new Command(DeleteUser));
 
         //Vill vi att man kan byta email?
         string _editEmail;
@@ -36,10 +38,11 @@ namespace Puma.ViewModels
         string _currentUserFirstName;
         string _currentUserLastName;
         string _currentUserEmail;
-        
+        string _currentUserPassword;
 
 
-        public void SetUserToEdit(string displayName, string email, string firstName, string lastName)
+
+        public void SetUserToEdit(string displayName, string email, string firstName, string lastName, string password)
         {
             if (App.LoggedInUser == null)
                 return;
@@ -47,7 +50,7 @@ namespace Puma.ViewModels
             CurrentUserFirstName = firstName;
             CurrentUserLastName = lastName;
             CurrentUserEmail = email;
-            
+            CurrentUserPassword = password;
         }
         public string CurrentUserDisplayName
         {
@@ -85,6 +88,15 @@ namespace Puma.ViewModels
                 OnPropertyChanged();
             }
         }
+        public string CurrentUserPassword
+        {
+            get => _currentUserPassword;
+            set
+            {
+                _currentUserPassword = value;
+                OnPropertyChanged();
+            }
+        }
         public string EditEmail
         {
             get => _editEmail;
@@ -101,6 +113,9 @@ namespace Puma.ViewModels
             get => _editPassword;
             set
             {
+                if (_editPassword == null)
+                    return;
+
                 _editPassword = value;
                 OnPropertyChanged();
                 EditUserCommand.ChangeCanExecute();
@@ -135,7 +150,7 @@ namespace Puma.ViewModels
             }
         }
         //private bool CanEdit() => !string.IsNullOrWhiteSpace(EditEmail) && !string.IsNullOrWhiteSpace(EditPassword) && !string.IsNullOrWhiteSpace(EditDisplayName);
-        
+
         private async void EditUser()
         {
             var user = new UpdateUserDto()
@@ -147,13 +162,32 @@ namespace Puma.ViewModels
                 FirstName = EditFirstName ?? App.LoggedInUser.FirstName,
                 LastName = EditSurname ?? App.LoggedInUser.LastName,
             };
-            if (EditPassword == null)
-                user.Password = App.LoggedInUser.Password;
+            
 
             var updatedUser = await _userApiService.UpdateUserAsync(user);
             if (updatedUser != null)
             {
                 await _dialogService.ShowMessageAsync("Saved!!", $"Settings applied! \"{user.DisplayName}\".");
+            }
+        }
+
+        private async void DeleteUser()
+        {
+            if (App.LoggedInUser == null)
+                return;
+
+            var confirmationPopup = await App.Current.MainPage.DisplayActionSheet($"Delete User {App.LoggedInUser.DisplayName}?", "No, I ragrats", null,
+                 "Yes, delete my account");
+            switch (confirmationPopup)
+            {
+                case "No, I ragrats":
+                    break;
+                case "Yes, delete my account":
+                    await _dialogService.ShowMessageAsync($"Deleted: {App.LoggedInUser.DisplayName}", "Deez hoes aint loyal");
+                    await _userApiService.DeleteUserAsync(App.LoggedInUser.Id);
+                    break;
+                //case "I'm never fucking leaving":
+                    //break;
             }
         }
     }

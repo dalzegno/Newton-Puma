@@ -151,7 +151,7 @@ namespace Puma.Views
             if (user == null)
                 return;
 
-            SettingsViewModel.SetUserToEdit(user.DisplayName, user.Email, user.FirstName, user.LastName);
+            SettingsViewModel.SetUserToEdit(user.DisplayName, user.Email, user.FirstName, user.LastName, user.Password);
         }
         #endregion
 
