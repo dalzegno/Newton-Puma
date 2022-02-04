@@ -51,6 +51,7 @@
 
   <Capabilities>
     <Capability Name="internetClient" />
+    <uap:Capability Name="sharedUserCertificates"/>
     <DeviceCapability Name="location"/>
   </Capabilities>
 </Package>

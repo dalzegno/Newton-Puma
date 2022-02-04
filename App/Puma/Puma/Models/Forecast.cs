@@ -61,7 +61,7 @@ namespace Puma.Models
             var outDatedCaches = new List<string>();
             foreach (string fileName in fileNames)
             {
-                // A cachekey is "DateTime, Latitude, Longitude,"
+                // A cachekey is "Latitude, Longitude, TimeWindow,.xml"
                 var cacheKeys = fileName.Split(',');
 
                 string strNow = DateTime.Now.ToString("yyyy/MM/dd HH:mm");
@@ -100,7 +100,8 @@ namespace Puma.Models
         public ForecastCacheKey(string latAndLongKey)
         {
             _latAndLongKey = latAndLongKey;
-            _timeWindow = DateTime.Now.AddMinutes(60).ToString("yyyy-MM-dd HH.mm");
+            var dateTimeRounded = RoundToHour(DateTime.Now.AddHours(1));
+            _timeWindow = dateTimeRounded.ToString("yyyy-MM-dd HH.mm");
         }
 
         static string Fname(string name)
@@ -112,6 +113,12 @@ namespace Puma.Models
                 Directory.CreateDirectory(documentPath);
             
             return Path.Combine(documentPath, name);
+        }
+
+        static DateTime RoundToHour(DateTime dt)
+        {
+            long ticks = dt.Ticks + 18000000000;
+            return new DateTime(ticks - ticks % 36000000000, dt.Kind);
         }
     }
 }

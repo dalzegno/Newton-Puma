@@ -125,7 +125,7 @@ namespace Puma.ViewModels
             }
             catch (Exception e)
             {
-                await _dialogService.ShowMessageAsync("Error", e.Message);
+                await _dialogService.ShowErrorAsync(e);
             }
 
             if (forecast == null)
