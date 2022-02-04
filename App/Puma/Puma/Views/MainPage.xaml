@@ -38,8 +38,6 @@
         <Label Background="blue" Grid.Row="10" Text="Hello" FontSize="2" Grid.ColumnSpan="12"/>-->
 
 
-
-
         <!-- MAP -->
         <maps:Map
             x:Name="map"
@@ -101,24 +99,25 @@
         </StackLayout>
 
 
-
-
-        <!-- NAVBAR -->
+        <!-- NAVBAR AND MENU -->
         <AbsoluteLayout
-            BackgroundColor="Green"
-            x:Name="slider_navbar"
-            Grid.Row="11"
-            AbsoluteLayout.LayoutBounds="0,0,1,1"
-            AbsoluteLayout.LayoutFlags="All"
-            Margin="0"
-            Padding="0"
-            Grid.ColumnSpan="12">
-
-            <Grid
-                BackgroundColor="{AppThemeBinding 
+            BackgroundColor="{AppThemeBinding 
                               Dark={StaticResource WindowBackgroundColorDark}, 
                               Light={StaticResource WindowBackgroundColor}}"
-                ColumnDefinitions="1*,1*,1*"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand"
+            x:Name="slider_navbar"
+            Grid.Row="11"
+            Margin="0"
+            Padding="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="12">
+
+            <!-- NAVBAR -->
+            <Grid
+                AbsoluteLayout.LayoutBounds="0,0,1,1"
+                AbsoluteLayout.LayoutFlags="All"
+                ColumnDefinitions="*,*,*"
                 HorizontalOptions="FillAndExpand"
                 VerticalOptions="FillAndExpand"
                 Opacity=".9"
@@ -133,20 +132,19 @@
 
                 <!-- POI VIEW POPOVER -->
                 <Frame
-                    AbsoluteLayout.LayoutBounds="0,0,1,1"
-                    AbsoluteLayout.LayoutFlags="All"
                     x:Name="slPoiPopover"
-                    HorizontalOptions="StartAndExpand"
+                    HorizontalOptions="Fill"
                     VerticalOptions="StartAndExpand"
                     Margin="0"
-                    Padding="0"
-                    WidthRequest="400">
+                    Padding="0">
                     <Grid
                         Padding="0"
                         Margin="0"
                         HorizontalOptions="CenterAndExpand"
                         VerticalOptions="CenterAndExpand"
                         RowDefinitions="1*,.6*,.6*">
+                        <!--ColumnDefinitions="auto, auto"-->
+
                         <Label
                             Grid.Row="0"
                             VerticalOptions="End"
@@ -168,6 +166,46 @@
                             Margin="0"
                             Text="{Binding StreetName}"
                             FontSize="12"></Label>
+                        <StackLayout
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Orientation="Horizontal">
+                            <Label
+                                VerticalOptions="End"
+                                HorizontalOptions="CenterAndExpand"
+                                Text="Today"
+                                FontSize="13"
+                                FontAttributes="Bold" />
+                            <Label
+                                VerticalOptions="End"
+                                HorizontalOptions="CenterAndExpand"
+                                Text="Tomorrow"
+                                FontSize="13"
+                                FontAttributes="Bold" />
+                        </StackLayout>
+
+                        <!--WEATHER-->
+                        <StackLayout
+                            x:Name="sl_Weather"
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Orientation="Horizontal">
+                            <Label
+                                VerticalOptions="End"
+                                HorizontalOptions="CenterAndExpand"
+                                Text="{Binding AvgTempToday, StringFormat='{0}°C'}"
+                                FontSize="13" />
+                            <Image
+                                Source="{Binding AvgIconUriToday}" />
+                            <Label
+                                VerticalOptions="End"
+                                HorizontalOptions="CenterAndExpand"
+                                Text="{Binding AvgTempTomorrow, StringFormat='{0}°C'}"
+                                FontSize="13" />
+                            <Image
+                                Source="{Binding AvgIconUriTomorrow}" />
+                        </StackLayout>
+
                     </Grid>
                 </Frame>
 
@@ -176,9 +214,7 @@
                 <Grid
                     Grid.Column="1"
                     Grid.Row="0"
-                    HorizontalOptions="Center"
-                    AbsoluteLayout.LayoutBounds=".1,.1,.1,.1"
-                    AbsoluteLayout.LayoutFlags="All">
+                    HorizontalOptions="CenterAndExpand">
                     <Path
                         Fill="#008db3"
                         Data="M58.4,22.7L60,42.7C55.8,54,44.8,62,32,62C15.4,62,2,48.6,2,32S15.4,2,32,2c6,0,11.6,1.8,16.3,4.8L58.4,22.7z" />
@@ -193,13 +229,11 @@
                         Data="m20.6 17.3c-.3 0-.6.2-.9.2-.3.1-.5.5-.5.9 0 .5.8.6.5.9-.3.3-1.9.6-1.7 1.1s.5.9.2 1.4c-.3.5.3.6.9.4s1-.9.9-1.3c-.1-.5.9-.6.6-.2s-.8 1.4-.5 1.7c.3.3-.8.8-.4 1 .4.2 1.5-.8 2.1-.6s.8-.2.9-.7c.1-.6-.8-1.3-1.1-2-.3-.8-.1-2.8-1-2.8" />
 
                 </Grid>
-
-
-               <!-- ICON TEXT -->
+                <!-- ICON TEXT -->
                 <StackLayout
                     Grid.Column="1"
                     Orientation="Vertical"
-                    HorizontalOptions="Center">
+                    HorizontalOptions="CenterAndExpand">
                     <Label
                         HorizontalOptions="Center"
                         HeightRequest="50"
@@ -216,7 +250,7 @@
 
                 <!--<<<<<<<< Navbar Login/Signup buttons >>>>>>>-->
                 <StackLayout
-                    Grid.Column="4"
+                    Grid.Column="2"
                     HorizontalOptions="EndAndExpand"
                     Orientation="Horizontal"
                     Margin="0">
@@ -260,15 +294,16 @@
             </Grid>
 
 
-            <!--<<<<<<<<<<<<<<<<<>>>>>> ¡ SLIDER OPEN MENU ! <<<<<<<<<<<<>>>>>>>>>>>>-->
-            
-            
+            <!--  MENU -->
             <StackLayout
                 x:Name="slider_menu"
                 IsVisible="false"
                 HorizontalOptions="Fill"
-                VerticalOptions="Fill"
-                Background="blue">
+                VerticalOptions="Fill">
+                <ContentView
+                    BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
+                    Light={StaticResource PopUpBackgroundColor}}"
+                    Opacity="0.8" />
 
                 <!-- POI MENU BUTTONS -->
                 <StackLayout
@@ -281,9 +316,9 @@
 
                     <local:CustomButton
                         BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
-                        
+                        Command="{Binding PoiGetCollectionCommand}"
                         Clicked="slider_MenuButtonClicked"
-                        ClassId="poiCollectionView"
+                        ClassId="poiCollectionFrame"
                         Grid.Column="0"
                         HorizontalOptions="FillAndExpand"
                         Text="Points of Interest">
@@ -292,6 +327,7 @@
                         BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
                         Grid.Column="1"
                         HorizontalOptions="FillAndExpand"
+                        Command="{Binding WeatherPopupCommand}"
                         ClassId="weatherCollectionView"
                         Clicked="slider_MenuButtonClicked"
                         Text="Weather"></local:CustomButton>
@@ -304,7 +340,7 @@
                         Clicked="slider_MenuButtonClicked"
                         Text="Add new Point of Interest"></local:CustomButton>
                 </StackLayout>
-                
+
                 <!-- POI CREATION POPUP -->
                 <Frame
                     IsVisible="false"
@@ -398,86 +434,95 @@
                 </Frame>
 
 
-               
-
-
-
-
-
                 <!-- POI COLLECTION VIEW  >-->
                 <Frame
                     HorizontalOptions="FillAndExpand"
                     VerticalOptions="FillAndExpand"
-                    IsVisible="false"
+                    IsVisible="true"
                     Margin="10,10"
                     BackgroundColor="White"
                     Opacity=".9"
-                    ClassId="poiCollectionView"
-                    x:Name="poiCollectionView">
-
+                    ClassId="poiCollectionFrame"
+                    x:Name="poiCollectionFrame">
+                    <!-- SINGLE POI -->
                     <StackLayout>
-                        <CollectionView
-                            IsVisible="{Binding PoiCollectionVisible}"
-                            Margin="0"
-                            ItemsSource="{Binding PoiCollection}"
-                            SelectionMode="Single"
-                            SelectedItem="{Binding SelectedSinglePoi}"
-                            SelectionChangedCommand="{Binding SelectedPoiCommand}">
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid
-                                        Padding="5"
-                                        HeightRequest="60"
-                                        RowDefinitions="1*,1*,1*">
-                                        <Label
-                                            Grid.Row="0"
-                                            Text="{Binding Name}"
-                                            FontAttributes="Bold"
-                                            CharacterSpacing=".5"
-                                            FontSize="12"
-                                            HeightRequest="100"></Label>
-                                        <Label
-                                            Grid.Row="1"
-                                            Text="{Binding Description}"
-                                            FontSize="12"
-                                            HeightRequest="100"></Label>
-                                        <Label
-                                            Grid.Row="2"
-                                            FontSize="12"
-                                            FontAttributes="Italic"
-                                            HeightRequest="100">
-                                            <Label.Text>
-                                                <MultiBinding
-                                                    StringFormat="{}{0}, {1}">
-                                                    <Binding
-                                                        Path="Address.Area" />
-                                                    <Binding
-                                                        Path="Address.Country" />
-                                                </MultiBinding>
-                                            </Label.Text>
-                                        </Label>
-                                        <Rectangle
-                                            Grid.Row="2"
-                                            HeightRequest="1"
-                                            BackgroundColor="Black"
-                                            VerticalOptions="End"
-                                            HorizontalOptions="FillAndExpand" />
-                                    </Grid>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-
                         <StackLayout
+                            x:Name="poiSingleView"
                             IsVisible="{Binding PoiSingleVisible}">
                             <local:CustomButton
                                 Text="Return"
-                                Command="{Binding SelectedPoiCommand}" />
+                                Command="{Binding PoiCollectionViewCommand}" />
                             <Label
-                                FontSize="24"
+                                FontSize="32"
+                                FontAttributes="Bold"
+                                TextDecorations="Underline"
                                 Text="{Binding SelectedSinglePoi.Name}" />
                             <Label
                                 FontSize="12"
+                                Text="{Binding SelectedSinglePoi.Address.Country}" />
+                            <Label
+                                FontSize="12"
+                                Text="{Binding SelectedSinglePoi.Address.Area}" />
+                            <Label
+                                FontSize="12"
+                                Text="{Binding SelectedSinglePoi.Address.StreetName}" />
+                            <Label
+                                FontSize="12"
                                 Text="{Binding SelectedSinglePoi.Description}" />
+                        </StackLayout>
+                        <!-- POI COLLECTION -->
+                        <StackLayout
+                            IsVisible="{Binding PoiCollectionVisible}">
+                            <CollectionView
+                                x:Name="poiCollectionView"
+                                Margin="0"
+                                ItemsSource="{Binding PoiCollection}"
+                                SelectionMode="Single"
+                                SelectedItem="{Binding SelectedSinglePoi}"
+                                SelectionChangedCommand="{Binding PoiSingleViewCommand}">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid
+                                            Padding="5"
+                                            HeightRequest="60"
+                                            RowDefinitions="1*,1*,1*">
+                                            <Label
+                                                Grid.Row="0"
+                                                Text="{Binding Name}"
+                                                FontAttributes="Bold"
+                                                CharacterSpacing=".5"
+                                                FontSize="12"
+                                                HeightRequest="100"></Label>
+                                            <Label
+                                                Grid.Row="1"
+                                                Text="{Binding Description}"
+                                                FontSize="12"
+                                                HeightRequest="100"></Label>
+                                            <Label
+                                                Grid.Row="2"
+                                                FontSize="12"
+                                                FontAttributes="Italic"
+                                                HeightRequest="100">
+                                                <Label.Text>
+                                                    <MultiBinding
+                                                        StringFormat="{}{0}, {1}">
+                                                        <Binding
+                                                            Path="Address.Area" />
+                                                        <Binding
+                                                            Path="Address.Country" />
+                                                    </MultiBinding>
+                                                </Label.Text>
+                                            </Label>
+                                            <Rectangle
+                                                Grid.Row="2"
+                                                HeightRequest="1"
+                                                BackgroundColor="Black"
+                                                VerticalOptions="End"
+                                                HorizontalOptions="FillAndExpand" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
                         </StackLayout>
                     </StackLayout>
                 </Frame>
@@ -500,6 +545,7 @@
 
 
                     <CollectionView
+                        IsVisible="{Binding WeatherPopup}"
                         VerticalOptions="StartAndExpand"
                         HorizontalOptions="Center"
                         Margin="0"
@@ -558,23 +604,8 @@
                 </Frame>
 
 
-                
-               
-
             </StackLayout>
         </AbsoluteLayout>
-
-        <!-- SLIDER MENU -->
-        <!--<StackLayout
-            
-            
-            Grid.RowSpan="11"
-            Grid.ColumnSpan="12"
-            BackgroundColor="red"
-            Opacity=".3"
-            IsVisible="false"
-            x:Name="slider_menu_frame">
-            -->
 
 
         <!--Signup Popup "-->
@@ -745,7 +776,6 @@
         </Frame>
 
 
-
         <!-- LOG IN POPUP -->
 
         <Frame
@@ -818,7 +848,6 @@
                 </Grid>
 
 
-
                 <!-- LOGIN INPUTS -->
                 <ScrollView
                     Grid.Row="1">
@@ -849,7 +878,6 @@
                     </Grid>
                 </ScrollView>
             </Grid>
-
         </Frame>
 
 
@@ -927,13 +955,17 @@
             </Grid>
         </Frame>
 
-        
+
         <!-- SETTINGS POPUP -->
 
+
+        <!-- Har bytt om lite så att det blev mer likt Login/signup,
+        flyttat bindingcontext så Close-knappen funkar.
+        Testade EntryViewControl på Första Email-entryt. -->
+
         <Frame
-            x:Name="settingsPopup"
-            ClassId="settingsPopup"
             IsVisible="{Binding settingsPopupState}"
+            ClassId="settingsPopup"
             Grid.Row="2"
             Grid.RowSpan="8"
             Grid.ColumnSpan="12"
@@ -944,132 +976,159 @@
             HeightRequest="500"
             BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
             Opacity=".9">
-
+            <!-- HEADER -->
             <Grid
-                        RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto"
-                        ColumnSpacing="0"
-                        >
-                <Button
+                RowDefinitions="auto,.9*">
+                <Grid
+                    Grid.Row="0"
+                    ColumnDefinitions="1*,1*,.2*"
+                    RowDefinitions="auto,auto">
+                    <Label
+                        FontSize="24"
+                        Text="Settings" />
+                    <local:CustomButton
+                        Grid.Column="3"
+                        VerticalOptions="StartAndExpand"
+                        Margin="-10,-10,-10,0"
                         Command="{Binding ClosePopupCommand}"
                         CornerRadius="15"
                         BackgroundColor="{AppThemeBinding 
-                              Dark={StaticResource ButtonBackgroundColorDark}, 
-                              Light={StaticResource ButtonBackgroundColor}}"
+                                  Dark={StaticResource ButtonBackgroundColorDark}, 
+                                  Light={StaticResource ButtonBackgroundColor}}"
                         BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
+
                         TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                         Margin="0,-10,-10,425"
+
                         Text="X"
-                        HorizontalOptions="EndAndExpand"></Button>
+                        HorizontalOptions="EndAndExpand" />
+                </Grid>
 
-                <Label Text="Settings"></Label>
-                <Grid x:Name="settingsInputs" IsVisible="{Binding settingsLoggedInState}">
-                    <Frame
-                            Grid.Row="1"
-                            BorderColor="LightGray"
-                            Padding="0"
-                            CornerRadius="15"
-                            IsClippedToBounds="False"
-                            HorizontalOptions="CenterAndExpand"
-                            WidthRequest="500"
-                            VerticalOptions="FillAndExpand"
-                            Opacity=".8">
+                <!-- INPUTS -->
+                <Grid
+                    Grid.Row="1"
+                    x:Name="settingsPopup"
+                    RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto"
+                    ColumnSpacing="0">
+                    <ScrollView>
+                        <Grid
+                            x:Name="settingsInputs"
+                            IsVisible="{Binding settingsLoggedInState}">
+                            <control:EntryViewControl
+                                Grid.Row="1"
+                                EntryText="{Binding EditEmail, Mode=TwoWay}"
+                                PlaceholderText="{Binding CurrentUserEmail}"
+                                ControlTemplate="{StaticResource EntryViewControlTemplate}" />
+                            <Frame
+                                Grid.Row="1"
+                                BorderColor="LightGray"
+                                Padding="0"
+                                CornerRadius="15"
+                                IsClippedToBounds="False"
+                                HorizontalOptions="CenterAndExpand"
+                                WidthRequest="500"
+                                VerticalOptions="FillAndExpand"
+                                Opacity=".8">
 
-                    <local:RoundedEntry
-                                x:Name="_editEmail"
-                                Opacity=".8"
-                                Placeholder="{Binding CurrentUserEmail}"
-                                Text="{Binding EditEmail}"></local:RoundedEntry>
-                </Frame>
-                <Frame
-                            Grid.Row="3"
-                            BorderColor="LightGray"
-                            Padding="0"
-                            CornerRadius="15"
-                            IsClippedToBounds="False"
-                            HorizontalOptions="CenterAndExpand"
-                            WidthRequest="500"
-                            VerticalOptions="FillAndExpand"
-                            Opacity=".8">
-                    <local:RoundedEntry
-                                x:Name="_editPassword"
-                                Text="{Binding EditPassword}"
-                                IsPassword="True"
-                                Opacity=".8"
-                                Placeholder="Password"></local:RoundedEntry>
-                </Frame>
-                <Frame
-                            Grid.Row="5"
-                            BorderColor="LightGray"
-                            Padding="0"
-                            CornerRadius="15"
-                            IsClippedToBounds="False"
-                            HorizontalOptions="CenterAndExpand"
-                            WidthRequest="500"
-                            VerticalOptions="FillAndExpand"
-                            Opacity=".8">
-                    <local:RoundedEntry
-                                x:Name="_editDisplayName"
-                                Text="{Binding EditDisplayName}"
-                                Opacity=".8"
-                                Placeholder="{Binding CurrentUserDisplayName}"></local:RoundedEntry>
-                </Frame>
+                                <local:RoundedEntry
+                                    x:Name="_editEmail"
+                                    Opacity=".8"
+                                    Placeholder="{Binding CurrentUserEmail}"
+                                    Text="{Binding EditEmail}"></local:RoundedEntry>
 
-                <Label
-                            Grid.Row="6"></Label>
-                <Frame
-                            Grid.Row="7"
-                            BorderColor="LightGray"
-                            Padding="0"
-                            CornerRadius="15"
-                            IsClippedToBounds="False"
-                            HorizontalOptions="CenterAndExpand"
-                            WidthRequest="500"
-                            VerticalOptions="FillAndExpand"
-                            Opacity=".8">
-                    <local:RoundedEntry
-                                x:Name="_editFirstName"
-                                Text="{Binding EditFirstName}"
-                                Opacity=".8"
-                                Placeholder="{Binding CurrentUserFirstName}"></local:RoundedEntry>
-                </Frame>
+                            </Frame>
+                            <Frame
+                                Grid.Row="3"
+                                BorderColor="LightGray"
+                                Padding="0"
+                                CornerRadius="15"
+                                IsClippedToBounds="False"
+                                HorizontalOptions="CenterAndExpand"
+                                WidthRequest="500"
+                                VerticalOptions="FillAndExpand"
+                                Opacity=".8">
+                                <local:RoundedEntry
+                                    x:Name="_editPassword"
+                                    Text="{Binding EditPassword}"
+                                    IsPassword="True"
+                                    Opacity=".8"
+                                    Placeholder="Password"></local:RoundedEntry>
+                            </Frame>
+                            <Frame
+                                Grid.Row="5"
+                                BorderColor="LightGray"
+                                Padding="0"
+                                CornerRadius="15"
+                                IsClippedToBounds="False"
+                                HorizontalOptions="CenterAndExpand"
+                                WidthRequest="500"
+                                VerticalOptions="FillAndExpand"
+                                Opacity=".8">
+                                <local:RoundedEntry
+                                    x:Name="_editDisplayName"
+                                    Text="{Binding EditDisplayName}"
+                                    Opacity=".8"
+                                    Placeholder="{Binding CurrentUserDisplayName}"></local:RoundedEntry>
+                            </Frame>
 
-                <Label
-                            Grid.Row="8"></Label>
+                            <Label
+                                Grid.Row="6"></Label>
+                            <Frame
+                                Grid.Row="7"
+                                BorderColor="LightGray"
+                                Padding="0"
+                                CornerRadius="15"
+                                IsClippedToBounds="False"
+                                HorizontalOptions="CenterAndExpand"
+                                WidthRequest="500"
+                                VerticalOptions="FillAndExpand"
+                                Opacity=".8">
+                                <local:RoundedEntry
+                                    x:Name="_editFirstName"
+                                    Text="{Binding EditFirstName}"
+                                    Opacity=".8"
+                                    Placeholder="{Binding CurrentUserFirstName}"></local:RoundedEntry>
+                            </Frame>
 
-                <Frame
-                            Grid.Row="9"
-                            BorderColor="LightGray"
-                            Padding="0"
-                            CornerRadius="15"
-                            IsClippedToBounds="False"
-                            HorizontalOptions="CenterAndExpand"
-                            WidthRequest="500"
-                            VerticalOptions="FillAndExpand"
-                            Opacity=".8">
-                    <local:RoundedEntry
-                                x:Name="_editSurname"
-                                Text="{Binding EditSurname}"
-                                Opacity=".8"
-                                Placeholder="{Binding CurrentUserLastName}"></local:RoundedEntry>
-                </Frame>
+                            <Label
+                                Grid.Row="8"></Label>
 
-                <Button
-                            HeightRequest="50"
-                            WidthRequest="150"
-                            VerticalOptions="Center"
-                            Grid.Row="10"
-                            Command="{Binding EditUserCommand}"
-                            CornerRadius="10"
-                            BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
-                            HorizontalOptions="Center"
-                            BackgroundColor="{AppThemeBinding Dark={StaticResource ButtonBackgroundColorDark}, Light={StaticResource ButtonBackgroundColor}}"
-                            TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                            Text="Edit User"
-                            FontSize="20">
-                </Button>
+                            <Frame
+                                Grid.Row="9"
+                                BorderColor="LightGray"
+                                Padding="0"
+                                CornerRadius="15"
+                                IsClippedToBounds="False"
+                                HorizontalOptions="CenterAndExpand"
+                                WidthRequest="500"
+                                VerticalOptions="FillAndExpand"
+                                Opacity=".8">
+                                <local:RoundedEntry
+                                    x:Name="_editSurname"
+                                    Text="{Binding EditSurname}"
+                                    Opacity=".8"
+                                    Placeholder="{Binding CurrentUserLastName}"></local:RoundedEntry>
+                            </Frame>
+
+                            <Button
+                                HeightRequest="50"
+                                WidthRequest="150"
+                                VerticalOptions="Center"
+                                Grid.Row="10"
+                                Command="{Binding EditUserCommand}"
+                                CornerRadius="10"
+                                BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
+                                HorizontalOptions="Center"
+                                BackgroundColor="{AppThemeBinding Dark={StaticResource ButtonBackgroundColorDark}, Light={StaticResource ButtonBackgroundColor}}"
+                                TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+                                Text="Edit User"
+                                FontSize="20">
+                            </Button>
+                        </Grid>
+                    </ScrollView>
+
                 </Grid>
             </Grid>
-
         </Frame>
 
     </Grid>

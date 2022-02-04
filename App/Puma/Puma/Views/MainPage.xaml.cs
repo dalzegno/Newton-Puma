@@ -22,6 +22,7 @@ namespace Puma.Views
         internal MainViewModel MainViewModel { get; }
         internal PoiViewModel PoiViewModel { get; }
         internal SettingsViewModel SettingsViewModel { get; }
+        internal WeatherViewModel WeatherViewModel1 { get; }
         IUserApiService UserApiService => DependencyService.Get<IUserApiService>();
         IDialogService DialogService => DependencyService.Get<IDialogService>();
         IPoiService PoiService => DependencyService.Get<IPoiService>();
@@ -33,14 +34,16 @@ namespace Puma.Views
             Instance = this;
             // Internal viewmodels that can be reached globally
             MainViewModel = new MainViewModel(DialogService);
-            PoiViewModel = new PoiViewModel(PoiService, DialogService, WeatherService);
+            PoiViewModel = new PoiViewModel(PoiService, DialogService);
+            WeatherViewModel1 = new WeatherViewModel(WeatherService, DialogService);
+            //PoiViewModel = new PoiViewModel(PoiService, DialogService, WeatherService);
             SettingsViewModel = new SettingsViewModel(UserApiService, DialogService);
             BindingContext = MainViewModel;
 
             SetBindingContexts();
 
             _geoCoder = new Geocoder();
-            }
+        }
 
         #region Events
         async void OnMapClicked(object sender, MapClickedEventArgs e)
@@ -48,7 +51,7 @@ namespace Puma.Views
             map.Pins.Clear();
             var position = e.Position;
             var pin = CreatePin(position);
-            map.Pins.Add(pin);
+            AddPin(pin);
 
             Debug.WriteLine($"MapClick: {position.Latitude}, {position.Longitude}");
 
@@ -57,11 +60,19 @@ namespace Puma.Views
 
             IEnumerable<string> possibleAddresses = await _geoCoder.GetAddressesForPositionAsync(position);
             string address = possibleAddresses.FirstOrDefault();
-            PoiViewModel.SetAddress(address);
 
+            PoiViewModel.SetAddress(address);
+            await PoiViewModel.SetLatAndLon(position.Latitude, position.Longitude);
+            WeatherViewModel1.SetWeather(position.Latitude, position.Longitude);
 
             Debug.WriteLine("address: " + address);
         }
+
+        public void AddPin(Pin pin)
+        {
+            map.Pins.Add(pin);
+        }
+
         private void ViewOptionButton_Clicked(object sender, EventArgs e)
         {
             Button button = sender as Button;
@@ -97,6 +108,10 @@ namespace Puma.Views
             var pin = CreatePin(searchedLocation);
             map.Pins.Add(pin);
             MoveToRegion(searchedLocation, 1);
+
+            PoiViewModel.SetAddress(searchedLocation.Addresses.FirstOrDefault());
+            await PoiViewModel.SetLatAndLon(searchedLocation.Position.Latitude, searchedLocation.Position.Longitude);
+            WeatherViewModel1.SetWeather(searchedLocation.Position.Latitude, searchedLocation.Position.Longitude);
 
             List<PointOfInterest> pois = await GetPoisFromDb(searchedLocation);
 
@@ -145,12 +160,9 @@ namespace Puma.Views
         {
             return new List<Frame>()
             {
-                signupPopup,
-                loginPopup,
-                poiCollectionView,
+                poiCollectionFrame,
                 poiCreationView,
-                weatherCollectionView,
-                settingsPopup
+                weatherCollectionView
             };
         }
         private async void SlideInMenuPanel(Frame selectedMenuPanel)
@@ -159,30 +171,23 @@ namespace Puma.Views
 
             List<Frame> MenuItemFrames = GetMenuPanels();
 
-            // Slidear ut den synliga menydelen
-            foreach(var menuFrame in MenuItemFrames)
+            if (selectedMenuPanel != null)
             {
-                if(menuFrame.ClassId != selectedMenuPanel.ToString() && menuFrame.IsVisible == true)
+                // Slidear ut den synliga menydelen
+                foreach (var menuFrame in MenuItemFrames)
                 {
-                    await menuFrame.TranslateTo(ScreenWidth * -1, 0, 300, Easing.SpringOut);
-                    menuFrame.IsVisible = false;
+                    if (menuFrame.ClassId != selectedMenuPanel.ToString() && menuFrame.IsVisible == true)
+                    {
+                        await menuFrame.TranslateTo(ScreenWidth * -1, 0, 300, Easing.SpringOut);
+                        menuFrame.IsVisible = false;
+                    }
                 }
+                //Slidear in den valda menyn
+                selectedMenuPanel.IsVisible = true;
+                selectedMenuPanel.TranslationX = ScreenWidth;
+
+                await selectedMenuPanel.TranslateTo(0, 0, 300, Easing.SpringIn);
             }
-            //Slidear in den valda menyn
-            selectedMenuPanel.IsVisible = true;
-            selectedMenuPanel.TranslationX = ScreenWidth;
-            await selectedMenuPanel.TranslateTo(0, 0, 300, Easing.SpringIn);
-            
-        }
-        async private void StartSlidePanel()
-        {
-            
-            //switch (Device.RuntimePlatform)
-            //{
-            //    default: slider_navbar.TranslationY = slider_navbar.TranslationY = 435;
-            //        //poiCreationPopup.TranslationY = poiCreationPopup.TranslationY = ScreenHeight;
-            //        break;
-            //}
         }
         private void slider_MenuButtonClicked(object sender, EventArgs e)
         {
@@ -191,47 +196,45 @@ namespace Puma.Views
             Frame frame = MenuItems.FirstOrDefault(x => x.ClassId == xnameofstack.ClassId);
             SlideInMenuPanel(frame);
         }
-        async void SliderUpDown(object sender, System.EventArgs e)
-            {
+        async void SliderUpDown(object sender, EventArgs e)
+        {
 
             double ScreenHeight = Application.Current.MainPage.Height;
             double ScreenWidth = Application.Current.MainPage.Width;
-            //var initialPosition = mainStack.Height;
-            //var currentPosition = body.Height;
             switch (Device.RuntimePlatform)
-                {
-                    case Device.Android:
+            {
+                case Device.Android:
 
-                        if (slider_navbar.TranslationY == 0)
-                        {
-                            await slider_navbar.TranslateTo(0, ScreenHeight * -0.6, 500, Easing.SinInOut);
-                            slider_menu.Margin = new Thickness(0, slider_navbar.Height);
-                            slider_menu.IsVisible = true;
-                            slider_menu.HeightRequest = ScreenHeight * 0.6;
-                            slider_menu.WidthRequest = ScreenWidth;
+                    if (slider_navbar.TranslationY == 0)
+                    {
+                        await slider_navbar.TranslateTo(0, ScreenHeight * -0.6, 500, Easing.SinInOut);
+                        slider_menu.Margin = new Thickness(0, slider_navbar.Height);
+                        slider_menu.IsVisible = true;
+                        slider_menu.HeightRequest = ScreenHeight * 0.6;
+                        slider_menu.WidthRequest = ScreenWidth;
                     }
-                        else
-                        {
-                            await slider_navbar.TranslateTo(0, 0, 500, Easing.SpringIn);
-                        }
+                    else
+                    {
+                        await slider_navbar.TranslateTo(0, 0, 500, Easing.SpringIn);
+                    }
 
-                        break;
-                    default:
-                        if (slider_navbar.TranslationY == 0)
-                        {
+                    break;
+                default:
+                    if (slider_navbar.TranslationY == 0)
+                    {
                         slider_menu.Margin = new Thickness(0, slider_navbar.Height);
                         slider_menu.IsVisible = true;
                         slider_menu.HeightRequest = ScreenHeight * 0.4;
                         slider_menu.WidthRequest = ScreenWidth;
                         await slider_navbar.TranslateTo(0, ScreenHeight * -0.4, 500, Easing.SinInOut);
-                        }
-                        else
-                        {
+                    }
+                    else
+                    {
                         await slider_navbar.TranslateTo(0, 0, 500, Easing.SpringIn);
-                        }
-                        break;
-                }
+                    }
+                    break;
             }
+        }
 
         #endregion
 
@@ -240,14 +243,16 @@ namespace Puma.Views
         {
             slCreateUserViewModel.BindingContext = new NewUserViewModel(UserApiService, DialogService);
             slLogIn.BindingContext = new LoginViewModel(UserApiService, DialogService);
-            //settingsPopup.BindingContext = SettingsViewModel;
+            settingsPopup.BindingContext = SettingsViewModel;
             slPoiPopover.BindingContext = PoiViewModel;
             slPoiPopup.BindingContext = PoiViewModel;
-            poiCollectionView.BindingContext = PoiViewModel;
-            //poiCreationPopup.BindingContext = PoiViewModel;
+            poiCollectionFrame.BindingContext = PoiViewModel;
+            poiCreationView.BindingContext = PoiViewModel;
             slPoiMenuButtons.BindingContext = PoiViewModel;
-            weatherCollectionView.BindingContext = PoiViewModel;
+            weatherCollectionView.BindingContext = WeatherViewModel1;
             settingsInputs.BindingContext = SettingsViewModel;
+
+            sl_Weather.BindingContext = WeatherViewModel1;
         }
         private async Task<List<PointOfInterest>> GetPoisFromDb(Location searchedLocation)
         {
@@ -301,7 +306,7 @@ namespace Puma.Views
 
             return pin;
         }
-        private Pin CreatePin(PointOfInterest poi)
+        public Pin CreatePin(PointOfInterest poi)
         {
             var pin = new Pin
             {
@@ -313,7 +318,10 @@ namespace Puma.Views
 
             pin.MarkerClicked += (sender2, args) =>
             {
-                DialogService.ShowMessageAsync("Tapped!", $"{pin.Label}");
+                //DialogService.ShowMessageAsync("Tapped!", $"{pin.Label}");
+                SliderUpDown(null, null);
+                PoiViewModel.SelectedSinglePoi = poi;
+                PoiViewModel.PoiSinglePopup();
             };
             return pin;
         }
@@ -332,6 +340,7 @@ namespace Puma.Views
             {
                 DialogService.ShowMessageAsync("Tapped!", $"{pin.Label}");
             };
+
             return pin;
         }
         public void GoToLocation(PointOfInterest poi, double distanceKm)
@@ -348,5 +357,7 @@ namespace Puma.Views
             public Position Position { get; set; }
             public IEnumerable<string> Addresses { get; set; }
         }
+
+
     }
 }

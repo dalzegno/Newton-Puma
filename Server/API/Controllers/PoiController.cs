@@ -1,4 +1,5 @@
-﻿using Logic.Models;
+﻿using Logic.Helpers;
+using Logic.Models;
 using Logic.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -107,8 +108,7 @@ namespace API.Controllers
         [HttpGet("GetPoisFromLatAndLon")]
         public async Task<ActionResult<IEnumerable<PointOfInterestDto>>> Get([FromQuery] string lat, [FromQuery] string lon)
         {
-            if (!double.TryParse(lat.Replace(".", ","), NumberStyles.Any, new CultureInfo("sv-SE"), out double latDouble) ||
-                !double.TryParse(lon.Replace(".", ","), NumberStyles.Any, new CultureInfo("sv-SE"), out double lonDouble))
+            if (!lat.TryParseToDouble(out double latDouble) || !lon.TryParseToDouble(out double lonDouble))
                 return BadRequest();
 
             var pois = await _poiService.GetAsync(latDouble, lonDouble);
