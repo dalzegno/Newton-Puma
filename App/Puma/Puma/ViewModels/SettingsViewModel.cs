@@ -24,7 +24,7 @@ namespace Puma.ViewModels
 
         Command _editUserCommand;
 
-        public Command EditUserCommand => _editUserCommand ?? (_editUserCommand = new Command(EditUser, CanEdit));
+        public Command EditUserCommand => _editUserCommand ?? (_editUserCommand = new Command(EditUser));
 
         //Vill vi att man kan byta email?
         string _editEmail;
@@ -36,6 +36,7 @@ namespace Puma.ViewModels
         string _currentUserFirstName;
         string _currentUserLastName;
         string _currentUserEmail;
+        
 
 
         public void SetUserToEdit(string displayName, string email, string firstName, string lastName)
@@ -46,6 +47,7 @@ namespace Puma.ViewModels
             CurrentUserFirstName = firstName;
             CurrentUserLastName = lastName;
             CurrentUserEmail = email;
+            
         }
         public string CurrentUserDisplayName
         {
@@ -132,18 +134,21 @@ namespace Puma.ViewModels
                 OnPropertyChanged();
             }
         }
-        private bool CanEdit() => !string.IsNullOrWhiteSpace(EditEmail) && !string.IsNullOrWhiteSpace(EditPassword) && !string.IsNullOrWhiteSpace(EditDisplayName);
+        //private bool CanEdit() => !string.IsNullOrWhiteSpace(EditEmail) && !string.IsNullOrWhiteSpace(EditPassword) && !string.IsNullOrWhiteSpace(EditDisplayName);
+        
         private async void EditUser()
         {
             var user = new UpdateUserDto()
             {
                 Id = App.LoggedInUser.Id,
-                Email = EditEmail,
+                Email = EditEmail ?? App.LoggedInUser.Email,
                 Password = EditPassword,
-                DisplayName = EditDisplayName,
-                FirstName = EditFirstName ?? "",
-                LastName = EditSurname ?? ""
+                DisplayName = EditDisplayName ?? App.LoggedInUser.DisplayName,
+                FirstName = EditFirstName ?? App.LoggedInUser.FirstName,
+                LastName = EditSurname ?? App.LoggedInUser.LastName,
             };
+            if (EditPassword == null)
+                user.Password = App.LoggedInUser.Password;
 
             var updatedUser = await _userApiService.UpdateUserAsync(user);
             if (updatedUser != null)
