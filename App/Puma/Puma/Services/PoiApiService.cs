@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 using Puma.Extensions;
+using System.Globalization;
 
 [assembly: Dependency(typeof(PoiApiService))]
 namespace Puma.Services
@@ -124,10 +125,10 @@ namespace Puma.Services
         }
         public async Task<List<PointOfInterest>> GetAsync(Position searchedPosition)
         {
-            _httpClient.SetHeader();
-
             try
             {
+                _httpClient.SetHeader();
+
                 var response = await _httpClient.GetAsync($"{_poiApiUri}/GetPoisFromLatAndLon?lat={searchedPosition.Latitude}&lon={searchedPosition.Longitude}");
 
                 if (!await response.IsResponseSuccessAsync())
@@ -142,12 +143,11 @@ namespace Puma.Services
             }
 
         }
-        public async Task<List<PointOfInterest>> GetAsync(string lat, string lon)
+        public async Task<List<PointOfInterest>> GetAsync(double lat, double lon)
         {
-            _httpClient.SetHeader();
-
             try
             {
+                _httpClient.SetHeader();
                 var response = await _httpClient.GetAsync($"{_poiApiUri}/GetPoisFromLatAndLon?lat={lat}&lon={lon}");
 
                 if (!await response.IsResponseSuccessAsync())
@@ -217,7 +217,7 @@ namespace Puma.Services
                 await _dialogService.ShowErrorAsync(e);
                 return null;
             }
-            
+
         }
         #endregion
     }

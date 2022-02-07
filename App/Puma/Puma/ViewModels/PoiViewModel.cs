@@ -244,7 +244,7 @@ namespace Puma.ViewModels
         {
             Tags = await _poiService.GetTags();
         }
-        private async Task<ObservableCollection<PointOfInterest>> GetPoisFromDb(string lat, string lon)
+        private async Task<ObservableCollection<PointOfInterest>> GetPoisFromDb(double lat, double lon)
         {
             var pois = await _poiService.GetAsync(lat, lon);
 
@@ -292,7 +292,7 @@ namespace Puma.ViewModels
             Latitude = lat.ToString();
             Longitude = lon.ToString();
 
-            PoiCollection = await GetPoisFromDb(Latitude, Longitude);
+            PoiCollection = await GetPoisFromDb(lat, lon);
 
             if (PoiCollection == null || PoiCollection.Count < 1)
                 return;

@@ -106,9 +106,9 @@ namespace API.Controllers
         }
 
         [HttpGet("GetFromLatAndLon")]
-        public async Task<ActionResult<IEnumerable<PointOfInterestDto>>> Get([FromQuery] string lat, [FromQuery] string lon)
+        public async Task<ActionResult<IEnumerable<PointOfInterestDto>>> Get([FromQuery] double lat, [FromQuery] double lon)
         {
-            if (!lat.TryParseToDouble(out double latDouble) || !lon.TryParseToDouble(out double lonDouble))
+            if (!lat.TryParseToInvariantCulture(out double latDouble) || !lon.TryParseToInvariantCulture(out double lonDouble))
                 return BadRequest();
 
             var pois = await _poiService.GetAsync(latDouble, lonDouble);
