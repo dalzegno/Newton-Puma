@@ -5,8 +5,6 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using PumaDbLibrary.Entities;
 
-#nullable disable
-
 namespace PumaDbLibrary.Entities
 {
     [Table("Point_Of_Interest")]
@@ -30,7 +28,12 @@ namespace PumaDbLibrary.Entities
         public int PositionId { get; set; }
         [Column("Address_Id")]
         public int AddressId { get; set; }
+        [Column("User_Id")]
+        public int UserId { get; set; }
 
+        [ForeignKey(nameof(UserId))]
+        [InverseProperty("PointOfInterests")]
+        public virtual User User { get; set; }
 
         [ForeignKey(nameof(PositionId))]
         [InverseProperty("PointOfInterests")]

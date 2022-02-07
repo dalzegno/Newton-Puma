@@ -36,8 +36,8 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<PointOfInterestDto>> Post([FromBody] AddPoiDto poi, [FromHeader] string apiKey)
         {
-            if (!await _userService.IsUserAuthorizedAsync(apiKey))
-                return Unauthorized();
+            //if (!await _userService.IsUserAuthorizedAsync(apiKey))
+            //    return Unauthorized();
 
             PointOfInterestDto createdPoi = await _poiService.CreateAsync(poi);
 
@@ -105,10 +105,10 @@ namespace API.Controllers
             return Ok(poi);
         }
 
-        [HttpGet("GetPoisFromLatAndLon")]
-        public async Task<ActionResult<IEnumerable<PointOfInterestDto>>> Get([FromQuery] string lat, [FromQuery] string lon)
+        [HttpGet("GetFromLatAndLon")]
+        public async Task<ActionResult<IEnumerable<PointOfInterestDto>>> Get([FromQuery] double lat, [FromQuery] double lon)
         {
-            if (!lat.TryParseToDouble(out double latDouble) || !lon.TryParseToDouble(out double lonDouble))
+            if (!lat.TryParseToInvariantCulture(out double latDouble) || !lon.TryParseToInvariantCulture(out double lonDouble))
                 return BadRequest();
 
             var pois = await _poiService.GetAsync(latDouble, lonDouble);
@@ -126,7 +126,7 @@ namespace API.Controllers
         /// <response code="200">Returns all users</response>
         /// <response code="404">If users could not be found</response>
         /// <response code="500">Internal server error</response>
-        [HttpGet("GetAllPoi")]
+        [HttpGet("GetAll")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

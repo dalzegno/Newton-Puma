@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+
 using AutoMapper;
 using Logic.Models;
-using Microsoft.EntityFrameworkCore;
 using PumaDbLibrary;
 using PumaDbLibrary.Entities;
 
@@ -12,8 +13,8 @@ namespace Logic.Services
 {
     public class PoiService : IPoiService
     {
-        PumaDbContext _context;
-        IMapper _mapper;
+        readonly PumaDbContext _context;
+        readonly IMapper _mapper;
         public PoiService(PumaDbContext context, IMapper mapper)
         {
             _context = context;
@@ -26,28 +27,29 @@ namespace Logic.Services
             PointOfInterest foundPoi = await GetPoiFromDbAsync(pointOfInterest.Name, pointOfInterest.Position.Latitude, pointOfInterest.Position.Longitude);
 
             if (foundPoi != null)
+            {
                 return _mapper.Map<PointOfInterestDto>(foundPoi);
+            }
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == pointOfInterest.UserId);
+
+            if (user == null)
+            {
+                throw new Exception("There is no user with the provided user id.");
+            }
 
             var dbPoi = new PointOfInterest
             {
                 Description = pointOfInterest.Description ?? "",
                 Name = pointOfInterest.Name,
-                Address = await _context.Addresses.FirstOrDefaultAsync(a => a.StreetName == pointOfInterest.Address.StreetName || a.Area == pointOfInterest.Address.Area)
-                          ?? _mapper.Map<Address>(pointOfInterest.Address),
-                Position = await _context.Positions.FirstOrDefaultAsync(p => p.Latitude == pointOfInterest.Position.Latitude || p.Longitude == pointOfInterest.Position.Longitude)
-                           ?? _mapper.Map<Position>(pointOfInterest.Position)
+                Address = await GetAddressAsync(pointOfInterest) ?? _mapper.Map<Address>(pointOfInterest.Address),
+                Position = await GetPositionAsync(pointOfInterest) ?? _mapper.Map<Position>(pointOfInterest.Position),
+                UserId = user.Id
             };
 
             if (pointOfInterest.TagIds?.Count > 0)
             {
-                foreach (var tagId in pointOfInterest.TagIds)
-                {
-                    dbPoi.PoiTags.Add(new PoiTag
-                    {
-                        PointOfInterest = dbPoi,
-                        Tag = await _context.Tags.FirstOrDefaultAsync(t => t.Id == tagId)
-                    });
-                }
+                await AddTagsToPoiAsync(pointOfInterest.TagIds, dbPoi);
             }
 
             await _context.PointOfInterests.AddAsync(dbPoi);
@@ -229,6 +231,29 @@ namespace Logic.Services
                                                                       .FirstOrDefaultAsync(poi => poi.Name.ToLower() == name.ToLower() &&
                                                                                            (poi.Position.Latitude == lat &&
                                                                                            poi.Position.Longitude == lon));
+        }
+        private async Task<Position> GetPositionAsync(AddPoiDto pointOfInterest)
+        {
+            return await _context.Positions.FirstOrDefaultAsync(p => p.Latitude == pointOfInterest.Position.Latitude || p.Longitude == pointOfInterest.Position.Longitude);
+        }
+
+        private async Task<Address> GetAddressAsync(AddPoiDto pointOfInterest)
+        {
+            return await _context.Addresses.FirstOrDefaultAsync(a => a.StreetName == pointOfInterest.Address.StreetName || a.Area == pointOfInterest.Address.Area);
+        }
+
+        private async Task AddTagsToPoiAsync(List<int> tagIds, PointOfInterest dbPoi)
+        {
+            foreach (var tagId in tagIds)
+            {
+                var tag = new PoiTag
+                {
+                    PointOfInterest = dbPoi,
+                    Tag = await _context.Tags.FirstOrDefaultAsync(t => t.Id == tagId)
+                };
+
+                dbPoi.PoiTags.Add(tag);
+            }
         }
         #endregion
     }
