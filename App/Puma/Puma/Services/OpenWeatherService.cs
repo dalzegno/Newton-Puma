@@ -30,6 +30,12 @@ namespace Puma.Services
         /// <returns></returns>
         public async Task<Forecast> GetForecastAsync(string latitude, string longitude)
         {
+            if (latitude.Contains(",") || longitude.Contains(","))
+            {
+                latitude.Replace(",", ".");
+                longitude.Replace(",", ".");
+            }
+
             string latAndLongKey = $"{latitude}, {longitude}";
             var cacheKey = new ForecastCacheKey(latAndLongKey);
 
