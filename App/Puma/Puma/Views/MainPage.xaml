@@ -356,7 +356,6 @@
                     Orientation="Horizontal"
                     VerticalOptions="Fill"
                     HorizontalOptions="FillAndExpand">
-
                     <local:CustomButton
                         BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
                         Command="{Binding PoiGetCollectionCommand}"
