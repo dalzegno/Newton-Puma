@@ -35,7 +35,8 @@ namespace Puma.ViewModels
         public bool openSettingsBool { get; set; } = false;
         public bool isUserLoggedOut { get; set; } = true;
         public bool isUserLoggedIn { get; set; } = false;
-        
+
+
         public void UserLoggedIn()
         {
             if (App.LoggedInUser == null)
@@ -44,6 +45,7 @@ namespace Puma.ViewModels
                 isUserLoggedIn = false;
                 OnPropertyChanged(nameof(userLoginState));
                 OnPropertyChanged(nameof(userLogoutState));
+
                 return;
             }
 
@@ -53,6 +55,8 @@ namespace Puma.ViewModels
             OnPropertyChanged(nameof(userLoginState));
             OnPropertyChanged(nameof(userLogoutState));
             OnPropertyChanged(nameof(loginPopupState));
+
+
         }
         public void ClosePopup()
         {
@@ -86,7 +90,6 @@ namespace Puma.ViewModels
             openSignupBool = false;
             openLoginBool = false;
             openSettingsBool = true;
-            
             OnPropertyChanged(nameof(signupPopupState));
             OnPropertyChanged(nameof(loginPopupState));
             OnPropertyChanged(nameof(settingsPopupState));
@@ -98,12 +101,14 @@ namespace Puma.ViewModels
         public bool userLoginState => isUserLoggedOut;
         public bool userLogoutState => isUserLoggedIn;
 
+
+
         #endregion
 
         public void LogOut()
         {
             if (App.LoggedInUser == null)
-                
+
                 return;
 
             App.LoggedInUser = null;

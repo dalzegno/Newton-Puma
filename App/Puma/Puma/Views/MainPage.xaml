@@ -283,30 +283,7 @@
                     Clicked="btn_OpenSettings">
                         </local:CustomButton>
                     </Grid>
-<!--
-                    <Button
-                        x:Name="btn_Settings_Popup"
-                        ImageSource="resource://Puma.Resources.SettingsIcon.svg"
-                        HeightRequest="50"
-                        WidthRequest="50"
-                        CornerRadius="15"
-                        Margin="0,0,20,0"
-                        ClassId="settingsPopup"
-                        Command="{Binding OpenSettingsCommand}"
-                        Clicked="btn_OpenSettings"
-                        TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                        BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
-                        Text="Settings">
-                    </Button>
-                        <ffimageloadingsvg:SvgCachedImage
-                    Grid.Column="2"
-                    VerticalOptions="Center"
-                    HorizontalOptions="End"
-                    HeightRequest="50"
-                    WidthRequest="50"
-                    Margin="0,0,0,0"
-                    Source="resource://Puma.Resources.SettingsIcon.svg">
-                    </ffimageloadingsvg:SvgCachedImage> -->
+
                     <Label
                         IsVisible="{Binding userLogoutState}"
                         TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
@@ -1000,12 +977,6 @@
 
 
         <!-- SETTINGS POPUP -->
-
-
-        <!-- Har bytt om lite så att det blev mer likt Login/signup,
-        flyttat bindingcontext så Close-knappen funkar.
-        Testade EntryViewControl på Första Email-entryt. -->
-
         <Frame
             IsVisible="{Binding settingsPopupState}"
             ClassId="settingsPopup"
@@ -1053,16 +1024,16 @@
                     <ScrollView>
                         <Grid
                             x:Name="settingsInputs"
-                            IsVisible="{Binding settingsLoggedInState}">
+                            IsVisible="{Binding userLogoutState}">
                             <control:EntryViewControl
                                 Grid.Row="1"
                                 EntryText="{Binding EditEmail, Mode=TwoWay}"
                                 PlaceholderText="{Binding CurrentUserEmail}"
-                                ControlTemplate="{StaticResource EntryViewControlTemplate}" />
+                                ControlTemplate="{StaticResource EntryViewControlTemplate}"/>
                             <control:EntryViewControl
                                 Grid.Row="2"
                                 EntryText="{Binding EditPassword, Mode=TwoWay}"
-                                PlaceholderText="{Binding CurrentUserPassword}"
+                                PlaceholderText="Password"
                                 ControlTemplate="{StaticResource EntryViewControlTemplate}" />
                             <control:EntryViewControl
                                 Grid.Row="3"
@@ -1091,7 +1062,7 @@
                                 HorizontalOptions="Center"
                                 BackgroundColor="{AppThemeBinding Dark={StaticResource ButtonBackgroundColorDark}, Light={StaticResource ButtonBackgroundColor}}"
                                 TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                                Text="Edit User"
+                                Text="Save Changes"
                                 FontSize="20">
                             </Button>
                             <Button
@@ -1110,7 +1081,6 @@
                             </Button>
                         </Grid>
                     </ScrollView>
-
                 </Grid>
             </Grid>
         </Frame>
