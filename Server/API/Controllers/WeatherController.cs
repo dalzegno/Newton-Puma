@@ -17,10 +17,10 @@ namespace API.Controllers
         }
 
         [HttpGet()]
-        public async Task<ActionResult<ForecastDto>> Get([FromQuery]string lat, [FromQuery]string lon, [FromQuery] string lang)
+        public async Task<ActionResult<ForecastDto>> Get([FromQuery]double lat, [FromQuery]double lon, [FromQuery] string lang)
         {
-            if (!lat.TryParseToDouble(out double latDouble) || !lon.TryParseToDouble(out double lonDouble))
-                return BadRequest();
+            if (!lat.TryParseToInvariantCulture(out double latDouble) || !lon.TryParseToInvariantCulture(out double lonDouble))
+                return BadRequest("The format of lat or lon was wrong.");
 
             var forecast = await _weatherService.Get(latDouble, lonDouble, lang);
 
