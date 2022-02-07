@@ -32,8 +32,8 @@ namespace Puma.Services
         {
             if (latitude.Contains(",") || longitude.Contains(","))
             {
-                latitude.Replace(",", ".");
-                longitude.Replace(",", ".");
+                latitude = latitude.Replace(",", ".");
+                longitude = longitude.Replace(",", ".");
             }
 
             string latAndLongKey = $"{latitude}, {longitude}";

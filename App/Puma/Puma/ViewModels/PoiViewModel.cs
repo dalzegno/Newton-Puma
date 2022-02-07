@@ -307,6 +307,7 @@ namespace Puma.ViewModels
         {
             var poi = new AddPoiDto()
             {
+                UserId = App.LoggedInUser.Id,
                 Name = Name,
                 Description = Description,
                 Position = new PositionPoi

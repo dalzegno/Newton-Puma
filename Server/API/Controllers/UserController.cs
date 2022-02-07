@@ -178,12 +178,13 @@ namespace API.Controllers
         /// <response code="500">Server error</response>
         [HttpDelete()]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<UserDto>> DeleteUser([FromQuery] int id, [FromHeader] string apiKey)
         {
-            if (!await _userService.IsUserAuthorizedAsync(apiKey))
-                return Unauthorized();
+            //if (!await _userService.IsUserAuthorizedAsync(apiKey))
+            //    return Unauthorized();
 
             UserDto deletedUser = await _userService.DeleteAsync(id);
 
