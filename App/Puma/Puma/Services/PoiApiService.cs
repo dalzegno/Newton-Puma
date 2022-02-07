@@ -129,7 +129,7 @@ namespace Puma.Services
             {
                 _httpClient.SetHeader();
 
-                var response = await _httpClient.GetAsync($"{_poiApiUri}/GetPoisFromLatAndLon?lat={searchedPosition.Latitude}&lon={searchedPosition.Longitude}");
+                var response = await _httpClient.GetAsync($"{_poiApiUri}/GetFromLatAndLon?lat={searchedPosition.Latitude}&lon={searchedPosition.Longitude}");
 
                 if (!await response.IsResponseSuccessAsync())
                     return null;
@@ -167,7 +167,7 @@ namespace Puma.Services
             _httpClient.SetHeader();
             try
             {
-                var response = await _httpClient.GetAsync($"{_poiApiUri}/GetAllPoi");
+                var response = await _httpClient.GetAsync($"{_poiApiUri}/GetAll");
 
                 if (!await response.IsResponseSuccessAsync())
                     return null;

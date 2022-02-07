@@ -41,7 +41,7 @@ namespace Puma.Services
 
             try
             {
-                var response = await _httpClient.GetAsync($"{_userApiUri}/GetUserByEmail?email={email}");
+                var response = await _httpClient.GetAsync($"{_userApiUri}/GetByEmail?email={email}");
                 if (!await response.IsResponseSuccessAsync(_dialogService))
                     return null;
 
