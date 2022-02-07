@@ -262,6 +262,15 @@ namespace Puma.ViewModels
                 OnPropertyChanged(nameof(Area));
                 OnPropertyChanged(nameof(Country));
             }
+            else if(words.Length == 1)
+            {
+                StreetName = "";
+                Area = "";
+                Country = words[0];
+                OnPropertyChanged(nameof(StreetName));
+                OnPropertyChanged(nameof(Area));
+                OnPropertyChanged(nameof(Country));
+            }
             else if (words.Length == 2)
             {
                 StreetName = "";
