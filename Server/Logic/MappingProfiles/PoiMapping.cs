@@ -11,10 +11,9 @@ namespace Logic.MappingProfiles
         {
             CreateMap<PointOfInterest, PointOfInterestDto>();
             CreateMap<PointOfInterestDto, PointOfInterest>().ForAllMembers(options => options.DoNotAllowNull());
-                                                            //.ForMember(dest => dest.Id, option => option.Ignore())
 
 
-            CreateMap<Comment, CommentDto>();
+            CreateMap<Comment, CommentDto>().ForMember(dest => dest.UserDisplayName, option => option.MapFrom(src => src.User.DisplayName));
             CreateMap<CommentDto, Comment>();
             CreateMap<AddCommentDto, Comment>().ForMember(dest => dest.Id, option => option.Ignore());
 
