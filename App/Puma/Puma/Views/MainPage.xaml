@@ -256,34 +256,33 @@
                     Margin="0">
 
                     <Grid
-                HorizontalOptions="CenterAndExpand"
-                WidthRequest="500"
-                ColumnDefinitions="auto,auto">
+                        HorizontalOptions="CenterAndExpand"
+                        WidthRequest="500"
+                        ColumnDefinitions="auto,auto">
                         <ffimageloadingsvg:SvgCachedImage
-                    Grid.Column="2"
-                    VerticalOptions="Center"
-                    HorizontalOptions="End"
-                    HeightRequest="50"
-                    WidthRequest="50"
-                    Margin="0,0,0,0"
-                    Source="resource://Puma.Resources.SettingsIcon.svg">
+                            Grid.Column="2"
+                            VerticalOptions="Center"
+                            HorizontalOptions="End"
+                            HeightRequest="50"
+                            WidthRequest="50"
+                            Margin="0,0,0,0"
+                            Source="resource://Puma.Resources.SettingsIcon.svg">
                         </ffimageloadingsvg:SvgCachedImage>
 
                         <!--- SETTINGS IMAGE BUTTON-->
                         <local:CustomButton
-                    HorizontalOptions="End"
-                    x:Name="btn_Settings_Popup"
-                    ClassId="settingsPopup"
-                    BackgroundColor="LightBlue"
-                    Grid.Column="2"
-                    
-                    Opacity="0"
-                    Text="Settings"
-                    Command="{Binding OpenSettingsCommand}"
-                    Clicked="btn_OpenSettings">
+                            HorizontalOptions="End"
+                            x:Name="btn_Settings_Popup"
+                            ClassId="settingsPopup"
+                            BackgroundColor="LightBlue"
+                            Grid.Column="2"
+                            Opacity="0"
+                            Text="Settings"
+                            Command="{Binding OpenSettingsCommand}"
+                            Clicked="btn_OpenSettings">
                         </local:CustomButton>
                     </Grid>
-<!--
+                    <!--
                     <Button
                         x:Name="btn_Settings_Popup"
                         ImageSource="resource://Puma.Resources.SettingsIcon.svg"
@@ -488,30 +487,75 @@
                     x:Name="poiCollectionFrame">
                     <!-- SINGLE POI -->
                     <StackLayout>
-                        <StackLayout
+
+                        <Grid
+                            ColumnDefinitions="*,*"
                             x:Name="poiSingleView"
                             IsVisible="{Binding PoiSingleVisible}">
-                            <local:CustomButton
-                                Text="Return"
-                                Command="{Binding PoiCollectionViewCommand}" />
-                            <Label
-                                FontSize="32"
-                                FontAttributes="Bold"
-                                TextDecorations="Underline"
-                                Text="{Binding SelectedSinglePoi.Name}" />
-                            <Label
-                                FontSize="12"
-                                Text="{Binding SelectedSinglePoi.Address.Country}" />
-                            <Label
-                                FontSize="12"
-                                Text="{Binding SelectedSinglePoi.Address.Area}" />
-                            <Label
-                                FontSize="12"
-                                Text="{Binding SelectedSinglePoi.Address.StreetName}" />
-                            <Label
-                                FontSize="12"
-                                Text="{Binding SelectedSinglePoi.Description}" />
-                        </StackLayout>
+                            <!-- Selected POI Presentation-->
+                            <StackLayout
+                                HorizontalOptions="FillAndExpand"
+                                VerticalOptions="FillAndExpand">
+                                <local:CustomButton
+                                    HorizontalOptions="Start"
+                                    Text="Return"
+                                    Command="{Binding PoiCollectionViewCommand}" />
+                                <Label
+                                    FontSize="32"
+                                    FontAttributes="Bold"
+                                    TextDecorations="Underline"
+                                    Text="{Binding SelectedSinglePoi.Name}" />
+                                <Label
+                                    FontSize="12"
+                                    Text="{Binding SelectedSinglePoi.Address.Country}" />
+                                <Label
+                                    FontSize="12"
+                                    Text="{Binding SelectedSinglePoi.Address.Area}" />
+                                <Label
+                                    FontSize="12"
+                                    Text="{Binding SelectedSinglePoi.Address.StreetName}" />
+                                <Label
+                                    FontSize="12"
+                                    Text="{Binding SelectedSinglePoi.Description}" />
+                            </StackLayout>
+                            <!-- Selected POI comments-->
+
+                            <StackLayout
+                                VerticalOptions="Fill"
+                                Grid.Column="1">
+
+                                <local:CustomEditor
+                                    x:Name="CommentBody"
+                                    Placeholder="What are your thoughts on this location?"
+                                    HeightRequest="75"></local:CustomEditor>
+                                <local:CustomButton
+                                    Text="Post Comment"
+                                    Command="{Binding AddCommentCommand}"
+                                    CommandParameter="{Binding Source={x:Reference CommentBody}, Path=Text}" />
+                                <CollectionView
+                                    ItemsSource="{Binding SelectedSinglePoi.Comments}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Frame
+                                                    Margin="0,3"
+                                                    BackgroundColor="white">
+                                                    <Grid>
+                                                        <Label
+                                                            FontAttributes="Bold"
+                                                            Text="{Binding UserId}" />
+                                                        <Label
+                                                            Grid.Row="1"
+                                                            Text="{Binding Body}" />
+                                                    </Grid>
+                                                </Frame>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+
+                            </StackLayout>
+                        </Grid>
                         <!-- POI COLLECTION -->
                         <StackLayout
                             IsVisible="{Binding PoiCollectionVisible}">
@@ -1097,7 +1141,7 @@
                                 HeightRequest="50"
                                 WidthRequest="150"
                                 VerticalOptions="Center"
-                                Grid.Row="8"    
+                                Grid.Row="8"
                                 Command="{Binding DeleteUserCommand}"
                                 CornerRadius="10"
                                 BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
