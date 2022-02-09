@@ -1020,11 +1020,12 @@
                     Grid.Row="1"
                     x:Name="settingsPopup"
                     RowDefinitions="auto,auto,auto,auto,auto,auto,auto,auto,auto,auto"
-                    ColumnSpacing="0">
+                    ColumnSpacing="0"
+                    IsVisible="{Binding EditSettingsVisible}">
                     <ScrollView>
                         <Grid
                             x:Name="settingsInputs"
-                            IsVisible="{Binding userLogoutState}">
+                            >
                             <control:EntryViewControl
                                 Grid.Row="1"
                                 EntryText="{Binding EditEmail, Mode=TwoWay}"
