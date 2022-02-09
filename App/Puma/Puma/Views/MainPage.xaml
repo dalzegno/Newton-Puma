@@ -8,14 +8,13 @@
     xmlns:viewmodel="clr-namespace:Puma.ViewModels"
     xmlns:control="clr-namespace:Puma.ControlTemplates"
     xmlns:ffimageloadingsvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
+    SizeChanged="SliderDown"
+    xmlns:suggestBox="clr-namespace:dotMorten.Xamarin.Forms;assembly=dotMorten.Xamarin.Forms.AutoSuggestBox"
     BackgroundColor="{AppThemeBinding 
                               Dark={StaticResource WindowBackgroundColorDark}, 
                               Light={StaticResource WindowBackgroundColor}}">
-
-
-
-
-
+    
+    
     <Grid
         Margin="0"
         Padding="0"
@@ -319,20 +318,22 @@
                         VerticalOptions="Center"></Label>
                     <local:CustomButton
                         x:Name="btn_Login_Popup"
-                        CornerRadius="15"
                         ClassId="loginPopup"
                         Command="{Binding OpenLoginCommand}"
                         IsVisible="{Binding userLoginState}"
                         TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                         BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
-                        Text="Log in" />
+                        Text="Sign In/Up"
+                        FontAttributes="Bold"
+                        />
                     <local:CustomButton
                         x:Name="btn_Logout"
                         Command="{Binding LogOutCommand}"
                         IsVisible="{Binding userLogoutState}"
                         TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
                         BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
-                        Text="Log out" />
+                        Text="Sign Out"
+                        FontAttributes="Bold"/>
                 </StackLayout>
             </Grid>
 
@@ -352,7 +353,7 @@
                 <StackLayout
                     x:Name="slPoiMenuButtons"
                     Padding="0"
-                    Margin="0"
+                    Margin="10"
                     Orientation="Horizontal"
                     VerticalOptions="Fill"
                     HorizontalOptions="FillAndExpand">
@@ -389,10 +390,10 @@
                     IsVisible="false"
                     HorizontalOptions="StartAndExpand"
                     VerticalOptions="StartAndExpand"
-                    Background="White"
+                    Background="#00AFDB"
                     x:Name="poiCreationView"
                     ClassId="poiCreationView"
-                    Opacity=".9">
+                    Margin="10,0">
                     <ScrollView>
                         <StackLayout
                             x:Name="slPoiPopup">
@@ -475,16 +476,16 @@
                         </StackLayout>
                     </ScrollView>
                 </Frame>
+ 
+<!--<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Min del >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>-->
 
-
-                <!-- POI COLLECTION VIEW  >-->
+                    <!-- POI COLLECTION VIEW  >-->
                 <Frame
                     HorizontalOptions="FillAndExpand"
                     VerticalOptions="FillAndExpand"
                     IsVisible="true"
                     Margin="10,10"
-                    BackgroundColor="White"
-                    Opacity=".9"
+                    BackgroundColor="#00AFDB"
                     ClassId="poiCollectionFrame"
                     x:Name="poiCollectionFrame">
                     <!-- SINGLE POI -->
@@ -525,6 +526,7 @@
                                 SelectionChangedCommand="{Binding PoiSingleViewCommand}">
                                 <CollectionView.ItemTemplate>
                                     <DataTemplate>
+
                                         <Grid
                                             Padding="5"
                                             HeightRequest="60"
@@ -570,6 +572,7 @@
                     </StackLayout>
                 </Frame>
 
+                <!--<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< Min del slut >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>-->
 
 
                 <!-- WEATHER POPUP -->
@@ -925,7 +928,128 @@
 
 
         <!-- SEARCH BAR -->
+
         <Frame
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="12"
+            Margin="5"
+            BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
+            Padding="0"
+            CornerRadius="15"
+            IsClippedToBounds="False"
+            HorizontalOptions="CenterAndExpand"
+            VerticalOptions="FillAndExpand"
+            MinimumWidthRequest="500"
+            WidthRequest="500"
+            >
+
+
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroup
+                    x:Name="opa">
+                    <VisualState
+                        x:Name="Normal">
+                        <VisualState.Setters>
+
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState
+                        x:Name="Focused">
+                        <VisualState.Setters>
+                            <Setter
+                                Property="BackgroundColor"
+                                Value="White"></Setter>
+                            <Setter
+                                Property="Opacity"
+                                Value=".9"></Setter>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+            <Grid
+                HorizontalOptions="CenterAndExpand"
+                WidthRequest="500"
+                ColumnDefinitions="auto,auto">
+
+
+                <suggestBox:AutoSuggestBox x:Name="searchEntry" 
+                                PlaceholderText="Where to ya scallywag?" 
+                                TextChanged="searchEntry_TextChanged" 
+                                QuerySubmitted="searchEntry_QuerySubmitted"
+                                   
+                                Grid.Column="0"
+                                HorizontalOptions="FillAndExpand"
+                                VerticalOptions="FillAndExpand"
+                                Grid.ColumnSpan="3">
+                                
+                    
+                    
+                </suggestBox:AutoSuggestBox>
+                    
+
+                
+                <ffimageloadingsvg:SvgCachedImage
+                    Grid.Column="2"
+                    VerticalOptions="Center"
+                    HorizontalOptions="End"
+                    HeightRequest="50"
+                    WidthRequest="50"
+                    Margin="0,0,20,0"
+                    Source="resource://Puma.Resources.SearchIcon.svg">
+                </ffimageloadingsvg:SvgCachedImage>
+                <local:CustomButton
+                    HorizontalOptions="End"
+                    Grid.Column="2"
+                    Opacity=".1"
+                    Text="Testa maps"
+                    Clicked="searchEntry_Enter">
+                </local:CustomButton>
+                
+
+            </Grid>
+        </Frame>
+
+
+
+
+        <StackLayout>
+            
+        </StackLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <!--<Frame
             Grid.Row="1"
             Grid.Column="0"
             Grid.ColumnSpan="12"
@@ -986,7 +1110,7 @@
                     Source="resource://Puma.Resources.SearchIcon.svg">
                 </ffimageloadingsvg:SvgCachedImage>
 
-                <!--- TEST-->
+                --><!--- TEST--><!--
                 <local:CustomButton
                     HorizontalOptions="End"
                     BackgroundColor="red"
@@ -996,7 +1120,7 @@
                     Clicked="SearchButton_Clicked">
                 </local:CustomButton>
             </Grid>
-        </Frame>
+        </Frame>-->
 
 
         <!-- SETTINGS POPUP -->

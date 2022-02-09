@@ -1,8 +1,10 @@
-﻿using Puma.CustomRenderer;
+﻿using dotMorten.Xamarin.Forms;
+using Puma.CustomRenderer;
 using Puma.Models;
 using Puma.Services;
 using Puma.ViewModels;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -28,6 +30,12 @@ namespace Puma.Views
         IPoiService PoiService => DependencyService.Get<IPoiService>();
         IOpenWeatherService WeatherService => DependencyService.Get<IOpenWeatherService>();
 
+
+        List<string> SearchItems = new List<string>
+        {
+            "Argentina","Bangladesh","Sweden","London","Bada","Alisia","Stockholm"
+        };
+
         public MainPage()
         {
             InitializeComponent();
@@ -39,6 +47,8 @@ namespace Puma.Views
             //PoiViewModel = new PoiViewModel(PoiService, DialogService, WeatherService);
             SettingsViewModel = new SettingsViewModel(UserApiService, DialogService);
             BindingContext = MainViewModel;
+
+
 
             SetBindingContexts();
 
@@ -89,41 +99,44 @@ namespace Puma.Views
                     break;
             }
         }
-        private async void SearchButton_Clicked(object sender, EventArgs e)
-        {
-            if (SearchField.Text == null)
-                return;
 
-            map.Pins.Clear();
-            List<Position> positionList = await GetPositionsFromSearch(SearchField.Text);
 
-            if (positionList.Count == 0)
-            {
-                await DialogService.ShowMessageAsync("Error", $"Could not find any location named \"{SearchField.Text}\"");
-                return;
-            }
 
-            Location searchedLocation = await GetLocation(positionList);
-            PoiViewModel.SetAddress(searchedLocation.Addresses.FirstOrDefault());
-            var pin = CreatePin(searchedLocation);
-            map.Pins.Add(pin);
-            MoveToRegion(searchedLocation, 1);
+        //private async void SearchButton_Clicked(object sender, EventArgs e)
+        //{
+        //    if (SearchField.Text == null)
+        //        return;
 
-            PoiViewModel.SetAddress(searchedLocation.Addresses.FirstOrDefault());
-            await PoiViewModel.SetLatAndLon(searchedLocation.Position.Latitude, searchedLocation.Position.Longitude);
-            WeatherViewModel1.SetWeather(searchedLocation.Position.Latitude, searchedLocation.Position.Longitude);
+        //    map.Pins.Clear();
+        //    List<Position> positionList = await GetPositionsFromSearch(SearchField.Text);
 
-            List<PointOfInterest> pois = await GetPoisFromDb(searchedLocation);
+        //    if (positionList.Count == 0)
+        //    {
+        //        await DialogService.ShowMessageAsync("Error", $"Could not find any location named \"{SearchField.Text}\"");
+        //        return;
+        //    }
 
-            if (pois == null || pois.Count == 0)
-                return;
+        //    Location searchedLocation = await GetLocation(positionList);
+        //    PoiViewModel.SetAddress(searchedLocation.Addresses.FirstOrDefault());
+        //    var pin = CreatePin(searchedLocation);
+        //    map.Pins.Add(pin);
+        //    MoveToRegion(searchedLocation, 1);
 
-            foreach (var poi in pois)
-            {
-                CreatePin(poi);
-                map.Pins.Add(pin);
-            }
-        }
+        //    PoiViewModel.SetAddress(searchedLocation.Addresses.FirstOrDefault());
+        //    await PoiViewModel.SetLatAndLon(searchedLocation.Position.Latitude, searchedLocation.Position.Longitude);
+        //    WeatherViewModel1.SetWeather(searchedLocation.Position.Latitude, searchedLocation.Position.Longitude);
+
+        //    List<PointOfInterest> pois = await GetPoisFromDb(searchedLocation);
+
+        //    if (pois == null || pois.Count == 0)
+        //        return;
+
+        //    foreach (var poi in pois)
+        //    {
+        //        CreatePin(poi);
+        //        map.Pins.Add(pin);
+        //    }
+        //}
         private void LblTemperature_BindingContextChanged(object sender, EventArgs e)
         {
             var lbl = (Label)sender;
@@ -234,6 +247,11 @@ namespace Puma.Views
                     }
                     break;
             }
+        }
+
+        async void SliderDown (object sender, EventArgs e)
+        {
+            await slider_navbar.TranslateTo(0, 0, 500, Easing.SpringIn);
         }
 
         #endregion
@@ -358,6 +376,74 @@ namespace Puma.Views
             public IEnumerable<string> Addresses { get; set; }
         }
 
+        private void searchEntry_TextChanged(object sender, dotMorten.Xamarin.Forms.AutoSuggestBoxTextChangedEventArgs e)
+        {
+            AutoSuggestBox input = (AutoSuggestBox)sender;
+            input.ItemsSource = GetSuggestions(input.Text);
 
+        }
+
+        private List<string> GetSuggestions(string input)
+       {
+            //return string.IsNullOrWhiteSpace(input) ? null : SearchItems.Where(c => c.StartsWith(input,StringComparison.InvariantCultureIgnoreCase)).ToList();
+            return string.IsNullOrWhiteSpace(input) ? null : SearchItems.Where(c => c.ToLower().Contains(input.ToLower())).ToList();
+        }
+
+        private async void searchEntry_QuerySubmitted(object sender, dotMorten.Xamarin.Forms.AutoSuggestBoxQuerySubmittedEventArgs e)
+        {
+            string searchField = "";
+
+            if (sender == null)
+            {
+                searchField = searchEntry.Text;
+            }
+            else
+            {
+                searchField = (sender as AutoSuggestBox).Text;
+            }
+
+
+
+
+
+
+            map.Pins.Clear();
+            List<Position> positionList = await GetPositionsFromSearch(searchField);
+            searchEntry.Text = "";
+            if (positionList.Count == 0)
+            {
+                await DialogService.ShowMessageAsync("Error", $"Could not find any location");
+                return;
+            }
+
+            Location searchedLocation = await GetLocation(positionList);
+            PoiViewModel.SetAddress(searchedLocation.Addresses.FirstOrDefault());
+            var pin = CreatePin(searchedLocation);
+            map.Pins.Add(pin);
+            MoveToRegion(searchedLocation, 1);
+
+            PoiViewModel.SetAddress(searchedLocation.Addresses.FirstOrDefault());
+            await PoiViewModel.SetLatAndLon(searchedLocation.Position.Latitude, searchedLocation.Position.Longitude);
+            WeatherViewModel1.SetWeather(searchedLocation.Position.Latitude, searchedLocation.Position.Longitude);
+
+            List<PointOfInterest> pois = await GetPoisFromDb(searchedLocation);
+
+            if (pois == null || pois.Count == 0)
+                searchEntry.Text = "";
+            return;
+
+            foreach (var poi in pois)
+            {
+                CreatePin(poi);
+                map.Pins.Add(pin);
+            }
+            
+        }
+
+        private void searchEntry_Enter(object sender, EventArgs e)
+        {
+            searchEntry_QuerySubmitted(null, null);
+            
+        }
     }
 }
