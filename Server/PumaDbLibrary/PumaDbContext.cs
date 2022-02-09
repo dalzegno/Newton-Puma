@@ -70,6 +70,11 @@ namespace PumaDbLibrary
                 entity.HasOne(d => d.Address)
                       .WithMany(p => p.PointOfInterests)
                       .HasForeignKey(d => d.AddressId);
+
+                entity.HasOne(poi => poi.User)
+                      .WithMany(user => user.PointOfInterests)
+                      .HasForeignKey(poi => poi.UserId)
+                      .OnDelete(DeleteBehavior.Cascade);
             });
 
             OnModelCreatingPartial(modelBuilder);

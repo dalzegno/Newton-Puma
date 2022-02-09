@@ -16,7 +16,7 @@ namespace Puma.Services
         Task<PointOfInterest> AddGradeAsync(AddGradeDto addGradeDto);
         Task<PointOfInterest> GetAsync(int id);
         Task<List<PointOfInterest>> GetAsync(Position searchedPosition);
-        Task<List<PointOfInterest>> GetAsync(string lat, string lon);
+        Task<List<PointOfInterest>> GetAsync(double lat, double lon);
         Task<ObservableCollection<PointOfInterest>> GetAllAsync();
         Task<List<Tag>> GetTags();
         Task<PointOfInterest> Delete(int poiId);

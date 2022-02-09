@@ -623,69 +623,68 @@
                     HorizontalOptions="StartAndExpand"
                     VerticalOptions="StartAndExpand"
                     Margin="10,10"
-                    IsVisible="false"
+                    IsVisible="true"
                     ClassId="weatherCollectionView"
-                    BackgroundColor="White"
-                    Opacity=".9"
+                   BackgroundColor="#005AC7"
+                    Opacity="0.9"
                     x:Name="weatherCollectionView">
 
 
                     <CollectionView
-                        IsVisible="{Binding WeatherPopup}"
+                        IsVisible="true"
                         VerticalOptions="StartAndExpand"
                         HorizontalOptions="Center"
                         Margin="0"
+                      
                         ItemsSource="{Binding ForecastCollection}"
                         SelectionMode="Single"
                         IsGrouped="True">
                         <CollectionView.GroupHeaderTemplate>
                             <DataTemplate>
-                                <Label
-                                    Padding="2"
+                                <Frame HorizontalOptions="CenterAndExpand"  VerticalOptions="Center"  BackgroundColor="{AppThemeBinding 
+                              Dark={StaticResource WindowBackgroundColorDark}, 
+                              Light={StaticResource WindowBackgroundColor}}" Padding="0,2" CornerRadius="5">
+
+                                    <Label
+                                   
                                     Text="{Binding Key, StringFormat='{0:dddd, MMMM dd, yyyy}'}"
-                                    FontSize="20" />
+                                    FontSize="20" TextColor="Black" HorizontalTextAlignment="Center" />
+                                </Frame>
                             </DataTemplate>
                         </CollectionView.GroupHeaderTemplate>
                         <CollectionView.ItemTemplate>
+
+
                             <DataTemplate>
-                                <Grid
-                                    Padding="5"
-                                    HeightRequest="100"
-                                    RowDefinitions="1*,1*,1*">
-                                    <Label
-                                        Grid.Row="0"
-                                        Text="{Binding DateTime, StringFormat='{0:HH:mm}'}"
-                                        FontSize="16"
-                                        HeightRequest="100"></Label>
-                                    <Label
-                                        Grid.Row="1"
-                                        FontAttributes="Bold"
-                                        FontSize="16"
-                                        HeightRequest="100"
-                                        Text="{Binding Temperature, StringFormat='{0}°C'}"
-                                        BindingContextChanged="LblTemperature_BindingContextChanged" />
-                                    <Image
-                                        Grid.Row="1"
-                                        Source="{Binding IconUrl}"
-                                        HeightRequest="100"></Image>
+                                <Grid HeightRequest="50" HorizontalOptions="FillAndExpand"  VerticalOptions="FillAndExpand">
 
-                                    <Label
-                                        Grid.Row="2"
-                                        FontSize="12"
-                                        HeightRequest="100"
-                                        Text="{Binding DescrAndWind}" />
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="Center" Grid.Column="1" Grid.ColumnSpan="2" >
+                                        <Label Text="{Binding DateTime, StringFormat='{0:HH:mm}'}" TextColor="White" FontSize="18"  VerticalOptions="Center" Margin="20,0"/>
+                                    </StackLayout>
+                                    <StackLayout HorizontalOptions="EndAndExpand" VerticalOptions="CenterAndExpand" Grid.Column="2">
+                                        <Image Source="{Binding IconUrl}" WidthRequest="38" HeightRequest="38" HorizontalOptions="CenterAndExpand" VerticalOptions="Center"/>
+                                    </StackLayout>
 
 
-                                    <!--<Rectangle Grid.Row="2"
-                                HeightRequest="1"
-                                BackgroundColor="Black"
-                                VerticalOptions="End"
-                                HorizontalOptions="FillAndExpand" />-->
+
+                                    <StackLayout Grid.Column="3"  VerticalOptions="CenterAndExpand" Orientation="Horizontal" 
+                                                 HorizontalOptions="EndAndExpand">
+                                        <Label Text="{Binding Temperature, StringFormat='{0}°C'}"  BindingContextChanged="LblTemperature_BindingContextChanged" TextColor="Black" FontSize="20" FontAttributes="Bold" VerticalOptions="Center"/>
+
+                                    </StackLayout>
                                 </Grid>
-
-
                             </DataTemplate>
+
                         </CollectionView.ItemTemplate>
+
                     </CollectionView>
                 </Frame>
 

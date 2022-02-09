@@ -272,7 +272,7 @@ namespace Puma.ViewModels
         {
             Tags = await _poiService.GetTags();
         }
-        private async Task<ObservableCollection<PointOfInterest>> GetPoisFromDb(string lat, string lon)
+        private async Task<ObservableCollection<PointOfInterest>> GetPoisFromDb(double lat, double lon)
         {
             var pois = await _poiService.GetAsync(lat, lon);
 
@@ -287,6 +287,15 @@ namespace Puma.ViewModels
                 StreetName = "";
                 Area = "No location found";
                 Country = "";
+                OnPropertyChanged(nameof(StreetName));
+                OnPropertyChanged(nameof(Area));
+                OnPropertyChanged(nameof(Country));
+            }
+            else if(words.Length == 1)
+            {
+                StreetName = "";
+                Area = "";
+                Country = words[0];
                 OnPropertyChanged(nameof(StreetName));
                 OnPropertyChanged(nameof(Area));
                 OnPropertyChanged(nameof(Country));
@@ -321,7 +330,7 @@ namespace Puma.ViewModels
             Latitude = lat.ToString();
             Longitude = lon.ToString();
 
-            PoiCollection = await GetPoisFromDb(Latitude, Longitude);
+            PoiCollection = await GetPoisFromDb(lat, lon);
 
             if (PoiCollection == null || PoiCollection.Count < 1)
                 return;
@@ -336,6 +345,7 @@ namespace Puma.ViewModels
         {
             var poi = new AddPoiDto()
             {
+                UserId = App.LoggedInUser.Id,
                 Name = Name,
                 Description = Description,
                 Position = new PositionPoi
