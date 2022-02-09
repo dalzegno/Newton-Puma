@@ -22,7 +22,7 @@
         RowDefinitions="80,100,1*,1*,1*,1*,1*,1*,1*,1*,1*,80">
 
 
-        <!-- GRID OUTLINES -->
+            <!-- GRID OUTLINES -->
         <!--<Label Background="blue" Grid.Column="1" Grid.Row="0"  Grid.RowSpan="12"/>
         <Label Background="blue" Grid.Column="3"  Grid.Row="0"  Grid.RowSpan="12"/>
         <Label Background="blue" Grid.Column="5" Grid.Row="0" Grid.RowSpan="12"/>
@@ -936,10 +936,9 @@
             Margin="5"
             BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
             Padding="0"
-            CornerRadius="15"
             IsClippedToBounds="False"
             HorizontalOptions="CenterAndExpand"
-            VerticalOptions="FillAndExpand"
+            VerticalOptions="CenterAndExpand"
             MinimumWidthRequest="500"
             WidthRequest="500"
             >
@@ -970,15 +969,18 @@
             <Grid
                 HorizontalOptions="CenterAndExpand"
                 WidthRequest="500"
-                ColumnDefinitions="auto,auto">
+                Padding="5"
+                ColumnDefinitions="auto,auto" Background="#DAEFF9">
 
 
                 <suggestBox:AutoSuggestBox x:Name="searchEntry" 
                                 PlaceholderText="Where to ya scallywag?" 
                                 TextChanged="searchEntry_TextChanged" 
                                 QuerySubmitted="searchEntry_QuerySubmitted"
-                                   
+                                HeightRequest="50"
                                 Grid.Column="0"
+                                TextColor="Red"
+                                          
                                 HorizontalOptions="FillAndExpand"
                                 VerticalOptions="FillAndExpand"
                                 Grid.ColumnSpan="3">
@@ -993,7 +995,7 @@
                     Grid.Column="2"
                     VerticalOptions="Center"
                     HorizontalOptions="End"
-                    HeightRequest="50"
+                    HeightRequest="30"
                     WidthRequest="50"
                     Margin="0,0,20,0"
                     Source="resource://Puma.Resources.SearchIcon.svg">
@@ -1238,6 +1240,7 @@
                 </Grid>
             </Grid>
         </Frame>
+
 
     </Grid>
 </ContentPage>

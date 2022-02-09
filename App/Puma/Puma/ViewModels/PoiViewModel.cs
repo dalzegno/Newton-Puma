@@ -11,6 +11,7 @@ using System.Linq;
 using Puma.Views;
 using System.Threading.Tasks;
 using Xamarin.Forms.Maps;
+using System.Globalization;
 
 namespace Puma.ViewModels
 {
@@ -321,8 +322,8 @@ namespace Puma.ViewModels
                 Description = Description,
                 Position = new PositionPoi
                 {
-                    Latitude = Convert.ToDouble(Latitude),
-                    Longitude = Convert.ToDouble(Longitude)
+                    Latitude = Convert.ToDouble(Latitude, CultureInfo.InvariantCulture),
+                    Longitude = Convert.ToDouble(Longitude, CultureInfo.InvariantCulture)
                 },
                 Address = new Address
                 {
