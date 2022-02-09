@@ -154,7 +154,6 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<UserDto>> Edit([FromBody] UpdateUserDto user, [FromHeader] string apiKey)
         {
-
             if (!await _userService.IsUserAuthorizedAsync(apiKey))
                 return Unauthorized();
 
