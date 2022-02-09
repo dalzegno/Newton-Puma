@@ -15,6 +15,7 @@ namespace PumaDbLibrary.Entities
         {
             Comments = new HashSet<Comment>();
             Gradings = new HashSet<Grading>();
+            PointOfInterests = new HashSet<PointOfInterest>();
         }
 
         [Key]
@@ -42,5 +43,8 @@ namespace PumaDbLibrary.Entities
         public virtual ICollection<Comment> Comments { get; set; }
         [InverseProperty(nameof(Grading.User))]
         public virtual ICollection<Grading> Gradings { get; set; }
+
+        [InverseProperty(nameof(PointOfInterest.User))]
+        public virtual ICollection<PointOfInterest> PointOfInterests { get; set; }
     }
 }

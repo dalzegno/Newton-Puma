@@ -9,6 +9,7 @@ namespace Logic.Models
         public string Description { get; set; }
         public PositionDto Position { get; set; }
         public AddressDto Address { get; set; }
+        public int UserId { get; set; }
         public List<CommentDto> Comments{ get; set; }
         public List<GradingDto> Gradings { get; set; }
         public List<PoiTagDto> PoiTags { get; set; }

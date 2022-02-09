@@ -17,5 +17,6 @@ namespace Logic.Models
         public bool IsAdmin { get; set; }
         public bool IsSuperAdmin { get; set; }
         public string ApiKey { get; set; }
+        public IEnumerable<PointOfInterestDto> PointOfInterests { get; set;}
     }
 }

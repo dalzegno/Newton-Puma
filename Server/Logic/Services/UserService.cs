@@ -102,6 +102,16 @@ namespace Logic.Services
         {
             var userToDelete = await _context.Users.Include(u => u.Comments)
                                                    .Include(u => u.Gradings)
+                                                   .Include(u => u.PointOfInterests)
+                                                   .ThenInclude(p => p.Gradings)
+                                                   .Include(u => u.PointOfInterests)
+                                                   .ThenInclude(p => p.Comments)
+                                                   .Include(u => u.PointOfInterests)
+                                                   .ThenInclude(p => p.Position)
+                                                   .Include(u => u.PointOfInterests)
+                                                   .ThenInclude(p => p.Address)
+                                                   .Include(u => u.PointOfInterests)
+                                                   .ThenInclude(p => p.PoiTags)
                                                    .FirstOrDefaultAsync(u => u.Id == id);
 
             if (userToDelete == null)
@@ -121,7 +131,8 @@ namespace Logic.Services
         }
         private async Task<User> GetDbUserAsync(string email)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email.ToLower());
+            return await _context.Users
+                .FirstOrDefaultAsync(u => u.Email == email.ToLower());
         }
         private static bool IsNewUserRequestValid(AddUserDto newUser)
         {
