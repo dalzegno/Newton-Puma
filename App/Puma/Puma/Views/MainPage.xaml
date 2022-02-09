@@ -582,8 +582,8 @@
                     Margin="10,10"
                     IsVisible="true"
                     ClassId="weatherCollectionView"
-                   BackgroundColor="#AA3399FF"
-                    Opacity=".9"
+                   BackgroundColor="#005AC7"
+                    Opacity="0.9"
                     x:Name="weatherCollectionView">
 
 
