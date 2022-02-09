@@ -258,11 +258,12 @@ namespace Puma.ViewModels
         {
             AddCommentDto comment = new AddCommentDto
             {
-                UserId = 1,
+                UserId = App.LoggedInUser.Id,
                 PointOfInterestId = SelectedSinglePoi.Id,
                 Body = body.ToString()
             };
-            await _poiService.AddCommentAsync(comment);
+            var poi = await _poiService.AddCommentAsync(comment);
+            SelectedSinglePoi = poi;
             OnPropertyChanged(nameof(SelectedSinglePoi));
             OnPropertyChanged(nameof(CommentCollection));
             
