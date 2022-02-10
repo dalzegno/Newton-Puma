@@ -11,6 +11,7 @@ using System.Linq;
 using Puma.Views;
 using System.Threading.Tasks;
 using Xamarin.Forms.Maps;
+using System.Globalization;
 
 namespace Puma.ViewModels
 {
@@ -34,6 +35,7 @@ namespace Puma.ViewModels
         Command _poiGetCollectionCommand;
         Command _poiSingleViewCommand;
         Command _poiCollectionViewCommand;
+        Command _addCommentCommand;
 
         public Command CreatePoiCommand => _createPoiCommand ?? (_createPoiCommand = new Command(CreatePoi, CanCreate));
         public Command RemoveTagCommand => _removeTagCommand ?? (_removeTagCommand = new Command(RemoveTag));
@@ -41,6 +43,7 @@ namespace Puma.ViewModels
         public Command PoiGetCollectionCommand => _poiGetCollectionCommand ?? (_poiGetCollectionCommand = new Command(PoiGetCollection));
         public Command PoiSingleViewCommand => _poiSingleViewCommand ?? (_poiSingleViewCommand = new Command(PoiSinglePopup));
         public Command PoiCollectionViewCommand => _poiCollectionViewCommand ?? (_poiCollectionViewCommand = new Command(PoisPopup));
+        public Command AddCommentCommand => _addCommentCommand ?? (_addCommentCommand = new Command(AddComment));
 
 
         public string _name;
@@ -52,6 +55,8 @@ namespace Puma.ViewModels
         public string _latitude;
 
         public PointOfInterest _selectedSinglePoi;
+        public ObservableCollection<Comment> _commentCollection;
+        
 
         public bool openPoiCreationBool { get; set; } = false;
         public bool openPoiCollectionBool { get; set; } = false;
@@ -60,6 +65,16 @@ namespace Puma.ViewModels
 
 
         #region Fields
+        public ObservableCollection<Comment> CommentCollection
+        {
+            get => _commentCollection;
+            set
+            {
+                _commentCollection = value;
+                OnPropertyChanged(nameof(CommentCollection));
+                
+            }
+        }
         // Poi Collection
         public ObservableCollection<PointOfInterest> _poiCollection;
         public ObservableCollection<PointOfInterest> PoiCollection
@@ -81,7 +96,7 @@ namespace Puma.ViewModels
                 OnPropertyChanged(nameof(SelectedSinglePoi));
             }
         }
-
+        
 
         // TAGS
         public List<Tag> _tags;
@@ -240,6 +255,22 @@ namespace Puma.ViewModels
         public bool PoiCollectionVisible => poiCollectionVisibleBool;
         public bool PoiSingleVisible => poiSingleVisibleBool;
 
+        private async void AddComment(object body)
+        {
+            if (App.LoggedInUser == null)
+                return;
+            AddCommentDto comment = new AddCommentDto
+            {
+                UserId = App.LoggedInUser.Id,
+                PointOfInterestId = SelectedSinglePoi.Id,
+                Body = body.ToString()
+            };
+            var poi = await _poiService.AddCommentAsync(comment);
+            SelectedSinglePoi = poi;
+            OnPropertyChanged(nameof(SelectedSinglePoi));
+            OnPropertyChanged(nameof(CommentCollection));
+            
+        }
         private async void GetTagsFromDb()
         {
             Tags = await _poiService.GetTags();
@@ -250,6 +281,7 @@ namespace Puma.ViewModels
 
             return pois != null ? new ObservableCollection<PointOfInterest>(pois) : null;
         }
+        
         public void SetAddress(string address)
         {
             var words = address?.Split('\n') ?? Array.Empty<string>();
@@ -321,8 +353,8 @@ namespace Puma.ViewModels
                 Description = Description,
                 Position = new PositionPoi
                 {
-                    Latitude = Convert.ToDouble(Latitude),
-                    Longitude = Convert.ToDouble(Longitude)
+                    Latitude = Convert.ToDouble(Latitude, CultureInfo.InvariantCulture),
+                    Longitude = Convert.ToDouble(Longitude, CultureInfo.InvariantCulture)
                 },
                 Address = new Address
                 {

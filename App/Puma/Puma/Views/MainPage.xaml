@@ -162,6 +162,7 @@
                        
                     </Grid>
                 </Frame>
+
                 <!-- POI MENU BUTTONS -->
                 <StackLayout
                     x:Name="slPoiMenuButtons"
@@ -170,7 +171,6 @@
                     Orientation="Horizontal"
                     VerticalOptions="Fill"
                     HorizontalOptions="FillAndExpand">
-
                     <local:CustomButton
                         BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
                         Command="{Binding PoiGetCollectionCommand}"
@@ -303,36 +303,77 @@
                     x:Name="poiCollectionFrame">
                     <!-- SINGLE POI -->
                     <StackLayout>
-                        <StackLayout
+
+                        <Grid
+                            ColumnDefinitions="*,*"
                             x:Name="poiSingleView"
                             IsVisible="{Binding PoiSingleVisible}">
-                            <local:CustomButton
-                                Text="Return"
-                                Command="{Binding PoiCollectionViewCommand}" />
-                            <Label
-                                FontSize="32"
-                                FontAttributes="Bold"
-                                TextDecorations="Underline"
-                                Text="{Binding SelectedSinglePoi.Name}" />
-                            <Label
-                                FontSize="12"
-                                Text="{Binding SelectedSinglePoi.Address.Country}" />
-                            <Label
-                                FontSize="12"
-                                Text="{Binding SelectedSinglePoi.Address.Area}" />
-                            <Label
-                                FontSize="12"
-                                Text="{Binding SelectedSinglePoi.Address.StreetName}" />
-                            <Label
-                                FontSize="12"
-                                Text="{Binding SelectedSinglePoi.Description}" />
-                            <ffimageloadingsvg:SvgCachedImage
-                                HeightRequest="50"
-                                WidthRequest="50"
-                                Margin="0,0,0,0"
-                                Source="resource://Puma.Resources.ThumbsUpIcon.svg">
-                            </ffimageloadingsvg:SvgCachedImage>
-                        </StackLayout>
+
+                            <!-- Selected POI Presentation-->
+                            <StackLayout
+                                HorizontalOptions="FillAndExpand"
+                                VerticalOptions="FillAndExpand">
+                                <local:CustomButton
+                                    HorizontalOptions="Start"
+                                    Text="Return"
+                                    Command="{Binding PoiCollectionViewCommand}" />
+                                <Label
+                                    FontSize="32"
+                                    FontAttributes="Bold"
+                                    TextDecorations="Underline"
+                                    Text="{Binding SelectedSinglePoi.Name}" />
+                                <Label
+                                    FontSize="12"
+                                    Text="{Binding SelectedSinglePoi.Address.Country}" />
+                                <Label
+                                    FontSize="12"
+                                    Text="{Binding SelectedSinglePoi.Address.Area}" />
+                                <Label
+                                    FontSize="12"
+                                    Text="{Binding SelectedSinglePoi.Address.StreetName}" />
+                                <Label
+                                    FontSize="12"
+                                    Text="{Binding SelectedSinglePoi.Description}" />
+                            </StackLayout>
+                            <!-- Selected POI comments-->
+
+                            <StackLayout
+                                VerticalOptions="Fill"
+                                Grid.Column="1">
+
+                                <local:CustomEditor
+                                    x:Name="CommentBody"
+                                    Placeholder="What are your thoughts on this location?"
+                                    HeightRequest="75"></local:CustomEditor>
+                                <local:CustomButton
+                                    Text="Post Comment"
+                                    Command="{Binding AddCommentCommand}"
+                                    CommandParameter="{Binding Source={x:Reference CommentBody}, Path=Text}" />
+                                <CollectionView
+                                    ItemsSource="{Binding SelectedSinglePoi.Comments}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Frame
+                                                    Margin="0,3"
+                                                    BackgroundColor="white">
+                                                    <Grid>
+                                                        <Label
+                                                            FontAttributes="Bold"
+                                                            Text="{Binding UserId}" />
+                                                        <Label
+                                                            Grid.Row="1"
+                                                            Text="{Binding Body}" />
+                                                    </Grid>
+                                                </Frame>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+
+                            </StackLayout>
+                        </Grid>
+
                         <!-- POI COLLECTION -->
                         <StackLayout
                             IsVisible="{Binding PoiCollectionVisible}">
