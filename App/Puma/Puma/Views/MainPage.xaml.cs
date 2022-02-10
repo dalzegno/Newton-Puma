@@ -231,7 +231,8 @@ namespace Puma.Views
 
         private async Task AdaptNavbarSliderToScreenSize(double screenHeight, double screenWidth, double sliderValue)
         {
-            slider_menu.Margin = new Thickness(-slider_navbar.Width * 0.6 + (screenWidth * sliderValue), 0);
+            slider_menu.TranslationX = -screenWidth * 0.4;
+            //slider_menu.Margin = new Thickness(-slider_navbar.Width * 0.6 + (screenWidth * sliderValue), 0);
             slider_menu.IsVisible = true;
             slider_menu.HeightRequest = screenHeight;
             slider_menu.WidthRequest = screenWidth * 0.4;
