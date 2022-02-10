@@ -93,6 +93,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="CustomEditorRenderer.cs" />
     <Compile Include="CustomRenderer\CustomButtonRenderer.cs" />
     <Compile Include="MainPage.xaml.cs">
