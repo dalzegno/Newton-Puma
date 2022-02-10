@@ -101,9 +101,7 @@
 
         <!-- NAVBAR AND MENU -->
         <AbsoluteLayout
-            BackgroundColor="{AppThemeBinding 
-                                Light={StaticResource WindowBackgroundColor},
-                              Dark={StaticResource WindowBackgroundColorDark}}"
+            BackgroundColor="Blue"
             HorizontalOptions="FillAndExpand"
             VerticalOptions="FillAndExpand"
             x:Name="slider_navbar"
