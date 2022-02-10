@@ -219,7 +219,7 @@ namespace Puma.Views
                 default:
                     if (slider_navbar.TranslationX == 0)
                     {
-                        await AdaptNavbarSliderToScreenSize(ScreenHeight, ScreenWidth, -0.4);
+                        await AdaptNavbarSliderToScreenSize(ScreenHeight, ScreenWidth, 0.3);
                     }
                     else
                     {
@@ -231,12 +231,12 @@ namespace Puma.Views
 
         private async Task AdaptNavbarSliderToScreenSize(double screenHeight, double screenWidth, double sliderValue)
         {
-            slider_menu.TranslationX = -screenWidth * 0.4;
+            slider_menu.TranslationX = -screenWidth * sliderValue;
             //slider_menu.Margin = new Thickness(-slider_navbar.Width * 0.6 + (screenWidth * sliderValue), 0);
             slider_menu.IsVisible = true;
             slider_menu.HeightRequest = screenHeight;
-            slider_menu.WidthRequest = screenWidth * 0.4;
-            await slider_navbar.TranslateTo(screenWidth * 0.4, 0, 500, Easing.SinInOut);
+            slider_menu.WidthRequest = screenWidth * sliderValue;
+            await slider_navbar.TranslateTo(screenWidth * sliderValue, 0, 500, Easing.SinInOut);
         }
 
         #endregion

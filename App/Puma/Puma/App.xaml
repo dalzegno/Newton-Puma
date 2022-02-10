@@ -9,7 +9,8 @@
         <ResourceDictionary>
             <!-- COLOURS -->
             <Color x:Key="WindowBackgroundColor">#DAEFF9</Color>
-            <Color x:Key="WindowBackgroundColorDark">#171C26</Color>
+            <Color
+                x:Key="WindowBackgroundColorDark">White</Color>
             <Color x:Key="PopUpBackgroundColor">#DAEFF9</Color>
             <Color x:Key="PopUpBackgroundColorDark">#171C26</Color>
             <Color x:Key="ButtonBackgroundColor">#FFF</Color>

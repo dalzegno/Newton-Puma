@@ -8,6 +8,7 @@
     xmlns:viewmodel="clr-namespace:Puma.ViewModels"
     xmlns:control="clr-namespace:Puma.ControlTemplates"
     xmlns:ffimageloadingsvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
+    SizeChanged="SliderUpDown"
     BackgroundColor="{AppThemeBinding 
                               Dark={StaticResource WindowBackgroundColorDark}, 
                               Light={StaticResource WindowBackgroundColor}}">
@@ -101,7 +102,6 @@
 
         <!-- NAVBAR AND MENU -->
         <AbsoluteLayout
-            BackgroundColor="Blue"
             HorizontalOptions="FillAndExpand"
             VerticalOptions="FillAndExpand"
             x:Name="slider_navbar"
@@ -110,11 +110,9 @@
             Padding="0"
             Grid.Column="0"
             Grid.RowSpan="12">
-            
+
             <!--  MENU -->
             <StackLayout
-                BackgroundColor="yellow"
-                Opacity=".5"
                 IsVisible="false"
                 x:Name="slider_menu"
                 HorizontalOptions="Fill"
@@ -124,6 +122,46 @@
                     Light={StaticResource PopUpBackgroundColor}}"
                     Opacity="0.8" />
 
+                <!-- POI VIEW POPOVER -->
+                <Frame
+                    x:Name="slPoiPopover"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="StartAndExpand"
+                    HeightRequest="100"
+                    Margin="0"
+                    Padding="0">
+                    <Grid
+                        Padding="0"
+                        Margin="0"
+                        HorizontalOptions="CenterAndExpand"
+                        VerticalOptions="CenterAndExpand"
+                        RowDefinitions="1*,.6*,.6*">
+                        <!--ColumnDefinitions="auto, auto"-->
+
+                        <Label
+                            Grid.Row="0"
+                            VerticalOptions="End"
+                            HorizontalOptions="CenterAndExpand"
+                            FontAttributes="Bold"
+                            Text="{Binding Country}"
+                            FontSize="18"></Label>
+                        <Label
+                            VerticalOptions="StartAndExpand"
+                            HorizontalOptions="CenterAndExpand"
+                            Grid.Row="1"
+                            x:Name="lbl_Country"
+                            Text="{Binding Area}"
+                            FontSize="13"></Label>
+                        <Label
+                            VerticalOptions="Start"
+                            HorizontalOptions="CenterAndExpand"
+                            Grid.Row="2"
+                            Margin="0"
+                            Text="{Binding StreetName}"
+                            FontSize="12"></Label>
+                       
+                    </Grid>
+                </Frame>
                 <!-- POI MENU BUTTONS -->
                 <StackLayout
                     x:Name="slPoiMenuButtons"
@@ -462,13 +500,15 @@
 
 
             </StackLayout>
+
+
             <!-- NAVBAR -->
             <Grid
                 AbsoluteLayout.LayoutBounds="0,0,1,1"
                 AbsoluteLayout.LayoutFlags="All"
                 RowDefinitions="*,*,*"
-                HorizontalOptions="FillAndExpand"
-                VerticalOptions="FillAndExpand"
+                HorizontalOptions="Fill"
+                VerticalOptions="Fill"
                 BackgroundColor="{AppThemeBinding 
                                 Light={StaticResource WindowBackgroundColor},
                               Dark={StaticResource WindowBackgroundColorDark}}"
@@ -482,91 +522,48 @@
                 </Grid.GestureRecognizers>
 
 
-                <!-- POI VIEW POPOVER -->
-                <Frame
-                    x:Name="slPoiPopover"
-                    HorizontalOptions="Fill"
-                    VerticalOptions="StartAndExpand"
-                    Margin="0"
-                    Padding="0">
-                    <Grid
-                        Padding="0"
-                        Margin="0"
+
+                    <!--WEATHER-->
+                <StackLayout
+                    x:Name="sl_Weather"
+                    Grid.Row="2"
+                    Orientation="Vertical">
+                    <Label
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center"
+                        Text="Today"
+                        FontSize="13"
+                        FontAttributes="Bold" />
+                    <Label
+                        VerticalOptions="End"
                         HorizontalOptions="CenterAndExpand"
-                        VerticalOptions="CenterAndExpand"
-                        RowDefinitions="1*,.6*,.6*">
-                        <!--ColumnDefinitions="auto, auto"-->
+                        Text="{Binding AvgTempToday, StringFormat='{0}°C'}"
+                        FontSize="13" />
+                    <Image
+                        Source="{Binding AvgIconUriToday}" HeightRequest="20" />
+                    <Label
+                        VerticalOptions="End"
+                        HorizontalOptions="CenterAndExpand"
+                        Text="Tomorrow"
+                        FontSize="13"
+                        FontAttributes="Bold" />
+                    <Label
+                        VerticalOptions="End"
+                        HorizontalOptions="CenterAndExpand"
+                        Text="{Binding AvgTempTomorrow, StringFormat='{0}°C'}"
+                        FontSize="13" />
+                    <Image
+                        Source="{Binding AvgIconUriTomorrow}"
+                        HeightRequest="20" />
+                </StackLayout>
 
-                        <Label
-                            Grid.Row="0"
-                            VerticalOptions="End"
-                            HorizontalOptions="CenterAndExpand"
-                            FontAttributes="Bold"
-                            Text="{Binding Country}"
-                            FontSize="18"></Label>
-                        <Label
-                            VerticalOptions="StartAndExpand"
-                            HorizontalOptions="CenterAndExpand"
-                            Grid.Row="1"
-                            x:Name="lbl_Country"
-                            Text="{Binding Area}"
-                            FontSize="13"></Label>
-                        <Label
-                            VerticalOptions="Start"
-                            HorizontalOptions="CenterAndExpand"
-                            Grid.Row="2"
-                            Margin="0"
-                            Text="{Binding StreetName}"
-                            FontSize="12"></Label>
-                        <StackLayout
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            Orientation="Horizontal">
-                            <Label
-                                VerticalOptions="End"
-                                HorizontalOptions="CenterAndExpand"
-                                Text="Today"
-                                FontSize="13"
-                                FontAttributes="Bold" />
-                            <Label
-                                VerticalOptions="End"
-                                HorizontalOptions="CenterAndExpand"
-                                Text="Tomorrow"
-                                FontSize="13"
-                                FontAttributes="Bold" />
-                        </StackLayout>
-
-                        <!--WEATHER-->
-                        <StackLayout
-                            x:Name="sl_Weather"
-                            Grid.Row="1"
-                            Grid.Column="1"
-                            Orientation="Horizontal">
-                            <Label
-                                VerticalOptions="End"
-                                HorizontalOptions="CenterAndExpand"
-                                Text="{Binding AvgTempToday, StringFormat='{0}°C'}"
-                                FontSize="13" />
-                            <Image
-                                Source="{Binding AvgIconUriToday}" />
-                            <Label
-                                VerticalOptions="End"
-                                HorizontalOptions="CenterAndExpand"
-                                Text="{Binding AvgTempTomorrow, StringFormat='{0}°C'}"
-                                FontSize="13" />
-                            <Image
-                                Source="{Binding AvgIconUriTomorrow}" />
-                        </StackLayout>
-
-                    </Grid>
-                </Frame>
 
 
                 <!-- GLOBE ICON -->
                 <Grid
-                    Grid.ColumnSpan="2"
                     Grid.Row="1"
-                    HorizontalOptions="FillAndExpand">
+                    VerticalOptions="Center"
+                    HorizontalOptions="CenterAndExpand">
                     <Path
                         Fill="#008db3"
                         Data="M58.4,22.7L60,42.7C55.8,54,44.8,62,32,62C15.4,62,2,48.6,2,32S15.4,2,32,2c6,0,11.6,1.8,16.3,4.8L58.4,22.7z" />
@@ -585,25 +582,24 @@
                 <StackLayout
                     Grid.Row="1"
                     Orientation="Vertical"
+                    VerticalOptions="Center"
                     HorizontalOptions="CenterAndExpand">
                     <Label
                         HorizontalOptions="Center"
                         HeightRequest="50"
                         Text="PuMap"
-                        FontSize="40"
+                        FontSize="24"
                         FontFamily="Lobster-Regular"></Label>
-                    <Label
+                    <!--<Label
                         HorizontalOptions="Center"
-                        Margin="-10"
+                        
                         Text="Travel for the people by the people"
-                        FontSize="12"
-                        FontFamily="Lobster-Regular"></Label>
+                        FontSize="8"
+                        FontFamily="Lobster-Regular"></Label>-->
                 </StackLayout>
 
                 <!--<<<<<<<< Navbar Login/Signup buttons >>>>>>>-->
                 <StackLayout
-                    BackgroundColor="red"
-                    Grid.ColumnSpan="2"
                     VerticalOptions="FillAndExpand"
                     HorizontalOptions="FillAndExpand"
                     Margin="0">
@@ -611,88 +607,66 @@
                     <Grid
                         Grid.Row="0"
                         VerticalOptions="FillAndExpand"
-                HorizontalOptions="FillAndExpand"
-                RowDefinitions="auto,auto">
-                        <ffimageloadingsvg:SvgCachedImage
-                    Grid.Row="1"
-                    VerticalOptions="Center"
-                    HorizontalOptions="End"
-                    HeightRequest="50"
-                    WidthRequest="50"
-                    Margin="0,0,0,0"
-                    Source="resource://Puma.Resources.SettingsIcon.svg">
-                        </ffimageloadingsvg:SvgCachedImage>
+                        HorizontalOptions="FillAndExpand"
+                        RowDefinitions="*,*,*">
 
                         <!--- SETTINGS IMAGE BUTTON-->
-                        <local:CustomButton
-                    x:Name="btn_Settings_Popup"
-                    ClassId="settingsPopup"
-                    BackgroundColor="LightBlue"
-                    Grid.Row="1"
-                    
-                    Opacity="0"
-                    Text="Settings"
-                    Command="{Binding OpenSettingsCommand}"
-                    Clicked="btn_OpenSettings">
-                        </local:CustomButton>
+                        <Grid
+                            VerticalOptions="Center"
+                            HorizontalOptions="Center"
+                            Grid.Row="1">
+                            <ffimageloadingsvg:SvgCachedImage
+                                HeightRequest="50"
+                                WidthRequest="50"
+                                Margin="0,0,0,0"
+                                Source="resource://Puma.Resources.SettingsIcon.svg">
+                            </ffimageloadingsvg:SvgCachedImage>
+                            <local:CustomButton
+                                x:Name="btn_Settings_Popup"
+                                ClassId="settingsPopup"
+                                BackgroundColor="LightBlue"
+                                Opacity="0"
+                                Text="Settings"
+                                Command="{Binding OpenSettingsCommand}"
+                                Clicked="btn_OpenSettings">
+                            </local:CustomButton>
+                        </Grid>
+                        <StackLayout
+                            Grid.Row="0">
+                            <Label
+                                IsVisible="{Binding userLogoutState}"
+                                TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+                                Text="|"
+                                VerticalOptions="Center" />
+                            <Label
+                                IsVisible="{Binding userLoginState}"
+                                TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+                                Text="|"
+                                VerticalOptions="Center"></Label>
+                            <local:CustomButton
+                                x:Name="btn_Login_Popup"
+                                CornerRadius="15"
+                                ClassId="loginPopup"
+                                Command="{Binding OpenLoginCommand}"
+                                IsVisible="{Binding userLoginState}"
+                                TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+                                BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
+                                Text="Log in" />
+                            <local:CustomButton
+                                x:Name="btn_Logout"
+                                Command="{Binding LogOutCommand}"
+                                IsVisible="{Binding userLogoutState}"
+                                TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
+                                BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
+                                Text="Log out" />
+                        </StackLayout>
                     </Grid>
-<!--
-                    <Button
-                        x:Name="btn_Settings_Popup"
-                        ImageSource="resource://Puma.Resources.SettingsIcon.svg"
-                        HeightRequest="50"
-                        WidthRequest="50"
-                        CornerRadius="15"
-                        Margin="0,0,20,0"
-                        ClassId="settingsPopup"
-                        Command="{Binding OpenSettingsCommand}"
-                        Clicked="btn_OpenSettings"
-                        TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                        BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
-                        Text="Settings">
-                    </Button>
-                        <ffimageloadingsvg:SvgCachedImage
-                    Grid.Column="2"
-                    VerticalOptions="Center"
-                    HorizontalOptions="End"
-                    HeightRequest="50"
-                    WidthRequest="50"
-                    Margin="0,0,0,0"
-                    Source="resource://Puma.Resources.SettingsIcon.svg">
-                    </ffimageloadingsvg:SvgCachedImage> -->
-                    <StackLayout Grid.Row="1">
-                    <Label
-                        IsVisible="{Binding userLogoutState}"
-                        TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                        Text="|"
-                        VerticalOptions="Center" />
-                    <Label
-                        IsVisible="{Binding userLoginState}"
-                        TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                        Text="|"
-                        VerticalOptions="Center"></Label>
-                    <local:CustomButton
-                        x:Name="btn_Login_Popup"
-                        CornerRadius="15"
-                        ClassId="loginPopup"
-                        Command="{Binding OpenLoginCommand}"
-                        IsVisible="{Binding userLoginState}"
-                        TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                        BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
-                        Text="Log in" />
-                    <local:CustomButton
-                        x:Name="btn_Logout"
-                        Command="{Binding LogOutCommand}"
-                        IsVisible="{Binding userLogoutState}"
-                        TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                        BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
-                        Text="Log out" />
-                    </StackLayout>
                 </StackLayout>
+
             </Grid>
 
 
-            
+
         </AbsoluteLayout>
 
 
@@ -971,9 +945,9 @@
 
         <!-- SEARCH BAR -->
         <Frame
-            Grid.Row="1"
-            Grid.Column="0"
-            Grid.ColumnSpan="12"
+            Grid.Row="0"
+            Grid.Column="6"
+            Grid.ColumnSpan="6"
             Margin="5"
             BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
             Padding="0"
@@ -1092,13 +1066,12 @@
                     IsVisible="{Binding EditSettingsVisible}">
                     <ScrollView>
                         <Grid
-                            x:Name="settingsInputs"
-                            >
+                            x:Name="settingsInputs">
                             <control:EntryViewControl
                                 Grid.Row="1"
                                 EntryText="{Binding EditEmail, Mode=TwoWay}"
                                 PlaceholderText="{Binding CurrentUserEmail}"
-                                ControlTemplate="{StaticResource EntryViewControlTemplate}"/>
+                                ControlTemplate="{StaticResource EntryViewControlTemplate}" />
                             <control:EntryViewControl
                                 Grid.Row="2"
                                 EntryText="{Binding EditPassword, Mode=TwoWay}"
@@ -1138,7 +1111,7 @@
                                 HeightRequest="50"
                                 WidthRequest="150"
                                 VerticalOptions="Center"
-                                Grid.Row="8"    
+                                Grid.Row="8"
                                 Command="{Binding DeleteUserCommand}"
                                 CornerRadius="10"
                                 BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
