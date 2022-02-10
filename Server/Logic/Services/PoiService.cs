@@ -139,8 +139,8 @@ namespace Logic.Services
                                                  .Include(poi => poi.Comments)
                                                  .Include(poi => poi.PoiTags)
                                                  .Include(poi => poi.Gradings)
-                                                 .Where(poi => poi.Position.Latitude < (lat + 0.1) && poi.Position.Latitude > (lat - 0.1) &&
-                                                               poi.Position.Longitude < (lon + 0.1) && poi.Position.Longitude > (lon - 0.1))
+                                                 .Where(poi => poi.Position.Latitude < (lat + 0.5) && poi.Position.Latitude > (lat - 0.5) &&
+                                                               poi.Position.Longitude < (lon + 0.5) && poi.Position.Longitude > (lon - 0.5))
                                                  .ToListAsync();
 
             if (pois == null || pois.Count == 0)
