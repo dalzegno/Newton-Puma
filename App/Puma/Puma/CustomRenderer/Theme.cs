@@ -12,11 +12,11 @@ namespace Puma.CustomRenderer
             switch(ThemeSettings.Theme)
             {
                 //LightMode
-                case 0:
+                default:
                     App.Current.UserAppTheme = OSAppTheme.Light;
                     break;
                 //DarkMode
-                case 1:
+                case 0:
                     App.Current.UserAppTheme = OSAppTheme.Dark;
                     break;
             }

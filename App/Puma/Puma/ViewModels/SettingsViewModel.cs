@@ -42,16 +42,20 @@ namespace Puma.ViewModels
 
 
 
+
         public void SetUserToEdit(string displayName, string email, string firstName, string lastName, string password)
         {
             if (App.LoggedInUser == null)
                 return;
+
+
             CurrentUserDisplayName = displayName;
             CurrentUserFirstName = firstName;
             CurrentUserLastName = lastName;
             CurrentUserEmail = email;
             CurrentUserPassword = password;
         }
+
         public string CurrentUserDisplayName
         {
             get => _currentUserDisplayName;
@@ -162,7 +166,7 @@ namespace Puma.ViewModels
                 FirstName = EditFirstName ?? App.LoggedInUser.FirstName,
                 LastName = EditSurname ?? App.LoggedInUser.LastName,
             };
-            
+
 
             var updatedUser = await _userApiService.UpdateUserAsync(user);
             if (updatedUser != null)
@@ -176,18 +180,16 @@ namespace Puma.ViewModels
             if (App.LoggedInUser == null)
                 return;
 
-            var confirmationPopup = await App.Current.MainPage.DisplayActionSheet($"Delete User {App.LoggedInUser.DisplayName}?", "No, I ragrats", null,
-                 "Yes, delete my account");
+            var confirmationPopup = await App.Current.MainPage.DisplayActionSheet($"Delete User {App.LoggedInUser.DisplayName}?", "No",
+                 "Yes");
             switch (confirmationPopup)
             {
-                case "No, I ragrats":
+                case "No":
                     break;
-                case "Yes, delete my account":
-                    await _dialogService.ShowMessageAsync($"Deleted: {App.LoggedInUser.DisplayName}", "Deez hoes aint loyal");
+                case "Yes":
+                    await _dialogService.ShowMessageAsync($"Deleted: {App.LoggedInUser.DisplayName}", "User has been deleted.");
                     await _userApiService.DeleteUserAsync(App.LoggedInUser.Id);
                     break;
-                //case "I'm never fucking leaving":
-                    //break;
             }
         }
     }
