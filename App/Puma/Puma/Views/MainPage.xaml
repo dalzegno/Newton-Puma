@@ -303,6 +303,8 @@
                     x:Name="poiCollectionFrame">
                     <!-- SINGLE POI -->
                     <StackLayout>
+
+                        
                         <StackLayout
                             x:Name="poiSingleView"
                             IsVisible="{Binding PoiSingleVisible}">
@@ -323,10 +325,25 @@
                             <Label
                                 FontSize="12"
                                 Text="{Binding SelectedSinglePoi.Address.StreetName}" />
-                            <Label
+                            <Frame BorderColor="Gray"
+                                                   CornerRadius="5"
+                                                   Padding="8">
+                                <StackLayout>
+                                    <Label
                                 FontSize="12"
-                                Text="{Binding SelectedSinglePoi.Description}" />
+                                Text="Frames can wrap more complex layouts to create more complex UI components, such as this card" />
+                            
+                                <BoxView Color="Gray"
+                                                         HeightRequest="2"
+                                                         HorizontalOptions="Fill" />
+                                    <Entry Placeholder="lämna här din kommentar"/>
+                                    <Label FontSize="Medium" HorizontalOptions="End">send</Label>
+                                </StackLayout>
+                               
+                            </Frame>
+                           
                         </StackLayout>
+                        
                         <!-- POI COLLECTION -->
                         <StackLayout
                             IsVisible="{Binding PoiCollectionVisible}">
@@ -343,6 +360,7 @@
                                             Padding="5"
                                             HeightRequest="60"
                                             RowDefinitions="1*,1*,1*">
+                                            
                                             <Label
                                                 Grid.Row="0"
                                                 Text="{Binding Name}"
@@ -369,18 +387,22 @@
                                                             Path="Address.Country" />
                                                     </MultiBinding>
                                                 </Label.Text>
+                                                
                                             </Label>
+                                            
                                             <Rectangle
                                                 Grid.Row="2"
                                                 HeightRequest="1"
                                                 BackgroundColor="Black"
                                                 VerticalOptions="End"
                                                 HorizontalOptions="FillAndExpand" />
+                                          
                                         </Grid>
                                     </DataTemplate>
                                 </CollectionView.ItemTemplate>
                             </CollectionView>
                         </StackLayout>
+                        
                     </StackLayout>
                 </Frame>
 
