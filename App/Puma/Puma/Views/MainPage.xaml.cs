@@ -196,6 +196,7 @@ namespace Puma.Views
             Frame frame = MenuItems.FirstOrDefault(x => x.ClassId == xnameofstack.ClassId);
             SlideInMenuPanel(frame);
         }
+        //Adapt navbar slideout menu to screen size
         async void SliderUpDown(object sender, EventArgs e)
         {
 
@@ -207,11 +208,7 @@ namespace Puma.Views
 
                     if (slider_navbar.TranslationY == 0)
                     {
-                        await slider_navbar.TranslateTo(0, ScreenHeight * -0.6, 500, Easing.SinInOut);
-                        slider_menu.Margin = new Thickness(0, slider_navbar.Height);
-                        slider_menu.IsVisible = true;
-                        slider_menu.HeightRequest = ScreenHeight * 0.6;
-                        slider_menu.WidthRequest = ScreenWidth;
+                        await AdaptNavbarSliderToScreenSize(ScreenHeight, ScreenWidth, -0.6);
                     }
                     else
                     {
@@ -220,13 +217,9 @@ namespace Puma.Views
 
                     break;
                 default:
-                    if (slider_navbar.TranslationY == 0)
+                    if (slider_navbar.TranslationX == 0)
                     {
-                        slider_menu.Margin = new Thickness(0, slider_navbar.Height);
-                        slider_menu.IsVisible = true;
-                        slider_menu.HeightRequest = ScreenHeight * 0.4;
-                        slider_menu.WidthRequest = ScreenWidth;
-                        await slider_navbar.TranslateTo(0, ScreenHeight * -0.4, 500, Easing.SinInOut);
+                        await AdaptNavbarSliderToScreenSize(ScreenHeight, ScreenWidth, -0.4);
                     }
                     else
                     {
@@ -236,6 +229,16 @@ namespace Puma.Views
             }
         }
 
+        private async Task AdaptNavbarSliderToScreenSize(double screenHeight, double screenWidth, double sliderValue)
+        {
+            slider_menu.TranslationX = -screenWidth * 0.4;
+            //slider_menu.Margin = new Thickness(-slider_navbar.Width * 0.6 + (screenWidth * sliderValue), 0);
+            slider_menu.IsVisible = true;
+            slider_menu.HeightRequest = screenHeight;
+            slider_menu.WidthRequest = screenWidth * 0.4;
+            await slider_navbar.TranslateTo(screenWidth * 0.4, 0, 500, Easing.SinInOut);
+        }
+
         #endregion
 
         #region Local methods
@@ -243,7 +246,6 @@ namespace Puma.Views
         {
             slCreateUserViewModel.BindingContext = new NewUserViewModel(UserApiService, DialogService);
             slLogIn.BindingContext = new LoginViewModel(UserApiService, DialogService);
-            settingsPopup.BindingContext = SettingsViewModel;
             slPoiPopover.BindingContext = PoiViewModel;
             slPoiPopup.BindingContext = PoiViewModel;
             poiCollectionFrame.BindingContext = PoiViewModel;

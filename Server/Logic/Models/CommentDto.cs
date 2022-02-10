@@ -7,6 +7,7 @@ namespace Logic.Models
         public string Body { get; set; }
         public int PointOfInterestId { get; set; }
         public int UserId { get; set; }
+        public string UserDisplayName { get; set; }
 
         //public PointOfInterestDto PointOfInterest { get; set; }
         //public UserDto User { get; set; }

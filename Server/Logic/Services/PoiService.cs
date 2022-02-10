@@ -90,8 +90,7 @@ namespace Logic.Services
         }
         public async Task<PointOfInterestDto> AddCommentAsync(AddCommentDto comment)
         {
-            var pointOfInterest = await _context.PointOfInterests.Include(p => p.Comments)
-                                                                 .FirstOrDefaultAsync(p => p.Id == comment.PointOfInterestId);
+            var pointOfInterest = await GetPoiFromDbAsync(comment.PointOfInterestId);
 
             if (pointOfInterest == null)
                 return null;
@@ -200,6 +199,7 @@ namespace Logic.Services
                                                   .Include(poi => poi.Comments)
                                                   .Include(poi => poi.PoiTags)
                                                   .Include(poi => poi.Gradings)
+                                                  .Include(poi => poi.User)
                                                   .FirstOrDefaultAsync(poi => poi.Id == id);
         }
         /// <summary>
@@ -207,13 +207,14 @@ namespace Logic.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        private async Task<ICollection<PointOfInterest>> GetPoiFromDbAsync()
+        private async Task<IEnumerable<PointOfInterest>> GetPoiFromDbAsync()
         {
             return await _context.PointOfInterests.Include(poi => poi.Address)
                                                   .Include(poi => poi.Position)
                                                   .Include(poi => poi.Comments)
                                                   .Include(poi => poi.PoiTags)
                                                   .Include(poi => poi.Gradings)
+                                                  .Include(poi => poi.User)
                                                   .ToListAsync();
         }
         /// <summary>

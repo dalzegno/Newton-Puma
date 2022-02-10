@@ -35,24 +35,29 @@ namespace Puma.ViewModels
         public bool openSettingsBool { get; set; } = false;
         public bool isUserLoggedOut { get; set; } = true;
         public bool isUserLoggedIn { get; set; } = false;
-        
+        public bool editSettingsVisible { get; set; } = false;
+
         public void UserLoggedIn()
         {
             if (App.LoggedInUser == null)
             {
                 isUserLoggedOut = true;
                 isUserLoggedIn = false;
+                EditSettingsVisible = false;
                 OnPropertyChanged(nameof(userLoginState));
                 OnPropertyChanged(nameof(userLogoutState));
+                OnPropertyChanged(nameof(EditSettingsVisible));
                 return;
             }
 
             isUserLoggedOut = false;
             isUserLoggedIn = true;
             openLoginBool = false;
+            EditSettingsVisible = true;
             OnPropertyChanged(nameof(userLoginState));
             OnPropertyChanged(nameof(userLogoutState));
             OnPropertyChanged(nameof(loginPopupState));
+            OnPropertyChanged(nameof(EditSettingsVisible));
         }
         public void ClosePopup()
         {
@@ -86,10 +91,20 @@ namespace Puma.ViewModels
             openSignupBool = false;
             openLoginBool = false;
             openSettingsBool = true;
-            
             OnPropertyChanged(nameof(signupPopupState));
             OnPropertyChanged(nameof(loginPopupState));
             OnPropertyChanged(nameof(settingsPopupState));
+            
+            
+        }
+        public bool EditSettingsVisible
+        {
+            get => editSettingsVisible;
+            set
+            {
+                editSettingsVisible = value;
+                OnPropertyChanged();
+            }
         }
 
         public bool signupPopupState => openSignupBool;
@@ -97,13 +112,13 @@ namespace Puma.ViewModels
         public bool settingsPopupState => openSettingsBool;
         public bool userLoginState => isUserLoggedOut;
         public bool userLogoutState => isUserLoggedIn;
-
+       
         #endregion
 
         public void LogOut()
         {
             if (App.LoggedInUser == null)
-                
+
                 return;
 
             App.LoggedInUser = null;

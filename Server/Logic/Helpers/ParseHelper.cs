@@ -13,7 +13,8 @@ namespace Logic.Helpers
         {
             try
             {
-                value = Convert.ToDouble(input, CultureInfo.InvariantCulture);
+                var valueStr = input.ToString(CultureInfo.InvariantCulture);
+                value = Convert.ToDouble(valueStr, CultureInfo.InvariantCulture);
                 return true;
             }
             catch (Exception)
