@@ -195,7 +195,7 @@
                     x:Name="slPoiMenuButtons"
                     Padding="0"
                     Margin="10,0"
-                    Orientation="Horizontal"
+                    Orientation="Vertical"
                     VerticalOptions="Start"
                     HorizontalOptions="FillAndExpand">
                     <local:CustomButton
@@ -887,7 +887,6 @@
                         x:Name="slCreateUserViewModel">
 
                         <Label
-                            HeightRequest="13"
                             Grid.Row="0"
                             Margin="0"
                             Padding="0"
@@ -906,11 +905,10 @@
                             Grid.Row="2"
                             Margin="0"
                             Padding="0"
-                            HeightRequest="12"
                             FontSize="12"
                             VerticalOptions="Start"
                             HorizontalTextAlignment="Center"
-                            Text="{Binding PaaswordErrorMSG}"
+                            Text="{Binding PasswordErrorMSG}"
                             TextColor="#C3FF0000" />
                         <control:EntryViewControl
                             Grid.Row="3"
