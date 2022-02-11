@@ -172,7 +172,7 @@
                     x:Name="slPoiMenuButtons"
                     Padding="0"
                     Margin="10,0"
-                    Orientation="Horizontal"
+                    Orientation="Vertical"
                     VerticalOptions="Start"
                     HorizontalOptions="FillAndExpand">
                     <local:CustomButton

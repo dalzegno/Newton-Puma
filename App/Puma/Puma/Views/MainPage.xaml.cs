@@ -25,6 +25,8 @@ namespace Puma.Views
         internal SettingsViewModel SettingsViewModel { get; }
         internal WeatherViewModel WeatherViewModel1 { get; }
         internal NewUserViewModel NewUserViewModel { get; }
+        internal LoginViewModel LoginViewModel { get; }
+        
         IUserApiService UserApiService => DependencyService.Get<IUserApiService>();
         IDialogService DialogService => DependencyService.Get<IDialogService>();
         IPoiService PoiService => DependencyService.Get<IPoiService>();
@@ -35,6 +37,7 @@ namespace Puma.Views
             InitializeComponent();
             Instance = this;
             // Internal viewmodels that can be reached globally
+            LoginViewModel = new LoginViewModel(UserApiService, DialogService);
             MainViewModel = new MainViewModel(DialogService);
             PoiViewModel = new PoiViewModel(PoiService, DialogService);
             WeatherViewModel1 = new WeatherViewModel(WeatherService, DialogService);
@@ -172,6 +175,7 @@ namespace Puma.Views
         private async void SlideInMenuPanel(Frame selectedMenuPanel)
         {
             double ScreenWidth = Application.Current.MainPage.Width;
+            double ScreenHeight = Application.Current.MainPage.Height;
 
             List<Frame> MenuItemFrames = GetMenuPanels();
 
@@ -182,14 +186,20 @@ namespace Puma.Views
                 {
                     if (menuFrame.ClassId != selectedMenuPanel.ToString() && menuFrame.IsVisible == true)
                     {
-                        await menuFrame.TranslateTo(ScreenWidth * -1, 0, 300, Easing.SpringOut);
+                        //slide to left
+                        //await menuFrame.TranslateTo(-ScreenWidth, 0, 300, Easing.SpringOut);
+
+                        //slide down
+                        await menuFrame.TranslateTo(0, ScreenHeight, 300, Easing.SpringOut);
                         menuFrame.IsVisible = false;
                     }
                 }
                 //Slidear in den valda menyn
                 selectedMenuPanel.IsVisible = true;
-                selectedMenuPanel.TranslationX = ScreenWidth;
-
+                //slide left to right
+                //selectedMenuPanel.TranslationX = -ScreenWidth;
+                //slide up
+                selectedMenuPanel.TranslationY = ScreenHeight;
                 await selectedMenuPanel.TranslateTo(0, 0, 300, Easing.SpringIn);
             }
         }
@@ -223,7 +233,7 @@ namespace Puma.Views
                 default:
                     if (slider_navbar.TranslationX == 0)
                     {
-                        await AdaptNavbarSliderToScreenSize(ScreenHeight, ScreenWidth +20, 0.5);
+                        await AdaptNavbarSliderToScreenSize(ScreenHeight, ScreenWidth, 0.3);
                     }
                     else
                     {
@@ -376,6 +386,12 @@ namespace Puma.Views
 
         async Task GetCurrentLocation()
         {
+            var checkStatus = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+            if (checkStatus != PermissionStatus.Granted) 
+            {
+                await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+            }
+           
             try
             {
                 var request = new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(10));
@@ -389,12 +405,14 @@ namespace Puma.Views
                     var position = new Position(location.Latitude, location.Longitude);
                     //var pin = CreatePin(position);
                     //map.Pins.Add(pin);
+
                     IEnumerable<string> possibleAddresses = await _geoCoder.GetAddressesForPositionAsync(position);
                     string address = possibleAddresses.FirstOrDefault();
 
                     PoiViewModel.SetAddress(address);
                     await PoiViewModel.SetLatAndLon(position.Latitude, position.Longitude);
                     WeatherViewModel1.SetWeather(position.Latitude, position.Longitude);
+
                     map.IsShowingUser = true;
                 }
             }
