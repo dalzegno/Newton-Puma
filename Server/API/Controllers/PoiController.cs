@@ -164,8 +164,8 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<PointOfInterestDto>> Delete([FromQuery] int id, [FromHeader] string apiKey)
         {
-            if (!await _userService.IsUserAuthorizedAsync(apiKey))
-                return Unauthorized();
+            //if (!await _userService.IsUserAuthorizedAsync(apiKey))
+            //    return Unauthorized();
 
             var deletedPoi = await _poiService.DeleteAsync(id);
 
