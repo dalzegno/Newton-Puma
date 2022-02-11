@@ -63,9 +63,19 @@ namespace Puma.ViewModels
         public bool poiCollectionVisibleBool { get; set; } = true;
         public bool poiSingleVisibleBool { get; set; } = false;
         public bool poiCommentPostVisible { get; set; } = false;
+        private bool isAddPoiVisible { get; set; } = false;
 
 
         #region Fields
+        public bool IsAddPoiVisible
+        { 
+            get => isAddPoiVisible;
+            set
+            {
+                isAddPoiVisible = value;
+                OnPropertyChanged(nameof(IsAddPoiVisible));
+            }
+        }
         public bool PoiCommentPostVisible
         {
             get=> poiCommentPostVisible;

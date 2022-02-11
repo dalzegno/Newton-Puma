@@ -384,10 +384,17 @@ namespace Puma.Views
                 if (location != null)
                 {
 
-                    map.Pins.Clear();
+                    //map.Pins.Clear();
                     var position = new Position(location.Latitude, location.Longitude);
-                    var pin = CreatePin(position);
-                    map.Pins.Add(pin);
+                    //var pin = CreatePin(position);
+                    //map.Pins.Add(pin);
+                    IEnumerable<string> possibleAddresses = await _geoCoder.GetAddressesForPositionAsync(position);
+                    string address = possibleAddresses.FirstOrDefault();
+
+                    PoiViewModel.SetAddress(address);
+                    await PoiViewModel.SetLatAndLon(position.Latitude, position.Longitude);
+                    WeatherViewModel1.SetWeather(position.Latitude, position.Longitude);
+                    map.IsShowingUser = true;
                 }
             }
             catch (FeatureNotSupportedException fnsEx)
