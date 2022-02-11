@@ -79,8 +79,8 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<UserDto>>> Get([FromHeader] string apiKey)
         {
-            //if (!await _userService.IsUserAuthorizedAsync(apiKey))
-            //    return Unauthorized();
+            if (!await _userService.IsUserAuthorizedAsync(apiKey))
+                return Unauthorized("Unauthorized");
 
             IEnumerable<UserDto> users = await _userService.GetAllAsync();
 
@@ -102,7 +102,7 @@ namespace API.Controllers
         public async Task<ActionResult<UserDto>> GetUser([FromQuery] int id, [FromHeader]string apiKey)
         {
             if (!await _userService.IsUserAuthorizedAsync(apiKey))
-                return Unauthorized();
+                return Unauthorized("Unauthorized");
 
             if (id == 0)
                 return BadRequest("Request parameter was 0");
@@ -131,7 +131,7 @@ namespace API.Controllers
         public async Task<ActionResult<UserDto>> GetUser([FromQuery] string email, [FromHeader] string apiKey)
         {
             if (!await _userService.IsUserAuthorizedAsync(apiKey))
-                return Unauthorized();
+                return Unauthorized("Unauthorized");
 
             UserDto user = await _userService.GetAsync(email.ToLower());
 
@@ -155,7 +155,7 @@ namespace API.Controllers
         public async Task<ActionResult<UserDto>> Edit([FromBody] UpdateUserDto user, [FromHeader] string apiKey)
         {
             if (!await _userService.IsUserAuthorizedAsync(apiKey))
-                return Unauthorized();
+                return Unauthorized("Unauthorized");
 
             UserDto updatedUser = await _userService.UpdateAsync(user);
 
@@ -182,13 +182,13 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<UserDto>> Delete([FromQuery] int id, [FromHeader] string apiKey)
         {
-            //if (!await _userService.IsUserAuthorizedAsync(apiKey))
-            //    return Unauthorized();
+            if (!await _userService.IsUserAuthorizedAsync(apiKey))
+                return Unauthorized("Unauthorized");
 
             UserDto deletedUser = await _userService.DeleteAsync(id);
 
             if (deletedUser == null)
-                return NotFound();
+                return NotFound("Could not find the user to delete.");
 
             return Ok(deletedUser);
         }

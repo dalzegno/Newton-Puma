@@ -59,7 +59,8 @@ namespace Logic.Services
         }
         public async Task<IEnumerable<UserDto>> GetAllAsync()
         {
-            var dbUsers = await _context.Users.ToListAsync();
+            var dbUsers = await _context.Users.Include(u => u.PointOfInterests)
+                                              .ToListAsync();
             return _mapper.Map<IEnumerable<UserDto>>(dbUsers);
         }
         public async Task<UserDto> GetAsync(int id)
@@ -127,11 +128,14 @@ namespace Logic.Services
         #region Methods
         private async Task<User> GetDbUserAsync(int id)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            return await _context.Users
+                .Include(u => u.PointOfInterests)
+                .FirstOrDefaultAsync(u => u.Id == id);
         }
         private async Task<User> GetDbUserAsync(string email)
         {
             return await _context.Users
+                .Include(u => u.PointOfInterests)
                 .FirstOrDefaultAsync(u => u.Email == email.ToLower());
         }
         private static bool IsNewUserRequestValid(AddUserDto newUser)

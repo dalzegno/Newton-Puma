@@ -197,6 +197,7 @@
                         Clicked="slider_MenuButtonClicked"
                         Text="Weather"></local:CustomButton>
                     <local:CustomButton
+                        IsVisible="{Binding IsAddPoiVisible}"
                         BackgroundColor="#4a5b64"
                         TextColor="White" 
                         FontAttributes="Bold"                        
