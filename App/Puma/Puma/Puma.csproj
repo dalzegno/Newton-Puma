@@ -25,6 +25,7 @@
     <None Remove="Resources\Lobster-Regular.ttf" />
     <None Remove="Resources\SearchIcon.svg" />
     <None Remove="Resources\SettingsIcon.svg" />
+
     <None Remove="Resources\upTumbs.svg" />
   </ItemGroup>
 
@@ -34,6 +35,7 @@
     <EmbeddedResource Include="Resources\Lobster-Regular.ttf" />
     <EmbeddedResource Include="Resources\SettingsIcon.svg" />
     <EmbeddedResource Include="Resources\SearchIcon.svg" />
+
     <EmbeddedResource Include="Resources\upTumbs.svg" />
   </ItemGroup>
 

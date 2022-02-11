@@ -116,7 +116,7 @@
                 IsVisible="false"
                 x:Name="slider_menu"
                 HorizontalOptions="Fill"
-                VerticalOptions="Fill">
+                VerticalOptions="Start">
                 <ContentView
                     BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
                     Light={StaticResource PopUpBackgroundColor}}"
@@ -126,7 +126,7 @@
                 <Frame
                     x:Name="slPoiPopover"
                     HorizontalOptions="Fill"
-                    VerticalOptions="StartAndExpand"
+                    VerticalOptions="Start"
                     HeightRequest="100"
                     BackgroundColor="#4a5b64"
                     Margin="10,0"
@@ -163,18 +163,18 @@
                             Margin="0"
                             Text="{Binding StreetName}"
                             FontSize="12"></Label>
-                       
+
                     </Grid>
                 </Frame>
+
                 <!-- POI MENU BUTTONS -->
                 <StackLayout
                     x:Name="slPoiMenuButtons"
                     Padding="0"
                     Margin="10,0"
                     Orientation="Horizontal"
-                    VerticalOptions="Fill"
+                    VerticalOptions="Start"
                     HorizontalOptions="FillAndExpand">
-
                     <local:CustomButton
                         BackgroundColor="#4a5b64"
                         TextColor="White"
@@ -212,7 +212,7 @@
                 <Frame
                     IsVisible="false"
                     HorizontalOptions="StartAndExpand"
-                    VerticalOptions="StartAndExpand"
+                    VerticalOptions="Start"
                     Background="White"
                     x:Name="poiCreationView"
                     ClassId="poiCreationView"
@@ -314,30 +314,80 @@
                     x:Name="poiCollectionFrame">
                     <!-- SINGLE POI -->
                     <StackLayout>
-                        <StackLayout
+
+                        <Grid
+                            RowDefinitions="auto,*"
                             x:Name="poiSingleView"
                             IsVisible="{Binding PoiSingleVisible}">
-                            <local:CustomButton
-                                Text="Return"
-                                Command="{Binding PoiCollectionViewCommand}" />
-                            <Label
-                                FontSize="32"
-                                FontAttributes="Bold"
-                                TextDecorations="Underline"
-                                Text="{Binding SelectedSinglePoi.Name}" />
-                            <Label
-                                FontSize="12"
-                                Text="{Binding SelectedSinglePoi.Address.Country}" />
-                            <Label
-                                FontSize="12"
-                                Text="{Binding SelectedSinglePoi.Address.Area}" />
-                            <Label
-                                FontSize="12"
-                                Text="{Binding SelectedSinglePoi.Address.StreetName}" />
-                            <Label
-                                FontSize="12"
-                                Text="{Binding SelectedSinglePoi.Description}" />
-                        </StackLayout>
+
+                            <!-- Selected POI Presentation-->
+                            <StackLayout
+                                HorizontalOptions="FillAndExpand"
+                                VerticalOptions="FillAndExpand">
+                                <local:CustomButton
+                                    HorizontalOptions="Start"
+                                    Text="Return"
+                                    Command="{Binding PoiCollectionViewCommand}" />
+                                <Label
+                                    FontSize="32"
+                                    FontAttributes="Bold"
+                                    TextDecorations="Underline"
+                                    Text="{Binding SelectedSinglePoi.Name}" />
+                                <Label
+                                    FontSize="12"
+                                    Text="{Binding SelectedSinglePoi.Address.Country}" />
+                                <Label
+                                    FontSize="12"
+                                    Text="{Binding SelectedSinglePoi.Address.Area}" />
+                                <Label
+                                    FontSize="12"
+                                    Text="{Binding SelectedSinglePoi.Address.StreetName}" />
+                                <Label
+                                    FontSize="12"
+                                    Text="{Binding SelectedSinglePoi.Description}" />
+                            </StackLayout>
+
+                            <!-- Selected POI comments-->
+                            <StackLayout
+                                Grid.Row="1"
+                                VerticalOptions="Fill">
+
+                                <StackLayout IsVisible="{Binding PoiCommentPostVisible}">
+                                    <local:CustomEditor
+                                        x:Name="CommentBody"
+                                        Placeholder="What are your thoughts on this location?"
+                                        HeightRequest="75"></local:CustomEditor>
+                                    <local:CustomButton
+                                        Text="Post Comment"
+                                        Command="{Binding AddCommentCommand}"
+                                        CommandParameter="{Binding Source={x:Reference CommentBody}, Path=Text}" />
+                                </StackLayout>
+                                <CollectionView
+                                    VerticalOptions="Fill"
+                                    ItemsSource="{Binding SelectedSinglePoi.Comments}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Frame
+                                                    Margin="0,3"
+                                                    BackgroundColor="white">
+                                                    <Grid>
+                                                        <Label
+                                                            FontSize="16"
+                                                            FontAttributes="Bold"
+                                                            Text="{Binding UserDisplayName}" />
+                                                        <Label
+                                                            Grid.Row="1"
+                                                            Text="{Binding Body}" />
+                                                    </Grid>
+                                                </Frame>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </StackLayout>
+                        </Grid>
+
                         <!-- POI COLLECTION -->
                         <StackLayout
                             IsVisible="{Binding PoiCollectionVisible}">
@@ -667,7 +717,7 @@
 
 
 
-                    <!--WEATHER-->
+                <!--WEATHER-->
                 <StackLayout
                     x:Name="sl_Weather"
                     Grid.Row="2"
@@ -684,7 +734,8 @@
                         Text="{Binding AvgTempToday, StringFormat='{0}°C'}"
                         FontSize="13" />
                     <Image
-                        Source="{Binding AvgIconUriToday}" HeightRequest="20" />
+                        Source="{Binding AvgIconUriToday}"
+                        HeightRequest="20" />
                     <Label
                         VerticalOptions="End"
                         HorizontalOptions="CenterAndExpand"
