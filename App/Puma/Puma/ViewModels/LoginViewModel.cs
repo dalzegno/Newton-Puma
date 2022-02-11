@@ -19,9 +19,8 @@ namespace Puma.ViewModels
 
         Command _logInCommand;
         public Command LoginCommand => _logInCommand ?? (_logInCommand = new Command(LogIn, CanLogIn));
-
         string _loginEmail;
-        string _loginPassword;
+        public string _loginPassword;
         public string LoginEmail
         {
             get => _loginEmail;
@@ -50,7 +49,7 @@ namespace Puma.ViewModels
         public async void LogIn()
         {
             var loggedInUser = await _userApiService.LogIn(LoginEmail, LoginPassword);
-
+            
             if (loggedInUser == null)
                 return;
 
@@ -58,6 +57,13 @@ namespace Puma.ViewModels
             MainPage.Instance.PoiViewModel.IsAddPoiVisible = true;
             await _dialogService.ShowMessageAsync("Login", $"Welcome {loggedInUser.DisplayName}!");
             MainPage.Instance.MainViewModel.UserLoggedInCommand.Execute(null);
+            ClearEntries();
+        }
+
+        private void ClearEntries()
+        {
+            LoginEmail = "";
+            LoginPassword = "";
         }
     }
 }

@@ -8,6 +8,7 @@ using Xamarin.Forms.Xaml;
 using System.Threading.Tasks;
 using Puma.Services;
 using Puma.Models;
+using Puma.Views;
 
 namespace Puma.ViewModels
 {
@@ -24,11 +25,9 @@ namespace Puma.ViewModels
 
         Command _editUserCommand;
         Command _deleteUserCommand;
-
         public Command EditUserCommand => _editUserCommand ?? (_editUserCommand = new Command(EditUser));
         public Command DeleteUserCommand => _deleteUserCommand ?? (_deleteUserCommand = new Command(DeleteUser));
 
-        //Vill vi att man kan byta email?
         string _editEmail;
         string _editPassword;
         string _editDisplayName;
@@ -41,13 +40,23 @@ namespace Puma.ViewModels
         string _currentUserPassword;
 
 
+        string _loginEmail;
+        public string LoginEmail
+        {
+            get => _loginEmail;
+            set
+            {
+                _loginEmail = value;
+                OnPropertyChanged();
+
+            }
+        }
 
 
         public void SetUserToEdit(string displayName, string email, string firstName, string lastName, string password)
         {
             if (App.LoggedInUser == null)
                 return;
-
 
             CurrentUserDisplayName = displayName;
             CurrentUserFirstName = firstName;
@@ -117,9 +126,6 @@ namespace Puma.ViewModels
             get => _editPassword;
             set
             {
-                if (_editPassword == null)
-                    return;
-
                 _editPassword = value;
                 OnPropertyChanged();
                 EditUserCommand.ChangeCanExecute();
@@ -153,10 +159,16 @@ namespace Puma.ViewModels
                 OnPropertyChanged();
             }
         }
-        //private bool CanEdit() => !string.IsNullOrWhiteSpace(EditEmail) && !string.IsNullOrWhiteSpace(EditPassword) && !string.IsNullOrWhiteSpace(EditDisplayName);
+        //private bool CanEdit() => !string.IsNullOrWhiteSpace(EditPassword);
 
         private async void EditUser()
         {
+            string passwordAnswer = await App.Current.MainPage.DisplayPromptAsync("Enter your current password please", "Password:");
+            var authorizeUser = await _userApiService.LogIn(App.LoggedInUser.Email, passwordAnswer);
+            if (authorizeUser == null)
+                return;
+
+
             var user = new UpdateUserDto()
             {
                 Id = App.LoggedInUser.Id,
@@ -167,11 +179,14 @@ namespace Puma.ViewModels
                 LastName = EditSurname ?? App.LoggedInUser.LastName,
             };
 
-
             var updatedUser = await _userApiService.UpdateUserAsync(user);
             if (updatedUser != null)
             {
+
                 await _dialogService.ShowMessageAsync("Saved!!", $"Settings applied! \"{user.DisplayName}\".");
+                App.LoggedInUser = updatedUser;
+                return;
+
             }
         }
 
@@ -179,7 +194,6 @@ namespace Puma.ViewModels
         {
             if (App.LoggedInUser == null)
                 return;
-
             var confirmationPopup = await App.Current.MainPage.DisplayActionSheet($"Delete User {App.LoggedInUser.DisplayName}?", "No",
                  "Yes");
             switch (confirmationPopup)
@@ -187,10 +201,18 @@ namespace Puma.ViewModels
                 case "No":
                     break;
                 case "Yes":
+                    string passwordAnswer = await App.Current.MainPage.DisplayPromptAsync("Enter your password please", "Password:");
+                    var authorizeUser = await _userApiService.LogIn(App.LoggedInUser.Email, passwordAnswer);
+                    if (authorizeUser == null)
+                        return;
+
                     await _dialogService.ShowMessageAsync($"Deleted: {App.LoggedInUser.DisplayName}", "User has been deleted.");
                     await _userApiService.DeleteUserAsync(App.LoggedInUser.Id);
+                    MainPage.Instance.MainViewModel.ClosePopupCommand.Execute(null);
+                    MainPage.Instance.MainViewModel.LogOutCommand.Execute(null);
                     break;
             }
         }
     }
 }
+
