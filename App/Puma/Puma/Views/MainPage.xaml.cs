@@ -222,7 +222,7 @@ namespace Puma.Views
                 default:
                     if (slider_navbar.TranslationX == 0)
                     {
-                        await AdaptNavbarSliderToScreenSize(ScreenHeight, ScreenWidth +20, 0.5);
+                        await AdaptNavbarSliderToScreenSize(ScreenHeight, ScreenWidth, 0.3);
                     }
                     else
                     {
@@ -375,6 +375,12 @@ namespace Puma.Views
 
         async Task GetCurrentLocation()
         {
+            var checkStatus = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+            if (checkStatus != PermissionStatus.Granted) 
+            {
+                await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+            }
+           
             try
             {
                 var request = new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(10));
@@ -386,8 +392,9 @@ namespace Puma.Views
 
                     map.Pins.Clear();
                     var position = new Position(location.Latitude, location.Longitude);
-                    var pin = CreatePin(position);
-                    map.Pins.Add(pin);
+                    //var pin = CreatePin(position);
+                    //map.Pins.Add(pin);
+                    map.IsShowingUser = true;
                 }
             }
             catch (FeatureNotSupportedException fnsEx)
