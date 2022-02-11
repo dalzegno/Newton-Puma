@@ -69,6 +69,7 @@ namespace Puma.ViewModels
             openLoginBool = false;
             openSignupBool = false;
             openSettingsBool = false;
+            MainPage.Instance.NewUserViewModel.ClearSignUpEntriesAndErrors();
             OnPropertyChanged(nameof(signupPopupState));
             OnPropertyChanged(nameof(loginPopupState));
             OnPropertyChanged(nameof(settingsPopupState));
