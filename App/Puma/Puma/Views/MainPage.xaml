@@ -13,10 +13,6 @@
                               Dark={StaticResource WindowBackgroundColorDark}, 
                               Light={StaticResource WindowBackgroundColor}}">
 
-
-
-
-
     <Grid
         Margin="0"
         Padding="0"
@@ -188,7 +184,7 @@
                     </local:CustomButton>
                     <local:CustomButton
                         BackgroundColor="#4a5b64"
-                        TextColor="White" 
+                        TextColor="White"
                         FontAttributes="Bold"
                         Grid.Column="1"
                         HorizontalOptions="FillAndExpand"
@@ -199,8 +195,8 @@
                     <local:CustomButton
                         IsVisible="{Binding IsAddPoiVisible}"
                         BackgroundColor="#4a5b64"
-                        TextColor="White" 
-                        FontAttributes="Bold"                        
+                        TextColor="White"
+                        FontAttributes="Bold"
                         Grid.Row="0"
                         Grid.Column="2"
                         HorizontalOptions="FillAndExpand"
@@ -302,7 +298,6 @@
                     </ScrollView>
                 </Frame>
 
-
                 <!-- POI COLLECTION VIEW  >-->
                 <Frame
                     HorizontalOptions="FillAndExpand"
@@ -315,7 +310,6 @@
                     x:Name="poiCollectionFrame">
                     <!-- SINGLE POI -->
                     <StackLayout>
-
                         <Grid
                             RowDefinitions="auto,*"
                             x:Name="poiSingleView"
@@ -353,7 +347,8 @@
                                 Grid.Row="1"
                                 VerticalOptions="Fill">
 
-                                <StackLayout IsVisible="{Binding PoiCommentPostVisible}">
+                                <StackLayout
+                                    IsVisible="{Binding PoiCommentPostVisible}">
                                     <local:CustomEditor
                                         x:Name="CommentBody"
                                         Placeholder="What are your thoughts on this location?"
@@ -401,14 +396,12 @@
                                 SelectionChangedCommand="{Binding PoiSingleViewCommand}">
                                 <CollectionView.ItemTemplate>
                                     <DataTemplate>
-
-                                            <Grid
+                                        <Grid
                                             Padding="5"
                                             HeightRequest="90"
-                                            RowDefinitions="1*,1*,1*,1*" ColumnDefinitions="*,*,*">
-                                            
+                                            RowDefinitions="1*,1*,1*"
+                                            ColumnDefinitions="3*,1*,1*">
                                             <Label
-                                                
                                                 Grid.Row="0"
                                                 Grid.Column="0"
                                                 Grid.ColumnSpan="2"
@@ -434,143 +427,92 @@
                                                     </MultiBinding>
                                                 </Label.Text>
                                             </Label>
-
-
                                             <Label
                                                 Grid.Row="2"
-                                                
                                                 VerticalTextAlignment="Center"
                                                 Text="Taggar"
                                                 FontSize="15"
-                                                FontAttributes="Bold"/>
-
-
-
-
-
-
-                                            <Grid 
-                                                  HorizontalOptions="CenterAndExpand"
-                                                  VerticalOptions="CenterAndExpand"
-                                                  Grid.RowSpan="3"
-                                                  Grid.Column="1"
-                                                  Grid.ColumnSpan="2"
-                                                  ColumnDefinitions="*,*,*,*,*">
-
-                                                <Label
-                                                Grid.Column="1"                                                    
-                                                VerticalTextAlignment="Center"
-                                                Margin="-25,10,0,0"
-                                                Text="40"
-                                                FontSize="15"
-                                                FontAttributes="Bold"/>
-
+                                                FontAttributes="Bold" />
+                                            <!-- LIKES (ON COLLECTION ITEM)-->
+                                            <Grid
+                                                HorizontalOptions="EndAndExpand"
+                                                Grid.Column="1"
+                                                Grid.RowSpan="4">
                                                 <Grid
-                                                    VerticalOptions="Center"
-                                                    Grid.Column="1">
+                                                    RowDefinitions="auto,auto"
+                                                    VerticalOptions="Fill">
+                                                    <Label
+                                                        VerticalOptions="Start"
+                                                        HorizontalOptions="Center"
+                                                        Text="{Binding LikeCounter}"
+                                                        FontSize="10"
+                                                        FontAttributes="Bold" />
+                                                    <Grid
+                                                        Grid.Row="1">
+                                                        <ffimageloadingsvg:SvgCachedImage
+                                                            HorizontalOptions="Center"
+                                                            HeightRequest="25"
+                                                            WidthRequest="25"
+                                                            Margin="0,-5,0,0"
+                                                            Source="resource://Puma.Resources.upTumbs.svg">
+                                                        </ffimageloadingsvg:SvgCachedImage>
+                                                        <local:CustomButton
+                                                            Command="{Binding AddGradeCommand}"
+                                                            BackgroundColor="Transparent"
+                                                            Opacity="0"></local:CustomButton>
+                                                    </Grid>
+                                                </Grid>
+                                                <Grid
+                                                    RowDefinitions="auto,auto"
+                                                    Grid.Row="1">
                                                     <ffimageloadingsvg:SvgCachedImage
-                                                    HeightRequest="50"
-                                                    WidthRequest="50"
-                                                    Margin="0,0,0,0"
-                                                    HorizontalOptions="Start"
-                                                    Source="resource://Puma.Resources.upTumbs.svg">
+                                                        HorizontalOptions="Center"
+                                                        HeightRequest="25"
+                                                        WidthRequest="25"
+                                                        Source="resource://Puma.Resources.downTumbs.svg">
                                                     </ffimageloadingsvg:SvgCachedImage>
                                                     <local:CustomButton
-                        
-                                                    ClassId="settingsPopup"
-                                                    BackgroundColor="LightBlue"
-                                                    Opacity="0"
-                                                    Text="Settings"
-                                                    Command="{Binding OpenSettingsCommand}"
-                                                    Clicked="btn_OpenSettings">
-                                                    </local:CustomButton>
+                                                        BackgroundColor="Transparent"
+                                                        Opacity="0"></local:CustomButton>
+                                                    <Label
+                                                        Grid.Row="1"
+                                                        Margin="0,-5,0,0"
+                                                        HorizontalOptions="Center"
+                                                        VerticalOptions="Start"
+                                                        Text="45"
+                                                        FontSize="10"
+                                                        FontAttributes="Bold"
+                                                        HeightRequest="100" />
                                                 </Grid>
-                                                
-                                                <Grid
-                                                    Grid.Column="2">
-                                                    <ffimageloadingsvg:SvgCachedImage
-                                                    HeightRequest="50"
-                                                    WidthRequest="50"
-                                                    HorizontalOptions="End"
-                                                    Margin="0,0,0,0"
-                                                    Source="resource://Puma.Resources.downTumbs.svg">
-                                                    </ffimageloadingsvg:SvgCachedImage>
-                                                    <local:CustomButton
-                        
-                                                    ClassId="settingsPopup"
-                                                    BackgroundColor="LightBlue"
-                                                    Opacity="0"
-                                                    Text="Settings"
-                                                    Command="{Binding OpenSettingsCommand}"
-                                                    Clicked="btn_OpenSettings">
-                                                    </local:CustomButton>
-                                                </Grid>
-
-                                                <Label
-                                                Grid.Column="3"
-                                                Margin="0,0,5,13"
-                                                HorizontalTextAlignment="Start"
-                                                VerticalTextAlignment="Center"
-                                                Text="45"
-                                                FontSize="15"
-                                                FontAttributes="Bold"
-                                                HeightRequest="100"/>
-
-
-                                                <Grid
-                                                    Grid.Column="4">
-                                                    
-                                                    <ffimageloadingsvg:SvgCachedImage
-                                                    HeightRequest="50"
-                                                    WidthRequest="50"
-                                                    Source="resource://Puma.Resources.coments.svg">
-                                                    </ffimageloadingsvg:SvgCachedImage>
-                                                    <local:CustomButton
-                        
-                                                    ClassId="settingsPopup"
-                                                    BackgroundColor="LightBlue"
-                                                    Opacity="0"
-                                                    Text="Settings"
-                                                    Command="{Binding OpenSettingsCommand}"
-                                                    Clicked="btn_OpenSettings">
-                                                    </local:CustomButton>
-                                                </Grid>
-                                                <Label
-                                                Grid.Column="4"
-                                                
-                                                HorizontalTextAlignment="Center"
-                                                Margin="0,20,0,0"
-                                                Text="45"
-                                                FontSize="15"
-                                                FontAttributes="Bold"
-                                                HeightRequest="100"/>
-
-
                                             </Grid>
-
-                                            <Rectangle
-                                                Grid.Row="2"
-                                                Grid.ColumnSpan="3"
-                                                Margin="5,0"
-                                                HeightRequest="1"
-                                                BackgroundColor="Transparent"
-                                                VerticalOptions="End"
-                                                HorizontalOptions="FillAndExpand" />
-
-
-
+                                            <!-- COMMENTS BOX (ON COLLECTION ITEM)-->
+                                            <Grid
+                                                Grid.RowSpan="4"
+                                                Grid.Column="2"
+                                                RowDefinitions="auto,*">
+                                                <Label
+                                                    VerticalOptions="End"
+                                                    HorizontalTextAlignment="Center"
+                                                    Text="45"
+                                                    FontSize="15"
+                                                    FontAttributes="Bold" />
+                                                <StackLayout Grid.Row="1" VerticalOptions="Start">
+                                                    <ffimageloadingsvg:SvgCachedImage
+                                                        HeightRequest="50"
+                                                        WidthRequest="50"
+                                                        Source="resource://Puma.Resources.coments.svg">
+                                                    </ffimageloadingsvg:SvgCachedImage>
+                                                </StackLayout>
+                                            </Grid>
 
                                             <Rectangle
                                                 Grid.Row="3"
                                                 Grid.ColumnSpan="3"
-                                               
                                                 HeightRequest="1"
                                                 BackgroundColor="Black"
                                                 VerticalOptions="End"
                                                 HorizontalOptions="FillAndExpand" />
-                                                
                                         </Grid>
-                           
                                     </DataTemplate>
                                 </CollectionView.ItemTemplate>
                             </CollectionView>
@@ -705,8 +647,8 @@
                 HorizontalOptions="Fill"
                 VerticalOptions="Fill"
                 BackgroundColor="{AppThemeBinding 
-                                Light={StaticResource WindowBackgroundColor},
-                              Dark={StaticResource WindowBackgroundColorDark}}"
+                                    Light={StaticResource WindowBackgroundColor},
+                                 Dark={StaticResource WindowBackgroundColorDark}}"
                 Opacity=".9"
                 Margin="0"
                 Padding="0">
@@ -867,7 +809,6 @@
 
 
         <!--Signup Popup "-->
-
         <Frame
             IsVisible="{Binding signupPopupState}"
             x:Name="signupPopup"

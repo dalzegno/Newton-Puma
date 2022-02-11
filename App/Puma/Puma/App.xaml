@@ -4,15 +4,12 @@
              x:Class="Puma.App"
              xmlns:cr="clr-namespace:Puma.CustomRenderer;assembly=Puma"
              xmlns:control="clr-namespace:Puma.ControlTemplates"
-            
-             
              xmlns:vm="clr-namespace:Puma.ViewModels">
     <Application.Resources>
         <ResourceDictionary>
             <!-- COLOURS -->
             <Color x:Key="WindowBackgroundColor">#DAEFF9</Color>
-            <Color
-                x:Key="WindowBackgroundColorDark">White</Color>
+            <Color x:Key="WindowBackgroundColorDark">White</Color>
             <Color x:Key="PopUpBackgroundColor">#DAEFF9</Color>
             <Color x:Key="PopUpBackgroundColorDark">#171C26</Color>
             <Color x:Key="ButtonBackgroundColor">#FFF</Color>

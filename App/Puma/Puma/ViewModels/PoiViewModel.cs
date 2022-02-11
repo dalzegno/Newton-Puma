@@ -36,7 +36,7 @@ namespace Puma.ViewModels
         Command _poiSingleViewCommand;
         Command _poiCollectionViewCommand;
         Command _addCommentCommand;
-
+        Command _addGradeCommand;
         public Command CreatePoiCommand => _createPoiCommand ?? (_createPoiCommand = new Command(CreatePoi, CanCreate));
         public Command RemoveTagCommand => _removeTagCommand ?? (_removeTagCommand = new Command(RemoveTag));
 
@@ -45,6 +45,7 @@ namespace Puma.ViewModels
         public Command PoiCollectionViewCommand => _poiCollectionViewCommand ?? (_poiCollectionViewCommand = new Command(PoisPopup));
         public Command AddCommentCommand => _addCommentCommand ?? (_addCommentCommand = new Command(AddComment));
 
+        public Command AddGradeCommand => _addGradeCommand ?? (_addGradeCommand = new Command(AddGrade));
 
         public string _name;
         public string _description;
@@ -56,6 +57,8 @@ namespace Puma.ViewModels
 
         public PointOfInterest _selectedSinglePoi;
         public ObservableCollection<Comment> _commentCollection;
+        public string _likeCount;
+        public string _dislikeCount;
         
 
         public bool openPoiCreationBool { get; set; } = false;
@@ -67,6 +70,24 @@ namespace Puma.ViewModels
 
 
         #region Fields
+        public string LikeCount
+        {
+            get => _likeCount;
+            set
+            {
+                _likeCount = value;
+                OnPropertyChanged(nameof(LikeCount));
+            }
+        }
+        public string DislikeCount
+        {
+            get => _dislikeCount;
+            set
+            {
+                _dislikeCount = value;
+                OnPropertyChanged(nameof(DislikeCount));
+            }
+        }
         public bool IsAddPoiVisible
         { 
             get => isAddPoiVisible;
@@ -278,6 +299,16 @@ namespace Puma.ViewModels
         public bool PoiCollectionVisible => poiCollectionVisibleBool;
         public bool PoiSingleVisible => poiSingleVisibleBool;
 
+        private async void AddGrade()
+        {
+            if (App.LoggedInUser == null)
+                return;
+
+            AddGradeDto grade = new AddGradeDto
+            {
+
+            };
+        }
         private async void AddComment(object body)
         {
             if (App.LoggedInUser == null)
