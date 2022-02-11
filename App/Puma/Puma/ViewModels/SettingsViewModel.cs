@@ -143,9 +143,6 @@ namespace Puma.ViewModels
             get => _editPassword;
             set
             {
-                if (_editPassword == null)
-                    return;
-
                 _editPassword = value;
                 OnPropertyChanged();
                 EditUserCommand.ChangeCanExecute();
@@ -184,7 +181,6 @@ namespace Puma.ViewModels
         private async void EditUser()
         {
             string passwordAnswer = await App.Current.MainPage.DisplayPromptAsync("Enter your password please", "Password:");
-            EditPassword = passwordAnswer;
             var authorizeUser = await _userApiService.LogIn(App.LoggedInUser.Email, passwordAnswer);
             if (authorizeUser == null)
             {
@@ -206,22 +202,11 @@ namespace Puma.ViewModels
             var updatedUser = await _userApiService.UpdateUserAsync(user);
             if (updatedUser != null)
             {
-                var confirmationPopup = await App.Current.MainPage.DisplayActionSheet($"Change Password of User aswell:  {App.LoggedInUser.DisplayName}?", "No",
-                               "Yes");
-                switch (confirmationPopup)
-                {
-                    case "No":
-                        await _userApiService.UpdateUserAsync(user);
+                
                         await _dialogService.ShowMessageAsync("Saved!!", $"Settings applied! \"{user.DisplayName}\".");
-                        break;
-                    case "Yes":
-                        string changePw = await App.Current.MainPage.DisplayPromptAsync("Password change", "New Password:");
-                        EditPassword = changePw;
-                        await _dialogService.ShowMessageAsync($"Password Changed of user: {user.DisplayName}", "& Settings have been applied!.");
-                        await _userApiService.UpdateUserAsync(user);
-                        break;
+                        App.LoggedInUser = updatedUser;
+                return;
 
-                }
             }
         }
 

@@ -49,7 +49,7 @@ namespace Logic.Services
         public async Task<UserDto> LogInAsync(string email, string password)
         {
             string encryptedPassword = EncryptionHelper.Encrypt(password);
-            
+
             User foundUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == email.ToLower() && u.Password == encryptedPassword);
 
             if (foundUser == null)
@@ -154,10 +154,13 @@ namespace Logic.Services
                 userToEdit.Email = user.Email;
                 isEdited = true;
             }
-            if (userToEdit.Password != EncryptionHelper.Encrypt(user.Password))
+            if (user.Password != null)
             {
-                userToEdit.Password = EncryptionHelper.Encrypt(user.Password);
-                isEdited = true;
+                if (userToEdit.Password != EncryptionHelper.Encrypt(user.Password))
+                {
+                    userToEdit.Password = EncryptionHelper.Encrypt(user.Password);
+                    isEdited = true;
+                }
             }
             if (userToEdit.DisplayName != user.DisplayName)
             {

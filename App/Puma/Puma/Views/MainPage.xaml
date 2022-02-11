@@ -1075,7 +1075,7 @@
                             <control:EntryViewControl
                                 Grid.Row="2"
                                 EntryText="{Binding EditPassword, Mode=TwoWay}"
-                                PlaceholderText="{Binding CurrentUserPassword}"
+                                PlaceholderText="Password"
                                 ControlTemplate="{StaticResource EntryViewControlTemplate}" />
                             <control:EntryViewControl
                                 Grid.Row="3"
