@@ -4,6 +4,8 @@
              x:Class="Puma.App"
              xmlns:cr="clr-namespace:Puma.CustomRenderer;assembly=Puma"
              xmlns:control="clr-namespace:Puma.ControlTemplates"
+            
+             
              xmlns:vm="clr-namespace:Puma.ViewModels">
     <Application.Resources>
         <ResourceDictionary>

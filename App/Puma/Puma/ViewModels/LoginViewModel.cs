@@ -54,6 +54,7 @@ namespace Puma.ViewModels
                 return;
 
             App.LoggedInUser = loggedInUser;
+            MainPage.Instance.PoiViewModel.IsAddPoiVisible = true;
             await _dialogService.ShowMessageAsync("Login", $"Welcome {loggedInUser.DisplayName}!");
             MainPage.Instance.MainViewModel.UserLoggedInCommand.Execute(null);
         }

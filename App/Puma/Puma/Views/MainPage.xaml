@@ -8,7 +8,7 @@
     xmlns:viewmodel="clr-namespace:Puma.ViewModels"
     xmlns:control="clr-namespace:Puma.ControlTemplates"
     xmlns:ffimageloadingsvg="clr-namespace:FFImageLoading.Svg.Forms;assembly=FFImageLoading.Svg.Forms"
-    SizeChanged="SliderUpDown"
+    SizeChanged="SliderDown"
     BackgroundColor="{AppThemeBinding 
                               Dark={StaticResource WindowBackgroundColorDark}, 
                               Light={StaticResource WindowBackgroundColor}}">
@@ -116,7 +116,7 @@
                 IsVisible="false"
                 x:Name="slider_menu"
                 HorizontalOptions="Fill"
-                VerticalOptions="Fill">
+                VerticalOptions="Start">
                 <ContentView
                     BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
                     Light={StaticResource PopUpBackgroundColor}}"
@@ -126,9 +126,10 @@
                 <Frame
                     x:Name="slPoiPopover"
                     HorizontalOptions="Fill"
-                    VerticalOptions="StartAndExpand"
+                    VerticalOptions="Start"
                     HeightRequest="100"
-                    Margin="0"
+                    BackgroundColor="#4a5b64"
+                    Margin="10,0"
                     Padding="0">
                     <Grid
                         Padding="0"
@@ -139,6 +140,7 @@
                         <!--ColumnDefinitions="auto, auto"-->
 
                         <Label
+                            TextColor="White"
                             Grid.Row="0"
                             VerticalOptions="End"
                             HorizontalOptions="CenterAndExpand"
@@ -146,6 +148,7 @@
                             Text="{Binding Country}"
                             FontSize="18"></Label>
                         <Label
+                            TextColor="White"
                             VerticalOptions="StartAndExpand"
                             HorizontalOptions="CenterAndExpand"
                             Grid.Row="1"
@@ -153,35 +156,40 @@
                             Text="{Binding Area}"
                             FontSize="13"></Label>
                         <Label
+                            TextColor="White"
                             VerticalOptions="Start"
                             HorizontalOptions="CenterAndExpand"
                             Grid.Row="2"
                             Margin="0"
                             Text="{Binding StreetName}"
                             FontSize="12"></Label>
-                       
+
                     </Grid>
                 </Frame>
+
                 <!-- POI MENU BUTTONS -->
                 <StackLayout
                     x:Name="slPoiMenuButtons"
                     Padding="0"
-                    Margin="0"
-                    Orientation="Horizontal"
-                    VerticalOptions="Fill"
+                    Margin="10,0"
+                    Orientation="Vertical"
+                    VerticalOptions="Start"
                     HorizontalOptions="FillAndExpand">
-
                     <local:CustomButton
-                        BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
+                        BackgroundColor="#4a5b64"
+                        TextColor="White"
                         Command="{Binding PoiGetCollectionCommand}"
                         Clicked="slider_MenuButtonClicked"
                         ClassId="poiCollectionFrame"
                         Grid.Column="0"
+                        FontAttributes="Bold"
                         HorizontalOptions="FillAndExpand"
                         Text="Points of Interest">
                     </local:CustomButton>
                     <local:CustomButton
-                        BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
+                        BackgroundColor="#4a5b64"
+                        TextColor="White" 
+                        FontAttributes="Bold"
                         Grid.Column="1"
                         HorizontalOptions="FillAndExpand"
                         Command="{Binding WeatherPopupCommand}"
@@ -189,7 +197,10 @@
                         Clicked="slider_MenuButtonClicked"
                         Text="Weather"></local:CustomButton>
                     <local:CustomButton
-                        BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
+                        IsVisible="{Binding IsAddPoiVisible}"
+                        BackgroundColor="#4a5b64"
+                        TextColor="White" 
+                        FontAttributes="Bold"                        
                         Grid.Row="0"
                         Grid.Column="2"
                         HorizontalOptions="FillAndExpand"
@@ -202,10 +213,11 @@
                 <Frame
                     IsVisible="false"
                     HorizontalOptions="StartAndExpand"
-                    VerticalOptions="StartAndExpand"
+                    VerticalOptions="Start"
                     Background="White"
                     x:Name="poiCreationView"
                     ClassId="poiCreationView"
+                    Margin="10,0"
                     Opacity=".9">
                     <ScrollView>
                         <StackLayout
@@ -303,30 +315,80 @@
                     x:Name="poiCollectionFrame">
                     <!-- SINGLE POI -->
                     <StackLayout>
-                        <StackLayout
+
+                        <Grid
+                            RowDefinitions="auto,*"
                             x:Name="poiSingleView"
                             IsVisible="{Binding PoiSingleVisible}">
-                            <local:CustomButton
-                                Text="Return"
-                                Command="{Binding PoiCollectionViewCommand}" />
-                            <Label
-                                FontSize="32"
-                                FontAttributes="Bold"
-                                TextDecorations="Underline"
-                                Text="{Binding SelectedSinglePoi.Name}" />
-                            <Label
-                                FontSize="12"
-                                Text="{Binding SelectedSinglePoi.Address.Country}" />
-                            <Label
-                                FontSize="12"
-                                Text="{Binding SelectedSinglePoi.Address.Area}" />
-                            <Label
-                                FontSize="12"
-                                Text="{Binding SelectedSinglePoi.Address.StreetName}" />
-                            <Label
-                                FontSize="12"
-                                Text="{Binding SelectedSinglePoi.Description}" />
-                        </StackLayout>
+
+                            <!-- Selected POI Presentation-->
+                            <StackLayout
+                                HorizontalOptions="FillAndExpand"
+                                VerticalOptions="FillAndExpand">
+                                <local:CustomButton
+                                    HorizontalOptions="Start"
+                                    Text="Return"
+                                    Command="{Binding PoiCollectionViewCommand}" />
+                                <Label
+                                    FontSize="32"
+                                    FontAttributes="Bold"
+                                    TextDecorations="Underline"
+                                    Text="{Binding SelectedSinglePoi.Name}" />
+                                <Label
+                                    FontSize="12"
+                                    Text="{Binding SelectedSinglePoi.Address.Country}" />
+                                <Label
+                                    FontSize="12"
+                                    Text="{Binding SelectedSinglePoi.Address.Area}" />
+                                <Label
+                                    FontSize="12"
+                                    Text="{Binding SelectedSinglePoi.Address.StreetName}" />
+                                <Label
+                                    FontSize="12"
+                                    Text="{Binding SelectedSinglePoi.Description}" />
+                            </StackLayout>
+
+                            <!-- Selected POI comments-->
+                            <StackLayout
+                                Grid.Row="1"
+                                VerticalOptions="Fill">
+
+                                <StackLayout IsVisible="{Binding PoiCommentPostVisible}">
+                                    <local:CustomEditor
+                                        x:Name="CommentBody"
+                                        Placeholder="What are your thoughts on this location?"
+                                        HeightRequest="75"></local:CustomEditor>
+                                    <local:CustomButton
+                                        Text="Post Comment"
+                                        Command="{Binding AddCommentCommand}"
+                                        CommandParameter="{Binding Source={x:Reference CommentBody}, Path=Text}" />
+                                </StackLayout>
+                                <CollectionView
+                                    VerticalOptions="Fill"
+                                    ItemsSource="{Binding SelectedSinglePoi.Comments}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Frame
+                                                    Margin="0,3"
+                                                    BackgroundColor="white">
+                                                    <Grid>
+                                                        <Label
+                                                            FontSize="16"
+                                                            FontAttributes="Bold"
+                                                            Text="{Binding UserDisplayName}" />
+                                                        <Label
+                                                            Grid.Row="1"
+                                                            Text="{Binding Body}" />
+                                                    </Grid>
+                                                </Frame>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </StackLayout>
+                        </Grid>
+
                         <!-- POI COLLECTION -->
                         <StackLayout
                             IsVisible="{Binding PoiCollectionVisible}">
@@ -339,24 +401,26 @@
                                 SelectionChangedCommand="{Binding PoiSingleViewCommand}">
                                 <CollectionView.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid
+
+                                            <Grid
                                             Padding="5"
-                                            HeightRequest="60"
-                                            RowDefinitions="1*,1*,1*">
+                                            HeightRequest="90"
+                                            RowDefinitions="1*,1*,1*,1*" ColumnDefinitions="*,*,*">
+                                            
                                             <Label
+                                                
                                                 Grid.Row="0"
+                                                Grid.Column="0"
+                                                Grid.ColumnSpan="2"
                                                 Text="{Binding Name}"
                                                 FontAttributes="Bold"
                                                 CharacterSpacing=".5"
-                                                FontSize="12"
+                                                FontSize="14"
+                                                TextTransform="Uppercase"
                                                 HeightRequest="100"></Label>
                                             <Label
                                                 Grid.Row="1"
-                                                Text="{Binding Description}"
-                                                FontSize="12"
-                                                HeightRequest="100"></Label>
-                                            <Label
-                                                Grid.Row="2"
+                                                Grid.Column="0"
                                                 FontSize="12"
                                                 FontAttributes="Italic"
                                                 HeightRequest="100">
@@ -370,13 +434,143 @@
                                                     </MultiBinding>
                                                 </Label.Text>
                                             </Label>
+
+
+                                            <Label
+                                                Grid.Row="2"
+                                                
+                                                VerticalTextAlignment="Center"
+                                                Text="Taggar"
+                                                FontSize="15"
+                                                FontAttributes="Bold"/>
+
+
+
+
+
+
+                                            <Grid 
+                                                  HorizontalOptions="CenterAndExpand"
+                                                  VerticalOptions="CenterAndExpand"
+                                                  Grid.RowSpan="3"
+                                                  Grid.Column="1"
+                                                  Grid.ColumnSpan="2"
+                                                  ColumnDefinitions="*,*,*,*,*">
+
+                                                <Label
+                                                Grid.Column="1"                                                    
+                                                VerticalTextAlignment="Center"
+                                                Margin="-25,10,0,0"
+                                                Text="40"
+                                                FontSize="15"
+                                                FontAttributes="Bold"/>
+
+                                                <Grid
+                                                    VerticalOptions="Center"
+                                                    Grid.Column="1">
+                                                    <ffimageloadingsvg:SvgCachedImage
+                                                    HeightRequest="50"
+                                                    WidthRequest="50"
+                                                    Margin="0,0,0,0"
+                                                    HorizontalOptions="Start"
+                                                    Source="resource://Puma.Resources.upTumbs.svg">
+                                                    </ffimageloadingsvg:SvgCachedImage>
+                                                    <local:CustomButton
+                        
+                                                    ClassId="settingsPopup"
+                                                    BackgroundColor="LightBlue"
+                                                    Opacity="0"
+                                                    Text="Settings"
+                                                    Command="{Binding OpenSettingsCommand}"
+                                                    Clicked="btn_OpenSettings">
+                                                    </local:CustomButton>
+                                                </Grid>
+                                                
+                                                <Grid
+                                                    Grid.Column="2">
+                                                    <ffimageloadingsvg:SvgCachedImage
+                                                    HeightRequest="50"
+                                                    WidthRequest="50"
+                                                    HorizontalOptions="End"
+                                                    Margin="0,0,0,0"
+                                                    Source="resource://Puma.Resources.downTumbs.svg">
+                                                    </ffimageloadingsvg:SvgCachedImage>
+                                                    <local:CustomButton
+                        
+                                                    ClassId="settingsPopup"
+                                                    BackgroundColor="LightBlue"
+                                                    Opacity="0"
+                                                    Text="Settings"
+                                                    Command="{Binding OpenSettingsCommand}"
+                                                    Clicked="btn_OpenSettings">
+                                                    </local:CustomButton>
+                                                </Grid>
+
+                                                <Label
+                                                Grid.Column="3"
+                                                Margin="0,0,5,13"
+                                                HorizontalTextAlignment="Start"
+                                                VerticalTextAlignment="Center"
+                                                Text="45"
+                                                FontSize="15"
+                                                FontAttributes="Bold"
+                                                HeightRequest="100"/>
+
+
+                                                <Grid
+                                                    Grid.Column="4">
+                                                    
+                                                    <ffimageloadingsvg:SvgCachedImage
+                                                    HeightRequest="50"
+                                                    WidthRequest="50"
+                                                    Source="resource://Puma.Resources.coments.svg">
+                                                    </ffimageloadingsvg:SvgCachedImage>
+                                                    <local:CustomButton
+                        
+                                                    ClassId="settingsPopup"
+                                                    BackgroundColor="LightBlue"
+                                                    Opacity="0"
+                                                    Text="Settings"
+                                                    Command="{Binding OpenSettingsCommand}"
+                                                    Clicked="btn_OpenSettings">
+                                                    </local:CustomButton>
+                                                </Grid>
+                                                <Label
+                                                Grid.Column="4"
+                                                
+                                                HorizontalTextAlignment="Center"
+                                                Margin="0,20,0,0"
+                                                Text="45"
+                                                FontSize="15"
+                                                FontAttributes="Bold"
+                                                HeightRequest="100"/>
+
+
+                                            </Grid>
+
                                             <Rectangle
                                                 Grid.Row="2"
+                                                Grid.ColumnSpan="3"
+                                                Margin="5,0"
+                                                HeightRequest="1"
+                                                BackgroundColor="Transparent"
+                                                VerticalOptions="End"
+                                                HorizontalOptions="FillAndExpand" />
+
+
+
+
+                                            <Rectangle
+                                                Grid.Row="3"
+                                                Grid.ColumnSpan="3"
+                                               
                                                 HeightRequest="1"
                                                 BackgroundColor="Black"
                                                 VerticalOptions="End"
                                                 HorizontalOptions="FillAndExpand" />
+                                                
                                         </Grid>
+                           
                                     </DataTemplate>
                                 </CollectionView.ItemTemplate>
                             </CollectionView>
@@ -396,7 +590,7 @@
                     Margin="10,10"
                     IsVisible="false"
                     ClassId="weatherCollectionView"
-                    BackgroundColor="#005AC7"
+                    BackgroundColor="White"
                     Opacity="0.9"
                     x:Name="weatherCollectionView">
 
@@ -423,7 +617,8 @@
                                     <Label
                                         Text="{Binding Key, StringFormat='{0:dddd, MMMM dd, yyyy}'}"
                                         FontSize="20"
-                                        TextColor="Black"
+                                        TextColor="White"
+                                        BackgroundColor="#4a5b64"
                                         HorizontalTextAlignment="Center" />
                                 </Frame>
                             </DataTemplate>
@@ -457,7 +652,7 @@
                                         Grid.ColumnSpan="2">
                                         <Label
                                             Text="{Binding DateTime, StringFormat='{0:HH:mm}'}"
-                                            TextColor="White"
+                                            TextColor="black"
                                             FontSize="18"
                                             VerticalOptions="Center"
                                             Margin="20,0" />
@@ -523,7 +718,7 @@
 
 
 
-                    <!--WEATHER-->
+                <!--WEATHER-->
                 <StackLayout
                     x:Name="sl_Weather"
                     Grid.Row="2"
@@ -540,7 +735,8 @@
                         Text="{Binding AvgTempToday, StringFormat='{0}°C'}"
                         FontSize="13" />
                     <Image
-                        Source="{Binding AvgIconUriToday}" HeightRequest="20" />
+                        Source="{Binding AvgIconUriToday}"
+                        HeightRequest="20" />
                     <Label
                         VerticalOptions="End"
                         HorizontalOptions="CenterAndExpand"

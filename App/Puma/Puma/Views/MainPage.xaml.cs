@@ -9,7 +9,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
-
+using Xamarin.Essentials;
+using System.Threading;
 
 namespace Puma.Views
 {
@@ -45,6 +46,8 @@ namespace Puma.Views
             SetBindingContexts();
 
             _geoCoder = new Geocoder();
+
+             GetCurrentLocation();
         }
 
         #region Events
@@ -170,6 +173,7 @@ namespace Puma.Views
         private async void SlideInMenuPanel(Frame selectedMenuPanel)
         {
             double ScreenWidth = Application.Current.MainPage.Width;
+            double ScreenHeight = Application.Current.MainPage.Height;
 
             List<Frame> MenuItemFrames = GetMenuPanels();
 
@@ -180,14 +184,20 @@ namespace Puma.Views
                 {
                     if (menuFrame.ClassId != selectedMenuPanel.ToString() && menuFrame.IsVisible == true)
                     {
-                        await menuFrame.TranslateTo(ScreenWidth * -1, 0, 300, Easing.SpringOut);
+                        //slide to left
+                        //await menuFrame.TranslateTo(-ScreenWidth, 0, 300, Easing.SpringOut);
+
+                        //slide down
+                        await menuFrame.TranslateTo(0, ScreenHeight, 300, Easing.SpringOut);
                         menuFrame.IsVisible = false;
                     }
                 }
                 //Slidear in den valda menyn
                 selectedMenuPanel.IsVisible = true;
-                selectedMenuPanel.TranslationX = ScreenWidth;
-
+                //slide left to right
+                //selectedMenuPanel.TranslationX = -ScreenWidth;
+                //slide up
+                selectedMenuPanel.TranslationY = ScreenHeight;
                 await selectedMenuPanel.TranslateTo(0, 0, 300, Easing.SpringIn);
             }
         }
@@ -240,6 +250,11 @@ namespace Puma.Views
             slider_menu.WidthRequest = screenWidth * sliderValue;
             await slider_navbar.TranslateTo(screenWidth * sliderValue, 0, 500, Easing.SinInOut);
         }
+        async void SliderDown(object sender, EventArgs e)
+        {
+            await slider_navbar.TranslateTo(0, 0, 500, Easing.SpringIn);
+        }
+
 
         #endregion
 
@@ -363,5 +378,70 @@ namespace Puma.Views
         }
 
 
+
+        #region Currents location
+        CancellationTokenSource cts;
+
+        async Task GetCurrentLocation()
+        {
+            var checkStatus = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+            if (checkStatus != PermissionStatus.Granted) 
+            {
+                await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+            }
+           
+            try
+            {
+                var request = new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(10));
+                cts = new CancellationTokenSource();
+                var location = await Geolocation.GetLocationAsync(request, cts.Token);
+
+                if (location != null)
+                {
+
+                    //map.Pins.Clear();
+                    var position = new Position(location.Latitude, location.Longitude);
+                    //var pin = CreatePin(position);
+                    //map.Pins.Add(pin);
+
+                    IEnumerable<string> possibleAddresses = await _geoCoder.GetAddressesForPositionAsync(position);
+                    string address = possibleAddresses.FirstOrDefault();
+
+                    PoiViewModel.SetAddress(address);
+                    await PoiViewModel.SetLatAndLon(position.Latitude, position.Longitude);
+                    WeatherViewModel1.SetWeather(position.Latitude, position.Longitude);
+
+                    map.IsShowingUser = true;
+                }
+            }
+            catch (FeatureNotSupportedException fnsEx)
+            {
+                // Handle not supported on device exception
+                await DisplayAlert("Alert", "This device do not have GPS ", "Ok");
+
+            }
+            catch (FeatureNotEnabledException fneEx)
+            {
+                // Handle not enabled on device exception
+
+            }
+            catch (PermissionException pEx)
+            {
+                // Handle permission exception
+                await DisplayAlert("Alert", "permission denied","Ok");
+            }
+            catch (Exception ex)
+            {
+                // Unable to get location
+            }
+        }
+
+        protected override void OnDisappearing()
+        {
+            if (cts != null && !cts.IsCancellationRequested)
+                cts.Cancel();
+            base.OnDisappearing();
+        }
+        #endregion
     }
 }
