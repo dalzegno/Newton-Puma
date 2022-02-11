@@ -158,10 +158,13 @@ namespace Logic.Services
                 userToEdit.Email = user.Email;
                 isEdited = true;
             }
-            if (userToEdit.Password != EncryptionHelper.Encrypt(user.Password))
+            if (user.Password != null)
             {
-                userToEdit.Password = EncryptionHelper.Encrypt(user.Password);
-                isEdited = true;
+                if (userToEdit.Password != EncryptionHelper.Encrypt(user.Password))
+                {
+                    userToEdit.Password = EncryptionHelper.Encrypt(user.Password);
+                    isEdited = true;
+                }
             }
             if (userToEdit.DisplayName != user.DisplayName)
             {
