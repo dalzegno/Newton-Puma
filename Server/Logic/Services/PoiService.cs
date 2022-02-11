@@ -96,7 +96,6 @@ namespace Logic.Services
                 return null;
 
             pointOfInterest.Comments.Add(_mapper.Map<Comment>(comment));
-
             await _context.SaveChangesAsync();
 
             return _mapper.Map<PointOfInterestDto>(pointOfInterest);
@@ -136,6 +135,7 @@ namespace Logic.Services
             var pois = await _context.PointOfInterests.Include(poi => poi.Address)
                                                  .Include(poi => poi.Position)
                                                  .Include(poi => poi.Comments)
+                                                 .ThenInclude(c => c.User)
                                                  .Include(poi => poi.PoiTags)
                                                  .Include(poi => poi.Gradings)
                                                  .Where(poi => poi.Position.Latitude < (lat + 0.5) && poi.Position.Latitude > (lat - 0.5) &&
@@ -150,7 +150,7 @@ namespace Logic.Services
 
         public async Task<IEnumerable<PointOfInterestDto>> GetAllAsync()
         {
-            return _mapper.Map<IEnumerable<PointOfInterestDto>>(await GetPoiFromDbAsync());
+            return _mapper.Map<IEnumerable<PointOfInterestDto>>(await GetPoisFromDbAsync());
         }
 
         public async Task<ICollection<TagDto>> GetTagsAsync()
@@ -207,7 +207,7 @@ namespace Logic.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        private async Task<IEnumerable<PointOfInterest>> GetPoiFromDbAsync()
+        private async Task<IEnumerable<PointOfInterest>> GetPoisFromDbAsync()
         {
             return await _context.PointOfInterests.Include(poi => poi.Address)
                                                   .Include(poi => poi.Position)
@@ -227,6 +227,7 @@ namespace Logic.Services
             return await _context.PointOfInterests.Include(poi => poi.Address)
                                                                       .Include(poi => poi.Position)
                                                                       .Include(poi => poi.Comments)
+                                                                      .ThenInclude(c => c.User)
                                                                       .Include(poi => poi.PoiTags)
                                                                       .Include(poi => poi.Gradings)
                                                                       .FirstOrDefaultAsync(poi => poi.Name.ToLower() == name.ToLower() &&
@@ -235,12 +236,12 @@ namespace Logic.Services
         }
         private async Task<Position> GetPositionAsync(AddPoiDto pointOfInterest)
         {
-            return await _context.Positions.FirstOrDefaultAsync(p => p.Latitude == pointOfInterest.Position.Latitude || p.Longitude == pointOfInterest.Position.Longitude);
+            return await _context.Positions.FirstOrDefaultAsync(p => p.Latitude == pointOfInterest.Position.Latitude && p.Longitude == pointOfInterest.Position.Longitude);
         }
 
         private async Task<Address> GetAddressAsync(AddPoiDto pointOfInterest)
         {
-            return await _context.Addresses.FirstOrDefaultAsync(a => a.StreetName == pointOfInterest.Address.StreetName || a.Area == pointOfInterest.Address.Area);
+            return await _context.Addresses.FirstOrDefaultAsync(a => a.StreetName == pointOfInterest.Address.StreetName);
         }
 
         private async Task AddTagsToPoiAsync(List<int> tagIds, PointOfInterest dbPoi)
