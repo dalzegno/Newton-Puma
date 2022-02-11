@@ -127,6 +127,7 @@ namespace Puma.ViewModels
                 return;
 
             App.LoggedInUser = null;
+            MainPage.Instance.PoiViewModel.IsAddPoiVisible = false;
             UserLoggedInCommand.Execute(null);
             _dialogService.ShowMessageAsync("Message", "You're logged out");
 
