@@ -171,6 +171,7 @@ namespace Puma.Views
         private async void SlideInMenuPanel(Frame selectedMenuPanel)
         {
             double ScreenWidth = Application.Current.MainPage.Width;
+            double ScreenHeight = Application.Current.MainPage.Height;
 
             List<Frame> MenuItemFrames = GetMenuPanels();
 
@@ -181,14 +182,20 @@ namespace Puma.Views
                 {
                     if (menuFrame.ClassId != selectedMenuPanel.ToString() && menuFrame.IsVisible == true)
                     {
-                        await menuFrame.TranslateTo(ScreenWidth * -1, 0, 300, Easing.SpringOut);
+                        //slide to left
+                        //await menuFrame.TranslateTo(-ScreenWidth, 0, 300, Easing.SpringOut);
+
+                        //slide down
+                        await menuFrame.TranslateTo(0, ScreenHeight, 300, Easing.SpringOut);
                         menuFrame.IsVisible = false;
                     }
                 }
                 //Slidear in den valda menyn
                 selectedMenuPanel.IsVisible = true;
-                selectedMenuPanel.TranslationX = ScreenWidth;
-
+                //slide left to right
+                //selectedMenuPanel.TranslationX = -ScreenWidth;
+                //slide up
+                selectedMenuPanel.TranslationY = ScreenHeight;
                 await selectedMenuPanel.TranslateTo(0, 0, 300, Easing.SpringIn);
             }
         }
