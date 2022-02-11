@@ -4,6 +4,7 @@ using Xamarin.Forms;
 
 using Puma.Services;
 using Puma.Models;
+using Puma.Views;
 
 namespace Puma.ViewModels
 {
@@ -44,6 +45,8 @@ namespace Puma.ViewModels
                 isUserLoggedOut = true;
                 isUserLoggedIn = false;
                 EditSettingsVisible = false;
+                MainPage.Instance.PoiViewModel.PoiCommentPostVisible = false;
+                OnPropertyChanged(nameof(MainPage.Instance.PoiViewModel.PoiCommentPostVisible));
                 OnPropertyChanged(nameof(userLoginState));
                 OnPropertyChanged(nameof(userLogoutState));
                 OnPropertyChanged(nameof(EditSettingsVisible));
@@ -54,6 +57,8 @@ namespace Puma.ViewModels
             isUserLoggedIn = true;
             openLoginBool = false;
             EditSettingsVisible = true;
+            MainPage.Instance.PoiViewModel.PoiCommentPostVisible = true;
+            OnPropertyChanged(nameof(MainPage.Instance.PoiViewModel.PoiCommentPostVisible));
             OnPropertyChanged(nameof(userLoginState));
             OnPropertyChanged(nameof(userLogoutState));
             OnPropertyChanged(nameof(loginPopupState));
@@ -124,6 +129,7 @@ namespace Puma.ViewModels
             App.LoggedInUser = null;
             UserLoggedInCommand.Execute(null);
             _dialogService.ShowMessageAsync("Message", "You're logged out");
+
         }
     }
 }
