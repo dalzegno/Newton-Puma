@@ -26,5 +26,15 @@ namespace Puma.Models
                 return Gradings.Where(g => g.GradeType == GradeType.Liked).Count();
             }
         }
+        public int DislikeCounter
+        {
+            get
+            {
+                if (Gradings == null || Gradings.Count() < 1)
+                    return 0;
+
+                return Gradings.Where(g => g.GradeType == GradeType.Disliked).Count();
+            }
+        }
     }
 }

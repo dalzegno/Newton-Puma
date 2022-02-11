@@ -397,6 +397,7 @@
                                 <CollectionView.ItemTemplate>
                                     <DataTemplate>
                                         <Grid
+                                            x:Name="poi_Item"
                                             Padding="5"
                                             HeightRequest="90"
                                             RowDefinitions="1*,1*,1*"
@@ -448,6 +449,7 @@
                                                         FontSize="10"
                                                         FontAttributes="Bold" />
                                                     <Grid
+                                                       
                                                         Grid.Row="1">
                                                         <ffimageloadingsvg:SvgCachedImage
                                                             HorizontalOptions="Center"
@@ -457,7 +459,9 @@
                                                             Source="resource://Puma.Resources.upTumbs.svg">
                                                         </ffimageloadingsvg:SvgCachedImage>
                                                         <local:CustomButton
-                                                            Command="{Binding AddGradeCommand}"
+                                                            x:Name="btn_Like"
+                                                            CommandParameter="{Binding Source={x:Reference poi_Item}}"
+                                                            Command="{Binding Path=BindingContext.AddGradeLikeCommand, Source={x:Reference Name=poiCollectionFrame}}"
                                                             BackgroundColor="Transparent"
                                                             Opacity="0"></local:CustomButton>
                                                     </Grid>
@@ -472,6 +476,8 @@
                                                         Source="resource://Puma.Resources.downTumbs.svg">
                                                     </ffimageloadingsvg:SvgCachedImage>
                                                     <local:CustomButton
+                                                        CommandParameter="{Binding Source={x:Reference poi_Item}}"
+                                                        Command="{Binding Path=BindingContext.AddGradeDislikeCommand, Source={x:Reference Name=poiCollectionFrame}}"
                                                         BackgroundColor="Transparent"
                                                         Opacity="0"></local:CustomButton>
                                                     <Label

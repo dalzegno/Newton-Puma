@@ -12,6 +12,7 @@ using Puma.Views;
 using System.Threading.Tasks;
 using Xamarin.Forms.Maps;
 using System.Globalization;
+using Puma.Enums;
 
 namespace Puma.ViewModels
 {
@@ -36,7 +37,8 @@ namespace Puma.ViewModels
         Command _poiSingleViewCommand;
         Command _poiCollectionViewCommand;
         Command _addCommentCommand;
-        Command _addGradeCommand;
+        Command _addGradeLikeCommand;
+        Command _addGradeDislikeCommand;
         public Command CreatePoiCommand => _createPoiCommand ?? (_createPoiCommand = new Command(CreatePoi, CanCreate));
         public Command RemoveTagCommand => _removeTagCommand ?? (_removeTagCommand = new Command(RemoveTag));
 
@@ -45,7 +47,8 @@ namespace Puma.ViewModels
         public Command PoiCollectionViewCommand => _poiCollectionViewCommand ?? (_poiCollectionViewCommand = new Command(PoisPopup));
         public Command AddCommentCommand => _addCommentCommand ?? (_addCommentCommand = new Command(AddComment));
 
-        public Command AddGradeCommand => _addGradeCommand ?? (_addGradeCommand = new Command(AddGrade));
+        public Command AddGradeLikeCommand => _addGradeLikeCommand ?? (_addGradeLikeCommand = new Command(AddGradeLike));
+        public Command AddGradeDislikeCommand => _addGradeDislikeCommand ?? (_addGradeDislikeCommand = new Command(AddGradeDislike));
 
         public string _name;
         public string _description;
@@ -299,15 +302,42 @@ namespace Puma.ViewModels
         public bool PoiCollectionVisible => poiCollectionVisibleBool;
         public bool PoiSingleVisible => poiSingleVisibleBool;
 
-        private async void AddGrade()
+        private async void AddGradeLike(object poi)
         {
             if (App.LoggedInUser == null)
                 return;
-
+            if (poi == null)
+                return;
+            var x = (Grid)poi;
+            PointOfInterest selectedPoi = x.BindingContext as PointOfInterest;
+            int gradeType = (int)GradeType.Liked;
             AddGradeDto grade = new AddGradeDto
             {
-
+                PoiId = selectedPoi.Id,
+                UserId = App.LoggedInUser.Id,
+                Grade = gradeType
             };
+            await _poiService.AddGradeAsync(grade);
+            await SetLatAndLon(Convert.ToDouble(Latitude, CultureInfo.InvariantCulture), Convert.ToDouble(Longitude, CultureInfo.InvariantCulture));
+
+        }
+        private async void AddGradeDislike(object poi)
+        {
+            if (App.LoggedInUser == null)
+                return;
+            if (poi == null)
+                return;
+            var x = (Grid)poi;
+            PointOfInterest selectedPoi = x.BindingContext as PointOfInterest;
+            int gradeType = (int)GradeType.Disliked;
+            AddGradeDto grade = new AddGradeDto
+            {
+                PoiId = selectedPoi.Id,
+                UserId = App.LoggedInUser.Id,
+                Grade = gradeType
+            };
+            await _poiService.AddGradeAsync(grade);
+            await SetLatAndLon(Convert.ToDouble(Latitude, CultureInfo.InvariantCulture), Convert.ToDouble(Longitude, CultureInfo.InvariantCulture));
         }
         private async void AddComment(object body)
         {
