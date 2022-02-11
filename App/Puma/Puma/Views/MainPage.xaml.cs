@@ -9,7 +9,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
-
+using Xamarin.Essentials;
+using System.Threading;
 
 namespace Puma.Views
 {
@@ -43,6 +44,8 @@ namespace Puma.Views
             SetBindingContexts();
 
             _geoCoder = new Geocoder();
+
+             GetCurrentLocation();
         }
 
         #region Events
@@ -219,7 +222,7 @@ namespace Puma.Views
                 default:
                     if (slider_navbar.TranslationX == 0)
                     {
-                        await AdaptNavbarSliderToScreenSize(ScreenHeight, ScreenWidth, 0.3);
+                        await AdaptNavbarSliderToScreenSize(ScreenHeight, ScreenWidth +20, 0.5);
                     }
                     else
                     {
@@ -238,6 +241,11 @@ namespace Puma.Views
             slider_menu.WidthRequest = screenWidth * sliderValue;
             await slider_navbar.TranslateTo(screenWidth * sliderValue, 0, 500, Easing.SinInOut);
         }
+        async void SliderDown(object sender, EventArgs e)
+        {
+            await slider_navbar.TranslateTo(0, 0, 500, Easing.SpringIn);
+        }
+
 
         #endregion
 
@@ -361,5 +369,55 @@ namespace Puma.Views
         }
 
 
+
+        #region Currents location
+        CancellationTokenSource cts;
+
+        async Task GetCurrentLocation()
+        {
+            try
+            {
+                var request = new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(10));
+                cts = new CancellationTokenSource();
+                var location = await Geolocation.GetLocationAsync(request, cts.Token);
+
+                if (location != null)
+                {
+
+                    map.Pins.Clear();
+                    var position = new Position(location.Latitude, location.Longitude);
+                    var pin = CreatePin(position);
+                    map.Pins.Add(pin);
+                }
+            }
+            catch (FeatureNotSupportedException fnsEx)
+            {
+                // Handle not supported on device exception
+                await DisplayAlert("Alert", "This device do not have GPS ", "Ok");
+
+            }
+            catch (FeatureNotEnabledException fneEx)
+            {
+                // Handle not enabled on device exception
+
+            }
+            catch (PermissionException pEx)
+            {
+                // Handle permission exception
+                await DisplayAlert("Alert", "permission denied","Ok");
+            }
+            catch (Exception ex)
+            {
+                // Unable to get location
+            }
+        }
+
+        protected override void OnDisappearing()
+        {
+            if (cts != null && !cts.IsCancellationRequested)
+                cts.Cancel();
+            base.OnDisappearing();
+        }
+        #endregion
     }
 }
