@@ -23,6 +23,7 @@ namespace Puma.Views
         internal PoiViewModel PoiViewModel { get; }
         internal SettingsViewModel SettingsViewModel { get; }
         internal WeatherViewModel WeatherViewModel1 { get; }
+        internal LoginViewModel LoginViewModel { get; }
         IUserApiService UserApiService => DependencyService.Get<IUserApiService>();
         IDialogService DialogService => DependencyService.Get<IDialogService>();
         IPoiService PoiService => DependencyService.Get<IPoiService>();
@@ -33,6 +34,7 @@ namespace Puma.Views
             InitializeComponent();
             Instance = this;
             // Internal viewmodels that can be reached globally
+            LoginViewModel = new LoginViewModel(UserApiService, DialogService);
             MainViewModel = new MainViewModel(DialogService);
             PoiViewModel = new PoiViewModel(PoiService, DialogService);
             WeatherViewModel1 = new WeatherViewModel(WeatherService, DialogService);

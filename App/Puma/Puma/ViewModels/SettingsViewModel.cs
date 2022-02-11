@@ -8,6 +8,7 @@ using Xamarin.Forms.Xaml;
 using System.Threading.Tasks;
 using Puma.Services;
 using Puma.Models;
+using Puma.Views;
 
 namespace Puma.ViewModels
 {
@@ -24,7 +25,8 @@ namespace Puma.ViewModels
 
         Command _editUserCommand;
         Command _deleteUserCommand;
-
+        Command _logInCommand;
+        // public Command LoginCommand => _logInCommand ?? (_logInCommand = new Command(LogIn));
         public Command EditUserCommand => _editUserCommand ?? (_editUserCommand = new Command(EditUser));
         public Command DeleteUserCommand => _deleteUserCommand ?? (_deleteUserCommand = new Command(DeleteUser));
 
@@ -41,13 +43,37 @@ namespace Puma.ViewModels
         string _currentUserPassword;
 
 
+        string _loginEmail;
+        //string _loginPassword;
+        public string LoginEmail
+        {
+            get => _loginEmail;
+            set
+            {
+                _loginEmail = value;
+                OnPropertyChanged();
+                //LoginCommand.ChangeCanExecute();
+            }
+        }
+
+        /* public string LoginPassword
+         {
+             get => _loginPassword;
+             set
+             {
+                 _loginPassword = value;
+                 OnPropertyChanged();
+                 LoginCommand.ChangeCanExecute();
+             }
+         }*/
+
 
 
         public void SetUserToEdit(string displayName, string email, string firstName, string lastName, string password)
         {
             if (App.LoggedInUser == null)
                 return;
-
+            
 
             CurrentUserDisplayName = displayName;
             CurrentUserFirstName = firstName;
@@ -153,10 +179,19 @@ namespace Puma.ViewModels
                 OnPropertyChanged();
             }
         }
-        //private bool CanEdit() => !string.IsNullOrWhiteSpace(EditEmail) && !string.IsNullOrWhiteSpace(EditPassword) && !string.IsNullOrWhiteSpace(EditDisplayName);
+        //private bool CanEdit() => !string.IsNullOrWhiteSpace(EditPassword);
 
         private async void EditUser()
         {
+            string passwordAnswer = await App.Current.MainPage.DisplayPromptAsync("Enter your password please", "Password:");
+            EditPassword = passwordAnswer;
+            var authorizeUser = await _userApiService.LogIn(App.LoggedInUser.Email, passwordAnswer);
+            if (authorizeUser == null)
+            {
+                await _dialogService.ShowMessageAsync($"User credentials didnt match user: {App.LoggedInUser.DisplayName}", "Try again.");
+                return;
+            }
+
             var user = new UpdateUserDto()
             {
                 Id = App.LoggedInUser.Id,
@@ -167,11 +202,26 @@ namespace Puma.ViewModels
                 LastName = EditSurname ?? App.LoggedInUser.LastName,
             };
 
-
+            //await _userApiService.UpdateUserAsync(user)
             var updatedUser = await _userApiService.UpdateUserAsync(user);
             if (updatedUser != null)
             {
-                await _dialogService.ShowMessageAsync("Saved!!", $"Settings applied! \"{user.DisplayName}\".");
+                var confirmationPopup = await App.Current.MainPage.DisplayActionSheet($"Change Password of User aswell:  {App.LoggedInUser.DisplayName}?", "No",
+                               "Yes");
+                switch (confirmationPopup)
+                {
+                    case "No":
+                        await _userApiService.UpdateUserAsync(user);
+                        await _dialogService.ShowMessageAsync("Saved!!", $"Settings applied! \"{user.DisplayName}\".");
+                        break;
+                    case "Yes":
+                        string changePw = await App.Current.MainPage.DisplayPromptAsync("Password change", "New Password:");
+                        EditPassword = changePw;
+                        await _dialogService.ShowMessageAsync($"Password Changed of user: {user.DisplayName}", "& Settings have been applied!.");
+                        await _userApiService.UpdateUserAsync(user);
+                        break;
+
+                }
             }
         }
 
@@ -192,5 +242,18 @@ namespace Puma.ViewModels
                     break;
             }
         }
+
+        /* public async void LogIn()
+         {
+             var loggedInUser = await _userApiService.LogIn(LoginEmail, LoginPassword);
+
+             if (loggedInUser == null)
+             {
+                 await _dialogService.ShowMessageAsync($"Email or Password of user: {loggedInUser.DisplayName}", "was wrong, try again");
+                 return;
+             }
+
+             App.LoggedInUser = loggedInUser;*/
     }
 }
+
