@@ -76,6 +76,12 @@ namespace Logic.Services
                 return _mapper.Map<PointOfInterestDto>(poi);
             }
 
+            // If user sent the same gradetype again, return 
+            if (previousGrade != null && previousGrade.GradeType == grading.Grade)
+            {
+                return _mapper.Map<PointOfInterestDto>(poi);
+            }
+            
 
             poi.Gradings.Add(new Grading
             {

@@ -45,12 +45,14 @@ namespace Puma.Views
 
             _geoCoder = new Geocoder();
 
-             GetCurrentLocation();
+            GetCurrentLocation();
         }
 
         #region Events
         async void OnMapClicked(object sender, MapClickedEventArgs e)
         {
+            map.IsShowingUser = false;
+
             map.Pins.Clear();
             var position = e.Position;
             var pin = CreatePin(position);
@@ -71,10 +73,6 @@ namespace Puma.Views
             Debug.WriteLine("address: " + address);
         }
 
-        public void AddPin(Pin pin)
-        {
-            map.Pins.Add(pin);
-        }
 
         private void ViewOptionButton_Clicked(object sender, EventArgs e)
         {
@@ -97,6 +95,7 @@ namespace Puma.Views
             if (SearchField.Text == null)
                 return;
 
+            map.IsShowingUser = false;
             map.Pins.Clear();
             List<Position> positionList = await GetPositionsFromSearch(SearchField.Text);
 
@@ -222,7 +221,7 @@ namespace Puma.Views
                 default:
                     if (slider_navbar.TranslationX == 0)
                     {
-                        await AdaptNavbarSliderToScreenSize(ScreenHeight, ScreenWidth +20, 0.5);
+                        await AdaptNavbarSliderToScreenSize(ScreenHeight, ScreenWidth + 20, 0.5);
                     }
                     else
                     {
@@ -295,6 +294,12 @@ namespace Puma.Views
             var position = new Position(poi.Position.Latitude, poi.Position.Longitude);
             map.MoveToRegion(MapSpan.FromCenterAndRadius(position, Distance.FromKilometers(distanceKm)));
         }
+
+        private void MoveToRegion(Pin pin, double distanceKm)
+        {
+            var position = new Position(pin.Position.Latitude, pin.Position.Longitude);
+            map.MoveToRegion(MapSpan.FromCenterAndRadius(position, Distance.FromKilometers(distanceKm)));
+        }
         private async Task<List<Position>> GetPositionsFromSearch(string search)
         {
             return new List<Position>(await _geoCoder.GetPositionsForAddressAsync(search));
@@ -353,6 +358,10 @@ namespace Puma.Views
 
             return pin;
         }
+        public void AddPin(Pin pin)
+        {
+            map.Pins.Add(pin);
+        }
         public void GoToLocation(PointOfInterest poi, double distanceKm)
         {
             MoveToRegion(poi, distanceKm);
@@ -373,7 +382,7 @@ namespace Puma.Views
         #region Currents location
         CancellationTokenSource cts;
 
-        async Task GetCurrentLocation()
+        async void GetCurrentLocation()
         {
             try
             {
@@ -387,7 +396,9 @@ namespace Puma.Views
                     //map.Pins.Clear();
                     var position = new Position(location.Latitude, location.Longitude);
                     //var pin = CreatePin(position);
-                    //map.Pins.Add(pin);
+                    //AddPin(pin);
+                    //MoveToRegion(pin, 5);
+
                     IEnumerable<string> possibleAddresses = await _geoCoder.GetAddressesForPositionAsync(position);
                     string address = possibleAddresses.FirstOrDefault();
 
@@ -411,7 +422,7 @@ namespace Puma.Views
             catch (PermissionException pEx)
             {
                 // Handle permission exception
-                await DisplayAlert("Alert", "permission denied","Ok");
+                await DisplayAlert("Alert", "permission denied", "Ok");
             }
             catch (Exception ex)
             {
@@ -426,5 +437,10 @@ namespace Puma.Views
             base.OnDisappearing();
         }
         #endregion
+
+        private void MyPositionButton_Clicked(object sender, EventArgs e)
+        {
+            map.IsShowingUser = true;
+        }
     }
 }
