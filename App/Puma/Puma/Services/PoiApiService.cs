@@ -143,7 +143,7 @@ namespace Puma.Services
             }
 
         }
-        public async Task<List<PointOfInterest>> GetAsync(double lat, double lon)
+        public async Task<ObservableCollection<PointOfInterest>> GetAsync(double lat, double lon)
         {
             try
             {
@@ -153,7 +153,7 @@ namespace Puma.Services
                 if (!await response.IsResponseSuccessAsync())
                     return null;
 
-                return await response.Content.ReadFromJsonAsync<List<PointOfInterest>>();
+                return await response.Content.ReadFromJsonAsync<ObservableCollection<PointOfInterest>>();
             }
             catch (Exception e)
             {

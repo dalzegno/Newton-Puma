@@ -10,7 +10,7 @@ namespace Puma.Models
         public string Description { get; set; }
         public PositionPoi Position { get; set; }
         public Address Address { get; set; }
-        public ObservableCollection<Comment> Comments{ get; set; }
+        public List<Comment> Comments{ get; set; }
         public List<Grading> Gradings { get; set; }
         public List<PoiTag> PoiTags { get; set; }
     }

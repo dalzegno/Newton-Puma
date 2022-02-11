@@ -116,7 +116,7 @@
                 IsVisible="false"
                 x:Name="slider_menu"
                 HorizontalOptions="Fill"
-                VerticalOptions="Fill">
+                VerticalOptions="Start">
                 <ContentView
                     BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
                     Light={StaticResource PopUpBackgroundColor}}"
@@ -126,7 +126,7 @@
                 <Frame
                     x:Name="slPoiPopover"
                     HorizontalOptions="Fill"
-                    VerticalOptions="StartAndExpand"
+                    VerticalOptions="Start"
                     HeightRequest="100"
                     Margin="0"
                     Padding="0">
@@ -169,7 +169,7 @@
                     Padding="0"
                     Margin="0"
                     Orientation="Horizontal"
-                    VerticalOptions="Fill"
+                    VerticalOptions="Start"
                     HorizontalOptions="FillAndExpand">
                     <local:CustomButton
                         BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark}, Light={StaticResource PopUpBackgroundColor}}"
@@ -202,7 +202,7 @@
                 <Frame
                     IsVisible="false"
                     HorizontalOptions="StartAndExpand"
-                    VerticalOptions="StartAndExpand"
+                    VerticalOptions="Start"
                     Background="White"
                     x:Name="poiCreationView"
                     ClassId="poiCreationView"
@@ -305,7 +305,7 @@
                     <StackLayout>
 
                         <Grid
-                            ColumnDefinitions="*,*"
+                            RowDefinitions="auto,*"
                             x:Name="poiSingleView"
                             IsVisible="{Binding PoiSingleVisible}">
 
@@ -335,13 +335,14 @@
                                     FontSize="12"
                                     Text="{Binding SelectedSinglePoi.Description}" />
                             </StackLayout>
+                            
                             <!-- Selected POI comments-->
-
                             <StackLayout
-                                VerticalOptions="Fill"
-                                Grid.Column="1">
+                                Grid.Row="1"
+                                VerticalOptions="Fill">
 
                                 <local:CustomEditor
+                                    
                                     x:Name="CommentBody"
                                     Placeholder="What are your thoughts on this location?"
                                     HeightRequest="75"></local:CustomEditor>
@@ -349,7 +350,9 @@
                                     Text="Post Comment"
                                     Command="{Binding AddCommentCommand}"
                                     CommandParameter="{Binding Source={x:Reference CommentBody}, Path=Text}" />
+
                                 <CollectionView
+                                    VerticalOptions="Fill"
                                     ItemsSource="{Binding SelectedSinglePoi.Comments}">
                                     <CollectionView.ItemTemplate>
                                         <DataTemplate>
@@ -359,8 +362,9 @@
                                                     BackgroundColor="white">
                                                     <Grid>
                                                         <Label
+                                                            FontSize="16"
                                                             FontAttributes="Bold"
-                                                            Text="{Binding UserId}" />
+                                                            Text="{Binding UserDisplayName}" />
                                                         <Label
                                                             Grid.Row="1"
                                                             Text="{Binding Body}" />
@@ -370,7 +374,6 @@
                                         </DataTemplate>
                                     </CollectionView.ItemTemplate>
                                 </CollectionView>
-
                             </StackLayout>
                         </Grid>
 
