@@ -36,8 +36,8 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<PointOfInterestDto>> Post([FromBody] AddPoiDto poi, [FromHeader] string apiKey)
         {
-            //if (!await _userService.IsUserAuthorizedAsync(apiKey))
-            //    return Unauthorized();
+            if (!await _userService.IsUserAuthorizedAsync(apiKey))
+                return Unauthorized("Unauthorized");
 
             PointOfInterestDto createdPoi = await _poiService.CreateAsync(poi);
 
@@ -47,24 +47,41 @@ namespace API.Controllers
             return Ok(createdPoi);
         }
 
+        /// <summary>
+        /// Adds a tag to use for POIS
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="apiKey"></param>
+        /// <returns></returns>
         [HttpPost("AddTag")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<PointOfInterestDto>> AddTag([FromQuery] string name, [FromHeader] string apiKey)
         {
             if (!await _userService.IsUserAuthorizedAsync(apiKey))
-                return Unauthorized();
+                return Unauthorized("Unauthorized");
 
             TagDto createdTag = await _poiService.CreateTagAsync(name);
 
             return Ok(createdTag);
         }
 
+        /// <summary>
+        /// Add a comment to a POI
+        /// </summary>
+        /// <param name="comment"></param>
+        /// <param name="apiKey"></param>
+        /// <returns></returns>
         [HttpPost("AddComment")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<PointOfInterestDto>> AddComment([FromBody] AddCommentDto comment, [FromHeader] string apiKey)
         {
             if (!await _userService.IsUserAuthorizedAsync(apiKey))
-                return Unauthorized();
+                return Unauthorized("Unauthorized");
 
             var poiCommentAdded = await _poiService.AddCommentAsync(comment);
 
@@ -75,12 +92,14 @@ namespace API.Controllers
         }
 
         [HttpPost("AddGrade")]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<PointOfInterestDto>> AddGrade([FromBody] AddGradeDto addGradeDto, [FromHeader] string apiKey)
         {
             if (!await _userService.IsUserAuthorizedAsync(apiKey))
-                return Unauthorized();
+                return Unauthorized("Unauthorized");
 
             var poi = await _poiService.AddGrade(addGradeDto);
 
@@ -109,12 +128,12 @@ namespace API.Controllers
         public async Task<ActionResult<IEnumerable<PointOfInterestDto>>> Get([FromQuery] double lat, [FromQuery] double lon)
         {
             if (!lat.TryParseToInvariantCulture(out double latDouble) || !lon.TryParseToInvariantCulture(out double lonDouble))
-                return BadRequest();
+                return BadRequest("The provided latitude and/or longitude values were faulty.");
 
             var pois = await _poiService.GetAsync(latDouble, lonDouble);
 
             if (pois == null || !pois.Any())
-                return NotFound();
+                return NotFound("Could not find any pois in the area of the provided latitude and longitude values");
 
             return Ok(pois);
         }
@@ -135,7 +154,7 @@ namespace API.Controllers
             IEnumerable<PointOfInterestDto> pois = await _poiService.GetAllAsync();
 
             if (!pois.Any())
-                return NotFound();
+                return NotFound("Could not find any points of interests.");
 
             return Ok(pois);
         }
@@ -148,7 +167,7 @@ namespace API.Controllers
             var tags = await _poiService.GetTagsAsync();
 
             if (tags == null)
-                return NotFound();
+                return NotFound("Could not find any tags");
 
             return Ok(tags);
         }
@@ -164,13 +183,13 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<PointOfInterestDto>> Delete([FromQuery] int id, [FromHeader] string apiKey)
         {
-            //if (!await _userService.IsUserAuthorizedAsync(apiKey))
-            //    return Unauthorized();
+            if (!await _userService.IsUserAuthorizedAsync(apiKey))
+                return Unauthorized("Unauthorized");
 
             var deletedPoi = await _poiService.DeleteAsync(id);
 
             if (deletedPoi == null)
-                return BadRequest();
+                return BadRequest("Could not find a poi to delete.");
 
             return Ok(deletedPoi);
         }
