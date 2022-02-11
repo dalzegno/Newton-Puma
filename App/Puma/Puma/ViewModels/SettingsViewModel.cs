@@ -25,12 +25,9 @@ namespace Puma.ViewModels
 
         Command _editUserCommand;
         Command _deleteUserCommand;
-        Command _logInCommand;
-        // public Command LoginCommand => _logInCommand ?? (_logInCommand = new Command(LogIn));
         public Command EditUserCommand => _editUserCommand ?? (_editUserCommand = new Command(EditUser));
         public Command DeleteUserCommand => _deleteUserCommand ?? (_deleteUserCommand = new Command(DeleteUser));
 
-        //Vill vi att man kan byta email?
         string _editEmail;
         string _editPassword;
         string _editDisplayName;
@@ -44,7 +41,6 @@ namespace Puma.ViewModels
 
 
         string _loginEmail;
-        //string _loginPassword;
         public string LoginEmail
         {
             get => _loginEmail;
@@ -52,28 +48,15 @@ namespace Puma.ViewModels
             {
                 _loginEmail = value;
                 OnPropertyChanged();
-                //LoginCommand.ChangeCanExecute();
+
             }
         }
-
-        /* public string LoginPassword
-         {
-             get => _loginPassword;
-             set
-             {
-                 _loginPassword = value;
-                 OnPropertyChanged();
-                 LoginCommand.ChangeCanExecute();
-             }
-         }*/
-
 
 
         public void SetUserToEdit(string displayName, string email, string firstName, string lastName, string password)
         {
             if (App.LoggedInUser == null)
                 return;
-            
 
             CurrentUserDisplayName = displayName;
             CurrentUserFirstName = firstName;
@@ -180,13 +163,11 @@ namespace Puma.ViewModels
 
         private async void EditUser()
         {
-            string passwordAnswer = await App.Current.MainPage.DisplayPromptAsync("Enter your password please", "Password:");
+            string passwordAnswer = await App.Current.MainPage.DisplayPromptAsync("Enter your current password please", "Password:");
             var authorizeUser = await _userApiService.LogIn(App.LoggedInUser.Email, passwordAnswer);
             if (authorizeUser == null)
-            {
-                await _dialogService.ShowMessageAsync($"User credentials didnt match user: {App.LoggedInUser.DisplayName}", "Try again.");
                 return;
-            }
+
 
             var user = new UpdateUserDto()
             {
@@ -198,13 +179,12 @@ namespace Puma.ViewModels
                 LastName = EditSurname ?? App.LoggedInUser.LastName,
             };
 
-            //await _userApiService.UpdateUserAsync(user)
             var updatedUser = await _userApiService.UpdateUserAsync(user);
             if (updatedUser != null)
             {
-                
-                        await _dialogService.ShowMessageAsync("Saved!!", $"Settings applied! \"{user.DisplayName}\".");
-                        App.LoggedInUser = updatedUser;
+
+                await _dialogService.ShowMessageAsync("Saved!!", $"Settings applied! \"{user.DisplayName}\".");
+                App.LoggedInUser = updatedUser;
                 return;
 
             }
@@ -214,7 +194,6 @@ namespace Puma.ViewModels
         {
             if (App.LoggedInUser == null)
                 return;
-
             var confirmationPopup = await App.Current.MainPage.DisplayActionSheet($"Delete User {App.LoggedInUser.DisplayName}?", "No",
                  "Yes");
             switch (confirmationPopup)
@@ -222,23 +201,18 @@ namespace Puma.ViewModels
                 case "No":
                     break;
                 case "Yes":
+                    string passwordAnswer = await App.Current.MainPage.DisplayPromptAsync("Enter your password please", "Password:");
+                    var authorizeUser = await _userApiService.LogIn(App.LoggedInUser.Email, passwordAnswer);
+                    if (authorizeUser == null)
+                        return;
+
                     await _dialogService.ShowMessageAsync($"Deleted: {App.LoggedInUser.DisplayName}", "User has been deleted.");
                     await _userApiService.DeleteUserAsync(App.LoggedInUser.Id);
+                    MainPage.Instance.MainViewModel.ClosePopupCommand.Execute(null);
+                    MainPage.Instance.MainViewModel.LogOutCommand.Execute(null);
                     break;
             }
         }
-
-        /* public async void LogIn()
-         {
-             var loggedInUser = await _userApiService.LogIn(LoginEmail, LoginPassword);
-
-             if (loggedInUser == null)
-             {
-                 await _dialogService.ShowMessageAsync($"Email or Password of user: {loggedInUser.DisplayName}", "was wrong, try again");
-                 return;
-             }
-
-             App.LoggedInUser = loggedInUser;*/
     }
 }
 
