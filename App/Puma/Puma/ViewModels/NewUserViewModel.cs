@@ -57,13 +57,13 @@ namespace Puma.ViewModels
         }
         public string DisplayNameErrorMSG
         {
-            get => _displayNameErrorMSG ;
+            get => _displayNameErrorMSG;
             set
             {
                 _displayNameErrorMSG = value;
                 OnPropertyChanged();
                 CreateUserCommand.ChangeCanExecute();
-                
+
             }
         }
         public string SignupEmail
@@ -116,48 +116,37 @@ namespace Puma.ViewModels
             }
         }
 
-        private bool CanCreate() => !string.IsNullOrWhiteSpace(SignupEmail) && !string.IsNullOrWhiteSpace(SignupPassword) && !string.IsNullOrWhiteSpace(SignupDisplayName);
+        private bool CanCreate() =>
+                   !string.IsNullOrWhiteSpace(SignupEmail)
+                && !string.IsNullOrWhiteSpace(SignupPassword)
+                && !string.IsNullOrWhiteSpace(SignupDisplayName);
 
-        public bool Uservalidation(AddUserDto user)
+
+
+        public bool IsUserValid(AddUserDto user)
         {
             UserValidationService validationRules = new UserValidationService();
-            ValidationResult ans = validationRules.Validate(user);
+            ValidationResult validationResult = validationRules.Validate(user);
 
-            Dictionary<string, string> errorPropertyName = new Dictionary<string, string>();
-
-            if (ans == null || !ans.IsValid)
-            {
-                foreach (var item in ans.Errors)
-                {
-
-                    errorPropertyName.Add(item.PropertyName, item.ErrorMessage);
-
-                }
-
-                if (errorPropertyName.ContainsKey("Email")) 
-                    EmailErrorMSG = errorPropertyName["Email"];
-                else 
-                    EmailErrorMSG = "";
-
-                if (errorPropertyName.ContainsKey("Password")) 
-                    PasswordErrorMSG = errorPropertyName["Password"];
-                else 
-                    PasswordErrorMSG = "";
-
-                if (errorPropertyName.ContainsKey("DisplayName")) 
-                    DisplayNameErrorMSG = errorPropertyName["DisplayName"];
-                else 
-                    DisplayNameErrorMSG = "";
-
-                return false;
-            }
+            Dictionary<string, string> errrorDictionary = new Dictionary<string, string>();
 
             EmailErrorMSG = "";
             PasswordErrorMSG = "";
             DisplayNameErrorMSG = "";
 
-            return true;
+            if (validationResult.IsValid)
+            {
+                return true;
+            }
 
+            foreach (var item in validationResult.Errors)
+            {
+                errrorDictionary.Add(item.PropertyName, item.ErrorMessage);
+            }
+
+            AddErrorMessageToPropertyIfInvalid(errrorDictionary);
+
+            return false;
         }
         private async void CreateUser()
         {
@@ -170,19 +159,57 @@ namespace Puma.ViewModels
                 LastName = SignupSurname ?? ""
             };
 
-            if (Uservalidation(user))
+            if (IsUserValid(user))
             {
-                var createdUser = await _userApiService.CreateUserAsync(user);
+                string errorMessages = "";
+                errorMessages = AppendErrorMessages(errorMessages);
 
-                if (createdUser != null)
-                {
-                    await _dialogService.ShowMessageAsync("Welcome!", $"Welcome to PUMA \"{createdUser.DisplayName}\".");
-                    return;
-                }
+                await _dialogService.ShowErrorAsync(errorMessages);
+                return;
             }
+
+            var createdUser = await _userApiService.CreateUserAsync(user);
+
+            if (createdUser != null)
+            {
+                await _dialogService.ShowMessageAsync("Welcome!", $"Welcome to PUMA \"{createdUser.DisplayName}\".");
+                return;
+            }
+
         }
 
-        private async void ReportErrorMessage(object sender, string message) => await _dialogService.ShowMessageAsync("Error", $"{message}");
+        private string AppendErrorMessages(string errorMessages)
+        {
+            if (!string.IsNullOrWhiteSpace(EmailErrorMSG))
+                errorMessages += "Email: " + EmailErrorMSG + "\n";
+            if (!string.IsNullOrWhiteSpace(PasswordErrorMSG))
+                errorMessages += "Password: " + PasswordErrorMSG + "\n";
+            if (!string.IsNullOrWhiteSpace(DisplayNameErrorMSG))
+                errorMessages += "DisplayName: " + DisplayNameErrorMSG + "\n";
+            return errorMessages;
+        }
 
+        public void ClearSignUpEntriesAndErrors()
+        {
+            EmailErrorMSG = "";
+            PasswordErrorMSG = "";
+            DisplayNameErrorMSG = "";
+            SignupEmail = "";
+            SignupPassword = "";
+            SignupDisplayName = "";
+            SignupFirstName = "";
+            SignupSurname = "";
+        }
+        private void AddErrorMessageToPropertyIfInvalid(Dictionary<string, string> errorPropertyName)
+        {
+            if (errorPropertyName.ContainsKey("Email"))
+                EmailErrorMSG = errorPropertyName["Email"];
+
+            if (errorPropertyName.ContainsKey("Password"))
+                PasswordErrorMSG = errorPropertyName["Password"];
+
+            if (errorPropertyName.ContainsKey("DisplayName"))
+                DisplayNameErrorMSG = errorPropertyName["DisplayName"];
+        }
     }
 }

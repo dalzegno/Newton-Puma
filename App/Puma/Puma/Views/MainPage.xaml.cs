@@ -24,6 +24,7 @@ namespace Puma.Views
         internal PoiViewModel PoiViewModel { get; }
         internal SettingsViewModel SettingsViewModel { get; }
         internal WeatherViewModel WeatherViewModel1 { get; }
+        internal NewUserViewModel NewUserViewModel { get; }
         IUserApiService UserApiService => DependencyService.Get<IUserApiService>();
         IDialogService DialogService => DependencyService.Get<IDialogService>();
         IPoiService PoiService => DependencyService.Get<IPoiService>();
@@ -37,8 +38,8 @@ namespace Puma.Views
             MainViewModel = new MainViewModel(DialogService);
             PoiViewModel = new PoiViewModel(PoiService, DialogService);
             WeatherViewModel1 = new WeatherViewModel(WeatherService, DialogService);
-            //PoiViewModel = new PoiViewModel(PoiService, DialogService, WeatherService);
             SettingsViewModel = new SettingsViewModel(UserApiService, DialogService);
+            NewUserViewModel = new NewUserViewModel(UserApiService, DialogService);
             BindingContext = MainViewModel;
 
             SetBindingContexts();
@@ -252,7 +253,7 @@ namespace Puma.Views
         #region Local methods
         private void SetBindingContexts()
         {
-            slCreateUserViewModel.BindingContext = new NewUserViewModel(UserApiService, DialogService);
+            slCreateUserViewModel.BindingContext = NewUserViewModel;
             slLogIn.BindingContext = new LoginViewModel(UserApiService, DialogService);
             slPoiPopover.BindingContext = PoiViewModel;
             slPoiPopup.BindingContext = PoiViewModel;

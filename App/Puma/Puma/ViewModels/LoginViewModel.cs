@@ -58,6 +58,13 @@ namespace Puma.ViewModels
             MainPage.Instance.PoiViewModel.IsAddPoiVisible = true;
             await _dialogService.ShowMessageAsync("Login", $"Welcome {loggedInUser.DisplayName}!");
             MainPage.Instance.MainViewModel.UserLoggedInCommand.Execute(null);
+            ClearEntries();
+        }
+
+        private void ClearEntries()
+        {
+            LoginEmail = "";
+            LoginPassword = "";
         }
     }
 }
