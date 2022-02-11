@@ -62,9 +62,20 @@ namespace Puma.ViewModels
         public bool openPoiCollectionBool { get; set; } = false;
         public bool poiCollectionVisibleBool { get; set; } = true;
         public bool poiSingleVisibleBool { get; set; } = false;
+        public bool poiCommentPostVisible { get; set; } = false;
 
 
         #region Fields
+        public bool PoiCommentPostVisible
+        {
+            get=> poiCommentPostVisible;
+            set
+            {
+                poiCommentPostVisible = value;
+                OnPropertyChanged(nameof(PoiCommentPostVisible));
+            }
+        }
+
         public ObservableCollection<Comment> CommentCollection
         {
             get => _commentCollection;
@@ -229,6 +240,8 @@ namespace Puma.ViewModels
         }
         public void PoiSinglePopup()
         {
+           
+
             if (SelectedSinglePoi != null) 
                 MainPage.Instance.GoToLocation(SelectedSinglePoi, 1);
 

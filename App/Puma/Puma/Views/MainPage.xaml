@@ -159,7 +159,7 @@
                             Margin="0"
                             Text="{Binding StreetName}"
                             FontSize="12"></Label>
-                       
+
                     </Grid>
                 </Frame>
 
@@ -335,22 +335,22 @@
                                     FontSize="12"
                                     Text="{Binding SelectedSinglePoi.Description}" />
                             </StackLayout>
-                            
+
                             <!-- Selected POI comments-->
                             <StackLayout
                                 Grid.Row="1"
                                 VerticalOptions="Fill">
 
-                                <local:CustomEditor
-                                    
-                                    x:Name="CommentBody"
-                                    Placeholder="What are your thoughts on this location?"
-                                    HeightRequest="75"></local:CustomEditor>
-                                <local:CustomButton
-                                    Text="Post Comment"
-                                    Command="{Binding AddCommentCommand}"
-                                    CommandParameter="{Binding Source={x:Reference CommentBody}, Path=Text}" />
-
+                                <StackLayout IsVisible="{Binding PoiCommentPostVisible}">
+                                    <local:CustomEditor
+                                        x:Name="CommentBody"
+                                        Placeholder="What are your thoughts on this location?"
+                                        HeightRequest="75"></local:CustomEditor>
+                                    <local:CustomButton
+                                        Text="Post Comment"
+                                        Command="{Binding AddCommentCommand}"
+                                        CommandParameter="{Binding Source={x:Reference CommentBody}, Path=Text}" />
+                                </StackLayout>
                                 <CollectionView
                                     VerticalOptions="Fill"
                                     ItemsSource="{Binding SelectedSinglePoi.Comments}">
@@ -573,7 +573,7 @@
 
 
 
-                    <!--WEATHER-->
+                <!--WEATHER-->
                 <StackLayout
                     x:Name="sl_Weather"
                     Grid.Row="2"
@@ -590,7 +590,8 @@
                         Text="{Binding AvgTempToday, StringFormat='{0}°C'}"
                         FontSize="13" />
                     <Image
-                        Source="{Binding AvgIconUriToday}" HeightRequest="20" />
+                        Source="{Binding AvgIconUriToday}"
+                        HeightRequest="20" />
                     <Label
                         VerticalOptions="End"
                         HorizontalOptions="CenterAndExpand"
