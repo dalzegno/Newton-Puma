@@ -343,10 +343,12 @@
                                 <StackLayout
                                     IsVisible="{Binding PoiCommentPostVisible}">
                                     <local:CustomEditor
+                                        
                                         x:Name="CommentBody"
                                         Placeholder="What are your thoughts on this location?"
                                         HeightRequest="75"></local:CustomEditor>
                                     <local:CustomButton
+                                        Style="{StaticResource buttonStyle}"
                                         Text="Post Comment"
                                         Command="{Binding AddCommentCommand}"
                                         CommandParameter="{Binding Source={x:Reference CommentBody}, Path=Text}" />

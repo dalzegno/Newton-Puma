@@ -18,7 +18,8 @@ namespace Puma.UWP
             if (Control != null)
             {
                 //Control.BorderBrush = new SolidColorBrush(Colors.Transparent);
-                Control.BorderThickness = new Windows.UI.Xaml.Thickness(0);
+                Control.BorderThickness = new Windows.UI.Xaml.Thickness(1);
+                Control.BorderBrush = new SolidColorBrush(Colors.Gray);
                 Control.CornerRadius = new CornerRadius(10);
                 //Control.CornerRadius = new CornerRadius(10);
                 //Control.Background = new SolidColorBrush(Colors.Green);
