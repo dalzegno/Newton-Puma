@@ -232,11 +232,15 @@ namespace Puma.Views
                 default:
                     if (slider_navbar.TranslationX == 0)
                     {
+                        globeIcon.RotateTo(180, 500, Easing.Linear);
                         await AdaptNavbarSliderToScreenSize(ScreenHeight, ScreenWidth, 0.3);
                     }
                     else
                     {
+                        globeIcon.RotateTo(360, 500, Easing.Linear);
+                        
                         await slider_navbar.TranslateTo(0, 0, 500, Easing.SpringIn);
+                        globeIcon.Rotation = 0;
                     }
                     break;
             }

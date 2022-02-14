@@ -8,17 +8,41 @@
     <Application.Resources>
         <ResourceDictionary>
             <!-- COLOURS -->
-            <Color x:Key="WindowBackgroundColor">#DAEFF9</Color>
-            <Color x:Key="WindowBackgroundColorDark">White</Color>
-            <Color x:Key="PopUpBackgroundColor">#DAEFF9</Color>
-            <Color x:Key="PopUpBackgroundColorDark">#171C26</Color>
-            <Color x:Key="ButtonBackgroundColor">#FFF</Color>
-            <Color x:Key="ButtonBackgroundColorDark">Black</Color>
-            <Color x:Key="TextColor">#000000</Color>
-            <Color x:Key="TextColorDark">LightGray</Color>
-            <Color x:Key="BorderColor">#000000</Color>
-            <Color x:Key="BorderColorDark">LightGray</Color>
-            <Color x:Key="TextBoxBackgroundColor">White</Color>
+                <!-- LIGHT MODE -->
+                <Color x:Key="WindowBackgroundColor">#DAEFF9</Color>
+                <Color x:Key="PopUpBackgroundColor">#DAEFF9</Color>
+            <Color
+                x:Key="ButtonBackgroundColor">#A4B3BA</Color>
+                <Color x:Key="TextColor">#6F686D</Color>
+                <Color x:Key="BorderColor">#000000</Color>
+                <Color x:Key="TextBoxBackgroundColor">White</Color>
+                <!-- DARK MODE -->
+                <Color x:Key="WindowBackgroundColorDark">White</Color>
+                <Color x:Key="PopUpBackgroundColorDark">#171C26</Color>
+                <Color x:Key="ButtonBackgroundColorDark">Black</Color>
+                <Color x:Key="TextColorDark">LightGray</Color>
+                <Color x:Key="BorderColorDark">LightGray</Color>
+            
+            <!--STYLES -->
+            <Style
+                x:Key="buttonStyle"
+                TargetType="Button">
+                <Setter
+                    Property="BorderColor"
+                    Value="{AppThemeBinding Light={StaticResource ButtonBackgroundColor},
+                Dark={StaticResource PopUpBackgroundColorDark}}" />
+                <Setter 
+                    Property="BackgroundColor"
+                    Value="{AppThemeBinding Light={StaticResource WindowBackgroundColor},
+                Dark={StaticResource PopUpBackgroundColorDark}}"/>
+                <Setter
+                    Property="TextColor"
+                    Value="{AppThemeBinding Light={StaticResource TextColor},
+                Dark={StaticResource TextColor}}" />
+                <Setter 
+                    Property="FontAttributes"
+                    Value="Bold"/>
+            </Style>
             
             <!-- CONTROL TEMPLATES-->
             <ControlTemplate x:Key="EntryViewControlTemplate">
@@ -34,13 +58,12 @@
                     VerticalOptions="FillAndExpand"
                     Opacity=".8">
                     <cr:RoundedEntry
-                            BackgroundColor="{StaticResource TextBoxBackgroundColor}"
-                            IsPassword="{TemplateBinding IsPassword}"
-                            Text="{TemplateBinding EntryText}"
-                            Opacity=".8"
-                            Placeholder="{TemplateBinding PlaceholderText}">
-                                
-                        </cr:RoundedEntry>
+                        BackgroundColor="{StaticResource TextBoxBackgroundColor}"
+                        IsPassword="{TemplateBinding IsPassword}"
+                        Text="{TemplateBinding EntryText}"
+                        Opacity=".8"
+                        Placeholder="{TemplateBinding PlaceholderText}">
+                    </cr:RoundedEntry>
                 </Frame>
             </ControlTemplate>
         </ResourceDictionary>
