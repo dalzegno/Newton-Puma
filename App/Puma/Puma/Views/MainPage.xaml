@@ -14,7 +14,6 @@
                               Light={StaticResource WindowBackgroundColor}}">
 
     <Grid
-        
         Margin="0"
         Padding="0"
         ColumnDefinitions="80,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*,1*"
@@ -114,7 +113,8 @@
                         RowDefinitions="auto,auto,auto">
                         <!--ColumnDefinitions="auto, auto"-->
 
-                        <Label Style="{StaticResource labelStyle}"
+                        <Label
+                            Style="{StaticResource labelStyle}"
                             TextColor="White"
                             Grid.Row="0"
                             VerticalOptions="Center"
@@ -122,7 +122,8 @@
                             FontAttributes="Bold"
                             Text="{Binding Country}"
                             FontSize="18"></Label>
-                        <Label Style="{StaticResource labelStyle}"
+                        <Label
+                            Style="{StaticResource labelStyle}"
                             TextColor="White"
                             VerticalTextAlignment="Center"
                             HorizontalTextAlignment="Center"
@@ -131,7 +132,8 @@
                             x:Name="lbl_Country"
                             Text="{Binding Area}"
                             FontSize="14"></Label>
-                        <Label Style="{StaticResource labelStyle}"
+                        <Label
+                            Style="{StaticResource labelStyle}"
                             TextColor="White"
                             VerticalOptions="Start"
                             HorizontalOptions="CenterAndExpand"
@@ -275,7 +277,8 @@
                                 x:Name="lbl_longitude"
                                 Text="{Binding Longitude}"
                                 FontSize="12"></local:RoundedEntry>
-                            <Label Style="{StaticResource labelStyle}"
+                            <Label
+                                Style="{StaticResource labelStyle}"
                                 x:Name="lbl_adress"
                                 FontSize="8"></Label>
                         </StackLayout>
@@ -308,21 +311,26 @@
                                     HorizontalOptions="Start"
                                     Text="Return"
                                     Command="{Binding PoiCollectionViewCommand}" />
-                                <Label Style="{StaticResource labelStyle}"
+                                <Label
+                                    Style="{StaticResource labelStyle}"
                                     FontSize="32"
                                     FontAttributes="Bold"
                                     TextDecorations="Underline"
                                     Text="{Binding SelectedSinglePoi.Name}" />
-                                <Label Style="{StaticResource labelStyle}"
+                                <Label
+                                    Style="{StaticResource labelStyle}"
                                     FontSize="12"
                                     Text="{Binding SelectedSinglePoi.Address.Country}" />
-                                <Label Style="{StaticResource labelStyle}"
+                                <Label
+                                    Style="{StaticResource labelStyle}"
                                     FontSize="12"
                                     Text="{Binding SelectedSinglePoi.Address.Area}" />
-                                <Label Style="{StaticResource labelStyle}"
+                                <Label
+                                    Style="{StaticResource labelStyle}"
                                     FontSize="12"
                                     Text="{Binding SelectedSinglePoi.Address.StreetName}" />
-                                <Label Style="{StaticResource labelStyle}"
+                                <Label
+                                    Style="{StaticResource labelStyle}"
                                     FontSize="12"
                                     Text="{Binding SelectedSinglePoi.Description}" />
                             </StackLayout>
@@ -353,11 +361,13 @@
                                                     Margin="0,3"
                                                     BackgroundColor="white">
                                                     <Grid>
-                                                        <Label Style="{StaticResource labelStyle}"
+                                                        <Label
+                                                            Style="{StaticResource labelStyle}"
                                                             FontSize="16"
                                                             FontAttributes="Bold"
                                                             Text="{Binding UserDisplayName}" />
-                                                        <Label Style="{StaticResource labelStyle}"
+                                                        <Label
+                                                            Style="{StaticResource labelStyle}"
                                                             Grid.Row="1"
                                                             Text="{Binding Body}" />
                                                     </Grid>
@@ -389,7 +399,8 @@
                                             RowDefinitions="auto,auto,auto"
                                             ColumnDefinitions="3*,1*,1*">
 
-                                            <Label Style="{StaticResource labelStyle}"
+                                            <Label
+                                                Style="{StaticResource labelStyle}"
                                                 Grid.Row="0"
                                                 Grid.Column="0"
                                                 Grid.ColumnSpan="2"
@@ -400,7 +411,7 @@
                                                 MaxLines="1"
                                                 TextDecorations="Underline"
                                                 TextTransform="Uppercase"></Label>
-                                            
+
                                             <Label
                                                 Style="{StaticResource labelStyle}"
                                                 Grid.Row="2"
@@ -410,7 +421,6 @@
                                                 CharacterSpacing="-.5"
                                                 MaxLines="1"
                                                 FontSize="10"
-
                                                 TextTransform="Uppercase"></Label>
                                             <Label
                                                 Style="{StaticResource labelStyle}"
@@ -461,7 +471,8 @@
                                                 <Grid
                                                     RowDefinitions="auto,auto"
                                                     VerticalOptions="Fill">
-                                                    <Label Style="{StaticResource labelStyle}"
+                                                    <Label
+                                                        Style="{StaticResource labelStyle}"
                                                         VerticalOptions="Start"
                                                         HorizontalOptions="Center"
                                                         Text="{Binding LikeCounter}"
@@ -498,7 +509,8 @@
                                                         Command="{Binding Path=BindingContext.AddGradeDislikeCommand, Source={x:Reference Name=poiCollectionFrame}}"
                                                         BackgroundColor="Transparent"
                                                         Opacity="0"></local:CustomButton>
-                                                    <Label Style="{StaticResource labelStyle}"
+                                                    <Label
+                                                        Style="{StaticResource labelStyle}"
                                                         Grid.Row="1"
                                                         Margin="0,-5,0,0"
                                                         HorizontalOptions="Center"
@@ -514,7 +526,8 @@
                                                 Grid.RowSpan="4"
                                                 Grid.Column="2"
                                                 RowDefinitions="auto,*">
-                                                <Label Style="{StaticResource labelStyle}"
+                                                <Label
+                                                    Style="{StaticResource labelStyle}"
                                                     VerticalOptions="End"
                                                     HorizontalTextAlignment="Center"
                                                     Text="45"
@@ -582,7 +595,8 @@
                                     Padding="0,2"
                                     CornerRadius="5">
 
-                                    <Label Style="{StaticResource labelStyle}"
+                                    <Label
+                                        Style="{StaticResource labelStyle}"
                                         Text="{Binding Key, StringFormat='{0:dddd, MMMM dd, yyyy}'}"
                                         FontSize="20"
                                         TextColor="White"
@@ -618,7 +632,8 @@
                                         HorizontalOptions="Center"
                                         Grid.Column="1"
                                         Grid.ColumnSpan="2">
-                                        <Label Style="{StaticResource labelStyle}"
+                                        <Label
+                                            Style="{StaticResource labelStyle}"
                                             Text="{Binding DateTime, StringFormat='{0:HH:mm}'}"
                                             TextColor="black"
                                             FontSize="18"
@@ -644,7 +659,8 @@
                                         VerticalOptions="CenterAndExpand"
                                         Orientation="Horizontal"
                                         HorizontalOptions="EndAndExpand">
-                                        <Label Style="{StaticResource labelStyle}"
+                                        <Label
+                                            Style="{StaticResource labelStyle}"
                                             Text="{Binding Temperature, StringFormat='{0}°C'}"
                                             BindingContextChanged="LblTemperature_BindingContextChanged"
                                             TextColor="Black"
@@ -691,34 +707,42 @@
                     x:Name="sl_Weather"
                     Grid.Row="2"
                     Orientation="Vertical">
-                    <Label Style="{StaticResource labelStyle}"
+
+                    <Label
+                        Style="{StaticResource labelStyle}"
                         VerticalOptions="Center"
                         HorizontalOptions="Center"
                         Text="Today"
                         FontSize="13"
                         FontAttributes="Bold" />
-                    <Label Style="{StaticResource labelStyle}"
-                        VerticalOptions="End"
+                    <Image
+                        Source="{Binding AvgIconUriToday}"
+                        HeightRequest="40" />
+                    <Label
+                        Margin="0,0,0,10"
+                        Style="{StaticResource labelStyle}"
+                        VerticalOptions="Start"
                         HorizontalOptions="CenterAndExpand"
                         Text="{Binding AvgTempToday, StringFormat='{0}°C'}"
                         FontSize="13" />
-                    <Image
-                        Source="{Binding AvgIconUriToday}"
-                        HeightRequest="20" />
-                    <Label Style="{StaticResource labelStyle}"
+
+                    <Label
+                        Style="{StaticResource labelStyle}"
                         VerticalOptions="End"
                         HorizontalOptions="CenterAndExpand"
                         Text="Tomorrow"
                         FontSize="13"
                         FontAttributes="Bold" />
-                    <Label Style="{StaticResource labelStyle}"
+                    <Image
+                        Source="{Binding AvgIconUriTomorrow}"
+                        HeightRequest="40" />
+                    <Label
+                        Style="{StaticResource labelStyle}"
                         VerticalOptions="End"
                         HorizontalOptions="CenterAndExpand"
                         Text="{Binding AvgTempTomorrow, StringFormat='{0}°C'}"
                         FontSize="13" />
-                    <Image
-                        Source="{Binding AvgIconUriTomorrow}"
-                        HeightRequest="20" />
+
                 </StackLayout>
 
 
@@ -753,7 +777,8 @@
                         Grid.Row="0"
                         VerticalOptions="End"
                         HorizontalOptions="Start">
-                        <Label Style="{StaticResource labelStyle}"
+                        <Label
+                            Style="{StaticResource labelStyle}"
                             HeightRequest="50"
                             Text="PuMap"
                             FontSize="22"
@@ -961,7 +986,8 @@
                         ColumnSpacing="0"
                         x:Name="slCreateUserViewModel">
 
-                        <Label Style="{StaticResource labelStyle}"
+                        <Label
+                            Style="{StaticResource labelStyle}"
                             Grid.Row="0"
                             Margin="0"
                             Padding="0"
@@ -976,7 +1002,8 @@
                             ControlTemplate="{StaticResource EntryViewControlTemplate}" />
 
 
-                        <Label Style="{StaticResource labelStyle}"
+                        <Label
+                            Style="{StaticResource labelStyle}"
                             Grid.Row="2"
                             Margin="0"
                             Padding="0"
@@ -993,7 +1020,8 @@
                             ControlTemplate="{StaticResource EntryViewControlTemplate}" />
 
 
-                        <Label Style="{StaticResource labelStyle}"
+                        <Label
+                            Style="{StaticResource labelStyle}"
                             Grid.Row="4"
                             Margin="0"
                             Padding="0"
@@ -1008,7 +1036,8 @@
                             ControlTemplate="{StaticResource EntryViewControlTemplate}" />
 
 
-                        <Label Style="{StaticResource labelStyle}"
+                        <Label
+                            Style="{StaticResource labelStyle}"
                             Grid.Row="6"></Label>
                         <control:EntryViewControl
                             Grid.Row="7"
@@ -1017,7 +1046,8 @@
                             ControlTemplate="{StaticResource EntryViewControlTemplate}" />
 
 
-                        <Label Style="{StaticResource labelStyle}"
+                        <Label
+                            Style="{StaticResource labelStyle}"
                             Grid.Row="8"></Label>
                         <control:EntryViewControl
                             Grid.Row="9"
@@ -1156,7 +1186,6 @@
             Grid.Row="0"
             Grid.Column="6"
             Grid.ColumnSpan="6"
-            
             Margin="5"
             BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
             Padding="0"
@@ -1194,6 +1223,7 @@
                 WidthRequest="500"
                 ColumnDefinitions="auto,.2*">
                 <local:RoundedEntry
+                    Style="{StaticResource labelStyle}"
                     Completed="SearchButton_Clicked"
                     Grid.Column="0"
                     HorizontalOptions="FillAndExpand"
@@ -1248,7 +1278,8 @@
                     Grid.Row="0"
                     ColumnDefinitions="1*,1*,.2*"
                     RowDefinitions="auto,auto">
-                    <Label Style="{StaticResource labelStyle}"
+                    <Label
+                        Style="{StaticResource labelStyle}"
                         FontSize="24"
                         Text="Settings" />
                     <local:CustomButton
