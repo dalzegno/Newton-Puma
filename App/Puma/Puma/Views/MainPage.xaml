@@ -343,7 +343,7 @@
                                 <StackLayout
                                     IsVisible="{Binding PoiCommentPostVisible}">
                                     <local:CustomEditor
-                                        
+                                        Style="{StaticResource labelStyle}"
                                         x:Name="CommentBody"
                                         Placeholder="What are your thoughts on this location?"
                                         HeightRequest="75"></local:CustomEditor>
@@ -573,7 +573,7 @@
                     Margin="10,10"
                     IsVisible="false"
                     ClassId="weatherCollectionView"
-                    BackgroundColor="White"
+                    BackgroundColor="Gray"
                     Opacity="0.9"
                     x:Name="weatherCollectionView">
 
@@ -581,7 +581,7 @@
                     <CollectionView
                         IsVisible="true"
                         VerticalOptions="StartAndExpand"
-                        HorizontalOptions="Center"
+                        HorizontalOptions="Start"
                         Margin="0"
                         ItemsSource="{Binding ForecastCollection}"
                         SelectionMode="Single"
@@ -592,8 +592,8 @@
                                     HorizontalOptions="CenterAndExpand"
                                     VerticalOptions="Center"
                                     BackgroundColor="{AppThemeBinding 
-                              Dark={StaticResource WindowBackgroundColorDark}, 
-                              Light={StaticResource WindowBackgroundColor}}"
+                              Dark={StaticResource ButtonBackgroundColorDark}, 
+                              Light={StaticResource ButtonBackgroundColorDark}}"
                                     Padding="0,2"
                                     CornerRadius="5">
 
@@ -602,38 +602,23 @@
                                         Text="{Binding Key, StringFormat='{0:dddd, MMMM dd, yyyy}'}"
                                         FontSize="20"
                                         TextColor="White"
-                                        BackgroundColor="#4a5b64"
+                                        BackgroundColor="{AppThemeBinding 
+                                            Dark={StaticResource ButtonBackgroundColorDark}, 
+                              Light={StaticResource ButtonBackgroundColorDark}}"
                                         HorizontalTextAlignment="Center" />
                                 </Frame>
                             </DataTemplate>
                         </CollectionView.GroupHeaderTemplate>
                         <CollectionView.ItemTemplate>
-
-
                             <DataTemplate>
                                 <Grid
-                                    HeightRequest="50"
-                                    HorizontalOptions="FillAndExpand"
-                                    VerticalOptions="FillAndExpand">
-
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition
-                                            Width="*" />
-                                        <ColumnDefinition
-                                            Width="*" />
-                                        <ColumnDefinition
-                                            Width="*" />
-                                        <ColumnDefinition
-                                            Width="*" />
-                                        <ColumnDefinition
-                                            Width="2*" />
-                                    </Grid.ColumnDefinitions>
-
+                                    HorizontalOptions="Start"
+                                    VerticalOptions="FillAndExpand"
+                                    ColumnDefinitions="*,.3*,*">
                                     <StackLayout
                                         VerticalOptions="CenterAndExpand"
-                                        HorizontalOptions="Center"
-                                        Grid.Column="1"
-                                        Grid.ColumnSpan="2">
+                                        HorizontalOptions="End"
+                                        Grid.Column="0">
                                         <Label
                                             Style="{StaticResource labelStyle}"
                                             Text="{Binding DateTime, StringFormat='{0:HH:mm}'}"
@@ -643,9 +628,9 @@
                                             Margin="20,0" />
                                     </StackLayout>
                                     <StackLayout
-                                        HorizontalOptions="EndAndExpand"
+                                        HorizontalOptions="Start"
                                         VerticalOptions="CenterAndExpand"
-                                        Grid.Column="2">
+                                        Grid.Column="1">
                                         <Image
                                             Source="{Binding IconUrl}"
                                             WidthRequest="38"
@@ -657,10 +642,10 @@
 
 
                                     <StackLayout
-                                        Grid.Column="3"
+                                        Grid.Column="2"
                                         VerticalOptions="CenterAndExpand"
                                         Orientation="Horizontal"
-                                        HorizontalOptions="EndAndExpand">
+                                        HorizontalOptions="Start">
                                         <Label
                                             Style="{StaticResource labelStyle}"
                                             Text="{Binding Temperature, StringFormat='{0}°C'}"
