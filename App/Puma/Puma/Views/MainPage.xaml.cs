@@ -232,14 +232,13 @@ namespace Puma.Views
                 default:
                     if (slider_navbar.TranslationX == 0)
                     {
-                        globeIcon.RotateTo(180, 500, Easing.Linear);
+                        globeIcon.RotateTo(180, 400, Easing.Linear);
                         await AdaptNavbarSliderToScreenSize(ScreenHeight, ScreenWidth, 0.3);
                     }
                     else
                     {
-                        globeIcon.RotateTo(360, 500, Easing.Linear);
-                        
-                        await slider_navbar.TranslateTo(0, 0, 500, Easing.SpringIn);
+                        globeIcon.RotateTo(360, 400, Easing.Linear);
+                        await slider_navbar.TranslateTo(0, 0, 500, Easing.CubicInOut);
                         globeIcon.Rotation = 0;
                     }
                     break;
@@ -253,7 +252,7 @@ namespace Puma.Views
             slider_menu.IsVisible = true;
             slider_menu.HeightRequest = screenHeight;
             slider_menu.WidthRequest = screenWidth * sliderValue;
-            await slider_navbar.TranslateTo(screenWidth * sliderValue, 0, 500, Easing.SinInOut);
+            await slider_navbar.TranslateTo(screenWidth * sliderValue, 0, 500, Easing.CubicInOut);
         }
         async void SliderDown(object sender, EventArgs e)
         {
@@ -324,7 +323,7 @@ namespace Puma.Views
             var pin = new Pin
             {
                 Address = location.Addresses.First(),
-                Label = location.Addresses.First(),
+                Label= location.Addresses.First(),
                 Type = PinType.SearchResult,
                 Position = location.Position
             };
@@ -348,7 +347,7 @@ namespace Puma.Views
 
             pin.MarkerClicked += (sender2, args) =>
             {
-                //DialogService.ShowMessageAsync("Tapped!", $"{pin.Label}");
+                //DialogService.ShowMessageAsync("Tapped!", $"{pin.Label Style="{StaticResource labelStyle}"}");
                 SliderUpDown(null, null);
                 PoiViewModel.SelectedSinglePoi = poi;
                 PoiViewModel.PoiSinglePopup();
@@ -399,11 +398,11 @@ namespace Puma.Views
 
         async void GetCurrentLocation()
         {
-            var checkStatus = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
-            if (checkStatus != PermissionStatus.Granted) 
-            {
-                await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
-            }
+            //var checkStatus = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
+            //if (checkStatus != PermissionStatus.Granted) 
+            //{
+            //    await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+            //}
            
             try
             {
@@ -414,19 +413,22 @@ namespace Puma.Views
                 if (location != null)
                 {
 
-                    //map.Pins.Clear();
+                    map.Pins.Clear();
                     var position = new Position(location.Latitude, location.Longitude);
-                    //var pin = CreatePin(position);
-                    //map.Pins.Add(pin);
+                    map.MoveToRegion(MapSpan.FromCenterAndRadius(position, Distance.FromKilometers(1)));
+                    var pin = CreatePin(position);
+                    map.Pins.Add(pin);
 
                     IEnumerable<string> possibleAddresses = await _geoCoder.GetAddressesForPositionAsync(position);
                     string address = possibleAddresses.FirstOrDefault();
+
+                    
 
                     PoiViewModel.SetAddress(address);
                     await PoiViewModel.SetLatAndLon(position.Latitude, position.Longitude);
                     WeatherViewModel1.SetWeather(position.Latitude, position.Longitude);
 
-                    map.IsShowingUser = true;
+                   // map.IsShowingUser = true;
                 }
             }
             catch (FeatureNotSupportedException fnsEx)
@@ -461,7 +463,7 @@ namespace Puma.Views
 
         private void MyPositionButton_Clicked(object sender, EventArgs e)
         {
-            map.IsShowingUser = true;
+            GetCurrentLocation();
         }
     }
 }

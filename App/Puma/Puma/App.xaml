@@ -28,6 +28,9 @@
                 x:Key="buttonStyle"
                 TargetType="Button">
                 <Setter
+                    Property="FontFamily"
+                    Value="Josefin" />
+                <Setter
                     Property="BorderColor"
                     Value="{AppThemeBinding Light={StaticResource ButtonBackgroundColor},
                 Dark={StaticResource PopUpBackgroundColorDark}}" />
@@ -42,6 +45,14 @@
                 <Setter 
                     Property="FontAttributes"
                     Value="Bold"/>
+            </Style>
+
+            <Style
+                x:Key="labelStyle"
+                TargetType="Label">
+                <Setter
+                    Property="FontFamily"
+                    Value="Josefin" />
             </Style>
             
             <!-- CONTROL TEMPLATES-->

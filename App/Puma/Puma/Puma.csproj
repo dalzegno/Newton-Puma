@@ -23,6 +23,7 @@
     <None Remove="Resources\coments.svg" />
     <None Remove="Resources\downTumbs.svg" />
     <None Remove="Resources\hamburgerMenuIcon.svg" />
+    <None Remove="Resources\JosefinSans-VariableFont_wght.ttf" />
     <None Remove="Resources\Lobster-Regular.ttf" />
     <None Remove="Resources\myposition.svg" />
     <None Remove="Resources\SearchIcon.svg" />
@@ -35,6 +36,7 @@
     <EmbeddedResource Include="Resources\coments.svg" />
     <EmbeddedResource Include="Resources\downTumbs.svg" />
     <EmbeddedResource Include="Resources\hamburgerMenuIcon.svg" />
+    <EmbeddedResource Include="Resources\JosefinSans-VariableFont_wght.ttf" />
     <EmbeddedResource Include="Resources\Lobster-Regular.ttf" />
     <EmbeddedResource Include="Resources\myposition.svg" />
     <EmbeddedResource Include="Resources\SettingsIcon.svg" />
