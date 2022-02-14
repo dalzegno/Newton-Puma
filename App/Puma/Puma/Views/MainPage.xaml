@@ -68,7 +68,7 @@
         </maps:Map>
 
 
-       
+
 
 
         <!-- NAVBAR AND MENU -->
@@ -86,12 +86,15 @@
             <StackLayout
                 IsVisible="false"
                 x:Name="slider_menu"
+                BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
+                    Light={StaticResource PopUpBackgroundColor}}"
+                Opacity="1"
                 HorizontalOptions="Fill"
                 VerticalOptions="Start">
                 <ContentView
                     BackgroundColor="{AppThemeBinding Dark={StaticResource PopUpBackgroundColorDark},
                     Light={StaticResource PopUpBackgroundColor}}"
-                    Opacity="0.8" />
+                    Opacity="1" />
 
                 <!-- POI VIEW POPOVER -->
                 <Frame
@@ -426,7 +429,6 @@
                                                         FontSize="10"
                                                         FontAttributes="Bold" />
                                                     <Grid
-                                                       
                                                         Grid.Row="1">
                                                         <ffimageloadingsvg:SvgCachedImage
                                                             HorizontalOptions="Center"
@@ -462,7 +464,7 @@
                                                         Margin="0,-5,0,0"
                                                         HorizontalOptions="Center"
                                                         VerticalOptions="Start"
-                                                        Text="45"
+                                                        Text="{Binding DislikeCounter}"
                                                         FontSize="10"
                                                         FontAttributes="Bold"
                                                         HeightRequest="100" />
@@ -479,7 +481,9 @@
                                                     Text="45"
                                                     FontSize="15"
                                                     FontAttributes="Bold" />
-                                                <StackLayout Grid.Row="1" VerticalOptions="Start">
+                                                <StackLayout
+                                                    Grid.Row="1"
+                                                    VerticalOptions="Start">
                                                     <ffimageloadingsvg:SvgCachedImage
                                                         HeightRequest="50"
                                                         WidthRequest="50"
@@ -626,7 +630,7 @@
             <Grid
                 AbsoluteLayout.LayoutBounds="0,0,1,1"
                 AbsoluteLayout.LayoutFlags="All"
-                RowDefinitions="*,*,*"
+                RowDefinitions="auto,*,*,*"
                 HorizontalOptions="Fill"
                 VerticalOptions="Fill"
                 BackgroundColor="{AppThemeBinding 
@@ -680,45 +684,60 @@
 
 
 
-                <!-- GLOBE ICON -->
+                <!-- GLOBE AND HAMBURGERMENU ICON -->
                 <Grid
-                    Grid.Row="1"
-                    VerticalOptions="Center"
-                    HorizontalOptions="CenterAndExpand">
-                    <Path
-                        Fill="#008db3"
-                        Data="M58.4,22.7L60,42.7C55.8,54,44.8,62,32,62C15.4,62,2,48.6,2,32S15.4,2,32,2c6,0,11.6,1.8,16.3,4.8L58.4,22.7z" />
-                    <Path
-                        Fill="#ffc942"
-                        Data="m48.3 6.8c.3 1 .6 2.1-.4 1.6-1.7-.9-3.9-1.9-3.2-1.2s1 1.5-.1 1.4c-1.1-.1-3.1-.4-4 .9-.9 1.3-2.1 1-2.4 1.5-.3.5-.8 2.6-1.7 1.9-.9-.6-2.7-2.9-1.2-2.3 1.5.6 3.2-.1 1.8-1.7-1.4-1.6-2.8-1-3.4-1.9-.6-.9-2.6-2-4.1.2-1.4 2.2-2.7 5.1-3.5 5.7-.8.6-2.5 1.7-2.2 2.6.2.9.3 3 1.2 2.4s1.4-.9 1.8-.3c.3.6.2 1.8.9 1.8 0 0 1.4-1 1.5-1.9.1-.9-1-1.4-.2-2.7s2.6-3.8 2.2-2.5c-.4 1.2-1.3 3-.6 3.8.6.8 4.1-.2 2.5.6-1.6.8-2.4 1.4-2.7 2.4-.3 1-.6 1.8-1.4 1.4s-1.8-.2-2.2-.2-.6-1.8-1.3-1.4c-.6.4.2 1.7-.5 1.8-.7.1-.8.9-1.6 1.5-.8.6-1.9 1.8-2.6 1.9s1.1 1 .8 1.8c-.3.9-1.9.8-2.5.9s-.1 1.3-.4 2c-.3.7.3 1.4 1.3 1.4 1 0 2-.2 2.1-1.1.1-.9 1-2.4 1.7-2.1.6.3 2.1-.6 2.4-.1.3.5 2.2 2.2 2 2.4s-1.3.7-.9.9c0 0 .3.5.5.4s.7-1.4 1-1.6.3-.9-.1-1.2c-.5-.3-2.2-1.5-1.8-2.1s1.3.7 1.7 1.1c.4.4 1 .9 1 1.8s.6.9.6 1.3c.1.5.3.6.8.6.5-.1.7-1.2.5-1.5-.3-.3-.3-.9.3-.9.6 0 1.3-.5 1.3-.8 0-.3.6-2.1 1-2.1s.7.7.8 1.1c.2.4 1.2-.3 1-.7-.2-.4.1-.5.4-.5.3 0 .1.8.3 1 .3.2 1.7 1.1 1.2 1.6s-1.2.2-1.7-.2c-.5-.4-1.8-.2-2.2.2-.3.4-.6.6-1.2.6-.6 0-.5 1.1 0 1.5.5.5 1.2.1 1.7.4.5.3 1.3-.4 1.4.1.1.5-.1 2-.6 2.1-.5.1-2.1.4-3.2-.1-1.2-.5-2.3-.7-2.4-.2-.1.6-.1 1-.9.5s-1.5-.8-2-.8c-.5 0-.5-.9-.4-1.6.1-.7-1.2-.5-2-.3s-2.4.7-3.4.7-1.4.2-1.6.6-1.1.4-1.1 1.2c0 .8.1 1-.7 1.4-.9.3-1.1 1.9-1.5 2.3-.4.4.4 1.4 0 2-.4.5-.8 1.9-.1 2.2.7.3 1.4 1.7 1.7 2.2.3.5 1.4 1 2.5.8 1.1-.2 3.1-.8 4.2-.3s2.2.4 1.7 1.4c-.6 1 .3 2.3 1 3 .7.7.5 2.5.1 3-.4.6-.3 1.6.1 2.1.4.5.6 1.7.6 2.1 0 .5.8 1.4.9 2.3.1 1-.6 2.1.3 2.1.9 0 3.2.1 3.4-.3s2-2 2.5-2.7 1.5-1.9 1.2-2.6c-.6-.5-.2-1 .8-1.4 1-.4 1-3.2.5-3.9-.5-.7.4-2.4 1.5-2.9 1.1-.5 3.7-5.1 2.9-4.7-.9.4-2.6.7-3.2.3-.6-.4-4.1-6.4-3.6-6.8s3.3 5.5 3.8 6.2c.5.8 5.2-2.1 5.8-2.8.5-.7-.3-1.4-.6-1.4s-1.4-.7-1.7-.3-2.3-2.9-1.6-2.6c.7.3 2.2 1.3 3.6 2.1s3-.5 3.9 1c1 1.5 1.6.5 1.5 1.2s1.2 3.6 1.7 4.5c.4.9 1.3-.4 1.4-1.4.1-1.1 2.2-2.8 3-3.4.7-.6 2.1.3 2.3 1.5.2 1.2 1.2-.2 1.2.7 0 1-.2 2.3.5 3.5 1.4-3.5 2.1-7 2.1-10.8 0-10.6-5.5-19.9-13.7-25.2" />
-                    <Path
-                        Data="m16.4 10.6c-.6.2-1.2.9-2 .5-.8-.4-2.5.2-1.4 1.1 1 1 .6 1.6 1.6 1.7s1.6-1.3 2.3-1.2.2-2.3-.5-2.1" />
-                    <Path
-                        Data="m40.7 49.7c-.7.1-.5 1.5-1.3 1.7-.7.2-.1.8-.5 1.3-.3.5-.5 1.7 0 2.3.5.7.7.7 1.3-.4.6-1 2-5 .5-4.9" />
-                    <Path
-                        Data="m20.6 17.3c-.3 0-.6.2-.9.2-.3.1-.5.5-.5.9 0 .5.8.6.5.9-.3.3-1.9.6-1.7 1.1s.5.9.2 1.4c-.3.5.3.6.9.4s1-.9.9-1.3c-.1-.5.9-.6.6-.2s-.8 1.4-.5 1.7c.3.3-.8.8-.4 1 .4.2 1.5-.8 2.1-.6s.8-.2.9-.7c.1-.6-.8-1.3-1.1-2-.3-.8-.1-2.8-1-2.8" />
+                    RowDefinitions="auto,auto"
+                    Margin="0,15"
+                    HorizontalOptions="CenterAndExpand"
+                    Grid.Row="0"
+                    VerticalOptions="Start">
+                    <Grid
+                        x:Name="globeIcon"
+                        Grid.Row="0"
+                        VerticalOptions="Start"
+                        HorizontalOptions="CenterAndExpand">
+                        <Path
+                            Fill="#008db3"
+                            Data="M58.4,22.7L60,42.7C55.8,54,44.8,62,32,62C15.4,62,2,48.6,2,32S15.4,2,32,2c6,0,11.6,1.8,16.3,4.8L58.4,22.7z" />
+                        <Path
+                            Fill="#ffc942"
+                            Data="m48.3 6.8c.3 1 .6 2.1-.4 1.6-1.7-.9-3.9-1.9-3.2-1.2s1 1.5-.1 1.4c-1.1-.1-3.1-.4-4 .9-.9 1.3-2.1 1-2.4 1.5-.3.5-.8 2.6-1.7 1.9-.9-.6-2.7-2.9-1.2-2.3 1.5.6 3.2-.1 1.8-1.7-1.4-1.6-2.8-1-3.4-1.9-.6-.9-2.6-2-4.1.2-1.4 2.2-2.7 5.1-3.5 5.7-.8.6-2.5 1.7-2.2 2.6.2.9.3 3 1.2 2.4s1.4-.9 1.8-.3c.3.6.2 1.8.9 1.8 0 0 1.4-1 1.5-1.9.1-.9-1-1.4-.2-2.7s2.6-3.8 2.2-2.5c-.4 1.2-1.3 3-.6 3.8.6.8 4.1-.2 2.5.6-1.6.8-2.4 1.4-2.7 2.4-.3 1-.6 1.8-1.4 1.4s-1.8-.2-2.2-.2-.6-1.8-1.3-1.4c-.6.4.2 1.7-.5 1.8-.7.1-.8.9-1.6 1.5-.8.6-1.9 1.8-2.6 1.9s1.1 1 .8 1.8c-.3.9-1.9.8-2.5.9s-.1 1.3-.4 2c-.3.7.3 1.4 1.3 1.4 1 0 2-.2 2.1-1.1.1-.9 1-2.4 1.7-2.1.6.3 2.1-.6 2.4-.1.3.5 2.2 2.2 2 2.4s-1.3.7-.9.9c0 0 .3.5.5.4s.7-1.4 1-1.6.3-.9-.1-1.2c-.5-.3-2.2-1.5-1.8-2.1s1.3.7 1.7 1.1c.4.4 1 .9 1 1.8s.6.9.6 1.3c.1.5.3.6.8.6.5-.1.7-1.2.5-1.5-.3-.3-.3-.9.3-.9.6 0 1.3-.5 1.3-.8 0-.3.6-2.1 1-2.1s.7.7.8 1.1c.2.4 1.2-.3 1-.7-.2-.4.1-.5.4-.5.3 0 .1.8.3 1 .3.2 1.7 1.1 1.2 1.6s-1.2.2-1.7-.2c-.5-.4-1.8-.2-2.2.2-.3.4-.6.6-1.2.6-.6 0-.5 1.1 0 1.5.5.5 1.2.1 1.7.4.5.3 1.3-.4 1.4.1.1.5-.1 2-.6 2.1-.5.1-2.1.4-3.2-.1-1.2-.5-2.3-.7-2.4-.2-.1.6-.1 1-.9.5s-1.5-.8-2-.8c-.5 0-.5-.9-.4-1.6.1-.7-1.2-.5-2-.3s-2.4.7-3.4.7-1.4.2-1.6.6-1.1.4-1.1 1.2c0 .8.1 1-.7 1.4-.9.3-1.1 1.9-1.5 2.3-.4.4.4 1.4 0 2-.4.5-.8 1.9-.1 2.2.7.3 1.4 1.7 1.7 2.2.3.5 1.4 1 2.5.8 1.1-.2 3.1-.8 4.2-.3s2.2.4 1.7 1.4c-.6 1 .3 2.3 1 3 .7.7.5 2.5.1 3-.4.6-.3 1.6.1 2.1.4.5.6 1.7.6 2.1 0 .5.8 1.4.9 2.3.1 1-.6 2.1.3 2.1.9 0 3.2.1 3.4-.3s2-2 2.5-2.7 1.5-1.9 1.2-2.6c-.6-.5-.2-1 .8-1.4 1-.4 1-3.2.5-3.9-.5-.7.4-2.4 1.5-2.9 1.1-.5 3.7-5.1 2.9-4.7-.9.4-2.6.7-3.2.3-.6-.4-4.1-6.4-3.6-6.8s3.3 5.5 3.8 6.2c.5.8 5.2-2.1 5.8-2.8.5-.7-.3-1.4-.6-1.4s-1.4-.7-1.7-.3-2.3-2.9-1.6-2.6c.7.3 2.2 1.3 3.6 2.1s3-.5 3.9 1c1 1.5 1.6.5 1.5 1.2s1.2 3.6 1.7 4.5c.4.9 1.3-.4 1.4-1.4.1-1.1 2.2-2.8 3-3.4.7-.6 2.1.3 2.3 1.5.2 1.2 1.2-.2 1.2.7 0 1-.2 2.3.5 3.5 1.4-3.5 2.1-7 2.1-10.8 0-10.6-5.5-19.9-13.7-25.2" />
+                        <Path
+                            Data="m16.4 10.6c-.6.2-1.2.9-2 .5-.8-.4-2.5.2-1.4 1.1 1 1 .6 1.6 1.6 1.7s1.6-1.3 2.3-1.2.2-2.3-.5-2.1" />
+                        <Path
+                            Data="m40.7 49.7c-.7.1-.5 1.5-1.3 1.7-.7.2-.1.8-.5 1.3-.3.5-.5 1.7 0 2.3.5.7.7.7 1.3-.4.6-1 2-5 .5-4.9" />
+                        <Path
+                            Data="m20.6 17.3c-.3 0-.6.2-.9.2-.3.1-.5.5-.5.9 0 .5.8.6.5.9-.3.3-1.9.6-1.7 1.1s.5.9.2 1.4c-.3.5.3.6.9.4s1-.9.9-1.3c-.1-.5.9-.6.6-.2s-.8 1.4-.5 1.7c.3.3-.8.8-.4 1 .4.2 1.5-.8 2.1-.6s.8-.2.9-.7c.1-.6-.8-1.3-1.1-2-.3-.8-.1-2.8-1-2.8" />
 
-                </Grid>
-                <!-- ICON TEXT -->
-                <StackLayout
-                    Grid.Row="1"
-                    Orientation="Vertical"
-                    VerticalOptions="Center"
-                    HorizontalOptions="CenterAndExpand">
-                    <Label
-                        HorizontalOptions="Center"
-                        HeightRequest="50"
-                        Text="PuMap"
-                        FontSize="24"
-                        FontFamily="Lobster-Regular"></Label>
-                    <!--<Label
+                    </Grid>
+                    <!-- ICON TEXT -->
+                    <StackLayout
+                        Grid.Row="0"
+                        Orientation="Vertical"
+                        VerticalOptions="Start"
+                        HorizontalOptions="CenterAndExpand">
+                        <Label
+                            HorizontalOptions="Center"
+                            HeightRequest="50"
+                            Text="PuMap"
+                            FontSize="24"
+                            FontFamily="Lobster-Regular"></Label>
+                        <!--<Label
                         HorizontalOptions="Center"
                         
                         Text="Travel for the people by the people"
                         FontSize="8"
                         FontFamily="Lobster-Regular"></Label>-->
-                </StackLayout>
-
+                    </StackLayout>
+                    <ffimageloadingsvg:SvgCachedImage
+                        HeightRequest="50"
+                        Grid.Row="1"
+                        Source="resource://Puma.Resources.hamburgerMenuIcon.svg" />
+                    <local:CustomButton
+                        Grid.Row="1"
+                        Opacity="0"
+                        Clicked="SliderUpDown" />
+                </Grid>
                 <!-- MAP TYPES -->
 
                 <Grid
@@ -763,13 +782,14 @@
 
                 <!--<<<<<<<< Navbar Login/Signup buttons >>>>>>>-->
                 <StackLayout
-                    VerticalOptions="FillAndExpand"
+                    Grid.Row="1"
+                    VerticalOptions="Start"
                     HorizontalOptions="FillAndExpand"
                     Margin="0">
 
                     <Grid
-                        Grid.Row="0"
-                        VerticalOptions="FillAndExpand"
+                        Grid.Row="1"
+                        VerticalOptions="Start"
                         HorizontalOptions="FillAndExpand"
                         RowDefinitions="*,*,*">
 
@@ -797,31 +817,21 @@
                         </Grid>
                         <StackLayout
                             Grid.Row="0">
-                            <Label
-                                IsVisible="{Binding userLogoutState}"
-                                TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                                Text="|"
-                                VerticalOptions="Center" />
-                            <Label
-                                IsVisible="{Binding userLoginState}"
-                                TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                                Text="|"
-                                VerticalOptions="Center"></Label>
+
                             <local:CustomButton
                                 x:Name="btn_Login_Popup"
                                 CornerRadius="15"
+                                Style="{StaticResource buttonStyle}"
                                 ClassId="loginPopup"
                                 Command="{Binding OpenLoginCommand}"
                                 IsVisible="{Binding userLoginState}"
-                                TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                                BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
                                 Text="Log in" />
                             <local:CustomButton
                                 x:Name="btn_Logout"
+                                Style="{StaticResource buttonStyle}"
+                                CornerRadius="15"
                                 Command="{Binding LogOutCommand}"
                                 IsVisible="{Binding userLogoutState}"
-                                TextColor="{AppThemeBinding Dark={StaticResource TextColorDark}, Light={StaticResource TextColor}}"
-                                BorderColor="{AppThemeBinding Dark={StaticResource BorderColorDark}, Light={StaticResource BorderColor}}"
                                 Text="Log out" />
                         </StackLayout>
                     </Grid>

@@ -11,7 +11,8 @@
                 <!-- LIGHT MODE -->
                 <Color x:Key="WindowBackgroundColor">#DAEFF9</Color>
                 <Color x:Key="PopUpBackgroundColor">#DAEFF9</Color>
-                <Color x:Key="ButtonBackgroundColor">#E0D3DE</Color>
+            <Color
+                x:Key="ButtonBackgroundColor">#A4B3BA</Color>
                 <Color x:Key="TextColor">#6F686D</Color>
                 <Color x:Key="BorderColor">#000000</Color>
                 <Color x:Key="TextBoxBackgroundColor">White</Color>
@@ -26,9 +27,13 @@
             <Style
                 x:Key="buttonStyle"
                 TargetType="Button">
+                <Setter
+                    Property="BorderColor"
+                    Value="{AppThemeBinding Light={StaticResource ButtonBackgroundColor},
+                Dark={StaticResource PopUpBackgroundColorDark}}" />
                 <Setter 
                     Property="BackgroundColor"
-                    Value="{AppThemeBinding Light={StaticResource PopUpBackgroundColor},
+                    Value="{AppThemeBinding Light={StaticResource WindowBackgroundColor},
                 Dark={StaticResource PopUpBackgroundColorDark}}"/>
                 <Setter
                     Property="TextColor"
