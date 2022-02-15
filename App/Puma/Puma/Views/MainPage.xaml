@@ -204,13 +204,15 @@
                     <ScrollView>
                         <StackLayout
                             x:Name="slPoiPopup">
-                            <local:RoundedEntry
+                            <Entry
+                                Style="{StaticResource labelStyle}"
                                 x:Name="entry_Name"
                                 Text="{Binding Name}"
                                 FontSize="24"
                                 Margin="0,0,0,10"
-                                Placeholder="Name of Location.."></local:RoundedEntry>
+                                Placeholder="Name of Location.."></Entry>
                             <local:CustomEditor
+                                Style="{StaticResource labelStyle}"
                                 x:Name="entry_Description"
                                 Text="{Binding Description}"
                                 HeightRequest="250"
@@ -234,6 +236,8 @@
                                         <DataTemplate>
 
                                             <local:CustomButton
+                                                BorderColor="LightGray"
+                                                Style="{StaticResource labelStyle}"
                                                 Command="{Binding Path=BindingContext.RemoveTagCommand, Source={x:Reference Name=cwTags}}"
                                                 CommandParameter="{Binding}"
                                                 Margin="10"
@@ -251,20 +255,28 @@
                             </StackLayout>
                             <!--<local:CustomButton Text="{Binding SelectedTagInfo.Name}" FontSize="12"/>-->
                             <Picker
+                                Style="{StaticResource labelStyle}"
                                 x:Name="TagPicker"
                                 SelectedItem="{Binding SelectedTagInfo}"
                                 ItemsSource="{Binding Tags}"
                                 ItemDisplayBinding="{Binding Name}" />
                             <local:RoundedEntry
+                                Style="{StaticResource labelStyle}"
                                 x:Name="entry_address"
+                                Placeholder="Street address"
                                 Text="{Binding StreetName}"></local:RoundedEntry>
                             <local:RoundedEntry
+                                Style="{StaticResource labelStyle}"
+                                Placeholder="Area code"
                                 x:Name="entry_zip"
                                 Text="{Binding Area}"></local:RoundedEntry>
                             <local:RoundedEntry
+                                Style="{StaticResource labelStyle}"
+                                Placeholder="Country"
                                 x:Name="entry_country"
                                 Text="{Binding Country}"></local:RoundedEntry>
                             <local:CustomButton
+                                Style="{StaticResource buttonStyle}"
                                 Text="Add Point of Interest"
                                 Command="{Binding CreatePoiCommand}" />
                             <local:RoundedEntry
@@ -331,7 +343,7 @@
                                     Text="{Binding SelectedSinglePoi.Address.StreetName}" />
                                 <Label
                                     Style="{StaticResource labelStyle}"
-                                    FontSize="12"
+                                    FontSize="16"
                                     Text="{Binding SelectedSinglePoi.Description}" />
                             </StackLayout>
 
@@ -343,6 +355,7 @@
                                 <StackLayout
                                     IsVisible="{Binding PoiCommentPostVisible}">
                                     <local:CustomEditor
+                                        Margin="0,15,0,0"
                                         Style="{StaticResource labelStyle}"
                                         x:Name="CommentBody"
                                         Placeholder="What are your thoughts on this location?"
@@ -360,6 +373,7 @@
                                         <DataTemplate>
                                             <Grid>
                                                 <Frame
+                                                    BorderColor="LightGray"
                                                     Margin="0,3"
                                                     BackgroundColor="white">
                                                     <Grid>
