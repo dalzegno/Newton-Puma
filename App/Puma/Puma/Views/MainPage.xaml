@@ -376,7 +376,7 @@
                                                     BorderColor="LightGray"
                                                     Margin="0,3"
                                                     BackgroundColor="white">
-                                                    <Grid>
+                                                    <Grid ColumnDefinitions=".9*,.1*" >
                                                         <Label
                                                             Style="{StaticResource labelStyle}"
                                                             FontSize="16"
@@ -386,6 +386,13 @@
                                                             Style="{StaticResource labelStyle}"
                                                             Grid.Row="1"
                                                             Text="{Binding Body}" />
+                                                        <Grid
+                                                            Grid.Column="1">
+                                                            <ffimageloadingsvg:SvgCachedImage
+                                                                Source="resource://Puma.Resources.deleteCommentIcon.svg" />
+                                                            <local:CustomButton
+                                                                Opacity="0" />
+                                                        </Grid>
                                                     </Grid>
                                                 </Frame>
                                             </Grid>
