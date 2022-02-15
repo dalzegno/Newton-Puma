@@ -846,6 +846,12 @@
                             Clicked="MyPositionButton_Clicked"></local:CustomButton>
                     </Grid>
 
+                    <local:CustomButton
+                        Style="{StaticResource buttonStyle}"
+                        Grid.Row="4"
+                        Clicked="GenerateMockData_Clicked"
+                        Text="Generate mock data"/>
+
                 </Grid>
 
                 <!--<<<<<<<< Navbar Login/Signup buttons >>>>>>>-->
