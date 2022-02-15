@@ -371,10 +371,52 @@ namespace Puma.Views
 
 
         #region Currents location
+
+
+
+
+
+
+
+
+
+
+
+
+
         CancellationTokenSource cts;
 
         async Task GetCurrentLocation()
         {
+
+            while (true)
+            {
+                if (await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>() == PermissionStatus.Granted)
+                    break;
+
+                await AppHelper.RequestAsync_Fixed<Permissions.LocationWhenInUse>();
+            }
+
+            var request = new GeolocationRequest(GeolocationAccuracy.Medium)
+            {
+                Timeout = TimeSpan.FromSeconds(30)
+            };
+
+            var location = await Geolocation.GetLocationAsync(request);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             try
             {
                 var request = new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(10));
@@ -418,6 +460,21 @@ namespace Puma.Views
                 cts.Cancel();
             base.OnDisappearing();
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         #endregion
     }
 }
