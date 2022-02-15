@@ -469,5 +469,26 @@ namespace Puma.Views
         {
             GetCurrentLocation();
         }
+
+        private async void GenerateMockData_Clicked(object sender, EventArgs e)
+        {
+            if (App.LoggedInUser == null)
+            {
+                await DialogService.ShowMessageAsync("Message", "You need to log in to be able to generate mock data.");
+                return;
+            }
+
+            var answer = await DialogService.ShowYesNoActionSheet("Are you sure you want to generate mock data? It'll take a while.");
+
+            if (answer == null || answer == "No")
+                return;
+
+            var mockService = new MockDataService();
+            await mockService.GetRandomAddressAndPosition(_geoCoder, 100);
+            await mockService.GenerateUsers(50);
+            await mockService.GeneratePois(20);
+            await mockService.GenerateComments(80);
+            await mockService.GenerateGrades(200);
+        }
     }
 }

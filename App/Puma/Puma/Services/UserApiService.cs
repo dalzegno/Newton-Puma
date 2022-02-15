@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Puma.Services;
 using Xamarin.Forms;
 using Puma.Extensions;
+using System.Collections.Generic;
 
 [assembly: Dependency(typeof(UserApiService))]
 namespace Puma.Services
@@ -46,6 +47,25 @@ namespace Puma.Services
                     return null;
 
                 return await response.Content.ReadFromJsonAsync<User>();
+
+            }
+            catch (Exception e)
+            {
+                await _dialogService.ShowErrorAsync(e);
+                return null;
+            }
+        }
+        public async Task<List<User>> GetAll()
+        {
+            _httpClient.SetHeader();
+
+            try
+            {
+                var response = await _httpClient.GetAsync($"{_userApiUri}/GetAll");
+                if (!await response.IsResponseSuccessAsync(_dialogService))
+                    return null;
+
+                return await response.Content.ReadFromJsonAsync<List<User>>();
 
             }
             catch (Exception e)

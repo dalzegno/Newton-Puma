@@ -98,8 +98,8 @@ namespace API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<PointOfInterestDto>> AddGrade([FromBody] AddGradeDto addGradeDto, [FromHeader] string apiKey)
         {
-            //if (!await _userService.IsUserAuthorizedAsync(apiKey))
-            //    return Unauthorized("Unauthorized");
+            if (!await _userService.IsUserAuthorizedAsync(apiKey))
+                return Unauthorized("Unauthorized");
 
             var poi = await _poiService.AddGrade(addGradeDto);
 

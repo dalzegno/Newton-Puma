@@ -11,7 +11,6 @@ namespace Puma.Services
         Task ShowErrorAsync(Exception error);
         Task ShowMessageAsync(string title, string message);
         Task ShowMessageAsync(string title, string message, string buttonText);
-
         Task<string> ShowYesNoActionSheet(string title);
     }
 }

@@ -485,11 +485,7 @@ namespace Puma.ViewModels
                 UserId = App.LoggedInUser.Id,
                 Name = Name,
                 Description = Description,
-                Position = new PositionPoi
-                {
-                    Latitude = Convert.ToDouble(Latitude, CultureInfo.InvariantCulture),
-                    Longitude = Convert.ToDouble(Longitude, CultureInfo.InvariantCulture)
-                },
+                Position = new PositionPoi(Convert.ToDouble(Latitude, CultureInfo.InvariantCulture), Convert.ToDouble(Longitude, CultureInfo.InvariantCulture)),
                 Address = new Address
                 {
                     StreetName = StreetName,
