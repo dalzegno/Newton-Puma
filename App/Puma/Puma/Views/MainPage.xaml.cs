@@ -489,6 +489,9 @@ namespace Puma.Views
             await mockService.GeneratePois(20);
             await mockService.GenerateComments(80);
             await mockService.GenerateGrades(200);
+
+            var button = (Button)sender;
+            button.IsVisible = false;
         }
     }
 }
