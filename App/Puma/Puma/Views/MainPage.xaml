@@ -346,7 +346,7 @@
                                     FontSize="16"
                                     Text="{Binding SelectedSinglePoi.Description}" />
                             </StackLayout>
-
+                            
                             <!-- Selected POI comments-->
                             <StackLayout
                                 Grid.Row="1"
@@ -371,7 +371,7 @@
                                     ItemsSource="{Binding SelectedSinglePoi.Comments}">
                                     <CollectionView.ItemTemplate>
                                         <DataTemplate>
-                                            <Grid>
+                                            <Grid RowDefinitions="auto, auto, auto">
                                                 <Frame
                                                     BorderColor="LightGray"
                                                     Margin="0,3"
@@ -390,9 +390,13 @@
                                                             Grid.Row="0"
                                                             Grid.Column="1">
                                                             <ffimageloadingsvg:SvgCachedImage
-                                                                Source="resource://Puma.Resources.deleteCommentIcon.svg" />
+                                                                Source="resource://Puma.Resources.deleteCommentIcon.svg" 
+                                                                IsVisible="{Binding IsRemoveVisible}"/>
                                                             <local:CustomButton
-                                                                Opacity="0" />
+                                                                Opacity="0"
+                                                                IsVisible="{Binding IsRemoveVisible}"
+                                                                Command="{Binding Path=BindingContext.RemoveCommentCommand, Source={x:Reference Name=poiCollectionFrame}}"
+                                                                CommandParameter="{Binding Id}"/>
                                                         </Grid>
                                                     </Grid>
                                                 </Frame>

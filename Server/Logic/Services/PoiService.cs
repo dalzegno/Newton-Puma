@@ -219,6 +219,7 @@ namespace Logic.Services
             return await _context.PointOfInterests.Include(poi => poi.Address)
                                                   .Include(poi => poi.Position)
                                                   .Include(poi => poi.Comments)
+                                                  .ThenInclude(c => c.User)
                                                   .Include(poi => poi.PoiTags)
                                                   .Include(poi => poi.Gradings)
                                                   .Include(poi => poi.User)

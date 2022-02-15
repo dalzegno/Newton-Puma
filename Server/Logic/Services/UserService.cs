@@ -32,6 +32,10 @@ namespace Logic.Services
             if (foundUser != null)
                 return _mapper.Map<UserDto>(foundUser);
 
+            var hasSameDisplayName = await _context.Users.AnyAsync(u => u.DisplayName.ToLower() == newUser.DisplayName.Trim().ToLower());
+
+            if (hasSameDisplayName)
+                return null;
 
             User userToAdd = _mapper.Map<User>(newUser);
 

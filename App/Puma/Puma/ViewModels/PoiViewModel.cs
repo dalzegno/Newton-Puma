@@ -65,15 +65,16 @@ namespace Puma.ViewModels
         public string _likeCount;
         public string _dislikeCount;
         public string _commentBody;
-        
+
 
         public bool openPoiCreationBool { get; set; } = false;
         public bool openPoiCollectionBool { get; set; } = false;
         public bool poiCollectionVisibleBool { get; set; } = true;
         public bool poiSingleVisibleBool { get; set; } = false;
         public bool poiCommentPostVisible { get; set; } = false;
+        //public bool poiCommentRemoveVisible { get; set; } = false;
         private bool isAddPoiVisible { get; set; } = false;
-        
+
 
 
         #region Fields
@@ -96,7 +97,7 @@ namespace Puma.ViewModels
             }
         }
         public bool IsAddPoiVisible
-        { 
+        {
             get => isAddPoiVisible;
             set
             {
@@ -106,13 +107,22 @@ namespace Puma.ViewModels
         }
         public bool PoiCommentPostVisible
         {
-            get=> poiCommentPostVisible;
+            get => poiCommentPostVisible;
             set
             {
                 poiCommentPostVisible = value;
                 OnPropertyChanged(nameof(PoiCommentPostVisible));
             }
         }
+        //public bool PoiCommentRemoveVisible
+        //{
+        //    get => poiCommentRemoveVisible;
+        //    set
+        //    {
+        //        poiCommentRemoveVisible = value;
+        //        OnPropertyChanged(nameof(PoiCommentRemoveVisible));
+        //    }
+        //}
         public string CommentBody
         {
             get => _commentBody;
@@ -130,7 +140,7 @@ namespace Puma.ViewModels
             {
                 _commentCollection = value;
                 OnPropertyChanged(nameof(CommentCollection));
-                
+
             }
         }
         // Poi Collection
@@ -154,7 +164,7 @@ namespace Puma.ViewModels
                 OnPropertyChanged(nameof(SelectedSinglePoi));
             }
         }
-        
+
 
         // TAGS
         public List<Tag> _tags;
@@ -263,6 +273,7 @@ namespace Puma.ViewModels
                 CreatePoiCommand.ChangeCanExecute();
             }
         }
+
         #endregion
 
         private bool CanCreate() => !string.IsNullOrWhiteSpace(Description) && !string.IsNullOrWhiteSpace(Name) && App.LoggedInUser != null;
@@ -288,9 +299,9 @@ namespace Puma.ViewModels
         }
         public void PoiSinglePopup()
         {
-           
 
-            if (SelectedSinglePoi != null) 
+
+            if (SelectedSinglePoi != null)
                 MainPage.Instance.GoToLocation(SelectedSinglePoi, 1);
 
             poiCollectionVisibleBool = false;
@@ -298,7 +309,7 @@ namespace Puma.ViewModels
             poiSingleVisibleBool = true;
             OnPropertyChanged(nameof(PoiSingleVisible));
 
-            if (SelectedSinglePoi == null) 
+            if (SelectedSinglePoi == null)
                 return;
 
             var a = SelectedSinglePoi.Address;
@@ -363,15 +374,32 @@ namespace Puma.ViewModels
                 PointOfInterestId = SelectedSinglePoi.Id,
                 Body = CommentBody
             };
+
             var poi = await _poiService.AddCommentAsync(comment);
             SelectedSinglePoi = poi;
             CommentBody = "";
             OnPropertyChanged(nameof(SelectedSinglePoi));
             OnPropertyChanged(nameof(CommentCollection));
-            
+
         }
-        private async void RemoveComment()
+        private async void RemoveComment(object idObj)
         {
+            var answer = await _dialogService.ShowYesNoActionSheet("Are you sure you want to delete this comment?");
+
+            if (answer == null || answer == "No")
+                return;
+
+            var id = (int)idObj;
+            var commentToRemove = SelectedSinglePoi.Comments.FirstOrDefault(c => c.Id == id);
+            var removedComment = await _poiService.DeleteComment(App.LoggedInUser.Id, commentToRemove.Id);
+
+            var selectedSingleId = SelectedSinglePoi.Id;
+            if (removedComment != null)
+            {
+                await SetLatAndLon(Convert.ToDouble(Latitude), Convert.ToDouble(Longitude));
+                SelectedSinglePoi = PoiCollection.FirstOrDefault(poi => poi.Id == selectedSingleId);
+                await _dialogService.ShowMessageAsync("Removed", "Comment removed");
+            }
 
         }
         private async void GetTagsFromDb()
@@ -384,7 +412,7 @@ namespace Puma.ViewModels
 
             return pois != null ? new ObservableCollection<PointOfInterest>(pois) : null;
         }
-        
+
         public void SetAddress(string address)
         {
             var words = address?.Split('\n') ?? Array.Empty<string>();
@@ -397,7 +425,7 @@ namespace Puma.ViewModels
                 OnPropertyChanged(nameof(Area));
                 OnPropertyChanged(nameof(Country));
             }
-            else if(words.Length == 1)
+            else if (words.Length == 1)
             {
                 StreetName = "";
                 Area = "";

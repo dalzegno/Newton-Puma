@@ -20,5 +20,6 @@ namespace Puma.Services
         Task<ObservableCollection<PointOfInterest>> GetAllAsync();
         Task<List<Tag>> GetTags();
         Task<PointOfInterest> Delete(int poiId);
+        Task<Comment> DeleteComment(int userId, int commentId);
     }
 }

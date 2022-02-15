@@ -6,6 +6,8 @@ using Puma.Services;
 using Puma.Models;
 using Puma.Views;
 using System.Linq;
+using System;
+using System.Threading.Tasks;
 
 namespace Puma.ViewModels
 {
@@ -39,15 +41,23 @@ namespace Puma.ViewModels
         public bool isUserLoggedIn { get; set; } = false;
         public bool editSettingsVisible { get; set; } = false;
 
-        public void UserLoggedIn()
+        public async void UserLoggedIn()
         {
+            int selectedId = 0;
+            if (MainPage.Instance.PoiViewModel.SelectedSinglePoi != null)
+                selectedId = MainPage.Instance.PoiViewModel.SelectedSinglePoi.Id;
+
             if (App.LoggedInUser == null)
             {
                 isUserLoggedOut = true;
                 isUserLoggedIn = false;
                 EditSettingsVisible = false;
+                await SetPoiCollection();
                 MainPage.Instance.PoiViewModel.PoiCommentPostVisible = false;
-                OnPropertyChanged(nameof(MainPage.Instance.PoiViewModel.PoiCommentPostVisible));
+
+                if (selectedId != 0)
+                    SetSelectedPoi(selectedId);
+
                 OnPropertyChanged(nameof(userLoginState));
                 OnPropertyChanged(nameof(userLogoutState));
                 OnPropertyChanged(nameof(EditSettingsVisible));
@@ -58,13 +68,18 @@ namespace Puma.ViewModels
             isUserLoggedIn = true;
             openLoginBool = false;
             EditSettingsVisible = true;
+            await SetPoiCollection();
             MainPage.Instance.PoiViewModel.PoiCommentPostVisible = true;
-            OnPropertyChanged(nameof(MainPage.Instance.PoiViewModel.PoiCommentPostVisible));
+
+            if (selectedId != 0)
+                SetSelectedPoi(selectedId);
+
             OnPropertyChanged(nameof(userLoginState));
             OnPropertyChanged(nameof(userLogoutState));
             OnPropertyChanged(nameof(loginPopupState));
             OnPropertyChanged(nameof(EditSettingsVisible));
         }
+
         public void ClosePopup()
         {
             openLoginBool = false;
@@ -101,8 +116,8 @@ namespace Puma.ViewModels
             OnPropertyChanged(nameof(signupPopupState));
             OnPropertyChanged(nameof(loginPopupState));
             OnPropertyChanged(nameof(settingsPopupState));
-            
-            
+
+
         }
         public bool EditSettingsVisible
         {
@@ -119,7 +134,7 @@ namespace Puma.ViewModels
         public bool settingsPopupState => openSettingsBool;
         public bool userLoginState => isUserLoggedOut;
         public bool userLogoutState => isUserLoggedIn;
-       
+
         #endregion
 
         public void LogOut()
@@ -138,6 +153,16 @@ namespace Puma.ViewModels
 
             _dialogService.ShowMessageAsync("Message", "You're logged out");
 
+        }
+
+        private static void SetSelectedPoi(int selectedId)
+        {
+            MainPage.Instance.PoiViewModel.SelectedSinglePoi = MainPage.Instance.PoiViewModel.PoiCollection.FirstOrDefault(x => x.Id == selectedId);
+        }
+
+        private static async Task SetPoiCollection()
+        {
+            await MainPage.Instance.PoiViewModel.SetLatAndLon(Convert.ToDouble(MainPage.Instance.PoiViewModel.Latitude), Convert.ToDouble(MainPage.Instance.PoiViewModel.Longitude));
         }
     }
 }

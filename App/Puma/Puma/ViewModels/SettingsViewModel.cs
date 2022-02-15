@@ -267,8 +267,7 @@ namespace Puma.ViewModels
         {
             if (App.LoggedInUser == null)
                 return;
-            var confirmationPopup = await App.Current.MainPage.DisplayActionSheet($"Delete User {App.LoggedInUser.DisplayName}?", "No",
-                 "Yes");
+            var confirmationPopup = await _dialogService.ShowYesNoActionSheet($"Delete User {App.LoggedInUser.DisplayName}?");
             switch (confirmationPopup)
             {
                 case "No":
