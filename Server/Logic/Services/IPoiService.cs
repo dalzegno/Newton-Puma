@@ -20,6 +20,7 @@ namespace Logic.Services
         Task<ICollection<TagDto>> GetTagsAsync();
         Task<PointOfInterestDto> UpdateAsync(PointOfInterestDto pointOfInterest);
         Task<PointOfInterestDto> DeleteAsync(int pointOfInterest);
+        Task<CommentDto> DeleteCommentAsync(int userId, int commentId);
 
     }
 }

@@ -5,6 +5,7 @@ using Xamarin.Forms;
 using Puma.Services;
 using Puma.Models;
 using Puma.Views;
+using System.Linq;
 
 namespace Puma.ViewModels
 {
@@ -128,8 +129,13 @@ namespace Puma.ViewModels
                 return;
 
             App.LoggedInUser = null;
-            MainPage.Instance.PoiViewModel.IsAddPoiVisible = false;
             UserLoggedInCommand.Execute(null);
+
+            MainPage.Instance.PoiViewModel.IsAddPoiVisible = false;
+
+            var poiCollectionFrame = MainPage.Instance.GetMenuPanels().First();
+            MainPage.Instance.SlideInMenuPanel(poiCollectionFrame);
+
             _dialogService.ShowMessageAsync("Message", "You're logged out");
 
         }

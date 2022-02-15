@@ -39,6 +39,7 @@ namespace Puma.ViewModels
         Command _addCommentCommand;
         Command _addGradeLikeCommand;
         Command _addGradeDislikeCommand;
+        Command _removeCommentCommand;
         public Command CreatePoiCommand => _createPoiCommand ?? (_createPoiCommand = new Command(CreatePoi, CanCreate));
         public Command RemoveTagCommand => _removeTagCommand ?? (_removeTagCommand = new Command(RemoveTag));
 
@@ -49,6 +50,7 @@ namespace Puma.ViewModels
 
         public Command AddGradeLikeCommand => _addGradeLikeCommand ?? (_addGradeLikeCommand = new Command(AddGradeLike));
         public Command AddGradeDislikeCommand => _addGradeDislikeCommand ?? (_addGradeDislikeCommand = new Command(AddGradeDislike));
+        public Command RemoveCommentCommand => _removeCommentCommand ?? (_removeCommentCommand = new Command(RemoveComment));
 
         public string _name;
         public string _description;
@@ -62,6 +64,7 @@ namespace Puma.ViewModels
         public ObservableCollection<Comment> _commentCollection;
         public string _likeCount;
         public string _dislikeCount;
+        public string _commentBody;
         
 
         public bool openPoiCreationBool { get; set; } = false;
@@ -70,6 +73,7 @@ namespace Puma.ViewModels
         public bool poiSingleVisibleBool { get; set; } = false;
         public bool poiCommentPostVisible { get; set; } = false;
         private bool isAddPoiVisible { get; set; } = false;
+        
 
 
         #region Fields
@@ -107,6 +111,15 @@ namespace Puma.ViewModels
             {
                 poiCommentPostVisible = value;
                 OnPropertyChanged(nameof(PoiCommentPostVisible));
+            }
+        }
+        public string CommentBody
+        {
+            get => _commentBody;
+            set
+            {
+                _commentBody = value;
+                OnPropertyChanged(nameof(CommentBody));
             }
         }
 
@@ -263,12 +276,13 @@ namespace Puma.ViewModels
             OnPropertyChanged(nameof(PoiCollection));
         }
 
-        public void PoisPopup()
+        public async void PoisPopup()
         {
             SelectedSinglePoi = null;
             OnPropertyChanged(nameof(SelectedSinglePoi));
             poiCollectionVisibleBool = true;
             poiSingleVisibleBool = false;
+            PoiCollection = await GetPoisFromDb(Convert.ToDouble(Latitude), Convert.ToDouble(Longitude));
             OnPropertyChanged(nameof(PoiCollectionVisible));
             OnPropertyChanged(nameof(PoiSingleVisible));
         }
@@ -339,21 +353,26 @@ namespace Puma.ViewModels
             await _poiService.AddGradeAsync(grade);
             await SetLatAndLon(Convert.ToDouble(Latitude, CultureInfo.InvariantCulture), Convert.ToDouble(Longitude, CultureInfo.InvariantCulture));
         }
-        private async void AddComment(object body)
+        private async void AddComment()
         {
-            if (App.LoggedInUser == null)
+            if (App.LoggedInUser == null || string.IsNullOrWhiteSpace(CommentBody))
                 return;
             AddCommentDto comment = new AddCommentDto
             {
                 UserId = App.LoggedInUser.Id,
                 PointOfInterestId = SelectedSinglePoi.Id,
-                Body = body.ToString()
+                Body = CommentBody
             };
             var poi = await _poiService.AddCommentAsync(comment);
             SelectedSinglePoi = poi;
+            CommentBody = "";
             OnPropertyChanged(nameof(SelectedSinglePoi));
             OnPropertyChanged(nameof(CommentCollection));
             
+        }
+        private async void RemoveComment()
+        {
+
         }
         private async void GetTagsFromDb()
         {
@@ -428,6 +447,9 @@ namespace Puma.ViewModels
                 MainPage.Instance.AddPin(pin);
             }
         }
+
+        // Name, Description, Position, Address, TagIds
+
         private async void CreatePoi()
         {
             var poi = new AddPoiDto()
@@ -453,9 +475,19 @@ namespace Puma.ViewModels
             if (createdPoi != null)
             {
                 await _dialogService.ShowMessageAsync("Created", $"Added a new POI");
+                ClearFields();
+
                 return;
             }
         }
+
+        private void ClearFields()
+        {
+            Name = "";
+            Description = "";
+            TagButtons.Clear();
+        }
+
         private void RemoveTag(object tag)
         {
             if (tag != null)

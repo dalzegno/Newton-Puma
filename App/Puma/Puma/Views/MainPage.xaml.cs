@@ -26,7 +26,7 @@ namespace Puma.Views
         internal WeatherViewModel WeatherViewModel1 { get; }
         internal NewUserViewModel NewUserViewModel { get; }
         internal LoginViewModel LoginViewModel { get; }
-        
+       
         IUserApiService UserApiService => DependencyService.Get<IUserApiService>();
         IDialogService DialogService => DependencyService.Get<IDialogService>();
         IPoiService PoiService => DependencyService.Get<IPoiService>();
@@ -171,7 +171,7 @@ namespace Puma.Views
                 weatherCollectionView
             };
         }
-        private async void SlideInMenuPanel(Frame selectedMenuPanel)
+        public async void SlideInMenuPanel(Frame selectedMenuPanel)
         {
             double ScreenWidth = Application.Current.MainPage.Width;
             double ScreenHeight = Application.Current.MainPage.Height;
@@ -202,11 +202,15 @@ namespace Puma.Views
                 await selectedMenuPanel.TranslateTo(0, 0, 300, Easing.SpringIn);
             }
         }
-        private void slider_MenuButtonClicked(object sender, EventArgs e)
+        private async void slider_MenuButtonClicked(object sender, EventArgs e)
         {
             var xnameofstack = sender as Button;
             List<Frame> MenuItems = GetMenuPanels();
             Frame frame = MenuItems.FirstOrDefault(x => x.ClassId == xnameofstack.ClassId);
+
+            if (xnameofstack.ClassId == "poiCollectionFrame")
+                await PoiViewModel.SetLatAndLon(Convert.ToDouble(PoiViewModel.Latitude), Convert.ToDouble(PoiViewModel.Longitude));
+
             SlideInMenuPanel(frame);
         }
         //Adapt navbar slideout menu to screen size

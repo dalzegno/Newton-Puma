@@ -219,6 +219,25 @@ namespace Puma.Services
             }
 
         }
+
+        public async Task<Comment> DeleteComment(int userId, int commentId)
+        {
+            _httpClient.SetHeader();
+            try
+            {
+                var response = await _httpClient.DeleteAsync($"{_poiApiUri}/?commentid={commentId}&userid={userId}");
+
+                if (!await response.IsResponseSuccessAsync(_dialogService))
+                    return null;
+
+                return await response.Content.ReadFromJsonAsync<Comment>();
+            }
+            catch (Exception e)
+            {
+                await _dialogService.ShowErrorAsync(e);
+                return null;
+            }
+        }
         #endregion
     }
 }

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Puma.Services;
 using Puma.Models;
 using Puma.Views;
+using FluentValidation.Results;
 
 namespace Puma.ViewModels
 {
@@ -38,6 +39,11 @@ namespace Puma.ViewModels
         string _currentUserLastName;
         string _currentUserEmail;
         string _currentUserPassword;
+
+
+        string _emailErrorMSG;
+        string _passwordErrorMSG;
+        string _displayNameErrorMSG;
 
 
         string _loginEmail;
@@ -159,15 +165,74 @@ namespace Puma.ViewModels
                 OnPropertyChanged();
             }
         }
+
+
+        public string EmailErrorMSG
+        {
+            get => _emailErrorMSG;
+            set
+            {
+                _emailErrorMSG = value;
+                OnPropertyChanged();
+            }
+        }
+        public string PasswordErrorMSG
+        {
+            get => _passwordErrorMSG;
+            set
+            {
+                _passwordErrorMSG = value;
+                OnPropertyChanged();
+            }
+        }
+        public string DisplayNameErrorMSG
+        {
+            get => _displayNameErrorMSG;
+            set
+            {
+                _displayNameErrorMSG = value;
+                OnPropertyChanged();
+
+            }
+        }
         //private bool CanEdit() => !string.IsNullOrWhiteSpace(EditPassword);
+
+        public bool IsUserValid(UpdateUserDto user)
+        {
+            EditUserValidationService validationRules = new EditUserValidationService();
+            ValidationResult validationResult = validationRules.Validate(user);
+
+            Dictionary<string, string> errrorDictionary = new Dictionary<string, string>();
+
+            EmailErrorMSG = "";
+            PasswordErrorMSG = "";
+            DisplayNameErrorMSG = "";
+
+            if (validationResult.IsValid)
+            {
+                return true;
+            }
+
+            foreach (var item in validationResult.Errors)
+            {
+                errrorDictionary.Add(item.PropertyName, item.ErrorMessage);
+            }
+
+            AddErrorMessageToPropertyIfInvalid(errrorDictionary);
+
+            return false;
+        }
 
         private async void EditUser()
         {
             string passwordAnswer = await App.Current.MainPage.DisplayPromptAsync("Enter your current password please", "Password:");
+
+            if (string.IsNullOrWhiteSpace(passwordAnswer))
+                return;
+
             var authorizeUser = await _userApiService.LogIn(App.LoggedInUser.Email, passwordAnswer);
             if (authorizeUser == null)
                 return;
-
 
             var user = new UpdateUserDto()
             {
@@ -178,6 +243,14 @@ namespace Puma.ViewModels
                 FirstName = EditFirstName ?? App.LoggedInUser.FirstName,
                 LastName = EditSurname ?? App.LoggedInUser.LastName,
             };
+
+            if (!IsUserValid(user))
+            {
+                string errorMessages = "";
+                errorMessages = AppendErrorMessages(errorMessages);
+                await _dialogService.ShowErrorAsync("Error: " + errorMessages);
+                return;
+            }
 
             var updatedUser = await _userApiService.UpdateUserAsync(user);
             if (updatedUser != null)
@@ -202,6 +275,9 @@ namespace Puma.ViewModels
                     break;
                 case "Yes":
                     string passwordAnswer = await App.Current.MainPage.DisplayPromptAsync("Enter your password please", "Password:");
+                    if (string.IsNullOrWhiteSpace(passwordAnswer))
+                        return;
+
                     var authorizeUser = await _userApiService.LogIn(App.LoggedInUser.Email, passwordAnswer);
                     if (authorizeUser == null)
                         return;
@@ -212,6 +288,28 @@ namespace Puma.ViewModels
                     MainPage.Instance.MainViewModel.LogOutCommand.Execute(null);
                     break;
             }
+        }
+
+        private void AddErrorMessageToPropertyIfInvalid(Dictionary<string, string> errorPropertyName)
+        {
+            if (errorPropertyName.ContainsKey("Email"))
+                EmailErrorMSG = errorPropertyName["Email"];
+
+            if (errorPropertyName.ContainsKey("Password"))
+                PasswordErrorMSG = errorPropertyName["Password"];
+
+            if (errorPropertyName.ContainsKey("DisplayName"))
+                DisplayNameErrorMSG = errorPropertyName["DisplayName"];
+        }
+        private string AppendErrorMessages(string errorMessages)
+        {
+            if (!string.IsNullOrWhiteSpace(EmailErrorMSG))
+                errorMessages += "Email: " + EmailErrorMSG + "\n";
+            if (!string.IsNullOrWhiteSpace(PasswordErrorMSG))
+                errorMessages += "Password: " + PasswordErrorMSG + "\n";
+            if (!string.IsNullOrWhiteSpace(DisplayNameErrorMSG))
+                errorMessages += "DisplayName: " + DisplayNameErrorMSG + "\n";
+            return errorMessages;
         }
     }
 }
