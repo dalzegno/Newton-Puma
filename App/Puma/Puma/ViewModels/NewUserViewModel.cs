@@ -6,6 +6,7 @@ using FluentValidation;
 using FluentValidation.Results;
 using System;
 using System.Collections.Generic;
+using Puma.Views;
 
 namespace Puma.ViewModels
 {
@@ -159,7 +160,7 @@ namespace Puma.ViewModels
                 LastName = SignupSurname ?? ""
             };
 
-            if (IsUserValid(user))
+            if (!IsUserValid(user))
             {
                 string errorMessages = "";
                 errorMessages = AppendErrorMessages(errorMessages);
@@ -173,6 +174,9 @@ namespace Puma.ViewModels
             if (createdUser != null)
             {
                 await _dialogService.ShowMessageAsync("Welcome!", $"Welcome to PUMA \"{createdUser.DisplayName}\".");
+                MainPage.Instance.LoginViewModel.LoginEmail = createdUser.Email;
+                MainPage.Instance.LoginViewModel.LoginPassword = SignupPassword;
+                MainPage.Instance.LoginViewModel.LoginCommand.Execute(null);
                 return;
             }
 

@@ -73,7 +73,13 @@ namespace Puma.Services
                 if (!await response.IsResponseSuccessAsync(_dialogService))
                     return null;
 
-                return await response.Content.ReadFromJsonAsync<PointOfInterest>();
+                var poi = await response.Content.ReadFromJsonAsync<PointOfInterest>();
+                if (poi != null)
+                {
+                    AdjustCommentRemoveVisibility(poi, true);
+                }
+
+                return poi;
             }
             catch (Exception e)
             {
@@ -153,7 +159,17 @@ namespace Puma.Services
                 if (!await response.IsResponseSuccessAsync())
                     return null;
 
-                return await response.Content.ReadFromJsonAsync<ObservableCollection<PointOfInterest>>();
+                var pois = await response.Content.ReadFromJsonAsync<ObservableCollection<PointOfInterest>>();
+
+                if (App.LoggedInUser != null)
+                {
+                    foreach (var poi in pois)
+                    {
+                        AdjustCommentRemoveVisibility(poi);
+                    }
+                }
+
+                return pois;
             }
             catch (Exception e)
             {
@@ -219,6 +235,38 @@ namespace Puma.Services
             }
 
         }
+
+        public async Task<Comment> DeleteComment(int userId, int commentId)
+        {
+            _httpClient.SetHeader();
+            try
+            {
+                var response = await _httpClient.DeleteAsync($"{_poiApiUri}/DeleteComment/?commentid={commentId}&userid={userId}");
+
+                if (!await response.IsResponseSuccessAsync(_dialogService))
+                    return null;
+
+                return await response.Content.ReadFromJsonAsync<Comment>();
+            }
+            catch (Exception e)
+            {
+                await _dialogService.ShowErrorAsync(e);
+                return null;
+            }
+        }
         #endregion
+
+        private static void AdjustCommentRemoveVisibility(PointOfInterest poi, bool addedNow = false)
+        {
+            foreach (var comment in poi.Comments)
+            {
+                if (comment.UserId == App.LoggedInUser.Id)
+                {
+                    comment.IsRemoveVisible = true;
+                    if (addedNow)
+                        comment.UserDisplayName = App.LoggedInUser.DisplayName;
+                }
+            }
+        }
     }
 }

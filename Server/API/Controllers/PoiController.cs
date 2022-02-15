@@ -193,6 +193,23 @@ namespace API.Controllers
 
             return Ok(deletedPoi);
         }
+
+
+        [HttpDelete("DeleteComment")]
+        public async Task<ActionResult<CommentDto>> DeleteComment([FromQuery] int commentId, [FromQuery] int userId, [FromHeader] string apiKey)
+        {
+            //if (!await _userService.IsUserAuthorizedAsync(apiKey))
+            //    return Unauthorized("Unauthorized");
+
+            var deletedComment = await _poiService.DeleteCommentAsync(userId, commentId);
+
+            if (deletedComment == null)
+                return NotFound("Could not find the comment to remove");
+
+            return Ok(deletedComment);
+
+        }
+
         #endregion
     }
 }

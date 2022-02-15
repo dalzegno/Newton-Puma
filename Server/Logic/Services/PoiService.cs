@@ -76,12 +76,14 @@ namespace Logic.Services
                 return _mapper.Map<PointOfInterestDto>(poi);
             }
 
-            // If user sent the same gradetype again, return 
+            // If user sent the same gradetype again, remove the previous grade 
             if (previousGrade != null && previousGrade.GradeType == grading.Grade)
             {
+                poi.Gradings.Remove(previousGrade);
+                await _context.SaveChangesAsync();
                 return _mapper.Map<PointOfInterestDto>(poi);
             }
-            
+
 
             poi.Gradings.Add(new Grading
             {
@@ -152,7 +154,7 @@ namespace Logic.Services
                 return null;
 
             return _mapper.Map<IEnumerable<PointOfInterestDto>>(pois);
-        }                                             
+        }
 
         public async Task<IEnumerable<PointOfInterestDto>> GetAllAsync()
         {
@@ -190,6 +192,20 @@ namespace Logic.Services
 
             return _mapper.Map<PointOfInterestDto>(objectToDelete);
         }
+
+        public async Task<CommentDto> DeleteCommentAsync(int userId, int commentId)
+        {
+            var comment = await _context.Comments.Include(c => c.User)
+                                                 .FirstOrDefaultAsync(c => c.Id == commentId && c.UserId == userId);
+
+            if (comment == null)
+                return null;
+
+            _context.Comments.Remove(comment);
+
+            await _context.SaveChangesAsync();
+            return _mapper.Map<CommentDto>(comment);
+        }
         #endregion
 
         #region Methods
@@ -203,6 +219,7 @@ namespace Logic.Services
             return await _context.PointOfInterests.Include(poi => poi.Address)
                                                   .Include(poi => poi.Position)
                                                   .Include(poi => poi.Comments)
+                                                  .ThenInclude(c => c.User)
                                                   .Include(poi => poi.PoiTags)
                                                   .Include(poi => poi.Gradings)
                                                   .Include(poi => poi.User)

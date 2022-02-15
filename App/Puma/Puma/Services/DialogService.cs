@@ -27,5 +27,10 @@ namespace Puma.Services
         {
             await Application.Current.MainPage.DisplayAlert(title, message, buttonText);
         }
+
+        public async Task<string> ShowYesNoActionSheet(string title)
+        {
+            return await Application.Current.MainPage.DisplayActionSheet(title, "No", "Yes");
+        }
     }
 }
