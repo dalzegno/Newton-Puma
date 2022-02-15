@@ -490,6 +490,7 @@ namespace Puma.Views
             await mockService.GenerateComments(80);
             await mockService.GenerateGrades(200);
 
+            await DialogService.ShowMessageAsync("Mock", "Mockdata added. Check out Stockholm!");
             var button = (Button)sender;
             button.IsVisible = false;
         }
