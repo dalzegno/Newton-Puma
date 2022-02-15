@@ -532,7 +532,7 @@
                                                     Style="{StaticResource labelStyle}"
                                                     VerticalOptions="End"
                                                     HorizontalTextAlignment="Center"
-                                                    Text="45"
+                                                    Text="{Binding CommentCounter}"
                                                     FontSize="15"
                                                     FontAttributes="Bold" />
                                                 <StackLayout

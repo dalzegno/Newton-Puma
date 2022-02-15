@@ -36,5 +36,7 @@ namespace Puma.Models
                 return Gradings.Where(g => g.GradeType == GradeType.Disliked).Count();
             }
         }
+
+        public int CommentCounter => Comments == null ? 0 : Comments.Count();
     }
 }
