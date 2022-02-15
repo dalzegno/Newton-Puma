@@ -219,8 +219,6 @@
                                 VerticalOptions="Center"
                                 FontSize="24"
                                 Placeholder="Description.."></local:CustomEditor>
-
-
                             <StackLayout
                                 HeightRequest="50">
                                 <CollectionView
@@ -230,11 +228,8 @@
                                     ItemsLayout="HorizontalList"
                                     SelectionMode="Single"
                                     ItemsSource="{Binding TagButtons}">
-
                                     <CollectionView.ItemTemplate>
-
                                         <DataTemplate>
-
                                             <local:CustomButton
                                                 BorderColor="LightGray"
                                                 Style="{StaticResource labelStyle}"
@@ -246,14 +241,11 @@
                                                 VerticalOptions="FillAndExpand"
                                                 Text="{Binding Name, StringFormat='X    {0:F0}'}"
                                                 FontSize="12">
-
                                             </local:CustomButton>
-
                                         </DataTemplate>
                                     </CollectionView.ItemTemplate>
                                 </CollectionView>
                             </StackLayout>
-                            <!--<local:CustomButton Text="{Binding SelectedTagInfo.Name}" FontSize="12"/>-->
                             <Picker
                                 Style="{StaticResource labelStyle}"
                                 x:Name="TagPicker"
@@ -804,6 +796,7 @@
                         FontSize="8"
                         FontFamily="Lobster-Regular"></Label>-->
                     </StackLayout>
+                    <!-- HAMBURGERMENU -->
                     <ffimageloadingsvg:SvgCachedImage
                         HeightRequest="50"
                         Grid.Row="1"

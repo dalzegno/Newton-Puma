@@ -37,18 +37,16 @@ namespace Puma.Views
             InitializeComponent();
             Instance = this;
             // Internal viewmodels that can be reached globally
-            LoginViewModel = new LoginViewModel(UserApiService, DialogService);
-            MainViewModel = new MainViewModel(DialogService);
-            PoiViewModel = new PoiViewModel(PoiService, DialogService);
+            LoginViewModel =    new LoginViewModel(UserApiService, DialogService);
+            MainViewModel =     new MainViewModel(DialogService);
+            PoiViewModel =      new PoiViewModel(PoiService, DialogService);
             WeatherViewModel1 = new WeatherViewModel(WeatherService, DialogService);
             SettingsViewModel = new SettingsViewModel(UserApiService, DialogService);
-            NewUserViewModel = new NewUserViewModel(UserApiService, DialogService);
-            BindingContext = MainViewModel;
+            NewUserViewModel =  new NewUserViewModel(UserApiService, DialogService);
+            BindingContext =    MainViewModel;
 
             SetBindingContexts();
-
             _geoCoder = new Geocoder();
-
             GetCurrentLocation();
         }
 
@@ -269,17 +267,16 @@ namespace Puma.Views
         #region Local methods
         private void SetBindingContexts()
         {
-            slCreateUserViewModel.BindingContext = NewUserViewModel;
-            slLogIn.BindingContext = new LoginViewModel(UserApiService, DialogService);
-            slPoiPopover.BindingContext = PoiViewModel;
-            slPoiPopup.BindingContext = PoiViewModel;
-            poiCollectionFrame.BindingContext = PoiViewModel;
-            poiCreationView.BindingContext = PoiViewModel;
-            slPoiMenuButtons.BindingContext = PoiViewModel;
-            weatherCollectionView.BindingContext = WeatherViewModel1;
-            settingsInputs.BindingContext = SettingsViewModel;
-
-            sl_Weather.BindingContext = WeatherViewModel1;
+            slCreateUserViewModel.BindingContext =      NewUserViewModel;
+            slLogIn.BindingContext =                    LoginViewModel;
+            slPoiPopover.BindingContext =               PoiViewModel;
+            slPoiPopup.BindingContext =                 PoiViewModel;
+            poiCollectionFrame.BindingContext =         PoiViewModel;
+            poiCreationView.BindingContext =            PoiViewModel;
+            slPoiMenuButtons.BindingContext =           PoiViewModel;
+            weatherCollectionView.BindingContext =      WeatherViewModel1;
+            sl_Weather.BindingContext =                 WeatherViewModel1;
+            settingsInputs.BindingContext =             SettingsViewModel;
         }
         private async Task<List<PointOfInterest>> GetPoisFromDb(Location searchedLocation)
         {
