@@ -68,9 +68,6 @@
         </maps:Map>
 
 
-
-
-
         <!-- NAVBAR AND MENU -->
         <AbsoluteLayout
             HorizontalOptions="FillAndExpand"
@@ -685,7 +682,6 @@
 
             </StackLayout>
 
-
             <!-- NAVBAR -->
             <Grid
                 AbsoluteLayout.LayoutBounds="0,0,1,1"
@@ -850,7 +846,7 @@
                         Style="{StaticResource buttonStyle}"
                         Grid.Row="4"
                         Clicked="GenerateMockData_Clicked"
-                        Text="Generate mock data"/>
+                        Text="Generate mock data" />
 
                 </Grid>
 
@@ -912,9 +908,6 @@
                 </StackLayout>
 
             </Grid>
-
-
-
         </AbsoluteLayout>
 
 
@@ -1089,7 +1082,6 @@
 
 
         <!-- LOG IN POPUP -->
-
         <Frame
             x:Name="loginPopup"
             ClassId="loginPopup"

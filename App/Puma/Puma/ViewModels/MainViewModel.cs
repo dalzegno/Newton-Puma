@@ -55,7 +55,7 @@ namespace Puma.ViewModels
                 await SetPoiCollection();
                 MainPage.Instance.PoiViewModel.PoiCommentPostVisible = false;
 
-                if (selectedId != 0 || selectedId != null)
+                if (selectedId != 0 || MainPage.Instance.PoiViewModel.SelectedSinglePoi != null)
                     SetSelectedPoi(selectedId);
 
                 OnPropertyChanged(nameof(userLoginState));
