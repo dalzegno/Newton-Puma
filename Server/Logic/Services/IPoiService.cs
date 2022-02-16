@@ -10,15 +10,19 @@ namespace Logic.Services
 {
     public interface IPoiService
     {
+        // Create
         Task<PointOfInterestDto> CreateAsync(AddPoiDto pointOfInterest);
         Task<PointOfInterestDto> AddCommentAsync(AddCommentDto comment);
         Task<PointOfInterestDto> AddGrade(AddGradeDto addGradeDto);
         Task<TagDto> CreateTagAsync(string name);
+        // Read
         Task<PointOfInterestDto> GetAsync(int id);
         Task<IEnumerable<PointOfInterestDto>> GetAsync(double lat, double lon);
         Task<IEnumerable<PointOfInterestDto>> GetAllAsync();
-        Task<ICollection<TagDto>> GetTagsAsync();
+        Task<IEnumerable<TagDto>> GetTagsAsync();
+        // Update
         Task<PointOfInterestDto> UpdateAsync(PointOfInterestDto pointOfInterest);
+        // Delete
         Task<PointOfInterestDto> DeleteAsync(int pointOfInterest);
         Task<CommentDto> DeleteCommentAsync(int userId, int commentId);
 

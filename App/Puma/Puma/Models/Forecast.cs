@@ -52,20 +52,20 @@ namespace Puma.Models
             if (!Directory.Exists(documentPath))
                 return;
 
-            string[] fileNames = Directory.GetFiles(documentPath); // Gets all filenames
+            string[] fileNames = Directory.GetFiles(documentPath); // Gets all filenames, including full path
 
             if (fileNames.Length < 1)
                 return;
 
-            var outDatedCaches = new List<string>();
+            var expiredCaches = new List<string>();
             foreach (string fileName in fileNames)
             {
                 if (IsCacheExpired(fileName))
-                    outDatedCaches.Add(fileName);
+                    expiredCaches.Add(fileName);
             }
 
-            if (outDatedCaches.Any())
-                DeleteExpiredCaches(outDatedCaches);
+            if (expiredCaches.Any())
+                DeleteExpiredCachesFromList(expiredCaches);
         }
 
         private static string GetDocumentPath()
@@ -75,7 +75,7 @@ namespace Puma.Models
             return documentPath;
         }
 
-        private static void DeleteExpiredCaches(List<string> outDatedCaches)
+        private static void DeleteExpiredCachesFromList(List<string> outDatedCaches)
         {
             outDatedCaches.ForEach(cache => File.Delete(cache));
         }

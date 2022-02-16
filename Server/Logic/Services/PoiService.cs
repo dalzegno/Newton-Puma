@@ -161,7 +161,7 @@ namespace Logic.Services
             return _mapper.Map<IEnumerable<PointOfInterestDto>>(await GetPoisFromDbAsync());
         }
 
-        public async Task<ICollection<TagDto>> GetTagsAsync()
+        public async Task<IEnumerable<TagDto>> GetTagsAsync()
         {
             var tags = await _context.Tags.ToListAsync();
 
