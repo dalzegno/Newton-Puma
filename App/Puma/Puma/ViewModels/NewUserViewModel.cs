@@ -173,7 +173,6 @@ namespace Puma.ViewModels
 
             if (createdUser != null)
             {
-                await _dialogService.ShowMessageAsync("Welcome!", $"Welcome to PUMA \"{createdUser.DisplayName}\".");
                 MainPage.Instance.LoginViewModel.LoginEmail = createdUser.Email;
                 MainPage.Instance.LoginViewModel.LoginPassword = SignupPassword;
                 MainPage.Instance.LoginViewModel.LoginCommand.Execute(null);
