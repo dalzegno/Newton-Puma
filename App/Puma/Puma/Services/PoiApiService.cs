@@ -154,7 +154,10 @@ namespace Puma.Services
             try
             {
                 _httpClient.SetHeader();
-                var response = await _httpClient.GetAsync($"{_poiApiUri}/GetFromLatAndLon?lat={lat.ToString(CultureInfo.InvariantCulture)}&lon={lon.ToString(CultureInfo.InvariantCulture)}");
+
+                var latStr = lat.ToString(CultureInfo.InvariantCulture);
+                var lonStr = lon.ToString(CultureInfo.InvariantCulture);
+                var response = await _httpClient.GetAsync($"{_poiApiUri}/GetFromLatAndLon?lat={latStr}&lon={lonStr}");
 
                 if (!await response.IsResponseSuccessAsync())
                     return null;

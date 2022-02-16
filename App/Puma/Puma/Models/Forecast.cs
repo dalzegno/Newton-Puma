@@ -47,8 +47,7 @@ namespace Puma.Models
 
         public static void RemoveExpiredCaches()
         {
-            var documentPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            documentPath = Path.Combine(documentPath, "PuMap", "WeatherCache");
+            string documentPath = GetDocumentPath();
 
             if (!Directory.Exists(documentPath))
                 return;
@@ -61,23 +60,43 @@ namespace Puma.Models
             var outDatedCaches = new List<string>();
             foreach (string fileName in fileNames)
             {
-                // A cachekey is "Latitude, Longitude, TimeWindow,.xml"
-                var cacheKeys = fileName.Split(',');
-
-                string strNow = DateTime.Now.ToString("yyyy/MM/dd HH:mm");
-                DateTime dtNow = DateTime.Parse(strNow);
-
-                var timeWindow = cacheKeys[2];
-                string strTimeWindow = Regex.Replace(timeWindow, @"\.", ":");
-
-                DateTime expirationTime = DateTime.Parse(strTimeWindow);
-
-                if (expirationTime < dtNow)
+                if (IsCacheExpired(fileName))
                     outDatedCaches.Add(fileName);
             }
 
             if (outDatedCaches.Any())
-                outDatedCaches.ForEach(cache => File.Delete(cache));
+                DeleteExpiredCaches(outDatedCaches);
+        }
+
+        private static string GetDocumentPath()
+        {
+            var documentPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            documentPath = Path.Combine(documentPath, "PuMap", "WeatherCache");
+            return documentPath;
+        }
+
+        private static void DeleteExpiredCaches(List<string> outDatedCaches)
+        {
+            outDatedCaches.ForEach(cache => File.Delete(cache));
+        }
+
+        private static bool IsCacheExpired(string fileName)
+        {
+            // A cachekey is "Latitude, Longitude, TimeWindow,.xml"
+            var cacheKeys = fileName.Split(',');
+
+            string strNow = DateTime.Now.ToString("yyyy/MM/dd HH:mm");
+            DateTime dtNow = DateTime.Parse(strNow);
+
+            var timeWindow = cacheKeys[2];
+            string strTimeWindow = Regex.Replace(timeWindow, @"\.", ":");
+
+            DateTime expirationTime = DateTime.Parse(strTimeWindow);
+
+            if (expirationTime < dtNow)
+                return true;
+
+            return false;
         }
     }
 

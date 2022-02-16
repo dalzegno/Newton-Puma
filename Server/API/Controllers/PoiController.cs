@@ -125,6 +125,10 @@ namespace API.Controllers
         }
 
         [HttpGet("GetFromLatAndLon")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<PointOfInterestDto>>> Get([FromQuery] double lat, [FromQuery] double lon)
         {
             if (!lat.TryParseToInvariantCulture(out double latDouble) || !lon.TryParseToInvariantCulture(out double lonDouble))

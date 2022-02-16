@@ -59,7 +59,6 @@ namespace Logic.Services
                 return ForecastTranslator.ToModel(weatherData); // Converts WeatherApiData to ForecastDto
             }
         }
-
         private static void SetAveragesForForecast(ForecastDto forecast)
         {
             bool today = true;
